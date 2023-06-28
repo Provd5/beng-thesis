@@ -3,20 +3,16 @@
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-export default function LogoutButton() {
-  const router = useRouter();
+import { Button } from "./ui/Button";
 
-  // Create a Supabase client configured to use cookies
+export default function LogoutButton() {
   const supabase = createClientComponentClient();
+  const router = useRouter();
 
   const signOut = async () => {
     await supabase.auth.signOut();
-    router.push("/login");
+    router.refresh();
   };
 
-  return (
-    <button className="hover:underline" onClick={signOut}>
-      Logout
-    </button>
-  );
+  return <Button onClick={signOut}>Logout</Button>;
 }
