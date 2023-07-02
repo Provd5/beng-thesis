@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { AuthForm } from "~/app/components/AuthForm";
+import { AuthForm } from "~/components/AuthForm";
 
 export default async function LoginPage() {
   const supabase = createServerComponentClient({
@@ -14,12 +14,8 @@ export default async function LoginPage() {
   } = await supabase.auth.getSession();
 
   if (session) {
-    redirect("/");
+    redirect("/profile");
   }
 
-  return (
-    <div className="flex w-full max-w-sm flex-1 flex-col justify-center gap-2">
-      <AuthForm view="logIn" />
-    </div>
-  );
+  return <AuthForm view="signUp" />;
 }

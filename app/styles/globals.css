@@ -2,12 +2,58 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: light;
+@layer base {
+  /* */
+  :root {
+    --nav-height: 64px;
+    --white-default: 235 234 232;
+    --white-light: 255 255 255;
+    --white-dark: 214 214 214;
+    --black-default: 38 38 38;
+    --black-light: 60 60 60;
+    --black-dark: 18 18 18;
+    --primary-default: 8 131 149;
+    --primary-light: 4 170 194;
+    --primary-dark: 10 77 104;
+    --secondary-default: 8 149 116;
+    --secondary-light: 4 194 150;
+    --secondary-dark: 10 104 96;
+    --green-default: 9 170 62;
+    --red-default: 194 26 10;
+    --blue-default: 11 110 208;
+    --yellow-default: 229 172 0;
+    --pink-default: 229 25 60;
+    --gray-default: 128 128 128;
+    --gradient-light: linear-gradient(
+      175deg,
+      rgb(var(--primary-light)),
+      rgb(var(--secondary-light))
+    );
+    --gradient-dark: linear-gradient(
+      175deg,
+      rgb(var(--secondary-default)),
+      rgb(var(--primary-default))
+    );
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
+@layer components {
+  .nav-padding {
+    @apply pb-[var(--nav-height)] md:pb-0;
   }
+  .svg-gradient-stroke {
+    @apply stroke-secondary dark:stroke-primary-light;
+  }
+  .svg-gradient-fill {
+    @apply fill-secondary dark:fill-primary-light;
+  }
+}
+
+html {
+  color-scheme: light;
+  height: 100%;
+}
+
+html.dark {
+  color-scheme: dark;
 }
