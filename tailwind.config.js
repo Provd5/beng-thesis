@@ -9,8 +9,8 @@ module.exports = {
         sm: ["14px", "16px"],
         base: ["16px", "18px"],
         md: ["18px", "20px"],
-        lg: ["20px"],
-        xl: ["24px"],
+        lg: ["20px", "28px"],
+        xl: ["24px", "32px"],
       },
       dropShadow: {
         light: "0 0 1px rgb(var(--white-light) / 1)",
