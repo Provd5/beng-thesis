@@ -5,7 +5,9 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { NavbarLink } from "./NavbarLink";
 import { ExploreIcon, ProfileIcon, SearchIcon } from "./NavIcons";
 
-export const Navbar: FC = async ({}) => {
+interface NavbarProps {}
+
+export const Navbar: FC<NavbarProps> = async ({}) => {
   const supabase = createServerComponentClient({
     cookies,
   });
