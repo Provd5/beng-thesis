@@ -1,7 +1,9 @@
 import type { ButtonHTMLAttributes, FC } from "react";
+
 import { MdKeyboardArrowDown } from "react-icons/md";
 
 import { Loader } from "./Loader";
+import { SvgPainter, SvgPainterWithIcon } from "./SvgPainter";
 
 type sizes = "default" | "sm";
 
@@ -9,6 +11,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
   size?: sizes;
   loading?: boolean;
+  defaultColor?: boolean;
   className?: string;
 }
 
@@ -18,7 +21,8 @@ const sharedClass =
 export const Button: FC<ButtonProps> = ({
   children,
   size = "default",
-  loading = false,
+  loading,
+  defaultColor = true,
   className,
   ...restProps
 }) => {
@@ -28,27 +32,26 @@ export const Button: FC<ButtonProps> = ({
       className={
         (className ?? "") +
         sharedClass +
-        " gap-1 bg-gradient-dark text-white-light hover:scale-105 hover:bg-gradient-light dark:bg-gradient-light dark:hover:bg-gradient-dark " +
+        " gap-1 hover:scale-105 " +
+        (defaultColor
+          ? "bg-gradient-dark text-white-light hover:bg-gradient-light dark:bg-gradient-light dark:hover:bg-gradient-dark "
+          : "") +
         (size === "default"
           ? "rounded-xl px-8 py-3.5 text-base"
           : "rounded-lg px-6 py-3 text-sm")
       }
       {...restProps}
     >
-      {loading && (
-        <div className="h-4 w-4 flex-none">
-          <Loader />
-        </div>
-      )}
+      {loading && <Loader className="text-md" />}
       {children}
     </button>
   );
 };
 
-export const ButtonWithColor: FC<ButtonProps> = ({
+export const ButtonWhite: FC<ButtonProps> = ({
   children,
   size = "default",
-  loading = false,
+  loading,
   className,
   ...restProps
 }) => {
@@ -71,9 +74,9 @@ export const ButtonWithColor: FC<ButtonProps> = ({
         }
       >
         {loading && (
-          <div className="h-4 w-4 flex-none">
-            <Loader className="svg-gradient-stroke" />
-          </div>
+          <SvgPainter className="h-[1em] w-[1em] animate-spin text-md">
+            <Loader className="stroke-[url(#myGradientDark)]" />
+          </SvgPainter>
         )}
         {children}
       </div>
@@ -84,9 +87,9 @@ export const ButtonWithColor: FC<ButtonProps> = ({
 export const ButtonLink: FC<ButtonProps & { active?: boolean }> = ({
   children,
   size = "default",
-  loading = false,
+  loading,
   className,
-  active = false,
+  active,
   ...restProps
 }) => {
   return (
@@ -101,12 +104,13 @@ export const ButtonLink: FC<ButtonProps & { active?: boolean }> = ({
       {...restProps}
     >
       {children}
-      <MdKeyboardArrowDown
-        className={
-          (active ? "rotate-180" : "") +
-          " svg-gradient-fill ml-[-2px] h-5 w-5 flex-none"
-        }
-      />
+      <span className={active ? "rotate-180" : ""}>
+        <SvgPainterWithIcon
+          textSize={"text-xl"}
+          Icon={MdKeyboardArrowDown}
+          className="flex-none"
+        />
+      </span>
     </button>
   );
 };

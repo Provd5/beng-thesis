@@ -4,6 +4,8 @@ import type { FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { SvgPainter } from "../ui/SvgPainter";
+
 interface NavbarLinkProps {
   href: `/${string}`;
   text: string;
@@ -29,17 +31,9 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
       }
     >
       <div className="mt-[-4px] flex flex-col items-center justify-center">
-        <svg className={big ? "h-8 w-8" : "h-7 w-7"}>
-          <linearGradient id="myGradient" gradientTransform="rotate(75)">
-            <stop stopColor="rgb(var(--primary-light))" offset="0%" />
-            <stop stopColor="rgb(var(--secondary-light))" offset="100%" />
-          </linearGradient>
-          <linearGradient id="myGradientDark" gradientTransform="rotate(75)">
-            <stop stopColor="rgb(var(--secondary-default))" offset="0%" />
-            <stop stopColor="rgb(var(--primary-default))" offset="100%" />
-          </linearGradient>
+        <SvgPainter className={big ? "h-8 w-8" : "h-7 w-7"}>
           {children}
-        </svg>
+        </SvgPainter>
         <p className="text-xs">{text}</p>
       </div>
     </Link>

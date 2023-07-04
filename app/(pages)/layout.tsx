@@ -22,9 +22,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const themeInitializerScript = `function initializeDarkMode() { localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");} initializeDarkMode();`;
+
   return (
     <html lang="en" className={quicksandFont.className}>
-      <body className="relative flex h-full shrink-0 grow flex-col bg-gradient-light bg-fixed text-black dark:bg-gradient-dark dark:text-white">
+      <body className="relative flex h-full shrink-0 grow flex-col bg-gradient-light bg-fixed font-medium text-black dark:bg-gradient-dark dark:text-white">
+        <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
         <Navbar />
         <Suspense fallback={<Loading />}>{children}</Suspense>
       </body>

@@ -1,13 +1,14 @@
 "use client";
 
 import { type FC, type FormEvent, useState } from "react";
-import { BiSolidErrorCircle } from "react-icons/bi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { type Provider } from "@supabase/supabase-js";
 
-import { Button, ButtonWithColor } from "./ui/Buttons";
+import { BiSolidErrorCircle } from "react-icons/bi";
+
+import { Button, ButtonWhite } from "./ui/Buttons";
 
 interface AuthFormProps {
   view: "logIn" | "signUp";
@@ -148,13 +149,13 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
                   <Link className="underline" href={"/"}>
                     Forgot your password?
                   </Link>
-                  <ButtonWithColor
+                  <ButtonWhite
                     loading={isLoading}
                     type="submit"
                     className="mt-3 uppercase"
                   >
                     {view === "logIn" ? "login" : "sign up"}
-                  </ButtonWithColor>
+                  </ButtonWhite>
                 </form>
                 <button
                   className="mt-6 font-semibold underline"

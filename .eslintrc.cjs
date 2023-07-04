@@ -42,6 +42,7 @@ const config = {
       {
         groups: [
           ["^react", "^next", "^@", "^\\w"],
+          ["^react-icons/lib", "^react-icons"],
           ["^(type|types|~/type|~/types)"],
           ["^~/"],
         ],

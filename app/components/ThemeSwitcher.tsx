@@ -1,18 +1,80 @@
 "use client";
 
-import type { FC } from "react";
+import { type Dispatch, type FC, type SetStateAction, useState } from "react";
 
-interface ThemeSwitcherProps {
-  className?: string;
+import { type IconType } from "react-icons/lib";
+import { FaSun } from "react-icons/fa";
+import { IoDesktop } from "react-icons/io5";
+import { MdNightsStay } from "react-icons/md";
+
+import { SvgPainterWithIcon } from "./ui/SvgPainter";
+
+type themeTypes = "system" | "light" | "dark";
+
+export const ThemeSwitcher: FC = ({}) => {
+  const [currentTheme, setCurrentTheme] = useState<themeTypes>(
+    (localStorage.theme as themeTypes) || "system"
+  );
+
+  return (
+    <>
+      <div className="flex flex-col gap-3 text-base">
+        <ThemeButton
+          setCurrentTheme={setCurrentTheme}
+          active={currentTheme === "system"}
+          Icon={IoDesktop}
+          theme={"system"}
+          text={"System"}
+        />
+        <ThemeButton
+          setCurrentTheme={setCurrentTheme}
+          active={currentTheme === "light"}
+          Icon={FaSun}
+          theme={"light"}
+          text={"Light"}
+        />
+        <ThemeButton
+          setCurrentTheme={setCurrentTheme}
+          active={currentTheme === "dark"}
+          Icon={MdNightsStay}
+          theme={"dark"}
+          text={"Dark"}
+        />
+      </div>
+    </>
+  );
+};
+
+interface ThemeButtonProps {
+  Icon: IconType;
+  theme: themeTypes;
+  text: string;
+  setCurrentTheme: Dispatch<SetStateAction<themeTypes>>;
+  active: boolean;
 }
 
-export const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className }) => {
-  const handleToggleTheme = (theme: "system" | "light" | "dark") => {
-    if (theme === "system") localStorage.removeItem("theme");
+const ThemeButton: FC<ThemeButtonProps> = ({
+  Icon,
+  theme,
+  text,
+  setCurrentTheme,
+  active,
+}) => {
+  const handleToggleTheme = (theme: themeTypes) => {
+    if (theme === "system") {
+      localStorage.removeItem("theme");
+      setCurrentTheme("system");
+    }
 
-    if (theme === "light") localStorage.theme = "light";
+    if (theme === "light") {
+      localStorage.theme = "light";
+      setCurrentTheme("light");
+    }
 
-    if (theme === "dark") localStorage.theme = "dark";
+    if (theme === "dark") {
+      localStorage.theme = "dark";
+      setCurrentTheme("dark");
+    }
 
     if (
       localStorage.theme === "dark" ||
@@ -26,12 +88,25 @@ export const ThemeSwitcher: FC<ThemeSwitcherProps> = ({ className }) => {
   };
 
   return (
-    <>
-      <div className={className}>
-        <button onClick={() => handleToggleTheme("system")}>system</button>
-        <button onClick={() => handleToggleTheme("light")}>light</button>
-        <button onClick={() => handleToggleTheme("dark")}>dark</button>
-      </div>
-    </>
+    <button
+      className="flex items-center gap-1"
+      onClick={() => handleToggleTheme(theme)}
+    >
+      <SvgPainterWithIcon
+        Icon={Icon}
+        textSize="text-lg"
+        className={!active ? "fill-black-light dark:fill-white" : ""}
+      />
+
+      <p
+        className={
+          (active
+            ? "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light"
+            : "") + " hidden md:block"
+        }
+      >
+        {text}
+      </p>
+    </button>
   );
 };

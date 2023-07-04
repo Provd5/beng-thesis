@@ -41,11 +41,15 @@
   .nav-padding {
     @apply pb-[var(--nav-height)] md:pb-0;
   }
-  .svg-gradient-stroke {
-    @apply stroke-secondary dark:stroke-primary-light;
-  }
-  .svg-gradient-fill {
-    @apply fill-secondary dark:fill-primary-light;
+}
+
+:root {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
   }
 }
 

@@ -1,4 +1,5 @@
 import type { FC } from "react";
+
 import { TbLoader3 } from "react-icons/tb";
 
 interface LoaderProps {

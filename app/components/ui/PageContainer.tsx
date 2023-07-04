@@ -6,7 +6,7 @@ interface PageContainerProps {
 
 export const PageContainer: FC<PageContainerProps> = ({ children }) => {
   return (
-    <main className="nav-padding mt-7 flex h-full flex-col rounded-t-3xl bg-white/95 dark:bg-black/95">
+    <main className="nav-padding relative mt-7 flex h-full flex-col rounded-t-3xl bg-white/95 dark:bg-black/95">
       {children}
     </main>
   );
@@ -14,7 +14,7 @@ export const PageContainer: FC<PageContainerProps> = ({ children }) => {
 
 export const ProfilePageContainer: FC<PageContainerProps> = ({ children }) => {
   return (
-    <main className="nav-padding mt-[68px] flex h-full flex-col rounded-t-3xl bg-white/95 dark:bg-black/95">
+    <main className="nav-padding relative mt-[68px] flex h-full flex-col rounded-t-3xl bg-white/95 dark:bg-black/95">
       <div className="mt-[-30px]">{children}</div>
     </main>
   );
