@@ -20,7 +20,7 @@
       }
     ],
     "paths": {
-      "~/*": ["./app/*"]
+      "~/*": ["./*"]
     }
   },
   "include": [
@@ -28,8 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/dictionaries.js"
+    "dictionaries.ts"
   ],
-  "exclude": ["node_modules"],
-  "ignorePatterns": ["dictionaries.js"]
+  "exclude": ["node_modules"]
 }

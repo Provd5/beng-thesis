@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Quicksand } from "next/font/google";
 
 import { Navbar } from "~/components/Navbar/Navbar";
+import { getLocaleFrom, type Locale, locales } from "~/dictionaries";
 
 import "~/styles/globals.css";
 import Loading from "./loading";
@@ -19,7 +20,7 @@ export const metadata = {
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function generateStaticParams() {
-  return [{ lang: "en" }, { lang: "pl" }];
+  return locales.map((locale) => getLocaleFrom({ locale }));
 }
 
 export default function RootLayout({
@@ -27,7 +28,7 @@ export default function RootLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { lang: string };
+  params: { lang: Locale };
 }) {
   const themeInitializerScript = `function initializeDarkMode() { localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");} initializeDarkMode();`;
 
