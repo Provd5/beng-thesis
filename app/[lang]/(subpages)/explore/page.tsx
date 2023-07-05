@@ -6,14 +6,12 @@ export default async function ExplorePage({
 }: {
   params: { lang: Locale };
 }) {
-  const t = await getTranslator(
-    `${params.lang}` // our middleware ensures this is valid
-  );
+  const t = await getTranslator(params.lang);
 
   return (
     <>
       <div className="flex flex-col items-center gap-3">
-        <h1>{t("Explore.explore")}</h1>
+        <h1>{t.Explore.categoryTitle}</h1>
         <ButtonWhite>TEST test Test</ButtonWhite>
         <ButtonWhite size="sm">TEST test Test</ButtonWhite>
         <ButtonWhite loading>TEST test Test</ButtonWhite>

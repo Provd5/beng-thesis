@@ -29,7 +29,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: providerType,
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: `${location.origin}/api/auth/callback`,
       },
     });
     error ? setErrorMsg(error.message) : setErrorMsg("");
@@ -65,7 +65,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
       email: email.value,
       password: password.value,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: `${location.origin}/api/auth/callback`,
       },
     });
 

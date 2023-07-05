@@ -1,16 +1,17 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import langParser from "accept-language-parser";
 
 import { defaultLocale, getLocaleFrom, locales } from "./dictionaries";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function middleware(req: NextRequest) {
-  // const res = NextResponse.next();
+  const res = NextResponse.next();
 
-  // //supabase auth middleware
-  // const supabase = createMiddlewareClient({ req, res });
-  // await supabase.auth.getSession();
+  //supabase auth middleware
+  const supabase = createMiddlewareClient({ req, res });
+  await supabase.auth.getSession();
 
   // localization
   const findBestMatchingLocale = (acceptLangHeader: string) => {
@@ -66,9 +67,9 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // return res;
+  return res;
 }
 
 export const config = {
-  matcher: ["/((?!_next|auth|favicon.ico).*)"],
+  matcher: ["/((?!_next|api|favicon.ico).*)"],
 };

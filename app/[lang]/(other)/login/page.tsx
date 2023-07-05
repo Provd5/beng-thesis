@@ -1,15 +1,10 @@
-import { type Locale } from "next/dist/compiled/@vercel/og/satori";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AuthForm } from "~/components/AuthForm";
 
-export default async function LoginPage({
-  params,
-}: {
-  params: { lang: Locale };
-}) {
+export default async function LoginPage({}) {
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -19,8 +14,7 @@ export default async function LoginPage({
   } = await supabase.auth.getSession();
 
   if (session) {
-    redirect(`/profile`);
-    // redirect(`/${params.lang}/profile`);
+    redirect(`/`);
   }
 
   return <AuthForm view="logIn" />;

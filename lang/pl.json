@@ -1,5 +1,11 @@
 {
   "Explore": {
-    "explore": "eksploruj"
+    "categoryTitle": "Odkryj"
+  },
+  "Profile": {
+    "categoryTitle": "Profil"
+  },
+  "Search": {
+    "categoryTitle": "Szukaj"
   }
 }
