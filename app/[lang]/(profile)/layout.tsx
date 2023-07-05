@@ -2,9 +2,13 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { AuthForm } from "~/components/AuthForm";
+import { ProfilePageContainer } from "~/components/ui/PageContainer";
 
-export default async function LoginPage() {
+export default async function ProfileLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -13,9 +17,9 @@ export default async function LoginPage() {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (session) {
-    redirect("/profile");
+  if (!session) {
+    redirect(`/login`);
   }
 
-  return <AuthForm view="signUp" />;
+  return <ProfilePageContainer>{children}</ProfilePageContainer>;
 }

@@ -1,9 +1,17 @@
 import { Button, ButtonLink, ButtonWhite } from "~/components/ui/Buttons";
+import { getTranslator, type Locale } from "~/dictionaries";
 
-export default function ExplorePage() {
+export default async function ExplorePage({
+  params,
+}: {
+  params: { lang: Locale };
+}) {
+  const t = await getTranslator(params.lang);
+
   return (
     <>
       <div className="flex flex-col items-center gap-3">
+        <h1>{t.Explore.categoryTitle}</h1>
         <ButtonWhite>TEST test Test</ButtonWhite>
         <ButtonWhite size="sm">TEST test Test</ButtonWhite>
         <ButtonWhite loading>TEST test Test</ButtonWhite>

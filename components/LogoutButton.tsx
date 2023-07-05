@@ -1,12 +1,17 @@
 "use client";
 
+import type { FC } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { Button } from "./ui/Buttons";
 
-export default function LogoutButton() {
+interface LogoutButtonProps {
+  text: string;
+}
+
+export const LogoutButton: FC<LogoutButtonProps> = ({ text }) => {
   const [loading, setLoading] = useState(false);
   const supabase = createClientComponentClient();
   const router = useRouter();
@@ -20,7 +25,7 @@ export default function LogoutButton() {
 
   return (
     <Button loading={loading} onClick={signOut}>
-      Logout
+      {text}
     </Button>
   );
-}
+};

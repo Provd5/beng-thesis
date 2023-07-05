@@ -4,7 +4,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AuthForm } from "~/components/AuthForm";
 
-export default async function LoginPage() {
+export default async function LoginPage({}) {
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -14,8 +14,8 @@ export default async function LoginPage() {
   } = await supabase.auth.getSession();
 
   if (session) {
-    redirect("/profile");
+    redirect(`/`);
   }
 
-  return <AuthForm view="logIn" />;
+  return <AuthForm view="signUp" />;
 }

@@ -4,6 +4,8 @@ import type { FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { type Locale, locales } from "~/dictionaries";
+
 import { SvgPainter } from "../ui/SvgPainter";
 
 interface NavbarLinkProps {
@@ -20,7 +22,13 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
   big,
 }) => {
   const pathname = usePathname();
-  const isActive = pathname.startsWith(href);
+  const pathnameWithoutLocale: string[] | undefined = pathname
+    .split("/")
+    .filter((element) => !locales.includes(element as Locale));
+
+  const isActive = (pathnameWithoutLocale[1] ?? "").startsWith(
+    href.split("/")[1]
+  );
 
   return (
     <Link
