@@ -1,38 +1,41 @@
-"use client";
-
 import type { FC } from "react";
-import { useState } from "react";
+import { cookies } from "next/headers";
 
-import { HiMiniLanguage } from "react-icons/hi2";
-import { IoInvertMode } from "react-icons/io5";
+import { SlOptions } from "react-icons/sl";
 
-import { ThemeSwitcher } from "./ThemeSwitcher";
-import { ModalWrapper } from "./ui/ModalWrapper";
+import { defaultLocale, type Locale } from "~/dictionaries";
 
-export const Settings: FC = ({}) => {
-  const [openModal, setOpenModal] = useState(false);
+import { ModalInitiator } from "./Modals/ModalInitiator";
+import { LanguageSwitcher } from "./Switchers/LanguageSwitcher";
+import { ThemeSwitcher } from "./Switchers/ThemeSwitcher";
+
+// eslint-disable-next-line @typescript-eslint/require-await
+export const Settings: FC = async ({}) => {
+  const currentLang = (cookies().get("lang")?.value ?? defaultLocale) as Locale;
+  // eslint-disable-next-line @typescript-eslint/require-await
+  const setLangCookie = async (data: Locale) => {
+    "use server";
+    cookies().set("lang", data);
+  };
 
   return (
     <>
-      <div className="absolute right-3 top-4 flex gap-2">
-        <div className="relative">
-          <div
-            tabIndex={0}
-            className="cursor-pointer hover:scale-105"
-            onKeyDown={(e) => e.key === "Enter" && setOpenModal(!openModal)}
-            onClick={() => setOpenModal(!openModal)}
-          >
-            <IoInvertMode />
+      <div className="absolute right-4 top-3 md:right-6 md:top-5">
+        <ModalInitiator
+          initiatorStyle={
+            <div className="hover:scale-105">
+              <SlOptions />
+            </div>
+          }
+        >
+          <div className="flex grow flex-col items-center gap-3">
+            <ThemeSwitcher />
+            <LanguageSwitcher
+              currentLang={currentLang}
+              setLangCookie={setLangCookie}
+            />
           </div>
-          {openModal && (
-            <ModalWrapper>
-              <ThemeSwitcher />
-            </ModalWrapper>
-          )}
-        </div>
-        <div>
-          <HiMiniLanguage />
-        </div>
+        </ModalInitiator>
       </div>
     </>
   );

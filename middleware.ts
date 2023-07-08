@@ -3,7 +3,23 @@ import { NextResponse } from "next/server";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import langParser from "accept-language-parser";
 
-import { defaultLocale, getLocaleFrom, locales } from "./dictionaries";
+import { defaultLocale, getLocale, type Locale, locales } from "./dictionaries";
+
+const findBestMatchingLocale = (acceptLangHeader: string) => {
+  const parsedLangs = langParser.parse(acceptLangHeader);
+
+  for (let i = 0; i < parsedLangs.length; i++) {
+    const parsedLang = parsedLangs[i];
+    const matchedLocale = locales.find((locale) => {
+      const localeParts = getLocale({ locale });
+      return parsedLang.code === localeParts.lang;
+    });
+    if (matchedLocale) {
+      return matchedLocale;
+    }
+  }
+  return defaultLocale;
+};
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function middleware(req: NextRequest) {
@@ -14,39 +30,10 @@ export async function middleware(req: NextRequest) {
   await supabase.auth.getSession();
 
   // localization
-  const findBestMatchingLocale = (acceptLangHeader: string) => {
-    const parsedLangs = langParser.parse(acceptLangHeader);
-
-    for (let i = 0; i < parsedLangs.length; i++) {
-      const parsedLang = parsedLangs[i];
-      const matchedLocale = locales.find((locale) => {
-        const localeParts = getLocaleFrom({ locale });
-        return parsedLang.code === localeParts.lang;
-      });
-      if (matchedLocale) {
-        return matchedLocale;
-      }
-    }
-    return defaultLocale;
-  };
-
   const pathname = req.nextUrl.pathname;
-  const defaultLocalePart = getLocaleFrom({ locale: defaultLocale });
-  const currentPathnamePart = getLocaleFrom({ pathname });
-  if (currentPathnamePart.lang === defaultLocalePart.lang) {
-    return NextResponse.redirect(
-      new URL(
-        pathname.replace(
-          `/${defaultLocalePart.lang}`,
-          pathname.startsWith("/") ? "/" : ""
-        ),
-        req.url
-      )
-    );
-  }
 
   const pathnameIsMissingValidLocale = locales.every((locale) => {
-    const localePart = getLocaleFrom({ locale });
+    const localePart = getLocale({ locale });
     return !pathname.startsWith(`/${localePart.lang}`);
   });
 
@@ -55,16 +42,32 @@ export async function middleware(req: NextRequest) {
       req.headers.get("Accept-Language") || defaultLocale
     );
 
-    if (matchedLocale !== defaultLocale) {
-      const matchedLocalePart = getLocaleFrom({ locale: matchedLocale });
-      return NextResponse.redirect(
-        new URL(`/${matchedLocalePart.lang}${pathname}`, req.url)
+    const langCookie = req.cookies.get("lang");
+    const langCookieValue = langCookie?.value as Locale;
+    if (locales.includes(langCookieValue)) {
+      const res = NextResponse.redirect(
+        new URL(`/${langCookieValue}${pathname}`, req.url)
       );
-    } else {
-      return NextResponse.rewrite(
-        new URL(`/${defaultLocalePart.lang}${pathname}`, req.url)
-      );
+      return res;
     }
+
+    const matchedLocalePart = getLocale({ locale: matchedLocale });
+    const res = NextResponse.redirect(
+      new URL(`/${matchedLocalePart.lang}${pathname}`, req.url)
+    );
+    res.cookies.set("lang", matchedLocalePart.lang);
+    return res;
+  }
+
+  // color theme initialization
+  if (req.headers.get("Accept")?.includes("text/html")) {
+    res.headers.set(
+      "Accept-CH",
+      `Sec-CH-Prefers-Color-Scheme, Sec-CH-Prefers-Contrast`
+    );
+    res.headers.set("Vary", "Sec-CH-Prefers-Color-Scheme");
+    res.headers.set("Critical-CH", "Sec-CH-Prefers-Color-Scheme");
+    return res;
   }
 
   return res;
