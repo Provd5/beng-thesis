@@ -32,15 +32,16 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
     <Link
       href={href}
       className={
-        "flex h-14 w-14 shrink-0 items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50" +
+        "flex shrink-0 items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50 " +
+        (big ? "h-[52px] w-[52px]" : "h-[48px] w-[48px]") +
         (isActive ? " bg-white-light dark:bg-black-dark" : "")
       }
     >
-      <div className="mt-[-4px] flex flex-col items-center justify-center">
-        <SvgPainter className={big ? "h-8 w-8" : "h-7 w-7"}>
+      <div className="mt-[-4px] flex flex-col items-center justify-center gap-0.5">
+        <SvgPainter className={big ? "h-7 w-7" : "h-6 w-6"}>
           {children}
         </SvgPainter>
-        <p className="text-xs">{text}</p>
+        <p className="text-2xs">{text}</p>
       </div>
     </Link>
   );

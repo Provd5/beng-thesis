@@ -2,9 +2,14 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { AuthForm } from "~/components/AuthForm";
+import { AuthPage } from "~/components/Auth/AuthPage";
+import { type Locale } from "~/dictionaries";
 
-export default async function LoginPage({}) {
+export default async function LoginPage({
+  params,
+}: {
+  params: { lang: Locale };
+}) {
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -17,5 +22,5 @@ export default async function LoginPage({}) {
     redirect(`/`);
   }
 
-  return <AuthForm view="signUp" />;
+  return <AuthPage params={params} view="signUp" />;
 }

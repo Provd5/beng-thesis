@@ -4,7 +4,7 @@ import { type FC, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
-import FlagOfGreatBritain from "~/assets/flags/gb.svg";
+import FlagOfTheUnitedKingdom from "~/assets/flags/gb.svg";
 import FlagOfPoland from "~/assets/flags/pl.svg";
 import { type Locale } from "~/dictionaries";
 
@@ -37,11 +37,11 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
         <Image
           className={
             language === "en"
-              ? "border-2 border-transparent bg-gradient-dark dark:bg-gradient-light"
+              ? "border border-transparent bg-gradient-dark dark:bg-gradient-light"
               : ""
           }
-          src={FlagOfGreatBritain as string}
-          alt="Flag of Great Britain"
+          src={FlagOfTheUnitedKingdom as string}
+          alt="Flag Of The United Kingdom"
           width={28}
           height={21}
         />
@@ -63,7 +63,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
         <Image
           className={
             language === "pl"
-              ? "border-2 border-transparent bg-gradient-dark dark:bg-gradient-light"
+              ? "border border-transparent bg-gradient-dark dark:bg-gradient-light"
               : ""
           }
           src={FlagOfPoland as string}

@@ -5,7 +5,7 @@
 @layer base {
   /* */
   :root {
-    --nav-height: 64px;
+    --nav-height: 52px;
     --white-default: 235 234 232;
     --white-light: 255 255 255;
     --white-dark: 214 214 214;
