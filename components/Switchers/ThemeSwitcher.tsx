@@ -11,7 +11,17 @@ import { SvgPainterWithIcon } from "../ui/SvgPainter";
 
 type themeTypes = "default" | "light" | "dark";
 
-export const ThemeSwitcher: FC = ({}) => {
+interface ThemeSwitcherProps {
+  defaultText: string;
+  lightText: string;
+  darkText: string;
+}
+
+export const ThemeSwitcher: FC<ThemeSwitcherProps> = ({
+  defaultText,
+  lightText,
+  darkText,
+}) => {
   const [currentTheme, setCurrentTheme] = useState<themeTypes>(
     (localStorage.theme as themeTypes) || "default"
   );
@@ -24,21 +34,21 @@ export const ThemeSwitcher: FC = ({}) => {
           active={currentTheme === "default"}
           Icon={IoDesktop}
           theme={"default"}
-          text={"Default"}
+          text={defaultText}
         />
         <ThemeButton
           setCurrentTheme={setCurrentTheme}
           active={currentTheme === "light"}
           Icon={FaSun}
           theme={"light"}
-          text={"Light"}
+          text={lightText}
         />
         <ThemeButton
           setCurrentTheme={setCurrentTheme}
           active={currentTheme === "dark"}
           Icon={MdNightsStay}
           theme={"dark"}
-          text={"Dark"}
+          text={darkText}
         />
       </div>
     </>

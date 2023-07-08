@@ -24,14 +24,14 @@ export const Navbar: FC<NavbarProps> = async ({ params }) => {
 
   return (
     <>
-      <nav className="fixed inset-x-0 bottom-0 z-50 flex h-[var(--nav-height)] items-center justify-center gap-12 rounded-t-2xl bg-white text-black-dark drop-shadow-light before:absolute before:z-[-1] before:h-20 before:w-20 before:rounded-full before:bg-white dark:bg-black dark:text-white-light dark:drop-shadow-dark before:dark:bg-black md:sticky md:top-0 md:rounded-none">
+      <nav className="fixed inset-x-0 bottom-0 z-50 flex h-[var(--nav-height)] shrink-0 items-center justify-center gap-12 rounded-t-lg bg-white text-black-dark drop-shadow-light before:absolute before:z-[-1] before:h-16 before:w-16 before:rounded-full before:bg-white dark:bg-black dark:text-white-light dark:drop-shadow-dark before:dark:bg-black md:sticky md:top-0 md:h-[58px] md:rounded-none before:md:hidden">
         <NavbarLink href="/explore" text={t.Explore.categoryTitle}>
           <ExploreIcon />
         </NavbarLink>
         <NavbarLink
           big
           href={session ? "/" : "/login"}
-          text={session ? `${t.Profile.categoryTitle}` : "Log in"}
+          text={session ? t.Profile.categoryTitle : t.Login.categoryTitle}
         >
           <ProfileIcon />
         </NavbarLink>

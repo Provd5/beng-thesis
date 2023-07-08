@@ -1,4 +1,36 @@
 {
+  "Settings": {
+    "appStyle": "app style",
+    "appLanguage": "app language"
+  },
+  "Theme": {
+    "default": "Default",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "Signup": {
+    "categoryTitle": "Sign up"
+  },
+  "Login": {
+    "categoryTitle": "Log in"
+  },
+  "Auth": {
+    "byLoggingIn": "By logging in, you agree to",
+    "ourTermsOfService": "our terms of service",
+    "email": "Email",
+    "and": "and",
+    "password": "Password",
+    "logIn": "Log in",
+    "signUp": "Sign up",
+    "with": "with",
+    "provider": "provider",
+    "ForgotPassword": "Forgot your password",
+    "NoAccountYet": "No account yet",
+    "CreateAccount": "Sign up",
+    "AlreadyHaveAccount": "Already have an account",
+    "LogInToAccount": "Log in",
+    "CheckYourEmail": "Check your email to continue login"
+  },
   "Explore": {
     "categoryTitle": "Explore"
   },

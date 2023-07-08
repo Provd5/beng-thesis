@@ -1,4 +1,36 @@
 {
+  "Settings": {
+    "appStyle": "styl aplikacji",
+    "appLanguage": "język aplikacji"
+  },
+  "Theme": {
+    "default": "Domyślny",
+    "light": "Jasny",
+    "dark": "Ciemny"
+  },
+  "Signup": {
+    "categoryTitle": "Stwórz konto"
+  },
+  "Login": {
+    "categoryTitle": "Zaloguj"
+  },
+  "Auth": {
+    "byLoggingIn": "Logując, zgadzasz się na",
+    "ourTermsOfService": "nasze warunki świadczenia usług",
+    "email": "Adres email",
+    "and": "i",
+    "password": "Hasło",
+    "logIn": "Zaloguj się",
+    "signUp": "Stwórz konto",
+    "with": "przez",
+    "provider": "dostawcę",
+    "ForgotPassword": "Nie pamiętasz hasła",
+    "NoAccountYet": "Nie masz jeszcze konta",
+    "CreateAccount": "Stwórz",
+    "AlreadyHaveAccount": "Masz już konto",
+    "LogInToAccount": "Zaloguj",
+    "CheckYourEmail": "Sprawdź swój adres email, aby kontynuować logowanie"
+  },
   "Explore": {
     "categoryTitle": "Odkryj"
   },

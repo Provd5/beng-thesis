@@ -3,14 +3,19 @@ import { cookies } from "next/headers";
 
 import { SlOptions } from "react-icons/sl";
 
-import { defaultLocale, type Locale } from "~/dictionaries";
+import { defaultLocale, getTranslator, type Locale } from "~/dictionaries";
 
 import { ModalInitiator } from "./Modals/ModalInitiator";
 import { LanguageSwitcher } from "./Switchers/LanguageSwitcher";
 import { ThemeSwitcher } from "./Switchers/ThemeSwitcher";
 
-// eslint-disable-next-line @typescript-eslint/require-await
-export const Settings: FC = async ({}) => {
+interface SettingsProps {
+  params: { lang: Locale };
+}
+
+export const Settings: FC<SettingsProps> = async ({ params }) => {
+  const t = await getTranslator(params.lang);
+
   const currentLang = (cookies().get("lang")?.value ?? defaultLocale) as Locale;
   // eslint-disable-next-line @typescript-eslint/require-await
   const setLangCookie = async (data: Locale) => {
@@ -29,7 +34,13 @@ export const Settings: FC = async ({}) => {
           }
         >
           <div className="flex grow flex-col items-center gap-3">
-            <ThemeSwitcher />
+            <p className="text-xs">{t.Settings.appStyle}</p>
+            <ThemeSwitcher
+              defaultText={t.Theme.default}
+              lightText={t.Theme.light}
+              darkText={t.Theme.dark}
+            />
+            <p className="text-xs">{t.Settings.appLanguage}</p>
             <LanguageSwitcher
               currentLang={currentLang}
               setLangCookie={setLangCookie}
