@@ -26,9 +26,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
     .split("/")
     .filter((element) => !locales.includes(element as Locale));
 
-  const isActive = (pathnameWithoutLocale[1] ?? "").startsWith(
-    href.split("/")[1]
-  );
+  const isActive = (pathnameWithoutLocale[1] ?? "") === href.split("/")[1];
 
   return (
     <Link

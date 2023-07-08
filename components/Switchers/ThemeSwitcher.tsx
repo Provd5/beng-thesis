@@ -7,13 +7,13 @@ import { FaSun } from "react-icons/fa";
 import { IoDesktop } from "react-icons/io5";
 import { MdNightsStay } from "react-icons/md";
 
-import { SvgPainterWithIcon } from "./ui/SvgPainter";
+import { SvgPainterWithIcon } from "../ui/SvgPainter";
 
-type themeTypes = "system" | "light" | "dark";
+type themeTypes = "default" | "light" | "dark";
 
 export const ThemeSwitcher: FC = ({}) => {
   const [currentTheme, setCurrentTheme] = useState<themeTypes>(
-    (localStorage.theme as themeTypes) || "system"
+    (localStorage.theme as themeTypes) || "default"
   );
 
   return (
@@ -21,10 +21,10 @@ export const ThemeSwitcher: FC = ({}) => {
       <div className="flex flex-col gap-3 text-base">
         <ThemeButton
           setCurrentTheme={setCurrentTheme}
-          active={currentTheme === "system"}
+          active={currentTheme === "default"}
           Icon={IoDesktop}
-          theme={"system"}
-          text={"System"}
+          theme={"default"}
+          text={"Default"}
         />
         <ThemeButton
           setCurrentTheme={setCurrentTheme}
@@ -61,9 +61,9 @@ const ThemeButton: FC<ThemeButtonProps> = ({
   active,
 }) => {
   const handleToggleTheme = (theme: themeTypes) => {
-    if (theme === "system") {
+    if (theme === "default") {
       localStorage.removeItem("theme");
-      setCurrentTheme("system");
+      setCurrentTheme("default");
     }
 
     if (theme === "light") {
@@ -100,9 +100,9 @@ const ThemeButton: FC<ThemeButtonProps> = ({
 
       <p
         className={
-          (active
+          active
             ? "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light"
-            : "") + " hidden md:block"
+            : ""
         }
       >
         {text}

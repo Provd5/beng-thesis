@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { Quicksand } from "next/font/google";
+import { headers } from "next/headers";
 
 import { Navbar } from "~/components/Navbar/Navbar";
 import { type Locale } from "~/dictionaries";
@@ -30,10 +31,17 @@ export default function RootLayout({
   children: React.ReactNode;
   params: { lang: Locale };
 }) {
+  const preferTheme = headers().get("sec-ch-prefers-color-scheme");
+
   const themeInitializerScript = `function initializeDarkMode() { localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");} initializeDarkMode();`;
 
   return (
-    <html lang={params.lang} className={quicksandFont.className}>
+    <html
+      lang={params.lang}
+      className={
+        quicksandFont.className + (preferTheme === "dark" ? " dark" : "")
+      }
+    >
       <body className="relative flex h-full shrink-0 grow flex-col bg-gradient-light bg-fixed font-medium text-black dark:bg-gradient-dark dark:text-white">
         <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
         <Navbar params={params} />

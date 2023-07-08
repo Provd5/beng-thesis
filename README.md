@@ -2,5 +2,5 @@
 
 - [ ] add SITE_URL to .env when app will be ready
 - [ ] add email template in supabase
-- [ ] move useSession from MainLayout
-- [ ]
+- [x] move useSession from MainLayout
+- [ ] change isActive in NavbarLink after adding user/profile subpages
