@@ -11,18 +11,18 @@ interface AuthPageProps {
 }
 
 export const AuthPage: FC<AuthPageProps> = async ({ view, params }) => {
-  const t = await getTranslator(params.lang);
+  const { Auth } = await getTranslator(params.lang);
 
   return (
     <div className="relative flex h-full flex-col items-center justify-between px-3 py-8 text-sm text-white-light">
       <div />
       <div className="flex flex-col items-center">
-        <AuthForm t={t} view={view} />
+        <AuthForm Auth={Auth} view={view} />
       </div>
       <p className="text-xs">
-        {t.Auth.byLoggingIn}{" "}
+        {Auth.byLoggingIn}{" "}
         <Link href={"/"} className="underline">
-          {t.Auth.ourTermsOfService}
+          {Auth.ourTermsOfService}
         </Link>
         .
       </p>

@@ -1,4 +1,8 @@
 {
+  "Other": {
+    "Logout": "Logout",
+    "Loading": "Loading"
+  },
   "Settings": {
     "appStyle": "app style",
     "appLanguage": "app language"

@@ -14,7 +14,7 @@ interface SettingsProps {
 }
 
 export const Settings: FC<SettingsProps> = async ({ params }) => {
-  const t = await getTranslator(params.lang);
+  const { Settings, Theme } = await getTranslator(params.lang);
 
   const currentLang = (cookies().get("lang")?.value ?? defaultLocale) as Locale;
   // eslint-disable-next-line @typescript-eslint/require-await
@@ -34,13 +34,13 @@ export const Settings: FC<SettingsProps> = async ({ params }) => {
           }
         >
           <div className="flex grow flex-col items-center gap-3">
-            <p className="text-xs">{t.Settings.appStyle}</p>
+            <p className="text-xs">{Settings.appStyle}</p>
             <ThemeSwitcher
-              defaultText={t.Theme.default}
-              lightText={t.Theme.light}
-              darkText={t.Theme.dark}
+              defaultText={Theme.default}
+              lightText={Theme.light}
+              darkText={Theme.dark}
             />
-            <p className="text-xs">{t.Settings.appLanguage}</p>
+            <p className="text-xs">{Settings.appLanguage}</p>
             <LanguageSwitcher
               currentLang={currentLang}
               setLangCookie={setLangCookie}
