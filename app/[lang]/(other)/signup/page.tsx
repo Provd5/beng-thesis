@@ -1,9 +1,22 @@
+import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AuthPage } from "~/components/Auth/AuthPage";
-import { type Locale } from "~/dictionaries";
+import { getTranslator, type Locale } from "~/dictionaries";
+
+import { type PageProps } from "../../layout";
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { Signup } = await getTranslator(params.lang);
+
+  return {
+    title: `${Signup.categoryTitle} | Being Thesis`,
+  };
+}
 
 export default async function LoginPage({
   params,

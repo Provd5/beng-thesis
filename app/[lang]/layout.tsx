@@ -24,12 +24,15 @@ export const metadata = {
 //   return locales.map((locale) => getLocaleFrom({ locale }));
 // }
 
+export type PageProps = {
+  params: { lang: Locale };
+};
+
 export default function RootLayout({
   children,
   params,
-}: {
+}: PageProps & {
   children: React.ReactNode;
-  params: { lang: Locale };
 }) {
   const preferTheme = headers().get("sec-ch-prefers-color-scheme");
 
