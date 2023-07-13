@@ -4,3 +4,4 @@
 - [ ] add email template in supabase
 - [x] move useSession from MainLayout
 - [ ] change isActive in NavbarLink after adding user/profile subpages
+- [ ] add metadata/manifest/fix metadata titles

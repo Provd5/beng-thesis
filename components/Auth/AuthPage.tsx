@@ -14,7 +14,7 @@ export const AuthPage: FC<AuthPageProps> = async ({ view, params }) => {
   const { Auth } = await getTranslator(params.lang);
 
   return (
-    <div className="relative flex h-full flex-col items-center justify-between px-3 py-8 text-sm text-white-light">
+    <div className="relative flex h-full flex-col items-center justify-between px-3 py-6 text-sm text-white-light">
       <div />
       <div className="flex flex-col items-center">
         <AuthForm Auth={Auth} view={view} />

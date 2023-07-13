@@ -2,11 +2,15 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
+import { Settings } from "~/components/Settings";
 import { ProfilePageContainer } from "~/components/ui/PageContainer";
+
+import { type PageProps } from "../layout";
 
 export default async function ProfileLayout({
   children,
-}: {
+  params,
+}: PageProps & {
   children: React.ReactNode;
 }) {
   const supabase = createServerComponentClient({
@@ -21,5 +25,10 @@ export default async function ProfileLayout({
     redirect(`/login`);
   }
 
-  return <ProfilePageContainer>{children}</ProfilePageContainer>;
+  return (
+    <ProfilePageContainer>
+      {children}
+      <Settings params={params} />
+    </ProfilePageContainer>
+  );
 }
