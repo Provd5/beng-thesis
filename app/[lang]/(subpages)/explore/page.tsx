@@ -9,9 +9,9 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { Explore } = await getTranslator(params.lang);
-
+  const title = Explore.categoryTitle;
   return {
-    title: `${Explore.categoryTitle} | Being Thesis`,
+    title: title,
   };
 }
 

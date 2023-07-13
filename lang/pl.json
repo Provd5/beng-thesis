@@ -24,6 +24,7 @@
     "email": "Adres email",
     "and": "i",
     "password": "Hasło",
+    "repeatPassword": "Powtórz hasło",
     "logIn": "Zaloguj się",
     "signUp": "Stwórz konto",
     "with": "przez",

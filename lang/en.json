@@ -24,6 +24,7 @@
     "email": "Email",
     "and": "and",
     "password": "Password",
+    "repeatPassword": "Repeat password",
     "logIn": "Log in",
     "signUp": "Sign up",
     "with": "with",

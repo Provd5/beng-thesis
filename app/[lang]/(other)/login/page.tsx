@@ -1,7 +1,4 @@
 import { type Metadata } from "next";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AuthPage } from "~/components/Auth/AuthPage";
 import { getTranslator } from "~/dictionaries";
@@ -12,24 +9,12 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { Login } = await getTranslator(params.lang);
-
+  const title = Login.categoryTitle;
   return {
-    title: `${Login.categoryTitle} | Being Thesis`,
+    title: title,
   };
 }
 
-export default async function LoginPage({ params }: PageProps) {
-  const supabase = createServerComponentClient({
-    cookies,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (session) {
-    redirect(`/`);
-  }
-
+export default function LoginPage({ params }: PageProps) {
   return <AuthPage params={params} view="logIn" />;
 }

@@ -15,7 +15,11 @@ const quicksandFont = Quicksand({
 });
 
 export const metadata = {
-  title: "Welcome to Being Thesis!",
+  title: {
+    default: "Being Thesis",
+    template: "%s | Being Thesis",
+    absolute: "Welcome to Being Thesis!",
+  },
   description: "This is main description",
 };
 
