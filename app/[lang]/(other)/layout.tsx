@@ -28,7 +28,9 @@ export default async function ProfileLayout({
   return (
     <main className="nav-padding relative flex h-full flex-col text-xl text-white-light">
       {children}
-      <Settings params={params} />
+      <div className="absolute right-4 top-3 md:right-6 md:top-5">
+        <Settings params={params} />
+      </div>
     </main>
   );
 }

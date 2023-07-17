@@ -8,6 +8,8 @@ import { type Provider } from "@supabase/supabase-js";
 
 import { BiSolidErrorCircle } from "react-icons/bi";
 
+import { PasswordValidator } from "~/utils/validations/password";
+
 import { ButtonWhite } from "../ui/Buttons";
 
 interface AuthFormProps {
@@ -88,6 +90,8 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
     ) as HTMLInputElement;
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?])[A-Za-z\d!@#$%^&*()_\-+=<>?]{10,}$/;
+
+    console.log(PasswordValidator.parse(password.value));
 
     if (!passwordRegex.test(password.value)) {
       setErrorMsg(

@@ -5,3 +5,5 @@
 - [x] move useSession from MainLayout
 - [ ] change isActive in NavbarLink after adding user/profile subpages
 - [ ] add metadata/manifest/fix metadata titles
+- [ ] change avatars placeholder, favicon
+- [ ] change signup/login errors

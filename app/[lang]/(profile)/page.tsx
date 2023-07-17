@@ -1,38 +1,42 @@
-import { type Metadata } from "next";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { LogoutButton } from "~/components/LogoutButton";
-import { getTranslator } from "~/dictionaries";
+import { CreateUsername } from "~/components/Auth/CreateUsername";
+import { db } from "~/utils/db";
 
-import { type PageProps } from "../layout";
-
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const { Profile } = await getTranslator(params.lang);
-  const title = Profile.categoryTitle;
-  return {
-    title: title,
-  };
-}
-
-export default async function ProfilePage({ params }: PageProps) {
-  const { Other } = await getTranslator(params.lang);
-
+export default async function CreateFullnamePage() {
   const supabase = createServerComponentClient({
     cookies,
   });
 
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  console.log("user:", user);
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  return (
-    <>
-      <div>ProfilePage</div>
-      <LogoutButton text={Other.Logout} />
-    </>
-  );
+  const userExists = session?.user;
+
+  if (!userExists) {
+    redirect(`/login`);
+  }
+
+  const userData = await db.profile.findFirst({
+    where: { id: userExists.id },
+  });
+
+  if (!userData) {
+    redirect(`/login`);
+  }
+
+  if (userData.full_name) {
+    redirect(`/${userData.full_name}`);
+  } else {
+    return (
+      <CreateUsername
+        avatarSrc={userData.avatar_url}
+        email={userExists.email as string}
+        createdAt={userData.created_at}
+      />
+    );
+  }
 }

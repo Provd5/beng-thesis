@@ -25,29 +25,27 @@ export const Settings: FC<SettingsProps> = async ({ params }) => {
 
   return (
     <>
-      <div className="absolute right-4 top-3 md:right-6 md:top-5">
-        <ModalInitiator
-          initiatorStyle={
-            <div className="hover:scale-105">
-              <SlOptions />
-            </div>
-          }
-        >
-          <div className="flex grow flex-col items-center gap-3">
-            <p className="text-xs">{Settings.appStyle}</p>
-            <ThemeSwitcher
-              defaultText={Theme.default}
-              lightText={Theme.light}
-              darkText={Theme.dark}
-            />
-            <p className="text-xs">{Settings.appLanguage}</p>
-            <LanguageSwitcher
-              currentLang={currentLang}
-              setLangCookie={setLangCookie}
-            />
+      <ModalInitiator
+        initiatorStyle={
+          <div className="hover:scale-105">
+            <SlOptions className="text-lg" />
           </div>
-        </ModalInitiator>
-      </div>
+        }
+      >
+        <div className="flex grow flex-col items-center gap-3">
+          <p className="text-xs">{Settings.appStyle}</p>
+          <ThemeSwitcher
+            defaultText={Theme.default}
+            lightText={Theme.light}
+            darkText={Theme.dark}
+          />
+          <p className="text-xs">{Settings.appLanguage}</p>
+          <LanguageSwitcher
+            currentLang={currentLang}
+            setLangCookie={setLangCookie}
+          />
+        </div>
+      </ModalInitiator>
     </>
   );
 };

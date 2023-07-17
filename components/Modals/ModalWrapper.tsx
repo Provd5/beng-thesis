@@ -18,8 +18,8 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
 }) => {
   return (
     <>
-      <div className="fixed inset-0" onClick={() => setOpenModal(false)} />
-      <div className="absolute right-0 top-full mt-2 flex rounded-lg bg-white-light px-7 py-5 text-black-light drop-shadow-lg dark:bg-black-light dark:text-white">
+      <div className="fixed inset-0 z-10" onClick={() => setOpenModal(false)} />
+      <div className="absolute right-0 top-full z-20 mt-2 flex rounded-lg bg-white-light px-7 py-5 text-black-light drop-shadow-lg dark:bg-black-light dark:text-white">
         {children}
       </div>
     </>
