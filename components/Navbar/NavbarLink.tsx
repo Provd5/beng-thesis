@@ -3,6 +3,7 @@
 import type { FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 import { type Locale, locales } from "~/dictionaries";
 
@@ -31,11 +32,11 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
   return (
     <Link
       href={href}
-      className={
-        "flex shrink-0 items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50 " +
-        (big ? "h-[52px] w-[52px]" : "h-[48px] w-[48px]") +
-        (isActive ? " bg-white-light dark:bg-black-dark" : "")
-      }
+      className={clsx(
+        "flex shrink-0 items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50",
+        big ? "h-[52px] w-[52px]" : "h-[48px] w-[48px]",
+        isActive && "bg-white-light dark:bg-black-dark"
+      )}
     >
       <div className="mt-[-4px] flex flex-col items-center justify-center gap-0.5">
         <SvgPainter className={big ? "h-7 w-7" : "h-6 w-6"}>

@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import Image from "next/image";
+import clsx from "clsx";
 
 import AvatarPlaceholder from "~/assets/AvatarPlaceholder.svg";
 
@@ -13,7 +14,7 @@ export const AvatarImage: FC<AvatarImageProps> = ({ avatarSrc, className }) => {
     <Image
       src={avatarSrc ? avatarSrc : (AvatarPlaceholder as string)}
       alt="Profile Avatar"
-      className={className ?? "" + " rounded-full"}
+      className={clsx(className, "rounded-full")}
     />
   );
 };

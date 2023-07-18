@@ -21,6 +21,7 @@
     "accept-language-parser": "^1.5.0",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
+    "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "negotiator": "^0.6.3",
     "next": "latest",
