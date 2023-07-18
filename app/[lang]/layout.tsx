@@ -3,6 +3,7 @@ import { Quicksand } from "next/font/google";
 import { headers } from "next/headers";
 
 import { Navbar } from "~/components/Navbar/Navbar";
+import { ToasterComponent } from "~/components/ui/ToasterComponent";
 import { type Locale } from "~/dictionaries";
 
 import "~/styles/globals.css";
@@ -52,7 +53,10 @@ export default function RootLayout({
       <body className="relative flex h-full shrink-0 grow flex-col bg-gradient-light bg-fixed font-medium text-black dark:bg-gradient-dark dark:text-white">
         <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
         <Navbar params={params} />
-        <Suspense fallback={<Loading />}>{children}</Suspense>
+        <Suspense fallback={<Loading />}>
+          {children}
+          <ToasterComponent />
+        </Suspense>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { type FC, type FormEvent, useState } from "react";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -276,7 +276,6 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
           </p>
         )}
       </div>
-      <Toaster position="bottom-center" />
     </>
   );
 };
