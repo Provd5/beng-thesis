@@ -1,6 +1,7 @@
 "use client";
 
 import { type Dispatch, type FC, type SetStateAction, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { type IconType } from "react-icons/lib";
 import { FaSun } from "react-icons/fa";
@@ -11,17 +12,7 @@ import { SvgPainterWithIcon } from "../ui/SvgPainter";
 
 type themeTypes = "default" | "light" | "dark";
 
-interface ThemeSwitcherProps {
-  defaultText: string;
-  lightText: string;
-  darkText: string;
-}
-
-export const ThemeSwitcher: FC<ThemeSwitcherProps> = ({
-  defaultText,
-  lightText,
-  darkText,
-}) => {
+export const ThemeSwitcher: FC = () => {
   const [currentTheme, setCurrentTheme] = useState<themeTypes>(
     (localStorage.theme as themeTypes) || "default"
   );
@@ -34,21 +25,18 @@ export const ThemeSwitcher: FC<ThemeSwitcherProps> = ({
           active={currentTheme === "default"}
           Icon={IoDesktop}
           theme={"default"}
-          text={defaultText}
         />
         <ThemeButton
           setCurrentTheme={setCurrentTheme}
           active={currentTheme === "light"}
           Icon={FaSun}
           theme={"light"}
-          text={lightText}
         />
         <ThemeButton
           setCurrentTheme={setCurrentTheme}
           active={currentTheme === "dark"}
           Icon={MdNightsStay}
           theme={"dark"}
-          text={darkText}
         />
       </div>
     </>
@@ -58,7 +46,6 @@ export const ThemeSwitcher: FC<ThemeSwitcherProps> = ({
 interface ThemeButtonProps {
   Icon: IconType;
   theme: themeTypes;
-  text: string;
   setCurrentTheme: Dispatch<SetStateAction<themeTypes>>;
   active: boolean;
 }
@@ -66,10 +53,11 @@ interface ThemeButtonProps {
 const ThemeButton: FC<ThemeButtonProps> = ({
   Icon,
   theme,
-  text,
   setCurrentTheme,
   active,
 }) => {
+  const t = useTranslations("Theme");
+
   const handleToggleTheme = (theme: themeTypes) => {
     if (theme === "default") {
       localStorage.removeItem("theme");
@@ -115,7 +103,9 @@ const ThemeButton: FC<ThemeButtonProps> = ({
             : ""
         }
       >
-        {text}
+        {theme === "dark" && t("dark")}
+        {theme === "default" && t("default")}
+        {theme === "light" && t("light")}
       </p>
     </button>
   );

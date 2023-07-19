@@ -3,17 +3,15 @@
 import type { FC } from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { FaPowerOff } from "react-icons/fa";
 
 import { Loader } from "./ui/Loader";
 
-interface LogoutButtonProps {
-  text: string;
-}
-
-export const LogoutButton: FC<LogoutButtonProps> = ({ text }) => {
+export const LogoutButton: FC = () => {
+  const t = useTranslations("Other");
   const [isLoading, setIsLoading] = useState(false);
   const supabase = createClientComponentClient();
   const router = useRouter();
@@ -33,7 +31,7 @@ export const LogoutButton: FC<LogoutButtonProps> = ({ text }) => {
     >
       <div className="h-4 w-4">{isLoading ? <Loader /> : <FaPowerOff />}</div>
 
-      <p>{text}</p>
+      <p>{t("logout")}</p>
     </button>
   );
 };

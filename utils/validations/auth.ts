@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-export enum AuthValidationErrors {
-  password_required_error = "password_required_error",
-  wrong_email = "wrong_email",
-  wrong_password = "wrong_password",
-  password_too_short = "password_too_short",
-}
+import { AuthValidationErrors } from "./errorsEnums";
 
 export const LoginValidator = z.object({
   formData: z.object({
@@ -21,10 +16,17 @@ export const SignupValidator = z.object({
     email: z.string().email({ message: AuthValidationErrors.wrong_email }),
     password: z
       .string()
-      .min(10, { message: AuthValidationErrors.password_too_short })
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?])[A-Za-z\d!@#$%^&*()_\-+=<>?]{10,}$/,
         { message: AuthValidationErrors.wrong_password }
-      ), // at least one number, one special character, both lower and uppercase letters
+      ), // at least 10 characters, one number, one special character, both lower and uppercase letters
   }),
 });
+
+export const UsernameValidator = z
+  .string()
+  .min(3, { message: AuthValidationErrors.username_too_short_3 })
+  .max(32, { message: AuthValidationErrors.username_too_long_32 })
+  .regex(/^[a-zA-Z0-9_]+$/, {
+    message: AuthValidationErrors.wrong_username,
+  }); // only numbers, lower and uppercase letters

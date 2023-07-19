@@ -3,16 +3,13 @@ import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { Settings } from "~/components/Settings";
-
-import { type PageProps } from "../layout";
+import { defaultLocale, type localeTypes } from "~/i18n";
 
 export default async function ProfileLayout({
   children,
-  params,
-}: PageProps & {
+}: {
   children: React.ReactNode;
 }) {
-  // const t = await getTranslator(params.lang);
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -25,11 +22,19 @@ export default async function ProfileLayout({
     redirect(`/`);
   }
 
+  const currentLang = (cookies().get("lang")?.value ??
+    defaultLocale) as localeTypes;
+  // eslint-disable-next-line @typescript-eslint/require-await
+  const setLangCookie = async (data: localeTypes) => {
+    "use server";
+    cookies().set("lang", data);
+  };
+
   return (
     <main className="nav-padding relative flex h-full flex-col text-xl text-white-light">
       {children}
       <div className="absolute right-4 top-3 md:right-6 md:top-5">
-        <Settings params={params} />
+        <Settings currentLang={currentLang} setLangCookie={setLangCookie} />
       </div>
     </main>
   );

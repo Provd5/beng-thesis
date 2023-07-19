@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
-import { type Locale, locales } from "~/dictionaries";
+import { locales, type localeTypes } from "~/i18n";
 
 import { SvgPainter } from "../ui/SvgPainter";
 
@@ -25,7 +25,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
   const pathname = usePathname();
   const pathnameWithoutLocale: string[] | undefined = pathname
     .split("/")
-    .filter((element) => !locales.includes(element as Locale));
+    .filter((element) => !locales.includes(element as localeTypes));
 
   const isActive = (pathnameWithoutLocale[1] ?? "") === href.split("/")[1];
 

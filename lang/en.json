@@ -1,48 +1,53 @@
 {
   "Other": {
-    "Logout": "Logout",
-    "Loading": "Loading"
+    "logout": "Logout",
+    "loading": "Loading"
   },
   "Settings": {
-    "appStyle": "app style",
-    "appLanguage": "app language"
+    "app style": "app style",
+    "app language": "app language"
   },
   "Theme": {
     "default": "Default",
     "light": "Light",
     "dark": "Dark"
   },
-  "Signup": {
-    "categoryTitle": "Sign up"
-  },
-  "Login": {
-    "categoryTitle": "Log in"
+  "CategoryTitles": {
+    "signup": "Sign up",
+    "login": "Log in",
+    "explore": "Explore",
+    "profile": "Profile",
+    "search": "Search"
   },
   "Auth": {
-    "byLoggingIn": "By logging in, you agree to",
-    "ourTermsOfService": "our terms of service",
-    "email": "Email",
-    "and": "and",
-    "password": "Password",
-    "repeatPassword": "Repeat password",
     "logIn": "Log in",
     "signUp": "Sign up",
     "with": "with",
-    "provider": "provider",
-    "ForgotPassword": "Forgot your password",
-    "NoAccountYet": "No account yet",
-    "CreateAccount": "Sign up",
-    "AlreadyHaveAccount": "Already have an account",
-    "LogInToAccount": "Log in",
-    "CheckYourEmail": "Check your email to continue login"
+    "logIn/signUp with email and password": "{view} with email and password",
+    "logIn/signUp with provider": "{view} with provider",
+    "terms of service": "By logging in, you agree to <Link>our terms of service</Link>.",
+    "email:": "Email:",
+    "password:": "Password:",
+    "repeat password:": "Repeat password:",
+    "forgot your password?": "Forgot your password?",
+    "no account yet? sign up": "No account yet? <Link>Sign up</Link>",
+    "already have an account? log in": "Already have an account? <Link>Log in</Link>",
+    "check your email to continue login": "Check your email ({email}), to continue login"
   },
-  "Explore": {
-    "categoryTitle": "Explore"
-  },
-  "Profile": {
-    "categoryTitle": "Profile"
-  },
-  "Search": {
-    "categoryTitle": "Search"
+  "AuthErrors": {
+    "password_required_error": "Password is required",
+    "username_too_short_3": "Username must be at least 3 characters",
+    "username_too_long_32": "Username must be less than 32 characters",
+    "wrong_email": "Email is invalid",
+    "wrong_password": "Password must have at least 10 characters, one number, one special character, both lower and uppercase letters",
+    "wrong_username": "Username can only contain numbers, lower and uppercase letters",
+    "user_exists": "User with this email address already exists",
+    "not_the_same_passwords": "The passwords are not the same",
+    "disabled_signups_error": "Email signups are temporary disabled",
+    "email_link_error": "Email link is invalid or has expired",
+    "token_error": "Token has expired or is invalid",
+    "login_error": "Invalid login credentials",
+    "email_not_confirmed": "Email not confirmed",
+    "something_went_wrong": "Something went wrong, try again in a moment"
   }
 }

@@ -3,7 +3,7 @@
 import { type FC, type FormEvent, useState } from "react";
 
 import { dateFormater } from "~/utils/dateFormater";
-import { UsernameValidator } from "~/utils/validations/username";
+import { UsernameValidator } from "~/utils/validations/auth";
 
 import { AvatarImage } from "../ui/AvatarImage";
 import { ButtonWhite } from "../ui/Buttons";

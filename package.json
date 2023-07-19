@@ -25,7 +25,7 @@
     "date-fns": "^2.30.0",
     "negotiator": "^0.6.3",
     "next": "latest",
-    "next-intl": "^2.18.0",
+    "next-intl": "^2.19.0",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -4,41 +4,24 @@ import { type FC, type FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { type Provider } from "@supabase/supabase-js";
 import { z } from "zod";
 
-import {
-  AuthValidationErrors,
-  LoginValidator,
-  SignupValidator,
-} from "~/utils/validations/auth";
-import { supabaseAuthValidatorErrors } from "~/utils/validations/supabaseAuth";
+import { LoginValidator, SignupValidator } from "~/utils/validations/auth";
+import { AuthValidationErrors } from "~/utils/validations/errorsEnums";
 
 import { ButtonWhite } from "../ui/Buttons";
 import { Input } from "../ui/Input";
 
 interface AuthFormProps {
   view: "logIn" | "signUp";
-  Auth: {
-    email: string;
-    and: string;
-    password: string;
-    repeatPassword: string;
-    logIn: string;
-    signUp: string;
-    with: string;
-    provider: string;
-    ForgotPassword: string;
-    NoAccountYet: string;
-    CreateAccount: string;
-    AlreadyHaveAccount: string;
-    LogInToAccount: string;
-    CheckYourEmail: string;
-  };
 }
 
-export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
+export const AuthForm: FC<AuthFormProps> = ({ view }) => {
+  const t = useTranslations("Auth");
+  const te = useTranslations("AuthErrors");
   const supabase = createClientComponentClient();
 
   const router = useRouter();
@@ -60,7 +43,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
         },
       });
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      toast.error(te("something_went_wrong"));
     } finally {
       setIsLoading(false);
     }
@@ -86,11 +69,10 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
         password: password.value,
       });
 
-      error?.message.includes(supabaseAuthValidatorErrors.login_error) &&
-        toast.error("zle dane");
-      error?.message.includes(
-        supabaseAuthValidatorErrors.email_not_confirmed
-      ) && toast.error("nie potwierdzono");
+      error?.message.includes(AuthValidationErrors.login_error) &&
+        toast.error(te("login_error"));
+      error?.message.includes(AuthValidationErrors.email_not_confirmed) &&
+        toast.error(te("email_not_confirmed"));
 
       //on success
       data.user && router.refresh();
@@ -98,12 +80,12 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
       if (error instanceof z.ZodError) {
         error.issues.map((error) => {
           error.message === AuthValidationErrors.wrong_email &&
-            toast.error("wrong_email");
+            toast.error(te("wrong_email"));
           error.message === AuthValidationErrors.password_required_error &&
-            toast.error("password_required_error");
+            toast.error(te("password_required_error"));
         });
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error(te("something_went_wrong"));
       }
     } finally {
       setIsLoading(false);
@@ -123,7 +105,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
       ) as HTMLInputElement;
 
       if (password.value !== passwordRepeat.value) {
-        toast.error("nie takie same");
+        toast.error(te("not_the_same_passwords"));
         return;
       }
 
@@ -142,16 +124,15 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
         },
       });
 
-      error?.message.includes(
-        supabaseAuthValidatorErrors.disabled_signups_error
-      ) && toast.error("DISABLED_SIGNUPS_ERROR");
-      error?.message.includes(supabaseAuthValidatorErrors.email_link_error) &&
-        toast.error("EMAIL_LINK_ERROR");
-      error?.message.includes(supabaseAuthValidatorErrors.token_error) &&
-        toast.error("TOKEN_ERROR");
+      error?.message.includes(AuthValidationErrors.disabled_signups_error) &&
+        toast.error(te("disabled_signups_error"));
+      error?.message.includes(AuthValidationErrors.email_link_error) &&
+        toast.error(te("email_link_error"));
+      error?.message.includes(AuthValidationErrors.token_error) &&
+        toast.error(te("token_error"));
 
       if (!error && !data.user?.identities?.length) {
-        toast.error("USER_EXIST");
+        toast.error(te("user_exists"));
         return;
       }
 
@@ -161,14 +142,14 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
       if (error instanceof z.ZodError) {
         error.issues.map((error) => {
           error.message === AuthValidationErrors.wrong_email &&
-            toast.error("wrong_email");
+            toast.error(te("wrong_email"));
           error.message === AuthValidationErrors.wrong_password &&
-            toast.error("wrong_password");
-          error.message === AuthValidationErrors.password_too_short &&
-            toast.error("password_too_short");
+            toast.error(te("wrong_password"), {
+              duration: 7000,
+            });
         });
       } else {
-        toast.error("Something went wrong. Please try again.");
+        toast.error(te("something_went_wrong"));
       }
     } finally {
       setIsLoading(false);
@@ -177,14 +158,12 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
 
   return checkMail ? (
     <h1 className="flex flex-col gap-1 text-center text-xl">
-      <span className="text-3xl">✉️ {checkMail}</span>
-      {Auth.CheckYourEmail}.
+      <span className="text-3xl">✉️</span>
+      {t("check your email to continue login", { email: checkMail })}
     </h1>
   ) : (
     <>
-      <h1 className="mb-[32px] text-3xl font-semibold">
-        {view === "logIn" ? Auth.logIn : Auth.signUp}
-      </h1>
+      <h1 className="mb-[32px] text-3xl font-semibold">{t(view)}</h1>
       {!loginByEmail ? (
         <div className="flex flex-col items-center gap-1">
           {Providers.map((provider) => (
@@ -193,7 +172,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
               onClick={() => handleProviderLogin(provider)}
               className="w-[220px]"
             >
-              {Auth.with}{" "}
+              {t("with")}{" "}
               <span className="first-letter:uppercase">{provider}</span>
             </ButtonWhite>
           ))}
@@ -201,8 +180,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
             className="mt-5 font-semibold underline"
             onClick={() => setLoginByEmail(true)}
           >
-            {view === "logIn" ? Auth.logIn : Auth.signUp} {Auth.with}{" "}
-            {Auth.email} {Auth.and} {Auth.password}
+            {t("logIn/signUp with email and password", { view: t(view) })}
           </button>
         </div>
       ) : (
@@ -212,7 +190,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
             onSubmit={view === "logIn" ? handleLogIn : handleSignUp}
           >
             <Input
-              label={`${Auth.email}:`}
+              label={t("email:")}
               id="email-input"
               type="email"
               name="email"
@@ -221,7 +199,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
               required
             />
             <Input
-              label={`${Auth.password}:`}
+              label={t("password:")}
               id="password-input"
               type="password"
               name="password"
@@ -230,7 +208,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
             />
             {view === "signUp" && (
               <Input
-                label={`${Auth.repeatPassword}:`}
+                label={t("repeat password:")}
                 id="password-repeat-input"
                 type="password"
                 name="password-repeat"
@@ -239,40 +217,45 @@ export const AuthForm: FC<AuthFormProps> = ({ view, Auth }) => {
               />
             )}
             <Link className="underline" href={"/"}>
-              {Auth.ForgotPassword}?
+              {t("forgot your password?")}
             </Link>
             <ButtonWhite
               loading={isLoading}
               type="submit"
               className="my-5 uppercase"
             >
-              {view === "logIn" ? Auth.LogInToAccount : Auth.CreateAccount}
+              {t(view)}
             </ButtonWhite>
           </form>
           <button
             className="font-semibold underline"
             onClick={() => setLoginByEmail(false)}
           >
-            {view === "logIn" ? Auth.logIn : Auth.signUp} {Auth.with}{" "}
-            {Auth.provider}
+            {t("logIn/signUp with provider", { view: t(view) })}
           </button>
         </>
       )}
       <div className="my-10">
         {view === "logIn" && (
           <p>
-            {Auth.NoAccountYet}?{" "}
-            <Link className="font-medium underline" href="/signup">
-              {Auth.CreateAccount}
-            </Link>
+            {t.rich("no account yet? sign up", {
+              Link: (chunks) => (
+                <Link href="/signup" className="font-medium underline">
+                  {chunks}
+                </Link>
+              ),
+            })}
           </p>
         )}
         {view === "signUp" && (
           <p>
-            {Auth.AlreadyHaveAccount}?{" "}
-            <Link className="font-medium underline" href="/login">
-              {Auth.LogInToAccount}
-            </Link>
+            {t.rich("already have an account? log in", {
+              Link: (chunks) => (
+                <Link href="/login" className="font-medium underline">
+                  {chunks}
+                </Link>
+              ),
+            })}
           </p>
         )}
       </div>

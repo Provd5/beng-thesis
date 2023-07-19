@@ -1,48 +1,53 @@
 {
   "Other": {
-    "Logout": "Wyloguj",
-    "Loading": "Ładowanie"
+    "logout": "Wyloguj",
+    "loading": "Ładowanie"
   },
   "Settings": {
-    "appStyle": "styl aplikacji",
-    "appLanguage": "język aplikacji"
+    "app style": "styl aplikacji",
+    "app language": "język aplikacji"
   },
   "Theme": {
     "default": "Domyślny",
     "light": "Jasny",
     "dark": "Ciemny"
   },
-  "Signup": {
-    "categoryTitle": "Stwórz konto"
-  },
-  "Login": {
-    "categoryTitle": "Zaloguj"
+  "CategoryTitles": {
+    "signup": "Stwórz konto",
+    "login": "Zaloguj",
+    "explore": "Odkryj",
+    "profile": "Profil",
+    "search": "Szukaj"
   },
   "Auth": {
-    "byLoggingIn": "Logując, zgadzasz się na",
-    "ourTermsOfService": "nasze warunki świadczenia usług",
-    "email": "Adres email",
-    "and": "i",
-    "password": "Hasło",
-    "repeatPassword": "Powtórz hasło",
     "logIn": "Zaloguj się",
     "signUp": "Stwórz konto",
     "with": "przez",
-    "provider": "dostawcę",
-    "ForgotPassword": "Nie pamiętasz hasła",
-    "NoAccountYet": "Nie masz jeszcze konta",
-    "CreateAccount": "Stwórz",
-    "AlreadyHaveAccount": "Masz już konto",
-    "LogInToAccount": "Zaloguj",
-    "CheckYourEmail": "Sprawdź swój adres email, aby kontynuować logowanie"
+    "logIn/signUp with email and password": "{view} za pomocą adresu email i hasła",
+    "logIn/signUp with provider": "{view} przez dostawcę",
+    "terms of service": "Logując się, wyrażasz zgodę na <Link>nasze warunki świadczenia usług</Link>.",
+    "email:": "Adres email:",
+    "password:": "Hasło:",
+    "repeat password:": "Powtórz hasło:",
+    "forgot your password?": "Nie pamiętasz hasła?",
+    "no account yet? sign up": "Nie masz jeszcze konta? <Link>Stwórz je</Link>",
+    "already have an account? log in": "Masz już konto? <Link>Zaloguj się</Link>",
+    "check your email to continue login": "Sprawdź swój adres email ({email}), aby kontynuować logowanie"
   },
-  "Explore": {
-    "categoryTitle": "Odkryj"
-  },
-  "Profile": {
-    "categoryTitle": "Profil"
-  },
-  "Search": {
-    "categoryTitle": "Szukaj"
+  "AuthErrors": {
+    "password_required_error": "Podanie hasła jest wymagane",
+    "username_too_short_3": "Nazwa użytkownika musi mieć co najmniej 3 znaki",
+    "username_too_long_32": "Nazwa użytkownika nie może zawierać więcej niż 32 znaki",
+    "wrong_email": "Adres email jest nieprawidłowy",
+    "wrong_password": "Hasło musi zawierać co najmniej 10 znaków, jedną cyfrę, jeden znak specjalny, małe i wielkie litery",
+    "wrong_username": "Nazwa użytkownika może zawierać tylko cyfry, małe i wielkie litery",
+    "user_exists": "Użytkownik o tym adresie e-mail już istnieje",
+    "not_the_same_passwords": "Hasła nie są takie same",
+    "disabled_signups_error": "Rejestracja przez email jest tymczasowo wyłączona",
+    "email_link_error": "Link email jest nieprawidłowy lub wygasł",
+    "token_error": "Token wygasł lub jest nieprawidłowy",
+    "login_error": "Nieprawidłowe dane logowania",
+    "email_not_confirmed": "Email nie został potwierdzony",
+    "something_went_wrong": "Coś poszło nie tak, spróbuj ponownie za chwilę"
   }
 }
