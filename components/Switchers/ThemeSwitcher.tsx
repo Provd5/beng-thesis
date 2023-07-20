@@ -2,13 +2,12 @@
 
 import { type Dispatch, type FC, type SetStateAction, useState } from "react";
 import { useTranslations } from "next-intl";
+import clsx from "clsx";
 
 import { type IconType } from "react-icons/lib";
 import { FaSun } from "react-icons/fa";
 import { IoDesktop } from "react-icons/io5";
 import { MdNightsStay } from "react-icons/md";
-
-import { SvgPainterWithIcon } from "../ui/SvgPainter";
 
 type themeTypes = "default" | "light" | "dark";
 
@@ -19,7 +18,7 @@ export const ThemeSwitcher: FC = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-3 text-base">
+      <div className="flex flex-col gap-3">
         <ThemeButton
           setCurrentTheme={setCurrentTheme}
           active={currentTheme === "default"}
@@ -87,13 +86,16 @@ const ThemeButton: FC<ThemeButtonProps> = ({
 
   return (
     <button
-      className="flex items-center gap-1"
+      className="flex items-center gap-1 text-base"
       onClick={() => handleToggleTheme(theme)}
     >
-      <SvgPainterWithIcon
-        Icon={Icon}
-        textSize="text-lg"
-        className={!active ? "fill-black-light dark:fill-white" : ""}
+      <Icon
+        className={clsx(
+          active
+            ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
+            : "fill-black-light dark:fill-white",
+          "text-md"
+        )}
       />
 
       <p

@@ -44,24 +44,19 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, href }) => {
       )}
     >
       <div className="mt-[-4px] flex flex-col items-center justify-center gap-0.5">
-        {/* <SvgPainter
-            className={
-              href === "login" || href === "profile" ? "h-7 w-7" : "h-6 w-6"
-            }
-          >
-            {(href === "login" || href === "profile") && <ProfileIcon />}
-            {href === "explore" && <ExploreIcon />}
-            {href === "search" && <SearchIcon />}
-          </SvgPainter> */}
         <div
           className={clsx(
             href === "login" || href === "profile" ? "h-7 w-7" : "h-6 w-6",
-            "text-white"
+            isActive
+              ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
+              : "text-black-dark dark:text-white-light"
           )}
         >
-          {(href === "login" || href === "profile") && <ProfileIcon />}
-          {href === "explore" && <ExploreIcon />}
-          {href === "search" && <SearchIcon />}
+          {(href === "login" || href === "profile") && (
+            <ProfileIcon isActive={isActive} />
+          )}
+          {href === "explore" && <ExploreIcon isActive={isActive} />}
+          {href === "search" && <SearchIcon isActive={isActive} />}
         </div>
         <p className="text-2xs">{t(href)}</p>
       </div>

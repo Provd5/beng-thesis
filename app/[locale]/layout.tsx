@@ -66,13 +66,13 @@ export default async function RootLayout({
     >
       <body className="relative flex h-full flex-col bg-gradient-light bg-fixed font-medium text-black antialiased dark:bg-gradient-dark dark:text-white">
         <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
+        <SvgPainter />
 
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar />
           <Suspense fallback={<Loading />}>
             {children}
             <ToasterComponent />
-            <SvgPainter>etr</SvgPainter>
           </Suspense>
         </NextIntlClientProvider>
       </body>

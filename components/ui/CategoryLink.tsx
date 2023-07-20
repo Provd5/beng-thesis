@@ -14,8 +14,6 @@ import {
 } from "react-icons/bs";
 import { MdNavigateNext } from "react-icons/md";
 
-import { SvgPainterWithIcon } from "./SvgPainter";
-
 type variantTypes =
   | "statistics"
   | "owned"
@@ -66,7 +64,7 @@ export const CategoryLink: FC<CategoryLinkProps> = ({ variant }) => {
             </div>
           )}
         </div>
-        <SvgPainterWithIcon Icon={MdNavigateNext} textSize="text-xl" />
+        <MdNavigateNext className="fill-[var(--svg-gradient-dark)] text-xl dark:fill-[var(--svg-gradient)]" />
       </Link>
     </div>
   );
