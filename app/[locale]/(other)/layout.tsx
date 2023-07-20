@@ -5,7 +5,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Settings } from "~/components/Settings";
 import { defaultLocale, type localeTypes } from "~/i18n";
 
-export default async function ProfileLayout({
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ export default async function ProfileLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (session) {
+  if (session?.user) {
     redirect(`/`);
   }
 

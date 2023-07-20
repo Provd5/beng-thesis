@@ -7,10 +7,17 @@ interface InputProps
     HTMLInputElement
   > {
   id: string;
+  loading: boolean;
   label?: string;
 }
 
-export const Input: FC<InputProps> = ({ id, label, className, ...props }) => {
+export const Input: FC<InputProps> = ({
+  id,
+  loading,
+  label,
+  className,
+  ...props
+}) => {
   return (
     <div className="flex flex-col">
       {label && (
@@ -19,6 +26,7 @@ export const Input: FC<InputProps> = ({ id, label, className, ...props }) => {
         </label>
       )}
       <input
+        disabled={loading}
         className={clsx(
           "w-64 rounded-lg bg-white px-3 py-2 text-md text-black dark:bg-black dark:text-white",
           className

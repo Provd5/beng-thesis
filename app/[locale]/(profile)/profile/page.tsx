@@ -2,10 +2,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { CreateUsername } from "~/components/Auth/CreateUsername";
-import { db } from "~/utils/db";
+import { db } from "~/lib/db";
 
-export default async function CreateFullnamePage() {
+export default async function CheckUsernamePage() {
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -28,15 +27,6 @@ export default async function CreateFullnamePage() {
     redirect(`/login`);
   }
 
-  if (userData.full_name) {
-    redirect(`/${userData.full_name}`);
-  } else {
-    return (
-      <CreateUsername
-        avatarSrc={userData.avatar_url}
-        email={userExists.email as string}
-        createdAt={userData.created_at}
-      />
-    );
-  }
+  if (userData.full_name) redirect(`/profile/${userData.full_name}`);
+  else redirect(`/edit/username`);
 }

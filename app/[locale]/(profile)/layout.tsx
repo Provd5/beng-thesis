@@ -19,7 +19,7 @@ export default async function ProfileLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session) {
+  if (!session?.user) {
     redirect(`/login`);
   }
 

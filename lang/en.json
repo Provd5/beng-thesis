@@ -23,8 +23,8 @@
     "logIn": "Log in",
     "signUp": "Sign up",
     "with": "with",
-    "logIn/signUp with email and password": "{view} with email and password",
-    "logIn/signUp with provider": "{view} with provider",
+    "logIn/signUp with email and password": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with email and password",
+    "logIn/signUp with provider": "{view, select, logIn {Log in} signUp {Sign up}} with provider",
     "terms of service": "By logging in, you agree to <Link>our terms of service</Link>.",
     "email:": "Email:",
     "password:": "Password:",
@@ -34,20 +34,36 @@
     "already have an account? log in": "Already have an account? <Link>Log in</Link>",
     "check your email to continue login": "Check your email ({email}), to continue login"
   },
+  "EditUsername": {
+    "back to profile": "back to profile",
+    "email:": "Email:",
+    "account created:": "Account created:",
+    "change/create your username:": "{view, select, change {Change} create {Create} other {Change/Create}} your username:",
+    "enter new username": "Enter new username...",
+    "submit": "Submit"
+  },
   "AuthErrors": {
     "password_required_error": "Password is required",
     "username_too_short_3": "Username must be at least 3 characters",
     "username_too_long_32": "Username must be less than 32 characters",
     "wrong_email": "Email is invalid",
     "wrong_password": "Password must have at least 10 characters, one number, one special character, both lower and uppercase letters",
-    "wrong_username": "Username can only contain numbers, lower and uppercase letters",
-    "user_exists": "User with this email address already exists",
+    "wrong_username": "Username can only contain letters (a-z), numbers (0-9) and periods (.)",
+    "email_exists": "User with this email address already exists",
+    "username_exists": "This username is already taken",
     "not_the_same_passwords": "The passwords are not the same",
     "disabled_signups_error": "Email signups are temporary disabled",
     "email_link_error": "Email link is invalid or has expired",
     "token_error": "Token has expired or is invalid",
     "login_error": "Invalid login credentials",
     "email_not_confirmed": "Email not confirmed",
-    "something_went_wrong": "Something went wrong, try again in a moment"
+    "something_went_wrong": "Something went wrong, try again in a moment",
+    "success": "Success",
+    "same_username": "Given username is the same as the current"
+  },
+  "NotFoundProfilePage": {
+    "not found": "Not found",
+    "not found message": "This profile <s>doesn't exist</s> or has been set as <s>private</s>.",
+    "back to your profile": "back to your profile"
   }
 }

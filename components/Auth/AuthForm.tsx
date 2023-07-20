@@ -9,8 +9,11 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { type Provider } from "@supabase/supabase-js";
 import { z } from "zod";
 
-import { LoginValidator, SignupValidator } from "~/utils/validations/auth";
-import { AuthValidationErrors } from "~/utils/validations/errorsEnums";
+import { LoginValidator, SignupValidator } from "~/lib/validations/auth";
+import {
+  AuthErrors,
+  SupabaseValidatorErrors,
+} from "~/lib/validations/errorsEnums";
 
 import { ButtonWhite } from "../ui/Buttons";
 import { Input } from "../ui/Input";
@@ -43,7 +46,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
         },
       });
     } catch (error) {
-      toast.error(te("something_went_wrong"));
+      toast.error(te(AuthErrors.something_went_wrong));
     } finally {
       setIsLoading(false);
     }
@@ -69,9 +72,9 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
         password: password.value,
       });
 
-      error?.message.includes(AuthValidationErrors.login_error) &&
+      error?.message.includes(SupabaseValidatorErrors.login_error) &&
         toast.error(te("login_error"));
-      error?.message.includes(AuthValidationErrors.email_not_confirmed) &&
+      error?.message.includes(SupabaseValidatorErrors.email_not_confirmed) &&
         toast.error(te("email_not_confirmed"));
 
       //on success
@@ -79,13 +82,10 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
     } catch (error) {
       if (error instanceof z.ZodError) {
         error.issues.map((error) => {
-          error.message === AuthValidationErrors.wrong_email &&
-            toast.error(te("wrong_email"));
-          error.message === AuthValidationErrors.password_required_error &&
-            toast.error(te("password_required_error"));
+          toast.error(te(error.message));
         });
       } else {
-        toast.error(te("something_went_wrong"));
+        toast.error(te(AuthErrors.something_went_wrong));
       }
     } finally {
       setIsLoading(false);
@@ -105,7 +105,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
       ) as HTMLInputElement;
 
       if (password.value !== passwordRepeat.value) {
-        toast.error(te("not_the_same_passwords"));
+        toast.error(te(AuthErrors.not_the_same_passwords));
         return;
       }
 
@@ -124,15 +124,15 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
         },
       });
 
-      error?.message.includes(AuthValidationErrors.disabled_signups_error) &&
+      error?.message.includes(SupabaseValidatorErrors.disabled_signups_error) &&
         toast.error(te("disabled_signups_error"));
-      error?.message.includes(AuthValidationErrors.email_link_error) &&
+      error?.message.includes(SupabaseValidatorErrors.email_link_error) &&
         toast.error(te("email_link_error"));
-      error?.message.includes(AuthValidationErrors.token_error) &&
+      error?.message.includes(SupabaseValidatorErrors.token_error) &&
         toast.error(te("token_error"));
 
       if (!error && !data.user?.identities?.length) {
-        toast.error(te("user_exists"));
+        toast.error(te(AuthErrors.email_exists));
         return;
       }
 
@@ -141,15 +141,10 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
     } catch (error) {
       if (error instanceof z.ZodError) {
         error.issues.map((error) => {
-          error.message === AuthValidationErrors.wrong_email &&
-            toast.error(te("wrong_email"));
-          error.message === AuthValidationErrors.wrong_password &&
-            toast.error(te("wrong_password"), {
-              duration: 7000,
-            });
+          toast.error(te(error.message), { duration: 7000 });
         });
       } else {
-        toast.error(te("something_went_wrong"));
+        toast.error(te(AuthErrors.something_went_wrong));
       }
     } finally {
       setIsLoading(false);
@@ -180,7 +175,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
             className="mt-5 font-semibold underline"
             onClick={() => setLoginByEmail(true)}
           >
-            {t("logIn/signUp with email and password", { view: t(view) })}
+            {t("logIn/signUp with email and password", { view: view })}
           </button>
         </div>
       ) : (
@@ -190,6 +185,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
             onSubmit={view === "logIn" ? handleLogIn : handleSignUp}
           >
             <Input
+              loading={isLoading}
               label={t("email:")}
               id="email-input"
               type="email"
@@ -199,6 +195,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
               required
             />
             <Input
+              loading={isLoading}
               label={t("password:")}
               id="password-input"
               type="password"
@@ -208,6 +205,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
             />
             {view === "signUp" && (
               <Input
+                loading={isLoading}
                 label={t("repeat password:")}
                 id="password-repeat-input"
                 type="password"
@@ -231,7 +229,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
             className="font-semibold underline"
             onClick={() => setLoginByEmail(false)}
           >
-            {t("logIn/signUp with provider", { view: t(view) })}
+            {t("logIn/signUp with provider", { view: view })}
           </button>
         </>
       )}

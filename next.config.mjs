@@ -5,6 +5,13 @@ const config = {
   experimental: {
     serverActions: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: "cdn.discordapp.com",
+      },
+    ],
+  },
 };
 
 export default config;
