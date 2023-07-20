@@ -3,14 +3,15 @@
 import { type FC, useState } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import clsx from "clsx";
 
 import FlagOfTheUnitedKingdom from "~/assets/flags/gb.svg";
 import FlagOfPoland from "~/assets/flags/pl.svg";
-import { type Locale } from "~/dictionaries";
+import { type localeTypes } from "~/i18n";
 
 interface LanguageSwitcherProps {
-  currentLang: Locale;
-  setLangCookie: (data: Locale) => Promise<void>;
+  currentLang: localeTypes;
+  setLangCookie: (data: localeTypes) => Promise<void>;
 }
 
 export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
@@ -21,7 +22,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
   const router = useRouter();
   const pathnameArr = usePathname().split("/");
 
-  const handleSetLanguage = (language: Locale) => {
+  const handleSetLanguage = (language: localeTypes) => {
     setLanguage(language);
     pathnameArr[1] = language;
     void setLangCookie(language).then(() => router.push(pathnameArr.join("/")));
@@ -46,11 +47,11 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
           height={21}
         />
         <p
-          className={
-            (language === "en"
-              ? "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light"
-              : "") + " font-semibold"
-          }
+          className={clsx(
+            language === "en" &&
+              "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light",
+            "font-semibold"
+          )}
         >
           EN
         </p>
@@ -72,11 +73,11 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
           height={21}
         />
         <p
-          className={
-            (language === "pl"
-              ? "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light"
-              : "") + " font-semibold"
-          }
+          className={clsx(
+            language === "pl" &&
+              "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light",
+            "font-semibold"
+          )}
         >
           PL
         </p>

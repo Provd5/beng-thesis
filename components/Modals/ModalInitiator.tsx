@@ -24,7 +24,9 @@ export const ModalInitiator: FC<ModalInitiatorProps> = ({
         {initiatorStyle}
       </button>
       {openModal && (
-        <ModalWrapper setOpenModal={setOpenModal}>{children}</ModalWrapper>
+        <ModalWrapper handler={() => setOpenModal(false)}>
+          {children}
+        </ModalWrapper>
       )}
     </div>
   );

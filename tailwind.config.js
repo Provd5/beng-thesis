@@ -25,7 +25,7 @@ module.exports = {
         lg: "14px",
         xl: "18px",
         "2xl": "24px",
-        "3xl": "32px",
+        "3xl": "36px",
       },
       backgroundImage: {
         "gradient-light": "var(--gradient-light)",

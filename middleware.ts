@@ -3,7 +3,14 @@ import { NextResponse } from "next/server";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import langParser from "accept-language-parser";
 
-import { defaultLocale, getLocale, type Locale, locales } from "./dictionaries";
+import { defaultLocale, locales, type localeTypes } from "./i18n";
+
+const getLocale = ({ locale }: { locale: string }) => {
+  const localeParts = locale.toLowerCase();
+  return {
+    lang: localeParts,
+  };
+};
 
 const findBestMatchingLocale = (acceptLangHeader: string) => {
   const parsedLangs = langParser.parse(acceptLangHeader);
@@ -43,7 +50,7 @@ export async function middleware(req: NextRequest) {
     );
 
     const langCookie = req.cookies.get("lang");
-    const langCookieValue = langCookie?.value as Locale;
+    const langCookieValue = langCookie?.value as localeTypes;
     if (locales.includes(langCookieValue)) {
       const res = NextResponse.redirect(
         new URL(`/${langCookieValue}${pathname}`, req.url)

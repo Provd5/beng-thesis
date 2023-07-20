@@ -1,30 +1,32 @@
+"use client";
+
 import { type FC } from "react";
 import Link from "next/link";
-
-import { getTranslator, type Locale } from "~/dictionaries";
+import { useTranslations } from "next-intl";
 
 import { AuthForm } from "./AuthForm";
 
 interface AuthPageProps {
-  params: { lang: Locale };
   view: "logIn" | "signUp";
 }
 
-export const AuthPage: FC<AuthPageProps> = async ({ view, params }) => {
-  const { Auth } = await getTranslator(params.lang);
+export const AuthPage: FC<AuthPageProps> = ({ view }) => {
+  const t = useTranslations("Auth");
 
   return (
     <div className="relative flex h-full flex-col items-center justify-between px-3 py-6 text-sm text-white-light">
       <div />
       <div className="flex flex-col items-center">
-        <AuthForm Auth={Auth} view={view} />
+        <AuthForm view={view} />
       </div>
       <p className="text-xs">
-        {Auth.byLoggingIn}{" "}
-        <Link href={"/"} className="underline">
-          {Auth.ourTermsOfService}
-        </Link>
-        .
+        {t.rich("terms of service", {
+          Link: (chunks) => (
+            <Link href={"/"} className="underline">
+              {chunks}
+            </Link>
+          ),
+        })}
       </p>
     </div>
   );

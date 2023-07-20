@@ -1,27 +1,24 @@
-import { type Metadata } from "next";
+import { createTranslator } from "next-intl";
 
 import { Button, ButtonLink, ButtonWhite } from "~/components/ui/Buttons";
-import { getTranslator } from "~/dictionaries";
 
-import { type PageProps } from "../../layout";
+import { getMessages, type PageProps } from "../../layout";
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const { Explore } = await getTranslator(params.lang);
-  const title = Explore.categoryTitle;
+export async function generateMetadata({ params: { locale } }: PageProps) {
+  const messages = await getMessages(locale);
+
+  const t = createTranslator({ locale, messages });
+
   return {
-    title: title,
+    title: t("CategoryTitles.explore"),
   };
 }
 
-export default async function ExplorePage({ params }: PageProps) {
-  const { Explore } = await getTranslator(params.lang);
-
+export default function ExplorePage() {
   return (
     <>
       <div className="flex flex-col items-center gap-3">
-        <h1>{Explore.categoryTitle}</h1>
+        <h1>{"categoryTitle"}</h1>
         <ButtonWhite>TEST test Test</ButtonWhite>
         <ButtonWhite size="sm">TEST test Test</ButtonWhite>
         <ButtonWhite loading>TEST test Test</ButtonWhite>

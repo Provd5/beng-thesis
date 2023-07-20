@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import clsx from "clsx";
 
 import { type IconType } from "react-icons/lib";
 
@@ -24,11 +25,11 @@ export const SvgPainterWithIcon: FC<SvgPainterWithIconProps> = ({
         <stop stopColor="rgb(var(--primary-default))" offset="100%" />
       </linearGradient>
       <Icon
-        className={
-          textSize +
-          " fill-[url(#myGradientDark)] dark:fill-[url(#myGradient)] " +
-          (className ?? "")
-        }
+        className={clsx(
+          "fill-[url(#myGradientDark)] dark:fill-[url(#myGradient)]",
+          textSize,
+          className
+        )}
       />
     </svg>
   );
