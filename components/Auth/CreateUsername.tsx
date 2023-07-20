@@ -17,7 +17,7 @@ import {
 } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
 
-import { AvatarImage } from "../ui/AvatarImage";
+import { AvatarImage } from "../Profile/AvatarImage";
 import { ButtonWhite } from "../ui/Buttons";
 import { Input } from "../ui/Input";
 
@@ -64,7 +64,7 @@ export const CreateUsername: FC<CreateUsernameProps> = ({
       // on success
       if (data === username.value) {
         toast.success(te(AuthErrors.success));
-        router.push(`/${data}`);
+        router.push(`/profile/${data}`);
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -92,13 +92,11 @@ export const CreateUsername: FC<CreateUsernameProps> = ({
         )}
 
         <div className="flex flex-col gap-1">
-          {avatarSrc && (
-            <AvatarImage
-              size="lg"
-              avatarSrc={avatarSrc}
-              className="mb-1 self-center"
-            />
-          )}
+          <AvatarImage
+            size="lg"
+            avatarSrc={avatarSrc}
+            className="mb-1 self-center"
+          />
           <p>
             <span className="font-semibold">{t("email:")}</span> {email}
           </p>

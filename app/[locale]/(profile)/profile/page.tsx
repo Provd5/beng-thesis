@@ -21,6 +21,7 @@ export default async function CheckUsernamePage() {
 
   const userData = await db.profile.findFirst({
     where: { id: userExists.id },
+    select: { full_name: true },
   });
 
   if (!userData) {
@@ -28,5 +29,5 @@ export default async function CheckUsernamePage() {
   }
 
   if (userData.full_name) redirect(`/profile/${userData.full_name}`);
-  else redirect(`/edit/username`);
+  else redirect(`/edit`);
 }

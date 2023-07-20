@@ -7,9 +7,9 @@ import { SlOptions } from "react-icons/sl";
 
 import { type localeTypes } from "~/i18n";
 
-import { ModalInitiator } from "./Modals/ModalInitiator";
-import { LanguageSwitcher } from "./Switchers/LanguageSwitcher";
-import { ThemeSwitcher } from "./Switchers/ThemeSwitcher";
+import { LanguageSwitcher } from "../Switchers/LanguageSwitcher";
+import { ThemeSwitcher } from "../Switchers/ThemeSwitcher";
+import { ModalInitiator } from "./ModalInitiator";
 
 interface SettingsProps {
   setLangCookie: (data: localeTypes) => Promise<void>;

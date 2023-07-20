@@ -19,11 +19,9 @@ export const NotFoundProfilePage: FC = () => {
             s: (chunks) => <span className="font-semibold">{chunks}</span>,
           })}
         </p>
-        <Link href={`/profile`}>
-          <div className="flex items-center justify-center text-xs underline">
-            {t("back to your profile")}
-          </div>
-        </Link>
+        <div className="flex items-center justify-center text-xs underline">
+          <Link href={`/profile`}>{t("back to your profile")}</Link>
+        </div>
       </div>
     </div>
   );

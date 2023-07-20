@@ -1,7 +1,8 @@
 {
   "Other": {
     "logout": "Logout",
-    "loading": "Loading"
+    "loading": "Loading",
+    "customise": "Customise"
   },
   "Settings": {
     "app style": "app style",
@@ -24,7 +25,7 @@
     "signUp": "Sign up",
     "with": "with",
     "logIn/signUp with email and password": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with email and password",
-    "logIn/signUp with provider": "{view, select, logIn {Log in} signUp {Sign up}} with provider",
+    "logIn/signUp with provider": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with provider",
     "terms of service": "By logging in, you agree to <Link>our terms of service</Link>.",
     "email:": "Email:",
     "password:": "Password:",
@@ -48,7 +49,7 @@
     "username_too_long_32": "Username must be less than 32 characters",
     "wrong_email": "Email is invalid",
     "wrong_password": "Password must have at least 10 characters, one number, one special character, both lower and uppercase letters",
-    "wrong_username": "Username can only contain letters (a-z), numbers (0-9) and periods (.)",
+    "wrong_username": "Username can only contain letters, numbers and some special characters",
     "email_exists": "User with this email address already exists",
     "username_exists": "This username is already taken",
     "not_the_same_passwords": "The passwords are not the same",
@@ -65,5 +66,21 @@
     "not found": "Not found",
     "not found message": "This profile <s>doesn't exist</s> or has been set as <s>private</s>.",
     "back to your profile": "back to your profile"
+  },
+  "Profile": {
+    "followers:": "Followers:",
+    "following:": "Following:",
+    "reviews:": "Reviews:",
+    "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}"
+  },
+  "Bookself": {
+    "statistics": "Statistics",
+    "owned": "Owned",
+    "liked": "Liked",
+    "to-read": "To read",
+    "already-read": "Already read",
+    "abadoned": "Abadoned",
+    "reading": "reading",
+    "reviwes": "Reviwes"
   }
 }

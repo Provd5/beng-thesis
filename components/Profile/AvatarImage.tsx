@@ -29,7 +29,7 @@ export const AvatarImage: FC<AvatarImageProps> = ({
         fill
         src={avatarSrc ? avatarSrc : (AvatarPlaceholder as string)}
         alt="Profile Avatar"
-        className="rounded-full"
+        className="pointer-events-none rounded-full"
       />
     </div>
   );
