@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { createTranslator } from "next-intl";
 
 import { ThumbnailPlaceholder } from "~/components/Book/ThumbnailPlaceholder";
@@ -18,23 +19,18 @@ export async function generateMetadata({ params: { locale } }: PageProps) {
 
 export default async function ExplorePage() {
   const books = await db.book.findMany({
+    select: { id: true, title: true, authors: true, thumbnail_url: true },
     orderBy: { published_date: "desc" },
   });
 
   return (
-    <>
+    <div className="flex shrink-0 flex-wrap gap-3 py-3">
       {books?.map((book) => (
-        <div key={book.id} className="flex flex-col">
-          authors:{book.authors}
-          categories:{book.categories}
-          description:{book.description}
-          id:{book.id}
-          isbn_10:{book.isbn_10}
-          isbn_13:{book.isbn_13}
-          page_count:{book.page_count}
-          published_date:{book.published_date}
-          publisher:{book.publisher}
-          subtitle:{book.subtitle}
+        <Link
+          href={`/book/${book.id}/${book.title}`}
+          key={book.id}
+          className="flex w-40 flex-col gap-1"
+        >
           {book.thumbnail_url ? (
             <Image
               alt="Book cover"
@@ -45,9 +41,12 @@ export default async function ExplorePage() {
           ) : (
             <ThumbnailPlaceholder />
           )}
-          title:{book.title}
-        </div>
+          <div>
+            <p>{book.title}</p>
+            <p className="text-sm font-normal">{book.authors}</p>
+          </div>
+        </Link>
       ))}
-    </>
+    </div>
   );
 }
