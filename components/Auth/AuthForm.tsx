@@ -229,7 +229,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
             className="font-semibold underline"
             onClick={() => setLoginByEmail(false)}
           >
-            {t("logIn/signUp with provider", { view: view })}
+            {t("logIn/signUp with provider", { view })}
           </button>
         </>
       )}

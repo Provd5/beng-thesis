@@ -1,6 +1,9 @@
+import Image from "next/image";
+import Link from "next/link";
 import { createTranslator } from "next-intl";
 
-import { Button, ButtonLink, ButtonWhite } from "~/components/ui/Buttons";
+import { ThumbnailPlaceholder } from "~/components/Book/ThumbnailPlaceholder";
+import { db } from "~/lib/db";
 
 import { getMessages, type PageProps } from "../../layout";
 
@@ -14,23 +17,36 @@ export async function generateMetadata({ params: { locale } }: PageProps) {
   };
 }
 
-export default function ExplorePage() {
+export default async function ExplorePage() {
+  const books = await db.book.findMany({
+    select: { id: true, title: true, authors: true, thumbnail_url: true },
+    orderBy: { published_date: "desc" },
+  });
+
   return (
-    <>
-      <div className="flex flex-col items-center gap-3">
-        <h1>{"categoryTitle"}</h1>
-        <ButtonWhite>TEST test Test</ButtonWhite>
-        <ButtonWhite size="sm">TEST test Test</ButtonWhite>
-        <ButtonWhite loading>TEST test Test</ButtonWhite>
-        <Button>TEST test Test</Button>
-        <Button size="sm">TEST test Test</Button>
-        <Button loading>TEST test Test</Button>
-        <ButtonLink>TEST test Test</ButtonLink>
-        <ButtonLink size="sm" active>
-          TEST test Test
-        </ButtonLink>
-        <ButtonLink loading>TEST test Test</ButtonLink>
-      </div>
-    </>
+    <div className="flex shrink-0 flex-wrap gap-3 py-3">
+      {books?.map((book) => (
+        <Link
+          href={`/book/${book.id}/${book.title}`}
+          key={book.id}
+          className="flex w-40 flex-col gap-1"
+        >
+          {book.thumbnail_url ? (
+            <Image
+              alt="Book cover"
+              src={book.thumbnail_url}
+              width="97"
+              height="140"
+            />
+          ) : (
+            <ThumbnailPlaceholder />
+          )}
+          <div>
+            <p>{book.title}</p>
+            <p className="text-sm font-normal">{book.authors}</p>
+          </div>
+        </Link>
+      ))}
+    </div>
   );
 }

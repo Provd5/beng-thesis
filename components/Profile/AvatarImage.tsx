@@ -2,7 +2,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 
-import AvatarPlaceholder from "~/assets/AvatarPlaceholder.svg";
+import { AvatarPlaceholder } from "./AvatarPlaceholder";
 
 type sizes = "default" | "sm" | "lg";
 
@@ -25,12 +25,16 @@ export const AvatarImage: FC<AvatarImageProps> = ({
 
   return (
     <div className={clsx("relative", sizeVariants[size], className)}>
-      <Image
-        fill
-        src={avatarSrc ? avatarSrc : (AvatarPlaceholder as string)}
-        alt="Profile Avatar"
-        className="rounded-full"
-      />
+      {avatarSrc ? (
+        <Image
+          fill
+          src={avatarSrc}
+          alt="Profile Avatar"
+          className="pointer-events-none rounded-full"
+        />
+      ) : (
+        <AvatarPlaceholder />
+      )}
     </div>
   );
 };

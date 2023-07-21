@@ -4,7 +4,6 @@ import { clsx } from "clsx";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
 import { Loader } from "./Loader";
-import { SvgPainter, SvgPainterWithIcon } from "./SvgPainter";
 
 type sizes = "default" | "sm";
 
@@ -16,7 +15,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const sharedClass =
-  "flex items-center justify-center transition-transform font-semibold whitespace-nowrap";
+  "flex items-center justify-center font-semibold whitespace-nowrap";
 
 export const Button: FC<ButtonProps> = ({
   children,
@@ -73,9 +72,7 @@ export const ButtonWhite: FC<ButtonProps> = ({
         )}
       >
         {loading && (
-          <SvgPainter className="h-[1em] w-[1em] animate-spin text-md">
-            <Loader className="stroke-[url(#myGradientDark)]" />
-          </SvgPainter>
+          <Loader className="stroke-[var(--svg-gradient-dark)] text-md" />
         )}
         {children}
       </div>
@@ -96,7 +93,7 @@ export const ButtonLink: FC<ButtonProps & { active?: boolean }> = ({
       disabled={loading}
       className={clsx(
         sharedClass,
-        "bg-gradient-dark bg-gradient-dark bg-clip-text text-transparent hover:font-semibold dark:bg-gradient-light",
+        "bg-gradient-dark bg-gradient-dark bg-clip-text text-transparent hover:font-bold dark:bg-gradient-light",
         size === "default" ? "text-base" : "text-sm",
         className
       )}
@@ -104,11 +101,7 @@ export const ButtonLink: FC<ButtonProps & { active?: boolean }> = ({
     >
       {children}
       <span className={active ? "rotate-180" : ""}>
-        <SvgPainterWithIcon
-          textSize={"text-xl"}
-          Icon={MdKeyboardArrowDown}
-          className="flex-none"
-        />
+        <MdKeyboardArrowDown className="flex-none fill-[var(--svg-gradient-dark)] text-xl dark:fill-[var(--svg-gradient)]" />
       </span>
     </button>
   );

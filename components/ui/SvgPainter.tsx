@@ -1,21 +1,8 @@
-import type { FC } from "react";
-import clsx from "clsx";
+import { type FC } from "react";
 
-import { type IconType } from "react-icons/lib";
-
-interface SvgPainterWithIconProps {
-  className?: string;
-  textSize: string;
-  Icon: IconType;
-}
-
-export const SvgPainterWithIcon: FC<SvgPainterWithIconProps> = ({
-  className,
-  textSize,
-  Icon,
-}) => {
+export const SvgPainter: FC = () => {
   return (
-    <svg className={textSize} width="1em" height="1em">
+    <svg className="pointer-events-none absolute h-0 w-0">
       <linearGradient id="myGradient" gradientTransform="rotate(75)">
         <stop stopColor="rgb(var(--primary-light))" offset="0%" />
         <stop stopColor="rgb(var(--secondary-light))" offset="100%" />
@@ -24,34 +11,6 @@ export const SvgPainterWithIcon: FC<SvgPainterWithIconProps> = ({
         <stop stopColor="rgb(var(--secondary-default))" offset="0%" />
         <stop stopColor="rgb(var(--primary-default))" offset="100%" />
       </linearGradient>
-      <Icon
-        className={clsx(
-          "fill-[url(#myGradientDark)] dark:fill-[url(#myGradient)]",
-          textSize,
-          className
-        )}
-      />
-    </svg>
-  );
-};
-
-interface SvgPainterProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-export const SvgPainter: FC<SvgPainterProps> = ({ children, className }) => {
-  return (
-    <svg className={className}>
-      <linearGradient id="myGradient" gradientTransform="rotate(75)">
-        <stop stopColor="rgb(var(--primary-light))" offset="0%" />
-        <stop stopColor="rgb(var(--secondary-light))" offset="100%" />
-      </linearGradient>
-      <linearGradient id="myGradientDark" gradientTransform="rotate(75)">
-        <stop stopColor="rgb(var(--secondary-default))" offset="0%" />
-        <stop stopColor="rgb(var(--primary-default))" offset="100%" />
-      </linearGradient>
-      {children}
     </svg>
   );
 };

@@ -1,12 +1,17 @@
 import type { FC } from "react";
 
-const className =
-  "h-full w-full fill-[url(#myGradientDark)] dark:fill-[url(#myGradient)]";
+interface NavIconsProps {
+  isActive: boolean;
+}
 
-export const SearchIcon: FC = ({}) => {
+const className = "h-full w-full text-black-dark dark:text-white-light";
+const activeClassName =
+  "h-full w-full fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]";
+
+export const SearchIcon: FC<NavIconsProps> = ({ isActive }) => {
   return (
     <svg
-      className={className}
+      className={isActive ? activeClassName : className}
       viewBox="0 0 40 40"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
@@ -17,10 +22,10 @@ export const SearchIcon: FC = ({}) => {
   );
 };
 
-export const ExploreIcon: FC = ({}) => {
+export const ExploreIcon: FC<NavIconsProps> = ({ isActive }) => {
   return (
     <svg
-      className={className}
+      className={isActive ? activeClassName : className}
       viewBox="0 0 40 40"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
@@ -30,10 +35,10 @@ export const ExploreIcon: FC = ({}) => {
   );
 };
 
-export const ProfileIcon: FC = ({}) => {
+export const ProfileIcon: FC<NavIconsProps> = ({ isActive }) => {
   return (
     <svg
-      className={className}
+      className={isActive ? activeClassName : className}
       viewBox="0 0 60 54"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

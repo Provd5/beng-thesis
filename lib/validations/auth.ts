@@ -31,6 +31,6 @@ export const UsernameValidator = z
   .string()
   .min(3, { message: UsernameValidatorErrors.username_too_short_3 })
   .max(32, { message: UsernameValidatorErrors.username_too_long_32 })
-  .regex(/^[A-Za-z0-9\.]+$/, {
+  .regex(/^(?!.*\.\.)[a-zA-Z0-9._-]+$/, {
     message: UsernameValidatorErrors.wrong_username,
-  }); // can contain letters (a-z), numbers (0-9), and periods (.)
+  }); // can contain letters (a-z), numbers (0-9), and (".", "_", "-")

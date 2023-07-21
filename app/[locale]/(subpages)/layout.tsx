@@ -5,5 +5,9 @@ export default function SubpagesLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <PageContainer>{children}</PageContainer>;
+  return (
+    <main className="grow-1 relative flex h-full flex-col overflow-x-hidden">
+      <PageContainer>{children}</PageContainer>
+    </main>
+  );
 }

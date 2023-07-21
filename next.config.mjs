@@ -10,6 +10,9 @@ const config = {
       {
         hostname: "cdn.discordapp.com",
       },
+      {
+        hostname: "books.google.com",
+      },
     ],
   },
 };

@@ -28,6 +28,7 @@ export async function PATCH(req: Request) {
       where: {
         full_name: username,
       },
+      select: { full_name: true },
     });
 
     if (isUsernameExists) {

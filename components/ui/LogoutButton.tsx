@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { FaPowerOff } from "react-icons/fa";
+import { ImExit } from "react-icons/im";
 
-import { Loader } from "./ui/Loader";
+import { Loader } from "./Loader";
 
 export const LogoutButton: FC = () => {
   const t = useTranslations("Other");
@@ -25,12 +25,11 @@ export const LogoutButton: FC = () => {
 
   return (
     <button
-      className="flex items-center gap-1 text-base"
+      className="flex items-center gap-1"
       disabled={isLoading}
       onClick={signOut}
     >
-      <div className="h-4 w-4">{isLoading ? <Loader /> : <FaPowerOff />}</div>
-
+      <div>{isLoading ? <Loader /> : <ImExit />}</div>
       <p>{t("logout")}</p>
     </button>
   );

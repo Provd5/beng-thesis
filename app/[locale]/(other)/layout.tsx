@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { Settings } from "~/components/Settings";
+import { Settings } from "~/components/Modals/Settings";
 import { defaultLocale, type localeTypes } from "~/i18n";
 
 export default async function AuthLayout({
@@ -19,7 +19,7 @@ export default async function AuthLayout({
   } = await supabase.auth.getSession();
 
   if (session?.user) {
-    redirect(`/`);
+    redirect(`/profile`);
   }
 
   const currentLang = (cookies().get("lang")?.value ??

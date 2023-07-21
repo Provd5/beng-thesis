@@ -1,7 +1,8 @@
 {
   "Other": {
     "logout": "Wyloguj",
-    "loading": "Ładowanie"
+    "loading": "Ładowanie",
+    "customise": "Personalizuj"
   },
   "Settings": {
     "app style": "styl aplikacji",
@@ -24,7 +25,7 @@
     "signUp": "Stwórz konto",
     "with": "przez",
     "logIn/signUp with email and password": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} za pomocą adresu email i hasła",
-    "logIn/signUp with provider": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto}} przez dostawcę",
+    "logIn/signUp with provider": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} przez dostawcę",
     "terms of service": "Logując się, wyrażasz zgodę na <Link>nasze warunki świadczenia usług</Link>.",
     "email:": "Adres email:",
     "password:": "Hasło:",
@@ -35,11 +36,10 @@
     "check your email to continue login": "Sprawdź swój adres email ({email}), aby kontynuować logowanie"
   },
   "EditUsername": {
-    "back to profile": "powrót do profilu",
-    "email:": "Adres email:",
     "account created:": "Konto utworzone:",
-    "change/create your username:": "{view, select, change {Zmień} create {Stwórz} other {Zmień/Stwórz}} swoją nazwę:",
-    "enter new username": "Podaj nową nazwę...",
+    "created by:": "Utworzone przez:",
+    "change/create your username:": "{view, select, change {Zmień} create {Stwórz} other {Zmień/Stwórz}} nazwę użytkownika:",
+    "enter username": "Podaj nazwę...",
     "submit": "Prześlij"
   },
   "AuthErrors": {
@@ -48,7 +48,7 @@
     "username_too_long_32": "Nazwa użytkownika nie może zawierać więcej niż 32 znaki",
     "wrong_email": "Adres email jest nieprawidłowy",
     "wrong_password": "Hasło musi zawierać co najmniej 10 znaków, jedną cyfrę, jeden znak specjalny, małe i wielkie litery",
-    "wrong_username": "Nazwa użytkownika może zawierać tylko litery (a-z), cyfry (0-9) i kropki (.)",
+    "wrong_username": "Nazwa użytkownika może zawierać tylko litery, cyfry i niektóre znaki specjalne",
     "email_exists": "Użytkownik o tym adresie e-mail już istnieje",
     "username_exists": "Ta nazwa użytkownika jest już zajęta",
     "not_the_same_passwords": "Hasła nie są takie same",
@@ -63,7 +63,23 @@
   },
   "NotFoundProfilePage": {
     "not found": "Nie znaleziono",
-    "not found message": "Ten profil <s>nie istnieje</s> lub został ustawiony jako <s>prywatny</s>.",
+    "not found message": "Taki profil <s>nie istnieje</s>.",
     "back to your profile": "wróć do swojego profilu"
+  },
+  "Profile": {
+    "followers:": "Obserwujących:",
+    "following:": "Obserwowani:",
+    "reviews:": "Recenzje:",
+    "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}"
+  },
+  "Bookself": {
+    "statistics": "Statystyki",
+    "owned": "Posiadane",
+    "liked": "Polubione",
+    "to-read": "Do przeczytania",
+    "already-read": "Przeczytane",
+    "abadoned": "Porzucone",
+    "reading": "W trakcie",
+    "reviwes": "Recenzje"
   }
 }
