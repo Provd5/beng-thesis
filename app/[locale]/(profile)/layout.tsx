@@ -38,7 +38,7 @@ export default async function ProfileLayout({
   };
 
   return (
-    <div className="relative flex h-full flex-col overflow-x-hidden">
+    <main className="grow-1 relative flex h-full flex-col overflow-x-hidden">
       {children}
       <div className="absolute right-4 top-3 text-white md:right-6 md:top-5">
         <div className="flex gap-3">
@@ -46,6 +46,6 @@ export default async function ProfileLayout({
           <Settings currentLang={currentLang} setLangCookie={setLangCookie} />
         </div>
       </div>
-    </div>
+    </main>
   );
 }

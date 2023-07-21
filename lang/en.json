@@ -36,11 +36,10 @@
     "check your email to continue login": "Check your email ({email}), to continue login"
   },
   "EditUsername": {
-    "back to profile": "back to profile",
-    "email:": "Email:",
     "account created:": "Account created:",
-    "change/create your username:": "{view, select, change {Change} create {Create} other {Change/Create}} your username:",
-    "enter new username": "Enter new username...",
+    "created by:": "Created by:",
+    "change/create your username:": "{view, select, change {Change} create {Create} other {Change/Create}} username:",
+    "enter username": "Enter username...",
     "submit": "Submit"
   },
   "AuthErrors": {
@@ -64,7 +63,7 @@
   },
   "NotFoundProfilePage": {
     "not found": "Not found",
-    "not found message": "This profile <s>doesn't exist</s> or has been set as <s>private</s>.",
+    "not found message": "Such profile <s>doesn't exist</s>.",
     "back to your profile": "back to your profile"
   },
   "Profile": {

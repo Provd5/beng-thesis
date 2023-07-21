@@ -3,7 +3,7 @@ import type { FC } from "react";
 export const AvatarPlaceholder: FC = ({}) => {
   return (
     <svg
-      className="pointer-events-none h-full w-full rounded-full fill-white-light dark:fill-black-dark"
+      className="pointer-events-none h-full w-full rounded-full fill-white-light dark:fill-white-dark"
       viewBox="0 0 256 256"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

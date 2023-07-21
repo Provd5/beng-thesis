@@ -36,11 +36,10 @@
     "check your email to continue login": "Sprawdź swój adres email ({email}), aby kontynuować logowanie"
   },
   "EditUsername": {
-    "back to profile": "powrót do profilu",
-    "email:": "Adres email:",
     "account created:": "Konto utworzone:",
-    "change/create your username:": "{view, select, change {Zmień} create {Stwórz} other {Zmień/Stwórz}} swoją nazwę:",
-    "enter new username": "Podaj nową nazwę...",
+    "created by:": "Utworzone przez:",
+    "change/create your username:": "{view, select, change {Zmień} create {Stwórz} other {Zmień/Stwórz}} nazwę użytkownika:",
+    "enter username": "Podaj nazwę...",
     "submit": "Prześlij"
   },
   "AuthErrors": {
@@ -64,7 +63,7 @@
   },
   "NotFoundProfilePage": {
     "not found": "Nie znaleziono",
-    "not found message": "Ten profil <s>nie istnieje</s> lub został ustawiony jako <s>prywatny</s>.",
+    "not found message": "Taki profil <s>nie istnieje</s>.",
     "back to your profile": "wróć do swojego profilu"
   },
   "Profile": {

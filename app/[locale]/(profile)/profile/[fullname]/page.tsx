@@ -5,6 +5,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
+import { FollowLinks } from "~/components/Profile/SmallLink";
 import { Statistics } from "~/components/Profile/Statistics";
 import { CategoryLink } from "~/components/ui/CategoryLink";
 import { ProfilePageContainer } from "~/components/ui/PageContainer";
@@ -72,11 +73,11 @@ export default async function ProfilePage({
             <h1 className="mx-0.5 my-2 bg-gradient-dark bg-clip-text text-xl font-semibold text-transparent dark:bg-gradient-light">
               {publicUserData.full_name}
             </h1>
-            {/* <FollowLinks
-              followers={userData.length}
-              following={userData.length}
-              reviews={userData.length}
-            /> */}
+            <FollowLinks
+              followers={userData?.followed_by.length ?? 0}
+              following={userData?.following.length ?? 0}
+              reviews={userData?.review.length ?? 0}
+            />
           </div>
         </section>
         <section className="flex flex-col gap-3">

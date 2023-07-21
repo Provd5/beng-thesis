@@ -8,7 +8,7 @@ import { ProfileStatus } from "~/components/Profile/ProfileStatus";
 import { ProfilePageContainer } from "~/components/ui/PageContainer";
 import { db } from "~/lib/db";
 
-export default async function CreateFullnamePage() {
+export default async function EditPage() {
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -47,12 +47,7 @@ export default async function CreateFullnamePage() {
           </div>
         </section>
       </div>
-      <CreateUsername
-        avatarSrc={userData.avatar_url}
-        email={userExists.email as string}
-        createdAt={userData.created_at}
-        fullName={userData.full_name}
-      />
+      <CreateUsername fullName={userData.full_name} />
     </ProfilePageContainer>
   );
 }

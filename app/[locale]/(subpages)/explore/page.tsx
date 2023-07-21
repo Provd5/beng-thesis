@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { createTranslator } from "next-intl";
 
-import { Button, ButtonLink, ButtonWhite } from "~/components/ui/Buttons";
+import { ThumbnailPlaceholder } from "~/components/Book/ThumbnailPlaceholder";
+import { db } from "~/lib/db";
 
 import { getMessages, type PageProps } from "../../layout";
 
@@ -14,23 +16,38 @@ export async function generateMetadata({ params: { locale } }: PageProps) {
   };
 }
 
-export default function ExplorePage() {
+export default async function ExplorePage() {
+  const books = await db.book.findMany({
+    orderBy: { published_date: "desc" },
+  });
+
   return (
     <>
-      <div className="flex flex-col items-center gap-3">
-        <h1>{"categoryTitle"}</h1>
-        <ButtonWhite>TEST test Test</ButtonWhite>
-        <ButtonWhite size="sm">TEST test Test</ButtonWhite>
-        <ButtonWhite loading>TEST test Test</ButtonWhite>
-        <Button>TEST test Test</Button>
-        <Button size="sm">TEST test Test</Button>
-        <Button loading>TEST test Test</Button>
-        <ButtonLink>TEST test Test</ButtonLink>
-        <ButtonLink size="sm" active>
-          TEST test Test
-        </ButtonLink>
-        <ButtonLink loading>TEST test Test</ButtonLink>
-      </div>
+      {books?.map((book) => (
+        <div key={book.id} className="flex flex-col">
+          authors:{book.authors}
+          categories:{book.categories}
+          description:{book.description}
+          id:{book.id}
+          isbn_10:{book.isbn_10}
+          isbn_13:{book.isbn_13}
+          page_count:{book.page_count}
+          published_date:{book.published_date}
+          publisher:{book.publisher}
+          subtitle:{book.subtitle}
+          {book.thumbnail_url ? (
+            <Image
+              alt="Book cover"
+              src={book.thumbnail_url}
+              width="97"
+              height="140"
+            />
+          ) : (
+            <ThumbnailPlaceholder />
+          )}
+          title:{book.title}
+        </div>
+      ))}
     </>
   );
 }

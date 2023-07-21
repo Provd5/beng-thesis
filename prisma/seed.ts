@@ -178,9 +178,7 @@ const getBooks = (): Prisma.bookCreateInput[] => [
   },
   {
     title: "Mitologia nordycka",
-    subtitle: "",
     authors: ["Neil Gaiman"],
-    publisher: "",
     published_date: "2017",
     description:
       'Wielkie nordyckie mity to jeden z korzeni, z których wyrasta nasza tradycja literacka - od Tolkiena, Alana Garnera i Rosemary Sutcliff po "Grę o tron" i komiksy Marvela. Stały się też inspiracją dla wielu obsypanych nagrodami bestsellerów Neila Gaimana. Teraz sam Gaiman sięga w odległą przeszłość, do oryginalnych źródeł tych opowieści, by przedstawić nam nowe, barwne i porywające wersje największych nordyckich historii. Dzięki niemu bogowie ożywają - pełni namiętności, złośliwi, wybuchowi, okrutni - a opowieść przenosi nas do ich świata - od zarania wszechrzeczy, aż po Ragnarok i zmierzch bogów. Barwne przygody Thora, Lokiego, Odyna czy Frei fascynują współczesnego czytelnika, a żywy, błyskotliwy język sprawia, że aż proszą się o to, by czytać je na głos przy ognisku w mroźną gwiaździstą noc.',
