@@ -59,7 +59,7 @@ export default async function ProfilePage({
   return (
     <ProfilePageContainer>
       <div className="container mx-auto pb-3">
-        <div className="mb-6 flex gap-3">
+        <div className="mb-6 flex gap-1 xs:gap-3">
           <div className="ml-0 mt-[-30px] xs:ml-6">
             <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
               <AvatarImage size="lg" avatarSrc={publicUserData.avatar_url} />
@@ -67,7 +67,7 @@ export default async function ProfilePage({
             </div>
           </div>
           <div>
-            <h1 className="mx-0.5 my-2 bg-gradient-dark bg-clip-text text-xl font-semibold text-transparent dark:bg-gradient-light">
+            <h1 className="mx-0.5 my-2 break-all bg-gradient-dark bg-clip-text text-xl font-semibold text-transparent dark:bg-gradient-light">
               {publicUserData.full_name}
             </h1>
             <FollowLinks
@@ -78,15 +78,15 @@ export default async function ProfilePage({
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          <CategoryLink variant="statistics" />
+          <CategoryLink variant="STATISTICS" href={"/#"} />
           <Statistics />
-          <CategoryLink variant="owned" />
-          <CategoryLink variant="liked" />
-          <CategoryLink variant="reading" />
-          <CategoryLink variant="to-read" />
-          <CategoryLink variant="already-read" />
-          <CategoryLink variant="abandoned" />
-          <CategoryLink variant="reviews" />
+          <CategoryLink variant="OWNED" href={"/#"} />
+          <CategoryLink variant="LIKED" href={"/#"} />
+          <CategoryLink variant="TO_READ" href={"/#"} />
+          <CategoryLink variant="ALREADY_READ" href={"/#"} />
+          <CategoryLink variant="ABANDONED" href={"/#"} />
+          <CategoryLink variant="READING" href={"/#"} />
+          <CategoryLink variant="REVIEWS" href={"/#"} />
         </div>
       </div>
     </ProfilePageContainer>

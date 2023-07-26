@@ -75,15 +75,15 @@
     "reviews:": "Reviews:",
     "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}"
   },
-  "Bookself": {
-    "statistics": "Statistics",
-    "owned": "Owned",
-    "liked": "Liked",
-    "to-read": "To read",
-    "already-read": "Already read",
-    "abandoned": "Abandoned",
-    "reading": "reading",
-    "reviews": "Reviews"
+  "BookselfTypes": {
+    "STATISTICS": "Statistics",
+    "OWNED": "Owned",
+    "LIKED": "Liked",
+    "TO_READ": "To read",
+    "ALREADY_READ": "Already read",
+    "ABANDONED": "Abandoned",
+    "READING": "reading",
+    "REVIEWS": "Reviews"
   },
   "Book": {
     "Details": {
@@ -91,7 +91,31 @@
       "publisher:": "Publisher:",
       "release date:": "Release date:",
       "genre:": "Genre:",
-      "averge score:": "Averge score:"
+      "averge score:": "Averge score:",
+      "description:": "Description:"
+    },
+    "ManageLikes": {
+      "likes": "Likes",
+      "liked": "liked",
+      "like": "like"
+    },
+    "ManageBookshelf": {
+      "on a shelf": "On a shelf",
+      "add to shelf": "add to shelf"
+    },
+    "ManageOwnedAs": {
+      "owned as": "Owned as"
+    },
+    "ManageReviews": {
+      "reviews": "Reviews",
+      "write yours": "write yours"
+    },
+    "Review": {
+      "joined:": "joined:",
+      "posted:": "Posted:",
+      "edited:": "Edited:",
+      "rate:": "Rate:",
+      "likes it": "likes it"
     }
   }
 }

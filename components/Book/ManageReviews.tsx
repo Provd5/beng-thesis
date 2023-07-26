@@ -1,4 +1,7 @@
+"use client";
+
 import type { FC } from "react";
+import { useTranslations } from "next-intl";
 
 import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
 
@@ -17,6 +20,8 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
   quantity,
   createdAt,
 }) => {
+  const t = useTranslations("Book.ManageReviews");
+
   return (
     <div className="flex gap-1">
       {myReview ? (
@@ -27,7 +32,7 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
       <div className="flex flex-col">
         <div className="flex h-[24px] items-center">
           <h3 className="bg-gradient-dark bg-clip-text text-base font-semibold text-transparent dark:bg-gradient-light">
-            Reviews
+            {t("reviews")}
           </h3>
         </div>
         <p>{quantity}</p>
@@ -35,7 +40,7 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
           {createdAt ? (
             dateFormater(createdAt)
           ) : (
-            <span className="underline">write yours</span>
+            <span className="underline">{t("write yours")}</span>
           )}
         </p>
       </div>

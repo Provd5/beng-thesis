@@ -3,6 +3,7 @@
 import type { FC } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { type bookshelfType } from "@prisma/client";
 
 import {
   BsFillBookmarkCheckFill,
@@ -15,51 +16,64 @@ import {
 import { MdNavigateNext } from "react-icons/md";
 
 type variantTypes =
-  | "statistics"
-  | "owned"
-  | "liked"
-  | "to-read"
-  | "already-read"
-  | "abandoned"
-  | "reading"
-  | "reviews";
+  | bookshelfType
+  | "STATISTICS"
+  | "OWNED"
+  | "LIKED"
+  | "REVIEWS";
 
 interface CategoryLinkProps {
   variant: variantTypes;
+  href: `/${string}`;
+  withoutIcon?: boolean;
 }
 
-export const CategoryLink: FC<CategoryLinkProps> = ({ variant }) => {
-  const t = useTranslations("Bookself");
+export const CategoryLink: FC<CategoryLinkProps> = ({
+  variant,
+  href,
+  withoutIcon,
+}) => {
+  const t = useTranslations("BookselfTypes");
+
+  const getBookshelfIcon = (bookshelf: variantTypes) => {
+    switch (bookshelf) {
+      case "LIKED":
+        return (
+          <BsFillBookmarkHeartFill className="text-pink drop-shadow-icon" />
+        );
+      case "TO_READ":
+        return (
+          <BsFillBookmarkDashFill className="text-blue drop-shadow-icon" />
+        );
+      case "ALREADY_READ":
+        return (
+          <BsFillBookmarkCheckFill className="text-green drop-shadow-icon" />
+        );
+      case "ABANDONED":
+        return <BsFillBookmarkXFill className="text-red drop-shadow-icon" />;
+      case "READING":
+        return <BsFillBookmarkFill className="text-gray drop-shadow-icon" />;
+      case "REVIEWS":
+        return (
+          <BsFillBookmarkStarFill className="text-yellow drop-shadow-icon" />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
-    <div className="flex">
+    <div className="flex w-full">
       <Link
-        href={`/${variant}`}
+        href={href}
         className="flex grow items-center justify-between gap-3 md:grow-0 md:justify-start"
       >
         <div className="mb-0.5 bg-gradient-dark bg-clip-text text-lg font-semibold text-transparent dark:bg-gradient-light">
-          {variant === ("statistics" || "owned") ? (
+          {withoutIcon ? (
             t(variant)
           ) : (
             <div className="flex items-center gap-1">
-              {variant === "liked" && (
-                <BsFillBookmarkHeartFill className="text-pink drop-shadow-icon" />
-              )}
-              {variant === "to-read" && (
-                <BsFillBookmarkDashFill className="text-blue drop-shadow-icon" />
-              )}
-              {variant === "already-read" && (
-                <BsFillBookmarkCheckFill className="text-green drop-shadow-icon" />
-              )}
-              {variant === "abandoned" && (
-                <BsFillBookmarkXFill className="text-red drop-shadow-icon" />
-              )}
-              {variant === "reading" && (
-                <BsFillBookmarkFill className="text-gray drop-shadow-icon" />
-              )}
-              {variant === "reviews" && (
-                <BsFillBookmarkStarFill className="text-yellow drop-shadow-icon" />
-              )}
+              {getBookshelfIcon(variant)}
               <h1>{t(variant)}</h1>
             </div>
           )}

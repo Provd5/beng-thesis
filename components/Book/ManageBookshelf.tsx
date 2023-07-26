@@ -1,4 +1,7 @@
+"use client";
+
 import type { FC } from "react";
+import { useTranslations } from "next-intl";
 import { type bookshelfType } from "@prisma/client";
 
 import {
@@ -26,6 +29,9 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   title,
   updatedAt,
 }) => {
+  const t = useTranslations("Book.ManageBookshelf");
+  const tb = useTranslations("BookselfTypes");
+
   const getBookshelfIcon = (bookshelf: bookshelfType) => {
     switch (bookshelf) {
       case "TO_READ":
@@ -53,15 +59,17 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
       )}
 
       <div className="flex flex-col">
-        <ButtonLink className="self-start">On a shelf</ButtonLink>
-        <p>{bookshelf ? (bookshelf === "OTHER" ? title : bookshelf) : "–"}</p>
+        <ButtonLink className="self-start">{t("on a shelf")}</ButtonLink>
+        <p>
+          {bookshelf ? (bookshelf === "OTHER" ? title : tb(bookshelf)) : "–"}
+        </p>
 
         {updatedAt ? (
           <p className="text-xs text-black-light dark:text-white-dark">
             {dateFormater(updatedAt)}
           </p>
         ) : (
-          <p className="underline">add to shelf</p>
+          <p className="underline">{t("add to shelf")}</p>
         )}
       </div>
     </div>

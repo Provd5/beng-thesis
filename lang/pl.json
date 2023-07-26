@@ -75,15 +75,15 @@
     "reviews:": "Recenzje:",
     "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}"
   },
-  "Bookself": {
-    "statistics": "Statystyki",
-    "owned": "Posiadane",
-    "liked": "Polubione",
-    "to-read": "Do przeczytania",
-    "already-read": "Przeczytane",
-    "abandoned": "Porzucone",
-    "reading": "W trakcie",
-    "reviews": "Recenzje"
+  "BookselfTypes": {
+    "STATISTICS": "Statystyki",
+    "OWNED": "Posiadane",
+    "LIKED": "Polubione",
+    "TO_READ": "Do przeczytania",
+    "ALREADY_READ": "Przeczytane",
+    "ABANDONED": "Porzucone",
+    "READING": "W trakcie",
+    "REVIEWS": "Recenzje"
   },
   "Book": {
     "Details": {
@@ -91,7 +91,31 @@
       "publisher:": "Wydawca:",
       "release date:": "Data wydania:",
       "genre:": "Gatunek:",
-      "averge score:": "Średnia ocen:"
+      "averge score:": "Średnia ocen:",
+      "description:": "Opis:"
+    },
+    "ManageLikes": {
+      "likes": "Polubienia",
+      "liked": "polubiono",
+      "like": "polub"
+    },
+    "ManageBookshelf": {
+      "on a shelf": "Na półce",
+      "add to shelf": "dodaj na półkę"
+    },
+    "ManageOwnedAs": {
+      "owned as": "Posiadana jako"
+    },
+    "ManageReviews": {
+      "reviews": "Recenzje",
+      "write yours": "napisz swoją"
+    },
+    "Review": {
+      "joined:": "dołączył:",
+      "posted:": "Zamieszczono:",
+      "edited:": "Edytowano:",
+      "rate:": "Ocena:",
+      "likes it": "lubi to"
     }
   }
 }
