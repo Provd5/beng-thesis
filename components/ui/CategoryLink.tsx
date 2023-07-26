@@ -20,9 +20,9 @@ type variantTypes =
   | "liked"
   | "to-read"
   | "already-read"
-  | "abadoned"
+  | "abandoned"
   | "reading"
-  | "reviwes";
+  | "reviews";
 
 interface CategoryLinkProps {
   variant: variantTypes;
@@ -51,13 +51,13 @@ export const CategoryLink: FC<CategoryLinkProps> = ({ variant }) => {
               {variant === "already-read" && (
                 <BsFillBookmarkCheckFill className="text-green drop-shadow-icon" />
               )}
-              {variant === "abadoned" && (
+              {variant === "abandoned" && (
                 <BsFillBookmarkXFill className="text-red drop-shadow-icon" />
               )}
               {variant === "reading" && (
                 <BsFillBookmarkFill className="text-gray drop-shadow-icon" />
               )}
-              {variant === "reviwes" && (
+              {variant === "reviews" && (
                 <BsFillBookmarkStarFill className="text-yellow drop-shadow-icon" />
               )}
               <h1>{t(variant)}</h1>

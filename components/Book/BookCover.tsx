@@ -1,11 +1,40 @@
 import type { FC } from "react";
+import Image from "next/image";
+import clsx from "clsx";
 
-export const ThumbnailPlaceholder: FC = () => {
+interface BookCoverProps {
+  coverUrl: string | null;
+  size?: "default" | "lg";
+}
+
+export const BookCover: FC<BookCoverProps> = ({
+  coverUrl,
+  size = "default",
+}) => {
+  const sizeClass =
+    (size === "default" && "h-[140px] w-[97px]") ||
+    (size === "lg" && "h-[175px] w-[121px]");
+
+  return (
+    <div
+      className={clsx(
+        "relative shrink-0 overflow-hidden rounded-sm drop-shadow-book",
+        sizeClass
+      )}
+    >
+      {coverUrl ? (
+        <Image alt="Book cover" src={coverUrl} fill className="object-cover" />
+      ) : (
+        <ThumbnailPlaceholder />
+      )}
+    </div>
+  );
+};
+
+const ThumbnailPlaceholder: FC = () => {
   return (
     <svg
-      className="pointer-events-none fill-white-light dark:fill-white-dark"
-      width="97"
-      height="140"
+      className="pointer-events-none h-full w-full fill-white-light dark:fill-white-dark"
       viewBox="0 0 97 140"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

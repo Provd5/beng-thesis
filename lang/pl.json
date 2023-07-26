@@ -61,9 +61,12 @@
     "success": "Sukces",
     "same_username": "Podana nazwa użytkownika jest taka sama jak bieżąca"
   },
-  "NotFoundProfilePage": {
+  "NotFoundPage": {
     "not found": "Nie znaleziono",
-    "not found message": "Taki profil <s>nie istnieje</s>.",
+    "page": "Ta strona",
+    "profile": "Taki profil",
+    "book": "Taka książka",
+    "doesn't exist": "nie istnieje",
     "back to your profile": "wróć do swojego profilu"
   },
   "Profile": {
@@ -78,8 +81,17 @@
     "liked": "Polubione",
     "to-read": "Do przeczytania",
     "already-read": "Przeczytane",
-    "abadoned": "Porzucone",
+    "abandoned": "Porzucone",
     "reading": "W trakcie",
-    "reviwes": "Recenzje"
+    "reviews": "Recenzje"
+  },
+  "Book": {
+    "Details": {
+      "pages:": "Stron:",
+      "publisher:": "Wydawca:",
+      "release date:": "Data wydania:",
+      "genre:": "Gatunek:",
+      "averge score:": "Średnia ocen:"
+    }
   }
 }

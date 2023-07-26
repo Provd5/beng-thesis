@@ -151,6 +151,15 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
     }
   };
 
+  const demoLogin = async () => {
+    const { data } = await supabase.auth.signInWithPassword({
+      email: "123@123.pl",
+      password: "1234567890",
+    });
+
+    data.user && router.refresh();
+  };
+
   return checkMail ? (
     <h1 className="flex flex-col gap-1 text-center text-xl">
       <span className="text-3xl">✉️</span>
@@ -158,6 +167,10 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
     </h1>
   ) : (
     <>
+      <button className="absolute left-0 top-1/2" onClick={demoLogin}>
+        demo login
+      </button>
+      {/* ^^^^^^^^^^^^^^^^ temp ^^^^^^^^^^^^^^^^ */}
       <h1 className="mb-[32px] text-3xl font-semibold">{t(view)}</h1>
       {!loginByEmail ? (
         <div className="flex flex-col items-center gap-1">

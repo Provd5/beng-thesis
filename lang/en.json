@@ -61,9 +61,12 @@
     "success": "Success",
     "same_username": "Given username is the same as the current"
   },
-  "NotFoundProfilePage": {
+  "NotFoundPage": {
     "not found": "Not found",
-    "not found message": "Such profile <s>doesn't exist</s>.",
+    "page": "Such page",
+    "profile": "Such profile",
+    "book": "Such book",
+    "doesn't exist": "doesn't exist",
     "back to your profile": "back to your profile"
   },
   "Profile": {
@@ -78,8 +81,17 @@
     "liked": "Liked",
     "to-read": "To read",
     "already-read": "Already read",
-    "abadoned": "Abadoned",
+    "abandoned": "Abandoned",
     "reading": "reading",
-    "reviwes": "Reviwes"
+    "reviews": "Reviews"
+  },
+  "Book": {
+    "Details": {
+      "pages:": "Pages:",
+      "publisher:": "Publisher:",
+      "release date:": "Release date:",
+      "genre:": "Genre:",
+      "averge score:": "Averge score:"
+    }
   }
 }

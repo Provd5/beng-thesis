@@ -33,7 +33,9 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, href }) => {
 
   return (
     <Link
-      href={`/${href}`}
+      href={
+        href === "profile" && fullname ? `/${href}/${fullname}` : `/${href}`
+      }
       className={clsx(
         "flex shrink-0 items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50",
         href === "login" || href === "profile"
@@ -45,12 +47,9 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, href }) => {
     >
       <div className="mt-[-4px] flex flex-col items-center justify-center gap-0.5">
         <div
-          className={clsx(
-            href === "login" || href === "profile" ? "h-7 w-7" : "h-6 w-6",
-            isActive
-              ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-              : "text-black-dark dark:text-white-light"
-          )}
+          className={
+            href === "login" || href === "profile" ? "h-7 w-7" : "h-6 w-6"
+          }
         >
           {(href === "login" || href === "profile") && (
             <ProfileIcon isActive={isActive} />

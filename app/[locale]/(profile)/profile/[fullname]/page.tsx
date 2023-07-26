@@ -4,8 +4,8 @@ import { createTranslator } from "next-intl";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
+import { FollowLinks } from "~/components/Profile/FollowLinks";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
-import { FollowLinks } from "~/components/Profile/SmallLink";
 import { Statistics } from "~/components/Profile/Statistics";
 import { CategoryLink } from "~/components/ui/CategoryLink";
 import { ProfilePageContainer } from "~/components/ui/PageContainer";
@@ -56,14 +56,11 @@ export default async function ProfilePage({
     },
   });
 
-  console.log("publicUserData:", publicUserData);
-  console.log("userData:", userData);
-
   return (
     <ProfilePageContainer>
       <div className="container mx-auto pb-3">
-        <section className="mb-6 flex gap-3">
-          <div className="ml-8 mt-[-30px]">
+        <div className="mb-6 flex gap-3">
+          <div className="ml-0 mt-[-30px] xs:ml-6">
             <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
               <AvatarImage size="lg" avatarSrc={publicUserData.avatar_url} />
               <ProfileStatus isPrivate={publicUserData.private} />
@@ -79,8 +76,8 @@ export default async function ProfilePage({
               reviews={userData?.review.length ?? 0}
             />
           </div>
-        </section>
-        <section className="flex flex-col gap-3">
+        </div>
+        <div className="flex flex-col gap-3">
           <CategoryLink variant="statistics" />
           <Statistics />
           <CategoryLink variant="owned" />
@@ -88,9 +85,9 @@ export default async function ProfilePage({
           <CategoryLink variant="reading" />
           <CategoryLink variant="to-read" />
           <CategoryLink variant="already-read" />
-          <CategoryLink variant="abadoned" />
-          <CategoryLink variant="reviwes" />
-        </section>
+          <CategoryLink variant="abandoned" />
+          <CategoryLink variant="reviews" />
+        </div>
       </div>
     </ProfilePageContainer>
   );

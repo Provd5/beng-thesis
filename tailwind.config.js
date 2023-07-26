@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "320px",
+      },
       fontSize: {
         "2xs": ["10px", "12px"],
         xs: ["12px", "14px"],
@@ -17,12 +20,14 @@ module.exports = {
         xl: ["24px", "32px"],
       },
       dropShadow: {
-        icon: "0 1px 1px rgba(0, 0, 0, 0.3)",
+        icon: "0 1px 1px rgba(0, 0, 0, 0.2)",
         modal: "-5px 5px 5px rgba(0, 0, 0, 0.1)",
+        book: "-2px 2px 3px rgba(0, 0, 0, 0.1)",
         light: "0 0 1px rgb(var(--white-light) / 1)",
         dark: "0 0 1px rgb(var(--black-dark) / 1)",
       },
       borderRadius: {
+        sm: "8px",
         md: "12px",
         lg: "14px",
         xl: "18px",
