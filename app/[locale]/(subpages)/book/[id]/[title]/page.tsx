@@ -11,6 +11,7 @@ import { ManageReviews } from "~/components/Book/ManageReviews";
 import { Review } from "~/components/Book/Review";
 import { CategoryLink } from "~/components/ui/CategoryLink";
 import { db } from "~/lib/db";
+import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
 
 export default async function BookPage({
   params: { id },
@@ -44,6 +45,7 @@ export default async function BookPage({
   const bookReviews = await db.review.findMany({
     where: { book_id: book.id },
     include: {
+      review_reaction: true,
       profile: {
         select: {
           avatar_url: true,
@@ -59,13 +61,14 @@ export default async function BookPage({
       },
     },
   });
+  console.log(...bookReviews);
 
   const myReview = bookReviews.find(
     (review) => review.author_id === session?.user.id
   );
 
   return (
-    <div className="container mx-auto py-10 text-sm font-normal">
+    <div className="container mx-auto pb-5 pt-10 text-sm font-normal">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-x-10 gap-y-8 px-1 xs:px-3 md:flex-row md:justify-between md:px-6">
           <div className="flex gap-1 xs:gap-3">
@@ -106,11 +109,14 @@ export default async function BookPage({
                   </div>
                 ))}
 
-              <BookDetails variant="averge score:" text="0/5" />
+              <BookDetails
+                variant="averge score:"
+                text={`${arithmeticMeanOfScores(bookReviews)}/5`}
+              />
             </div>
           </div>
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-5 px-2 md:max-w-[400px] md:justify-end">
-            <div className="flex max-w-[300px] flex-wrap items-start justify-center gap-x-8 gap-y-5 sm:justify-between">
+            <div className="flex max-w-[320px] flex-wrap items-start justify-center gap-x-8 gap-y-5 sm:justify-between">
               <ManageBookshelf
                 bookshelf={bookshelfData?.bookshelf}
                 title={bookshelfData?.title}
@@ -122,8 +128,8 @@ export default async function BookPage({
                 addedBookAt={ownedAsData?.added_book_at}
               />
             </div>
-            <div className="flex max-w-[300px] flex-wrap items-start justify-center gap-x-8 gap-y-5 sm:justify-between">
-              <ManageLikes liked={!!liked} quantity={book.liked_by.length} />
+            <div className="flex max-w-[320px] flex-wrap items-start justify-center gap-x-8 gap-y-5 sm:justify-between">
+              <ManageLikes liked={liked} quantity={book.liked_by.length} />
               <ManageReviews
                 myReview={!!myReview}
                 quantity={bookReviews.length}
@@ -135,18 +141,15 @@ export default async function BookPage({
         {book.description && (
           <BookDetails variant="description:" text={book.description} col />
         )}
-        <div className="flex flex-col items-start divide-y divide-white-dark dark:divide-black-light">
+        <div className="flex flex-col items-start divide-y divide-y-reverse divide-white-dark dark:divide-black-light">
           <CategoryLink variant="REVIEWS" href={"/#"} withoutIcon />
           {bookReviews.map((review) => (
             <Review
               key={review.id}
-              fullName={review.profile.full_name}
-              avatarUrl={review.profile.avatar_url}
-              createdAt={review.profile.created_at}
+              profileData={review.profile}
+              reactions={review.review_reaction}
               reviewCreatedAt={review.created_at}
               reviewUpdatedAt={review.updated_at}
-              bookshelfQuantity={review.profile._count.bookshelf}
-              reviewQuantity={review.profile._count.review}
               score={review.score}
               isLiked={book.liked_by.some(
                 (profile) => profile.id === review.author_id

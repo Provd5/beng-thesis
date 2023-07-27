@@ -86,6 +86,11 @@
     "REVIEWS": "Recenzje"
   },
   "Book": {
+    "BookCard": {
+      "score": "Ocena",
+      "likes": "Polubień",
+      "reviews": "Recenzji"
+    },
     "Details": {
       "pages:": "Stron:",
       "publisher:": "Wydawca:",

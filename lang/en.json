@@ -86,6 +86,11 @@
     "REVIEWS": "Reviews"
   },
   "Book": {
+    "BookCard": {
+      "score": "Score",
+      "likes": "Likes",
+      "reviews": "Reviews"
+    },
     "Details": {
       "pages:": "Pages:",
       "publisher:": "Publisher:",
