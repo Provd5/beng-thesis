@@ -33,7 +33,7 @@ export default async function EditPage() {
   return (
     <ProfilePageContainer>
       <div className="container mx-auto pb-3">
-        <section className="mb-6 flex gap-3">
+        <div className="mb-6 flex gap-3">
           <div className="ml-8 mt-[-30px]">
             <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
               <AvatarImage size="lg" avatarSrc={userData.avatar_url} />
@@ -45,7 +45,7 @@ export default async function EditPage() {
               {userData.full_name}
             </h1>
           </div>
-        </section>
+        </div>
       </div>
       <CreateUsername fullName={userData.full_name} />
     </ProfilePageContainer>

@@ -1,5 +1,5 @@
 import { NotFoundPage } from "~/components/NotFoundPage";
 
 export default function NotFound() {
-  return <NotFoundPage variant="profile" />;
+  return <NotFoundPage variant="book" />;
 }

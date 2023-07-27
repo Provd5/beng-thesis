@@ -19,7 +19,7 @@ export const AuthPage: FC<AuthPageProps> = ({ view }) => {
       <div className="flex flex-col items-center">
         <AuthForm view={view} />
       </div>
-      <p className="text-xs">
+      <p className="text-center text-xs">
         {t.rich("terms of service", {
           Link: (chunks) => (
             <Link href={"/"} className="underline">

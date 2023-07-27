@@ -61,9 +61,12 @@
     "success": "Sukces",
     "same_username": "Podana nazwa użytkownika jest taka sama jak bieżąca"
   },
-  "NotFoundProfilePage": {
+  "NotFoundPage": {
     "not found": "Nie znaleziono",
-    "not found message": "Taki profil <s>nie istnieje</s>.",
+    "page": "Ta strona",
+    "profile": "Taki profil",
+    "book": "Taka książka",
+    "doesn't exist": "nie istnieje",
     "back to your profile": "wróć do swojego profilu"
   },
   "Profile": {
@@ -72,14 +75,52 @@
     "reviews:": "Recenzje:",
     "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}"
   },
-  "Bookself": {
-    "statistics": "Statystyki",
-    "owned": "Posiadane",
-    "liked": "Polubione",
-    "to-read": "Do przeczytania",
-    "already-read": "Przeczytane",
-    "abadoned": "Porzucone",
-    "reading": "W trakcie",
-    "reviwes": "Recenzje"
+  "BookselfTypes": {
+    "STATISTICS": "Statystyki",
+    "OWNED": "Posiadane",
+    "LIKED": "Polubione",
+    "TO_READ": "Do przeczytania",
+    "ALREADY_READ": "Przeczytane",
+    "ABANDONED": "Porzucone",
+    "READING": "W trakcie",
+    "REVIEWS": "Recenzje"
+  },
+  "Book": {
+    "BookCard": {
+      "score": "Ocena",
+      "likes": "Polubień",
+      "reviews": "Recenzji"
+    },
+    "Details": {
+      "pages:": "Stron:",
+      "publisher:": "Wydawca:",
+      "release date:": "Data wydania:",
+      "genre:": "Gatunek:",
+      "averge score:": "Średnia ocen:",
+      "description:": "Opis:"
+    },
+    "ManageLikes": {
+      "likes": "Polubienia",
+      "liked": "polubiono",
+      "like": "polub"
+    },
+    "ManageBookshelf": {
+      "on a shelf": "Na półce",
+      "add to shelf": "dodaj na półkę"
+    },
+    "ManageOwnedAs": {
+      "owned as": "Posiadana jako"
+    },
+    "ManageReviews": {
+      "reviews": "Recenzje",
+      "write yours": "napisz swoją"
+    },
+    "Review": {
+      "joined:": "dołączył:",
+      "posted:": "Zamieszczono:",
+      "edited:": "Edytowano:",
+      "rate:": "Ocena:",
+      "likes it": "lubi to"
+    }
   }
 }

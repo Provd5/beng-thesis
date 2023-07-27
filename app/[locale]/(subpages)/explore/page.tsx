@@ -1,8 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
 import { createTranslator } from "next-intl";
 
-import { ThumbnailPlaceholder } from "~/components/Book/ThumbnailPlaceholder";
+import { BookCard } from "~/components/Explore/BookCard";
 import { db } from "~/lib/db";
 
 import { getMessages, type PageProps } from "../../layout";
@@ -19,34 +17,24 @@ export async function generateMetadata({ params: { locale } }: PageProps) {
 
 export default async function ExplorePage() {
   const books = await db.book.findMany({
-    select: { id: true, title: true, authors: true, thumbnail_url: true },
+    select: {
+      id: true,
+      title: true,
+      authors: true,
+      thumbnail_url: true,
+      review: { select: { score: true } },
+      _count: { select: { review: true, liked_by: true } },
+    },
     orderBy: { published_date: "desc" },
   });
 
   return (
-    <div className="flex shrink-0 flex-wrap gap-3 py-3">
-      {books?.map((book) => (
-        <Link
-          href={`/book/${book.id}/${book.title}`}
-          key={book.id}
-          className="flex w-40 flex-col gap-1"
-        >
-          {book.thumbnail_url ? (
-            <Image
-              alt="Book cover"
-              src={book.thumbnail_url}
-              width="97"
-              height="140"
-            />
-          ) : (
-            <ThumbnailPlaceholder />
-          )}
-          <div>
-            <p>{book.title}</p>
-            <p className="text-sm font-normal">{book.authors}</p>
-          </div>
-        </Link>
-      ))}
+    <div className="container mx-auto">
+      <div className="grid grid-cols-1 gap-5 py-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+        {books?.map((book) => (
+          <BookCard key={book.id} bookData={book} />
+        ))}
+      </div>
     </div>
   );
 }
