@@ -1,65 +1,28 @@
 {
-  "Other": {
-    "logout": "Wyloguj",
-    "loading": "Ładowanie",
-    "customise": "Personalizuj"
-  },
-  "Settings": {
-    "app style": "styl aplikacji",
-    "app language": "język aplikacji"
-  },
-  "Theme": {
-    "default": "Domyślny",
-    "light": "Jasny",
-    "dark": "Ciemny"
-  },
-  "CategoryTitles": {
-    "signup": "Stwórz konto",
-    "login": "Zaloguj",
-    "explore": "Odkryj",
-    "profile": "Profil",
-    "search": "Szukaj"
-  },
-  "Auth": {
-    "logIn": "Zaloguj się",
-    "signUp": "Stwórz konto",
-    "with": "przez",
-    "logIn/signUp with email and password": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} za pomocą adresu email i hasła",
-    "logIn/signUp with provider": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} przez dostawcę",
-    "terms of service": "Logując się, wyrażasz zgodę na <Link>nasze warunki świadczenia usług</Link>.",
-    "email:": "Adres email:",
-    "password:": "Hasło:",
-    "repeat password:": "Powtórz hasło:",
-    "forgot your password?": "Nie pamiętasz hasła?",
-    "no account yet? sign up": "Nie masz jeszcze konta? <Link>Stwórz je</Link>",
-    "already have an account? log in": "Masz już konto? <Link>Zaloguj się</Link>",
-    "check your email to continue login": "Sprawdź swój adres email ({email}), aby kontynuować logowanie"
-  },
-  "EditUsername": {
-    "account created:": "Konto utworzone:",
-    "created by:": "Utworzone przez:",
-    "change/create your username:": "{view, select, change {Zmień} create {Stwórz} other {Zmień/Stwórz}} nazwę użytkownika:",
-    "enter username": "Podaj nazwę...",
-    "submit": "Prześlij"
-  },
-  "AuthErrors": {
-    "password_required_error": "Podanie hasła jest wymagane",
-    "username_too_short_3": "Nazwa użytkownika musi mieć co najmniej 3 znaki",
-    "username_too_long_32": "Nazwa użytkownika nie może zawierać więcej niż 32 znaki",
-    "wrong_email": "Adres email jest nieprawidłowy",
-    "wrong_password": "Hasło musi zawierać co najmniej 10 znaków, jedną cyfrę, jeden znak specjalny, małe i wielkie litery",
-    "wrong_username": "Nazwa użytkownika może zawierać tylko litery, cyfry i niektóre znaki specjalne",
-    "email_exists": "Użytkownik o tym adresie e-mail już istnieje",
-    "username_exists": "Ta nazwa użytkownika jest już zajęta",
-    "not_the_same_passwords": "Hasła nie są takie same",
-    "disabled_signups_error": "Rejestracja przez email jest tymczasowo wyłączona",
-    "email_link_error": "Link email jest nieprawidłowy lub wygasł",
-    "token_error": "Token wygasł lub jest nieprawidłowy",
-    "login_error": "Nieprawidłowe dane logowania",
-    "email_not_confirmed": "Email nie został potwierdzony",
-    "something_went_wrong": "Coś poszło nie tak, spróbuj ponownie za chwilę",
-    "success": "Sukces",
-    "same_username": "Podana nazwa użytkownika jest taka sama jak bieżąca"
+  "Errors": {
+    "PASSWORD_REQUIRED_ERROR": "Podanie hasła jest wymagane",
+    "USERNAME_TOO_SHORT_3": "Nazwa użytkownika musi mieć co najmniej 3 znaki",
+    "USERNAME_TOO_LONG_32": "Nazwa użytkownika nie może zawierać więcej niż 32 znaki",
+    "WRONG_EMAIL": "Adres email jest nieprawidłowy",
+    "WRONG_PASSWORD": "Hasło musi zawierać co najmniej 10 znaków, jedną cyfrę, jeden znak specjalny, małe i wielkie litery",
+    "WRONG_USERNAME": "Nazwa użytkownika może zawierać tylko litery, cyfry i niektóre znaki specjalne",
+    "EMAIL_EXISTS": "Użytkownik o tym adresie e-mail już istnieje",
+    "USERNAME_EXISTS": "Ta nazwa użytkownika jest już zajęta",
+    "NOT_THE_SAME_PASSWORDS": "Hasła nie są takie same",
+    "DISABLED_SIGNUPS_ERROR": "Rejestracja przez email jest tymczasowo wyłączona",
+    "EMAIL_LINK_ERROR": "Link email jest nieprawidłowy lub wygasł",
+    "TOKEN_ERROR": "Token wygasł lub jest nieprawidłowy",
+    "LOGIN_ERROR": "Nieprawidłowe dane logowania",
+    "EMAIL_NOT_CONFIRMED": "Email nie został potwierdzony",
+    "SAME_USERNAME": "Podana nazwa użytkownika jest taka sama jak bieżąca",
+
+    "REVIEW_REQUIRED": "Twoja recenzja nie może być pusta",
+    "REVIEW_TOO_LONG_5000": "Twoja recenzja jest zbyt długa",
+    "WRONG_SCORE": "Najpierw wystaw odpowiednią ocenę",
+
+    "UNAUTHORIZED": "Nie jesteś zalogowany",
+    "SOMETHING_WENT_WRONG": "Coś poszło nie tak, spróbuj ponownie za chwilę",
+    "SUCCESS": "Sukces"
   },
   "NotFoundPage": {
     "not found": "Nie znaleziono",
@@ -69,23 +32,70 @@
     "doesn't exist": "nie istnieje",
     "back to your profile": "wróć do swojego profilu"
   },
-  "Profile": {
-    "followers:": "Obserwujących:",
-    "following:": "Obserwowani:",
-    "reviews:": "Recenzje:",
-    "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}"
+  "Other": {
+    "logout": "Wyloguj",
+    "loading": "Ładowanie",
+    "customise": "Personalizuj"
   },
-  "BookselfTypes": {
-    "STATISTICS": "Statystyki",
-    "OWNED": "Posiadane",
-    "LIKED": "Polubione",
-    "TO_READ": "Do przeczytania",
-    "ALREADY_READ": "Przeczytane",
-    "ABANDONED": "Porzucone",
-    "READING": "W trakcie",
-    "REVIEWS": "Recenzje"
+  "Nav": {
+    "Settings": {
+      "app style": "styl aplikacji",
+      "app language": "język aplikacji"
+    },
+    "Theme": {
+      "default": "Domyślny",
+      "light": "Jasny",
+      "dark": "Ciemny"
+    },
+    "CategoryTitles": {
+      "signup": "Stwórz konto",
+      "login": "Zaloguj",
+      "explore": "Odkryj",
+      "profile": "Profil",
+      "search": "Szukaj"
+    }
+  },
+  "Profile": {
+    "Auth": {
+      "logIn": "Zaloguj się",
+      "signUp": "Stwórz konto",
+      "with": "przez",
+      "logIn/signUp with email and password": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} za pomocą adresu email i hasła",
+      "logIn/signUp with provider": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} przez dostawcę",
+      "terms of service": "Logując się, wyrażasz zgodę na <Link>nasze warunki świadczenia usług</Link>.",
+      "email:": "Adres email:",
+      "password:": "Hasło:",
+      "repeat password:": "Powtórz hasło:",
+      "forgot your password?": "Nie pamiętasz hasła?",
+      "no account yet? sign up": "Nie masz jeszcze konta? <Link>Stwórz je</Link>",
+      "already have an account? log in": "Masz już konto? <Link>Zaloguj się</Link>",
+      "check your email to continue login": "Sprawdź swój adres email ({email}), aby kontynuować logowanie"
+    },
+    "EditUsername": {
+      "account created:": "Konto utworzone:",
+      "created by:": "Utworzone przez:",
+      "change/create your username:": "{view, select, change {Zmień} create {Stwórz} other {Zmień/Stwórz}} nazwę użytkownika:",
+      "enter username": "Podaj nazwę...",
+      "submit": "Prześlij"
+    },
+    "Page": {
+      "followers:": "Obserwujących:",
+      "following:": "Obserwowani:",
+      "reviews:": "Recenzje:",
+      "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}"
+    }
   },
   "Book": {
+    "BookselfTypes": {
+      "STATISTICS": "Statystyki",
+      "OWNED": "Posiadane",
+      "LIKED": "Polubione",
+      "TO_READ": "Do przeczytania",
+      "ALREADY_READ": "Przeczytane",
+      "ABANDONED": "Porzucone",
+      "READING": "W trakcie",
+      "REVIEWS": "Recenzje"
+    },
     "BookCard": {
       "score": "Ocena",
       "likes": "Polubień",
@@ -97,9 +107,13 @@
       "release date:": "Data wydania:",
       "genre:": "Gatunek:",
       "averge score:": "Średnia ocen:",
-      "description:": "Opis:"
+      "description:": "Opis:",
+      "show more": "pokaż więcej",
+      "show less": "pokaż mniej"
     },
     "ManageLikes": {
+      "added to liked": "Dodano do polubionych",
+      "removed from liked": "Usunięto z polubionych",
       "likes": "Polubienia",
       "liked": "polubiono",
       "like": "polub"
@@ -115,12 +129,28 @@
       "reviews": "Recenzje",
       "write yours": "napisz swoją"
     },
+    "CreateReview": {
+      "express your opinion": "Wyraź swoją opinię...",
+      "your score": "Twoja ocena",
+      "add review": "Dodaj recenzję",
+      "edit review": "Edytuj recenzję",
+      "review added": "Recenzja dodana",
+      "review updated": "Review zaktualizowana"
+    },
+    "MyReview": {
+      "your review": "Twoja recenzja"
+    },
     "Review": {
       "joined:": "dołączył:",
       "posted:": "Zamieszczono:",
       "edited:": "Edytowano:",
       "rate:": "Ocena:",
-      "likes it": "lubi to"
+      "likes it": "lubi to",
+      "was this review useful?": "Czy recenzja była przydatna?",
+      "yes": "Tak",
+      "no": "Nie",
+      "collapse": "zwiń",
+      "expand": "rozwiń"
     }
   }
 }

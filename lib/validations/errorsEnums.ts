@@ -1,33 +1,42 @@
+export enum GlobalErrors {
+  SOMETHING_WENT_WRONG = "SOMETHING_WENT_WRONG",
+  UNAUTHORIZED = "UNAUTHORIZED",
+  SUCCESS = "SUCCESS",
+}
+
 export enum AuthErrors {
-  email_exists = "email_exists",
-  username_exists = "username_exists",
-  not_the_same_passwords = "not_the_same_passwords",
-  something_went_wrong = "something_went_wrong",
-  unauthorized = "unauthorized",
-  success = "success",
+  EMAIL_EXISTS = "EMAIL_EXISTS",
+  USERNAME_EXISTS = "USERNAME_EXISTS",
+  NOT_THE_SAME_PASSWORDS = "NOT_THE_SAME_PASSWORDS",
 }
 
 export enum SupabaseValidatorErrors {
-  disabled_signups_error = "Email signups are disabled",
-  email_link_error = "Email link is invalid or has expired",
-  token_error = "Token has expired or is invalid",
-  login_error = "Invalid login credentials",
-  email_not_confirmed = "Email not confirmed",
+  DISABLED_SIGNUPS_ERROR = "Email signups are disabled",
+  EMAIL_LINK_ERROR = "Email link is invalid or has expired",
+  TOKEN_ERROR = "Token has expired or is invalid",
+  LOGIN_ERROR = "Invalid login credentials",
+  EMAIL_NOT_CONFIRMED = "Email not confirmed",
 }
 
 export enum LoginValidatorErrors {
-  wrong_email = "wrong_email",
-  password_required_error = "password_required_error",
+  WRONG_EMAIL = "WRONG_EMAIL",
+  PASSWORD_REQUIRED_ERROR = "PASSWORD_REQUIRED_ERROR",
 }
 
 export enum SignupValidatorErrors {
-  wrong_email = "wrong_email",
-  wrong_password = "wrong_password",
+  WRONG_EMAIL = "WRONG_EMAIL",
+  WRONG_PASSWORD = "WRONG_PASSWORD",
 }
 
 export enum UsernameValidatorErrors {
-  username_too_short_3 = "username_too_short_3",
-  username_too_long_32 = "username_too_long_32",
-  wrong_username = "wrong_username",
-  same_username = "same_username",
+  USERNAME_TOO_SHORT_3 = "USERNAME_TOO_SHORT_3",
+  USERNAME_TOO_LONG_32 = "USERNAME_TOO_LONG_32",
+  WRONG_USERNAME = "WRONG_USERNAME",
+  SAME_USERNAME = "SAME_USERNAME",
+}
+
+export enum CreateReviewValidatorErrors {
+  REVIEW_REQUIRED = "REVIEW_REQUIRED",
+  REVIEW_TOO_LONG_5000 = "REVIEW_TOO_LONG_5000",
+  WRONG_SCORE = "WRONG_SCORE",
 }

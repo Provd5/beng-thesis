@@ -17,7 +17,7 @@ export const FollowLinks: FC<FollowLinksProps> = ({
   following,
   reviews,
 }) => {
-  const t = useTranslations("Profile");
+  const t = useTranslations("Profile.Page");
 
   return (
     <>

@@ -11,19 +11,31 @@ export const BookCover: FC<BookCoverProps> = ({
   coverUrl,
   size = "default",
 }) => {
-  const sizeClass =
-    (size === "default" && "h-[140px] w-[97px]") ||
-    (size === "lg" && "h-[175px] w-[121px]");
+  const sizes = {
+    default: "97px",
+    lg: "121px",
+  };
+  const sizeClass = {
+    default: "h-[140px] w-[97px]",
+    lg: "h-[175px] w-[121px]",
+  };
 
   return (
     <div
       className={clsx(
         "relative shrink-0 overflow-hidden rounded-sm drop-shadow-book",
-        sizeClass
+        sizeClass[size]
       )}
     >
       {coverUrl ? (
-        <Image alt="Book cover" src={coverUrl} fill className="object-cover" />
+        <Image
+          alt="Book cover"
+          src={coverUrl}
+          fill
+          priority
+          sizes={sizes[size]}
+          className="pointer-events-none object-cover"
+        />
       ) : (
         <ThumbnailPlaceholder />
       )}

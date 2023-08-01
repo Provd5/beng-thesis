@@ -14,18 +14,19 @@ datasource db {
 // models
 // ------
 model profile {
-  id              String            @id @default(uuid()) @db.Uuid
-  full_name       String?           @unique
-  avatar_url      String?
-  users           users             @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  created_at      DateTime          @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime?         @db.Timestamptz(6)
-  private         Boolean           @default(false)
+  id         String    @id @default(uuid()) @db.Uuid
+  full_name  String?   @unique
+  avatar_url String?
+  users      users     @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime? @updatedAt @db.Timestamptz(6)
+  private    Boolean   @default(false)
+
   followed_by     follows[]         @relation("following")
   following       follows[]         @relation("follower")
   review          review[]
   review_reaction review_reaction[]
-  liked_books     book[]            @relation("liked_books")
+  liked_book      liked_books[]
   bookshelf       bookshelf[]
   book_owned_as   book_owned_as[]
 
@@ -43,11 +44,12 @@ model follows {
 }
 
 model review {
-  id              String            @id @default(uuid()) @db.Uuid
-  created_at      DateTime          @default(now()) @db.Timestamptz(6)
-  updated_at      DateTime?         @db.Timestamptz(6)
-  text            String?
-  score           Int
+  id         String    @id @default(uuid()) @db.Uuid
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  updated_at DateTime? @updatedAt @db.Timestamptz(6)
+  text       String
+  score      Int
+
   author_id       String            @db.Uuid
   profile         profile           @relation(fields: [author_id], references: [id])
   book_id         String            @db.Uuid
@@ -58,18 +60,19 @@ model review {
 }
 
 model review_reaction {
-  reaction  reactionType
-  user_id   String       @db.Uuid
-  review_id String       @db.Uuid
-  review    review       @relation(fields: [review_id], references: [id])
-  profile   profile      @relation(fields: [user_id], references: [id])
+  reaction reactionType
+
+  user_id   String  @db.Uuid
+  review_id String  @db.Uuid
+  review    review  @relation(fields: [review_id], references: [id])
+  profile   profile @relation(fields: [user_id], references: [id])
 
   @@id([user_id, review_id])
   @@schema("public")
 }
 
 model book {
-  id             String          @id @default(uuid()) @db.Uuid
+  id             String   @id @default(uuid()) @db.Uuid
   title          String
   subtitle       String?
   authors        String[]
@@ -78,13 +81,14 @@ model book {
   description    String?
   isbn_10        String
   isbn_13        String
-  page_count     Int             @default(0)
+  page_count     Int      @default(0)
   thumbnail_url  String?
   categories     String[]
-  review         review[]
-  liked_by       profile[]       @relation("liked_books")
-  bookshelf      bookshelf[]
-  book_owned_as  book_owned_as[]
+
+  review        review[]
+  liked_by      liked_books[]
+  bookshelf     bookshelf[]
+  book_owned_as book_owned_as[]
 
   @@schema("public")
 }
@@ -93,10 +97,11 @@ model bookshelf {
   updated_at DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
   bookshelf  bookshelfType?
   title      String?
-  user_id    String         @db.Uuid
-  book_id    String         @db.Uuid
-  book       book           @relation(fields: [book_id], references: [id])
-  profile    profile        @relation(fields: [user_id], references: [id])
+
+  user_id String  @db.Uuid
+  book_id String  @db.Uuid
+  book    book    @relation(fields: [book_id], references: [id])
+  profile profile @relation(fields: [user_id], references: [id])
 
   @@id([user_id, book_id])
   @@schema("public")
@@ -106,10 +111,21 @@ model book_owned_as {
   added_book_at      DateTime? @updatedAt @db.Timestamptz(6)
   added_ebook_at     DateTime? @updatedAt @db.Timestamptz(6)
   added_audiobook_at DateTime? @updatedAt @db.Timestamptz(6)
-  user_id            String    @db.Uuid
-  book_id            String    @db.Uuid
-  book               book      @relation(fields: [book_id], references: [id])
-  profile            profile   @relation(fields: [user_id], references: [id])
+
+  user_id String  @db.Uuid
+  book_id String  @db.Uuid
+  book    book    @relation(fields: [book_id], references: [id])
+  profile profile @relation(fields: [user_id], references: [id])
+
+  @@id([user_id, book_id])
+  @@schema("public")
+}
+
+model liked_books {
+  book_id String  @db.Uuid
+  user_id String  @db.Uuid
+  book    book    @relation(fields: [book_id], references: [id])
+  profile profile @relation(fields: [user_id], references: [id])
 
   @@id([user_id, book_id])
   @@schema("public")

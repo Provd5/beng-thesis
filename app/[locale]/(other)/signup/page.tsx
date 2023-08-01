@@ -10,7 +10,7 @@ export async function generateMetadata({ params: { locale } }: PageProps) {
   const t = createTranslator({ locale, messages });
 
   return {
-    title: t("CategoryTitles.signup"),
+    title: t("Nav.CategoryTitles.signup"),
   };
 }
 

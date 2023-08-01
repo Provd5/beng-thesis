@@ -9,7 +9,7 @@ import { z } from "zod";
 
 import { UsernameValidator } from "~/lib/validations/auth";
 import {
-  AuthErrors,
+  GlobalErrors,
   UsernameValidatorErrors,
 } from "~/lib/validations/errorsEnums";
 
@@ -21,8 +21,8 @@ interface CreateUsernameProps {
 }
 
 export const CreateUsername: FC<CreateUsernameProps> = ({ fullName }) => {
-  const t = useTranslations("EditUsername");
-  const te = useTranslations("AuthErrors");
+  const t = useTranslations("Profile.EditUsername");
+  const te = useTranslations("Errors");
 
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -36,30 +36,27 @@ export const CreateUsername: FC<CreateUsernameProps> = ({ fullName }) => {
       const username = form.elements.namedItem("username") as HTMLInputElement;
 
       if (fullName === username.value) {
-        toast.error(te(UsernameValidatorErrors.same_username));
+        toast.error(te(UsernameValidatorErrors.SAME_USERNAME));
         return;
       }
 
-      UsernameValidator.parse(username.value);
-      const { data }: { data: string } = await axios.patch(
-        `/api/username/`,
-        username.value
-      );
-
-      data === AuthErrors.username_exists && toast.error(te(data));
+      UsernameValidator.parse({ username: username.value });
+      const { data }: { data: string } = await axios.patch(`/api/username/`, {
+        username: username.value,
+      });
 
       // on success
       if (data === username.value) {
-        toast.success(te(AuthErrors.success));
+        toast.success(te(GlobalErrors.SUCCESS));
         router.push(`/profile/${data}`);
+      } else {
+        toast.error(te(data));
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
-        error.issues.map((error) => {
-          toast.error(te(error.message));
-        });
+        toast.error(te(error.issues[0].message));
       } else {
-        toast.error(te(AuthErrors.something_went_wrong));
+        toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       }
     } finally {
       setIsLoading(false);

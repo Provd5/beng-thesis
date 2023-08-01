@@ -11,7 +11,7 @@ export async function generateMetadata({ params: { locale } }: PageProps) {
   const t = createTranslator({ locale, messages });
 
   return {
-    title: t("CategoryTitles.explore"),
+    title: t("Nav.CategoryTitles.explore"),
   };
 }
 
@@ -30,7 +30,7 @@ export default async function ExplorePage() {
 
   return (
     <div className="container mx-auto">
-      <div className="grid grid-cols-1 gap-5 py-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 py-3 sm:grid-cols-2 lg:grid-cols-3">
         {books?.map((book) => (
           <BookCard key={book.id} bookData={book} />
         ))}

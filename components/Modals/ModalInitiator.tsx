@@ -2,29 +2,35 @@
 
 import { type FC, useState } from "react";
 
-import { ModalWrapper } from "./ModalWrapper";
+import { type modalSizes, ModalWrapper } from "./ModalWrapper";
 
 interface ModalInitiatorProps {
   children: React.ReactNode;
   initiatorStyle: React.ReactNode;
+  size?: modalSizes;
+  customModalStateHandler?: () => void;
 }
 
 export const ModalInitiator: FC<ModalInitiatorProps> = ({
   children,
   initiatorStyle,
+  size = "default",
 }) => {
-  const [openModal, setOpenModal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="relative flex">
       <button
-        onKeyDown={(e) => e.key === "Escape" && setOpenModal(false)}
-        onClick={() => setOpenModal(!openModal)}
+        onKeyDown={(e) => e.key === "Escape" && setIsModalOpen(false)}
+        onClick={() => setIsModalOpen(!isModalOpen)}
       >
         {initiatorStyle}
       </button>
-      {openModal && (
-        <ModalWrapper handler={() => setOpenModal(false)}>
+      {isModalOpen && (
+        <ModalWrapper
+          size={size}
+          closeModalHandler={() => setIsModalOpen(false)}
+        >
           {children}
         </ModalWrapper>
       )}
