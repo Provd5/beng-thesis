@@ -1,65 +1,28 @@
 {
-  "Other": {
-    "logout": "Logout",
-    "loading": "Loading",
-    "customise": "Customise"
-  },
-  "Settings": {
-    "app style": "app style",
-    "app language": "app language"
-  },
-  "Theme": {
-    "default": "Default",
-    "light": "Light",
-    "dark": "Dark"
-  },
-  "CategoryTitles": {
-    "signup": "Sign up",
-    "login": "Log in",
-    "explore": "Explore",
-    "profile": "Profile",
-    "search": "Search"
-  },
-  "Auth": {
-    "logIn": "Log in",
-    "signUp": "Sign up",
-    "with": "with",
-    "logIn/signUp with email and password": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with email and password",
-    "logIn/signUp with provider": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with provider",
-    "terms of service": "By logging in, you agree to <Link>our terms of service</Link>.",
-    "email:": "Email:",
-    "password:": "Password:",
-    "repeat password:": "Repeat password:",
-    "forgot your password?": "Forgot your password?",
-    "no account yet? sign up": "No account yet? <Link>Sign up</Link>",
-    "already have an account? log in": "Already have an account? <Link>Log in</Link>",
-    "check your email to continue login": "Check your email ({email}), to continue login"
-  },
-  "EditUsername": {
-    "account created:": "Account created:",
-    "created by:": "Created by:",
-    "change/create your username:": "{view, select, change {Change} create {Create} other {Change/Create}} username:",
-    "enter username": "Enter username...",
-    "submit": "Submit"
-  },
-  "AuthErrors": {
-    "password_required_error": "Password is required",
-    "username_too_short_3": "Username must be at least 3 characters",
-    "username_too_long_32": "Username must be less than 32 characters",
-    "wrong_email": "Email is invalid",
-    "wrong_password": "Password must have at least 10 characters, one number, one special character, both lower and uppercase letters",
-    "wrong_username": "Username can only contain letters, numbers and some special characters",
-    "email_exists": "User with this email address already exists",
-    "username_exists": "This username is already taken",
-    "not_the_same_passwords": "The passwords are not the same",
-    "disabled_signups_error": "Email signups are temporary disabled",
-    "email_link_error": "Email link is invalid or has expired",
-    "token_error": "Token has expired or is invalid",
-    "login_error": "Invalid login credentials",
-    "email_not_confirmed": "Email not confirmed",
-    "something_went_wrong": "Something went wrong, try again in a moment",
-    "success": "Success",
-    "same_username": "Given username is the same as the current"
+  "Errors": {
+    "PASSWORD_REQUIRED_ERROR": "Password is required",
+    "USERNAME_TOO_SHORT_3": "Username must be at least 3 characters",
+    "USERNAME_TOO_LONG_32": "Username must be less than 32 characters",
+    "WRONG_EMAIL": "Email is invalid",
+    "WRONG_PASSWORD": "Password must have at least 10 characters, one number, one special character, both lower and uppercase letters",
+    "WRONG_USERNAME": "Username can only contain letters, numbers and some special characters",
+    "EMAIL_EXISTS": "User with this email address already exists",
+    "USERNAME_EXISTS": "This username is already taken",
+    "NOT_THE_SAME_PASSWORDS": "The passwords are not the same",
+    "DISABLED_SIGNUPS_ERROR": "Email signups are temporary disabled",
+    "EMAIL_LINK_ERROR": "Email link is invalid or has expired",
+    "TOKEN_ERROR": "Token has expired or is invalid",
+    "LOGIN_ERROR": "Invalid login credentials",
+    "EMAIL_NOT_CONFIRMED": "Email not confirmed",
+    "SAME_USERNAME": "Given username is the same as the current",
+
+    "REVIEW_REQUIRED": "Your review cannot be empty",
+    "REVIEW_TOO_LONG_5000": "Your review is too long",
+    "WRONG_SCORE": "Give an adequate rating first",
+
+    "UNAUTHORIZED": "You are not logged in",
+    "SOMETHING_WENT_WRONG": "Something went wrong, try again in a moment",
+    "SUCCESS": "Success"
   },
   "NotFoundPage": {
     "not found": "Not found",
@@ -69,23 +32,70 @@
     "doesn't exist": "doesn't exist",
     "back to your profile": "back to your profile"
   },
-  "Profile": {
-    "followers:": "Followers:",
-    "following:": "Following:",
-    "reviews:": "Reviews:",
-    "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}"
+  "Other": {
+    "logout": "Logout",
+    "loading": "Loading",
+    "customise": "Customise"
   },
-  "BookselfTypes": {
-    "STATISTICS": "Statistics",
-    "OWNED": "Owned",
-    "LIKED": "Liked",
-    "TO_READ": "To read",
-    "ALREADY_READ": "Already read",
-    "ABANDONED": "Abandoned",
-    "READING": "reading",
-    "REVIEWS": "Reviews"
+  "Nav": {
+    "Settings": {
+      "app style": "app style",
+      "app language": "app language"
+    },
+    "Theme": {
+      "default": "Default",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "CategoryTitles": {
+      "signup": "Sign up",
+      "login": "Log in",
+      "explore": "Explore",
+      "profile": "Profile",
+      "search": "Search"
+    }
+  },
+  "Profile": {
+    "Auth": {
+      "logIn": "Log in",
+      "signUp": "Sign up",
+      "with": "with",
+      "logIn/signUp with email and password": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with email and password",
+      "logIn/signUp with provider": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with provider",
+      "terms of service": "By logging in, you agree to <Link>our terms of service</Link>.",
+      "email:": "Email:",
+      "password:": "Password:",
+      "repeat password:": "Repeat password:",
+      "forgot your password?": "Forgot your password?",
+      "no account yet? sign up": "No account yet? <Link>Sign up</Link>",
+      "already have an account? log in": "Already have an account? <Link>Log in</Link>",
+      "check your email to continue login": "Check your email ({email}), to continue login"
+    },
+    "EditUsername": {
+      "account created:": "Account created:",
+      "created by:": "Created by:",
+      "change/create your username:": "{view, select, change {Change} create {Create} other {Change/Create}} username:",
+      "enter username": "Enter username...",
+      "submit": "Submit"
+    },
+    "Page": {
+      "followers:": "Followers:",
+      "following:": "Following:",
+      "reviews:": "Reviews:",
+      "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}"
+    }
   },
   "Book": {
+    "BookselfTypes": {
+      "STATISTICS": "Statistics",
+      "OWNED": "Owned",
+      "LIKED": "Liked",
+      "TO_READ": "To read",
+      "ALREADY_READ": "Already read",
+      "ABANDONED": "Abandoned",
+      "READING": "Reading",
+      "REVIEWS": "Reviews"
+    },
     "BookCard": {
       "score": "Score",
       "likes": "Likes",
@@ -97,9 +107,13 @@
       "release date:": "Release date:",
       "genre:": "Genre:",
       "averge score:": "Averge score:",
-      "description:": "Description:"
+      "description:": "Description:",
+      "show more": "show more",
+      "show less": "show less"
     },
     "ManageLikes": {
+      "added to liked": "Added to liked",
+      "removed from liked": "Removed from liked",
       "likes": "Likes",
       "liked": "liked",
       "like": "like"
@@ -115,12 +129,28 @@
       "reviews": "Reviews",
       "write yours": "write yours"
     },
+    "CreateReview": {
+      "express your opinion": "Express your opinion...",
+      "your score": "Your score",
+      "add review": "Add review",
+      "edit review": "Edit review",
+      "review added": "Review added",
+      "review updated": "Review updated"
+    },
+    "MyReview": {
+      "your review": "Your review"
+    },
     "Review": {
       "joined:": "joined:",
       "posted:": "Posted:",
       "edited:": "Edited:",
       "rate:": "Rate:",
-      "likes it": "likes it"
+      "likes it": "likes it",
+      "was this review useful?": "Was this review useful?",
+      "yes": "Yes",
+      "no": "No",
+      "collapse": "collapse",
+      "expand": "expand"
     }
   }
 }

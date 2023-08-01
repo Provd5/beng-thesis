@@ -11,7 +11,7 @@ interface AuthPageProps {
 }
 
 export const AuthPage: FC<AuthPageProps> = ({ view }) => {
-  const t = useTranslations("Auth");
+  const t = useTranslations("Profile.Auth");
 
   return (
     <div className="relative flex h-full flex-col items-center justify-between px-3 py-6 text-sm text-white-light">

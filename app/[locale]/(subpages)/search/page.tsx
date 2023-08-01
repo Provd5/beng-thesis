@@ -10,7 +10,7 @@ export async function generateMetadata({ params: { locale } }: PageProps) {
   const t = createTranslator({ locale, messages });
 
   return {
-    title: t("CategoryTitles.search"),
+    title: t("Nav.CategoryTitles.search"),
   };
 }
 
@@ -20,7 +20,7 @@ export default async function SearchPage({ params: { locale } }: PageProps) {
   return (
     <>
       <div className="flex flex-col items-center gap-3">
-        <h1>{t("categoryTitle")}</h1>
+        <h1>{t("categoryTitles")}</h1>
         <ButtonWhite>TEST test Test</ButtonWhite>
         <ButtonWhite size="sm">TEST test Test</ButtonWhite>
         <ButtonWhite loading>TEST test Test</ButtonWhite>

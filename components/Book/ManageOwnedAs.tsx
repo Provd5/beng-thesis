@@ -34,6 +34,7 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
         {renderOwnedAsIcon(!!addedEbookAt, AsEbook)}
         {renderOwnedAsIcon(!!addedAudiobookAt, AsAudiobook)}
         {renderOwnedAsIcon(!!addedBookAt, AsBook)}
+        {!addedEbookAt && !addedAudiobookAt && !addedBookAt && <p>–</p>}
       </div>
     </div>
   );

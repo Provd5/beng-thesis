@@ -17,7 +17,7 @@ interface SettingsProps {
 }
 
 export const Settings: FC<SettingsProps> = ({ setLangCookie, currentLang }) => {
-  const t = useTranslations("Settings");
+  const t = useTranslations("Nav.Settings");
 
   return (
     <>

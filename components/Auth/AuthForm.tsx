@@ -12,6 +12,7 @@ import { z } from "zod";
 import { LoginValidator, SignupValidator } from "~/lib/validations/auth";
 import {
   AuthErrors,
+  GlobalErrors,
   SupabaseValidatorErrors,
 } from "~/lib/validations/errorsEnums";
 
@@ -23,8 +24,8 @@ interface AuthFormProps {
 }
 
 export const AuthForm: FC<AuthFormProps> = ({ view }) => {
-  const t = useTranslations("Auth");
-  const te = useTranslations("AuthErrors");
+  const t = useTranslations("Profile.Auth");
+  const te = useTranslations("Errors");
   const supabase = createClientComponentClient();
 
   const router = useRouter();
@@ -46,7 +47,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
         },
       });
     } catch (error) {
-      toast.error(te(AuthErrors.something_went_wrong));
+      toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
     } finally {
       setIsLoading(false);
     }
@@ -72,20 +73,18 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
         password: password.value,
       });
 
-      error?.message.includes(SupabaseValidatorErrors.login_error) &&
-        toast.error(te("login_error"));
-      error?.message.includes(SupabaseValidatorErrors.email_not_confirmed) &&
-        toast.error(te("email_not_confirmed"));
+      error?.message.includes(SupabaseValidatorErrors.LOGIN_ERROR) &&
+        toast.error(te("LOGIN_ERROR"));
+      error?.message.includes(SupabaseValidatorErrors.EMAIL_NOT_CONFIRMED) &&
+        toast.error(te("EMAIL_NOT_CONFIRMED"));
 
       //on success
       data.user && router.refresh();
     } catch (error) {
       if (error instanceof z.ZodError) {
-        error.issues.map((error) => {
-          toast.error(te(error.message));
-        });
+        toast.error(te(error.issues[0].message));
       } else {
-        toast.error(te(AuthErrors.something_went_wrong));
+        toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       }
     } finally {
       setIsLoading(false);
@@ -105,7 +104,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
       ) as HTMLInputElement;
 
       if (password.value !== passwordRepeat.value) {
-        toast.error(te(AuthErrors.not_the_same_passwords));
+        toast.error(te(AuthErrors.NOT_THE_SAME_PASSWORDS));
         return;
       }
 
@@ -124,15 +123,15 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
         },
       });
 
-      error?.message.includes(SupabaseValidatorErrors.disabled_signups_error) &&
-        toast.error(te("disabled_signups_error"));
-      error?.message.includes(SupabaseValidatorErrors.email_link_error) &&
-        toast.error(te("email_link_error"));
-      error?.message.includes(SupabaseValidatorErrors.token_error) &&
-        toast.error(te("token_error"));
+      error?.message.includes(SupabaseValidatorErrors.DISABLED_SIGNUPS_ERROR) &&
+        toast.error(te("DISABLED_SIGNUPS_ERROR"));
+      error?.message.includes(SupabaseValidatorErrors.EMAIL_LINK_ERROR) &&
+        toast.error(te("EMAIL_LINK_ERROR"));
+      error?.message.includes(SupabaseValidatorErrors.TOKEN_ERROR) &&
+        toast.error(te("TOKEN_ERROR"));
 
       if (!error && !data.user?.identities?.length) {
-        toast.error(te(AuthErrors.email_exists));
+        toast.error(te(AuthErrors.EMAIL_EXISTS));
         return;
       }
 
@@ -140,11 +139,9 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
       !error && data.user && setCheckMail(data.user.email);
     } catch (error) {
       if (error instanceof z.ZodError) {
-        error.issues.map((error) => {
-          toast.error(te(error.message), { duration: 7000 });
-        });
+        toast.error(te(error.issues[0].message), { duration: 7000 });
       } else {
-        toast.error(te(AuthErrors.something_went_wrong));
+        toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       }
     } finally {
       setIsLoading(false);

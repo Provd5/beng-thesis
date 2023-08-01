@@ -5,19 +5,16 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 
 import { Loader } from "./Loader";
 
-type sizes = "default" | "sm";
-
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
-  size?: sizes;
   loading?: boolean;
   defaultColor?: boolean;
 }
 
 const sharedClass =
-  "flex items-center justify-center font-semibold whitespace-nowrap";
+  "flex items-center justify-center font-semibold whitespace-nowrap h-fit";
 
-export const Button: FC<ButtonProps> = ({
+export const Button: FC<ButtonProps & { size?: "default" | "sm" }> = ({
   children,
   size = "default",
   loading,
@@ -25,6 +22,11 @@ export const Button: FC<ButtonProps> = ({
   className,
   ...restProps
 }) => {
+  const sizeClass = {
+    default: "rounded-xl px-8 py-3.5 text-base",
+    sm: "rounded-lg px-6 py-3 text-sm",
+  };
+
   return (
     <button
       disabled={loading}
@@ -33,9 +35,7 @@ export const Button: FC<ButtonProps> = ({
         "gap-1 hover:scale-105",
         defaultColor &&
           "bg-gradient-dark text-white-light hover:bg-gradient-light dark:bg-gradient-light dark:hover:bg-gradient-dark",
-        size === "default"
-          ? "rounded-xl px-8 py-3.5 text-base"
-          : "rounded-lg px-6 py-3 text-sm",
+        sizeClass[size],
         className
       )}
       {...restProps}
@@ -46,21 +46,24 @@ export const Button: FC<ButtonProps> = ({
   );
 };
 
-export const ButtonWhite: FC<ButtonProps> = ({
+export const ButtonWhite: FC<ButtonProps & { size?: "default" | "sm" }> = ({
   children,
   size = "default",
   loading,
   className,
   ...restProps
 }) => {
+  const sizeClass = {
+    default: "rounded-xl px-8 py-3.5 text-base",
+    sm: "rounded-lg px-6 py-3 text-sm",
+  };
+
   return (
     <button
       disabled={loading}
       className={clsx(
         "bg-white-light hover:scale-105 hover:bg-white-light/80",
-        size === "default"
-          ? "rounded-xl px-8 py-3.5 text-base"
-          : "rounded-lg px-6 py-3 text-sm",
+        sizeClass[size],
         className
       )}
       {...restProps}
@@ -80,28 +83,44 @@ export const ButtonWhite: FC<ButtonProps> = ({
   );
 };
 
-export const ButtonLink: FC<ButtonProps & { active?: boolean }> = ({
+export const ButtonLink: FC<
+  ButtonProps & { active?: boolean; size?: "default" | "sm" | "lg" }
+> = ({
   children,
   size = "default",
+  defaultColor = true,
   loading,
   className,
   active,
   ...restProps
 }) => {
+  const sizeClass = {
+    default: "text-base",
+    sm: "text-sm",
+    lg: "text-md",
+  };
+
   return (
     <button
       disabled={loading}
       className={clsx(
         sharedClass,
-        "bg-gradient-dark bg-gradient-dark bg-clip-text text-transparent hover:font-bold dark:bg-gradient-light",
-        size === "default" ? "text-base" : "text-sm",
+        defaultColor &&
+          "bg-gradient-dark bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light",
+        sizeClass[size],
         className
       )}
       {...restProps}
     >
       {children}
-      <span className={active ? "rotate-180" : ""}>
-        <MdKeyboardArrowDown className="flex-none fill-[var(--svg-gradient-dark)] text-xl dark:fill-[var(--svg-gradient)]" />
+      <span className={clsx("transition-transform", active && "rotate-180")}>
+        <MdKeyboardArrowDown
+          className={clsx(
+            "flex-none text-xl",
+            defaultColor &&
+              "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
+          )}
+        />
       </span>
     </button>
   );

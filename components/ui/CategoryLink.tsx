@@ -26,14 +26,16 @@ interface CategoryLinkProps {
   variant: variantTypes;
   href: `/${string}`;
   withoutIcon?: boolean;
+  quantity?: number;
 }
 
 export const CategoryLink: FC<CategoryLinkProps> = ({
   variant,
   href,
   withoutIcon,
+  quantity,
 }) => {
-  const t = useTranslations("BookselfTypes");
+  const t = useTranslations("Book.BookselfTypes");
 
   const getBookshelfIcon = (bookshelf: variantTypes) => {
     switch (bookshelf) {
@@ -69,14 +71,13 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
         className="flex grow items-center justify-between gap-3 md:grow-0 md:justify-start"
       >
         <div className="mb-0.5 bg-gradient-dark bg-clip-text text-lg font-semibold text-transparent dark:bg-gradient-light">
-          {withoutIcon ? (
-            t(variant)
-          ) : (
-            <div className="flex items-center gap-1">
-              {getBookshelfIcon(variant)}
-              <h1>{t(variant)}</h1>
-            </div>
-          )}
+          <div className="flex items-center gap-1">
+            {!withoutIcon && getBookshelfIcon(variant)}
+            <h1>
+              {t(variant)}
+              {quantity !== undefined && ` – ${quantity}`}
+            </h1>
+          </div>
         </div>
         <MdNavigateNext className="fill-[var(--svg-gradient-dark)] text-xl dark:fill-[var(--svg-gradient)]" />
       </Link>

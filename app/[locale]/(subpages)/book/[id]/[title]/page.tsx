@@ -8,6 +8,7 @@ import { ManageBookshelf } from "~/components/Book/ManageBookshelf";
 import { ManageLikes } from "~/components/Book/ManageLikes";
 import { ManageOwnedAs } from "~/components/Book/ManageOwnedAs";
 import { ManageReviews } from "~/components/Book/ManageReviews";
+import { MyReview } from "~/components/Book/MyReview";
 import { Review } from "~/components/Book/Review";
 import { CategoryLink } from "~/components/ui/CategoryLink";
 import { db } from "~/lib/db";
@@ -29,18 +30,18 @@ export default async function BookPage({
   const book = await db.book.findFirst({
     where: { id: id },
     include: {
-      liked_by: { select: { id: true } },
+      liked_by: { select: { user_id: true } },
       bookshelf: session ? { where: { user_id: session.user.id } } : false,
       book_owned_as: session ? { where: { user_id: session.user.id } } : false,
     },
   });
 
   if (!book) notFound();
-  const bookshelfData = book.bookshelf ? book.bookshelf[0] : undefined;
-  const ownedAsData = book.book_owned_as ? book.book_owned_as[0] : undefined;
-  const liked = book.liked_by.some(
-    (profile) => profile.id === session?.user.id
-  );
+  const bookshelfData = book.bookshelf[0] ?? null;
+  const ownedAsData = book.book_owned_as[0] ?? null;
+  const isBookLiked = (userId: string | undefined) => {
+    return book.liked_by.some((profile) => profile.user_id === userId);
+  };
 
   const bookReviews = await db.review.findMany({
     where: { book_id: book.id },
@@ -48,6 +49,7 @@ export default async function BookPage({
       review_reaction: true,
       profile: {
         select: {
+          id: true,
           avatar_url: true,
           full_name: true,
           created_at: true,
@@ -61,11 +63,20 @@ export default async function BookPage({
       },
     },
   });
-  console.log(...bookReviews);
+
+  const myProfile = await db.profile.findFirst({
+    where: { id: session?.user.id },
+    select: {
+      avatar_url: true,
+      full_name: true,
+    },
+  });
 
   const myReview = bookReviews.find(
     (review) => review.author_id === session?.user.id
   );
+
+  const otherReviews = bookReviews.filter((review) => review !== myReview);
 
   return (
     <div className="container mx-auto pb-5 pt-10 text-sm font-normal">
@@ -129,7 +140,11 @@ export default async function BookPage({
               />
             </div>
             <div className="flex max-w-[320px] flex-wrap items-start justify-center gap-x-8 gap-y-5 sm:justify-between">
-              <ManageLikes liked={liked} quantity={book.liked_by.length} />
+              <ManageLikes
+                bookId={book.id}
+                liked={isBookLiked(session?.user.id)}
+                quantity={book.liked_by.length}
+              />
               <ManageReviews
                 myReview={!!myReview}
                 quantity={bookReviews.length}
@@ -139,22 +154,40 @@ export default async function BookPage({
           </div>
         </div>
         {book.description && (
-          <BookDetails variant="description:" text={book.description} col />
+          <BookDetails variant="description:" text={book.description} />
         )}
-        <div className="flex flex-col items-start divide-y divide-y-reverse divide-white-dark dark:divide-black-light">
+        <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
           <CategoryLink variant="REVIEWS" href={"/#"} withoutIcon />
-          {bookReviews.map((review) => (
+          <MyReview
+            isReviewExists={!!myReview?.id}
+            bookId={book.id}
+            myProfileData={myProfile}
+            score={myReview?.score}
+            text={myReview?.text}
+          >
+            {myReview && (
+              <Review
+                profileData={myReview.profile}
+                reactions={myReview.review_reaction}
+                reviewCreatedAt={myReview.created_at}
+                reviewUpdatedAt={myReview.updated_at}
+                score={myReview.score}
+                isLiked={isBookLiked(myReview.author_id)}
+                text={myReview.text}
+                isMyReview
+              />
+            )}
+          </MyReview>
+          {otherReviews.map((review) => (
             <Review
               key={review.id}
               profileData={review.profile}
-              reactions={review.review_reaction}
               reviewCreatedAt={review.created_at}
               reviewUpdatedAt={review.updated_at}
               score={review.score}
-              isLiked={book.liked_by.some(
-                (profile) => profile.id === review.author_id
-              )}
+              isLiked={isBookLiked(review.author_id)}
               text={review.text}
+              reactions={review.review_reaction}
             />
           ))}
         </div>

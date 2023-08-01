@@ -55,7 +55,7 @@ const ThemeButton: FC<ThemeButtonProps> = ({
   setCurrentTheme,
   active,
 }) => {
-  const t = useTranslations("Theme");
+  const t = useTranslations("Nav.Theme");
 
   const handleToggleTheme = (theme: themeTypes) => {
     if (theme === "default") {

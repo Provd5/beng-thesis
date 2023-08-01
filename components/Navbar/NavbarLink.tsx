@@ -18,7 +18,7 @@ interface NavbarLinkProps {
 }
 
 export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, href }) => {
-  const t = useTranslations("CategoryTitles");
+  const t = useTranslations("Nav.CategoryTitles");
 
   const pathname = usePathname();
   const pathnameWithoutLocale: string[] | undefined = pathname

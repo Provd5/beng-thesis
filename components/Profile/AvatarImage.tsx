@@ -17,16 +17,22 @@ export const AvatarImage: FC<AvatarImageProps> = ({
   size = "default",
   className,
 }) => {
-  const sizeVariants = {
+  const sizes = {
+    default: "75px",
+    sm: "50px",
+    lg: "100px",
+  };
+  const sizeClass = {
     default: "h-[75px] w-[75px]",
     sm: "h-[50px] w-[50px]",
     lg: "h-[100px] w-[100px]",
   };
 
   return (
-    <div className={clsx("relative", sizeVariants[size], className)}>
+    <div className={clsx("relative shrink-0", sizeClass[size], className)}>
       {avatarSrc ? (
         <Image
+          sizes={sizes[size]}
           fill
           src={avatarSrc}
           alt="Profile Avatar"

@@ -30,7 +30,7 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   updatedAt,
 }) => {
   const t = useTranslations("Book.ManageBookshelf");
-  const tb = useTranslations("BookselfTypes");
+  const tb = useTranslations("Book.BookselfTypes");
 
   const getBookshelfIcon = (bookshelf: bookshelfType) => {
     switch (bookshelf) {
@@ -64,12 +64,10 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
           {bookshelf ? (bookshelf === "OTHER" ? title : tb(bookshelf)) : "–"}
         </p>
 
-        {updatedAt ? (
+        {updatedAt && (
           <p className="text-xs text-black-light dark:text-white-dark">
             {dateFormater(updatedAt)}
           </p>
-        ) : (
-          <p className="underline">{t("add to shelf")}</p>
         )}
       </div>
     </div>

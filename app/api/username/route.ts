@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { db } from "~/lib/db";
 import { UsernameValidator } from "~/lib/validations/auth";
-import { AuthErrors } from "~/lib/validations/errorsEnums";
+import { AuthErrors, GlobalErrors } from "~/lib/validations/errorsEnums";
 
 export async function PATCH(req: Request) {
   try {
@@ -17,11 +17,11 @@ export async function PATCH(req: Request) {
     } = await supabase.auth.getSession();
 
     if (!session?.user) {
-      return new Response(AuthErrors.unauthorized);
+      return new Response(GlobalErrors.UNAUTHORIZED);
     }
 
-    const body = await req.text();
-    const username = UsernameValidator.parse(body);
+    const body = (await req.json()) as { username: string };
+    const { username } = UsernameValidator.parse(body);
 
     // check if username is taken
     const isUsernameExists = await db.profile.findFirst({
@@ -32,7 +32,7 @@ export async function PATCH(req: Request) {
     });
 
     if (isUsernameExists) {
-      return new Response(AuthErrors.username_exists);
+      return new Response(AuthErrors.USERNAME_EXISTS);
     }
 
     // update username
@@ -52,7 +52,7 @@ export async function PATCH(req: Request) {
         return new Response(error.message);
       });
     } else {
-      return new Response(AuthErrors.something_went_wrong);
+      return new Response(GlobalErrors.SOMETHING_WENT_WRONG);
     }
   }
 }

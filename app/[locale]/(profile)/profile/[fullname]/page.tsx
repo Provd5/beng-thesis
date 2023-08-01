@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { createTranslator } from "next-intl";
+import { type bookshelfType } from "@prisma/client";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
@@ -19,7 +20,7 @@ export async function generateMetadata({ params: { locale } }: PageProps) {
   const t = createTranslator({ locale, messages });
 
   return {
-    title: t("CategoryTitles.profile"),
+    title: t("Nav.CategoryTitles.profile"),
   };
 }
 
@@ -46,15 +47,22 @@ export default async function ProfilePage({
     where: {
       OR: [{ id: session?.user.id }, { id: publicUserData.id, private: false }],
     },
-    include: {
+    select: {
       followed_by: true,
       following: true,
       review: true,
-      liked_books: true,
+      liked_book: true,
       bookshelf: true,
       book_owned_as: true,
     },
   });
+
+  function quantityOfBookshelfType(bookshelfType: bookshelfType) {
+    return (
+      userData?.bookshelf.filter((type) => type.bookshelf === bookshelfType)
+        .length ?? 0
+    );
+  }
 
   return (
     <ProfilePageContainer>
@@ -80,13 +88,41 @@ export default async function ProfilePage({
         <div className="flex flex-col gap-3">
           <CategoryLink variant="STATISTICS" href={"/#"} />
           <Statistics />
-          <CategoryLink variant="OWNED" href={"/#"} />
-          <CategoryLink variant="LIKED" href={"/#"} />
-          <CategoryLink variant="TO_READ" href={"/#"} />
-          <CategoryLink variant="ALREADY_READ" href={"/#"} />
-          <CategoryLink variant="ABANDONED" href={"/#"} />
-          <CategoryLink variant="READING" href={"/#"} />
-          <CategoryLink variant="REVIEWS" href={"/#"} />
+          <CategoryLink
+            variant="OWNED"
+            href={"/#"}
+            quantity={userData?.book_owned_as.length}
+          />
+          <CategoryLink
+            variant="LIKED"
+            href={"/#"}
+            quantity={userData?.liked_book.length}
+          />
+          <CategoryLink
+            variant="TO_READ"
+            href={"/#"}
+            quantity={quantityOfBookshelfType("TO_READ")}
+          />
+          <CategoryLink
+            variant="ALREADY_READ"
+            href={"/#"}
+            quantity={quantityOfBookshelfType("ALREADY_READ")}
+          />
+          <CategoryLink
+            variant="ABANDONED"
+            href={"/#"}
+            quantity={quantityOfBookshelfType("ABANDONED")}
+          />
+          <CategoryLink
+            variant="READING"
+            href={"/#"}
+            quantity={quantityOfBookshelfType("READING")}
+          />
+          <CategoryLink
+            variant="REVIEWS"
+            href={"/#"}
+            quantity={userData?.review.length}
+          />
         </div>
       </div>
     </ProfilePageContainer>
