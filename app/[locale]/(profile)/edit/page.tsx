@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { CreateUsername } from "~/components/Auth/CreateUsername";
@@ -17,17 +17,14 @@ export default async function EditPage() {
     data: { session },
   } = await supabase.auth.getSession();
 
-  const userExists = session?.user;
-  if (!userExists) {
-    redirect(`/login`);
-  }
-
-  const userData = await db.profile.findFirst({
-    where: { id: userExists.id },
-  });
+  const userData =
+    session?.user &&
+    (await db.profile.findFirst({
+      where: { id: session.user.id },
+    }));
 
   if (!userData) {
-    redirect(`/login`);
+    notFound();
   }
 
   return (

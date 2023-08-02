@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { type reactionType } from "@prisma/client";
 import clsx from "clsx";
 
+import { type IconType } from "react-icons";
 import {
   BsBookmarkHeartFill,
   BsBookmarkStarFill,
@@ -31,13 +32,12 @@ interface ReviewProps {
   reviewCreatedAt: Date;
   reviewUpdatedAt: Date | null;
   score: number;
-  isLiked: boolean;
   text: string;
+  isLiked: boolean;
   reactions: {
     reaction: reactionType;
-    user_id: string;
-    review_id: string;
   }[];
+  userReaction: reactionType | undefined;
   isMyReview?: boolean;
 }
 
@@ -45,16 +45,29 @@ export const Review: FC<ReviewProps> = ({
   profileData,
   reviewCreatedAt,
   reviewUpdatedAt,
-  score,
   isLiked,
+  score,
   text,
   reactions,
+  userReaction,
   isMyReview,
 }) => {
   const t = useTranslations("Book.Review");
 
+  const filterReaction = (reaction: reactionType) => {
+    const filterArrayByReaction = reactionsState.filter(
+      (type) => type.reaction === reaction
+    );
+    return filterArrayByReaction;
+  };
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [reactionsState, setReactionsState] = useState(reactions);
+  const [userReactionState, setUserReactionState] = useState(userReaction);
+
   const [renderButton, setRenderButton] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
   const reviewParagraphRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
@@ -64,19 +77,71 @@ export const Review: FC<ReviewProps> = ({
     ) {
       setRenderButton(true);
     }
+    console.log(userReactionState);
   }, []);
+
+  const renderReaction = (reaction: reactionType, Icon: IconType) => {
+    return (
+      <button
+        disabled={isLoading}
+        className="flex items-center gap-1"
+        onClick={() => handleReaction(reaction)}
+      >
+        <Icon
+          className={
+            userReactionState === reaction
+              ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
+              : ""
+          }
+        />
+        <p
+          className={
+            userReactionState === reaction
+              ? "bg-gradient-dark bg-clip-text font-bold text-transparent dark:bg-gradient-light"
+              : ""
+          }
+        >
+          {`${t(reaction)} – ${filterReaction(reaction).length}`}
+        </p>
+      </button>
+    );
+  };
+
+  const handleReaction = (reaction: reactionType) => {
+    setIsLoading(true);
+
+    // set active reaction
+    setUserReactionState(userReactionState === reaction ? undefined : reaction);
+    const index = reactionsState.findIndex(
+      (item) => item.reaction === userReactionState
+    );
+    //removing reaction from array
+    reactionsState.splice(index, index !== -1 ? 1 : 0);
+    //changing or adding reaction
+    userReactionState !== reaction &&
+      setReactionsState((prev) => [...prev, { reaction }]);
+
+    try {
+      // on success
+    } catch (error) {
+    } finally {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    }
+  };
 
   return (
     <div
       className={clsx(
         "relative flex w-full flex-col gap-1 py-3 sm:flex-row",
         isMyReview &&
-          "min-h-[260px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[215px] before:sm:rounded-md"
+          "min-h-[355px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[275px] before:sm:rounded-md"
       )}
     >
       <Link
         href={profileData.full_name ? `/profile/${profileData.full_name}` : "#"}
-        className="flex shrink-0 gap-x-1.5 gap-y-1 font-medium sm:w-24 sm:flex-col sm:items-center"
+        className="flex h-fit shrink-0 gap-x-1.5 gap-y-1 font-medium sm:w-24 sm:flex-col sm:items-center"
       >
         <AvatarImage
           className="drop-shadow-icon"
@@ -152,20 +217,8 @@ export const Review: FC<ReviewProps> = ({
           <div className="flex flex-col items-end gap-1">
             <p className="text-right text-xs">{t("was this review useful?")}</p>
             <div className="flex gap-5 px-1 text-black-light dark:text-white-dark">
-              <div className="flex items-center gap-1">
-                <FaFaceLaughBeam />
-                <p>
-                  {t("yes")} –{" "}
-                  {reactions.filter((type) => type.reaction === "OK").length}
-                </p>
-              </div>
-              <div className="flex items-center gap-1">
-                <FaFaceMeh />
-                <p>
-                  {t("no")} –{" "}
-                  {reactions.filter((type) => type.reaction === "MEH").length}
-                </p>
-              </div>
+              {renderReaction("OK", FaFaceLaughBeam)}
+              {renderReaction("MEH", FaFaceMeh)}
             </div>
           </div>
         </div>

@@ -141,14 +141,14 @@
       "your review": "Your review"
     },
     "Review": {
+      "was this review useful?": "Was this review useful?",
+      "OK": "Yes",
+      "MEH": "No",
       "joined:": "joined:",
       "posted:": "Posted:",
       "edited:": "Edited:",
       "rate:": "Rate:",
       "likes it": "likes it",
-      "was this review useful?": "Was this review useful?",
-      "yes": "Yes",
-      "no": "No",
       "collapse": "collapse",
       "expand": "expand"
     }

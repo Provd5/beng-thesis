@@ -37,8 +37,8 @@ export default async function BookPage({
   });
 
   if (!book) notFound();
-  const bookshelfData = book.bookshelf[0] ?? null;
-  const ownedAsData = book.book_owned_as[0] ?? null;
+  const bookshelfData = book.bookshelf ? book.bookshelf[0] : null;
+  const ownedAsData = book.book_owned_as ? book.book_owned_as[0] : null;
   const isBookLiked = (userId: string | undefined) => {
     return book.liked_by.some((profile) => profile.user_id === userId);
   };
@@ -46,7 +46,7 @@ export default async function BookPage({
   const bookReviews = await db.review.findMany({
     where: { book_id: book.id },
     include: {
-      review_reaction: true,
+      review_reaction: { select: { reaction: true } },
       profile: {
         select: {
           id: true,
@@ -64,17 +64,26 @@ export default async function BookPage({
     },
   });
 
-  const myProfile = await db.profile.findFirst({
-    where: { id: session?.user.id },
-    select: {
-      avatar_url: true,
-      full_name: true,
-    },
-  });
+  const myProfile =
+    session?.user &&
+    (await db.profile.findFirst({
+      where: { id: session.user.id },
+      select: {
+        avatar_url: true,
+        full_name: true,
+        review_reaction: { select: { review_id: true, reaction: true } },
+      },
+    }));
 
-  const myReview = bookReviews.find(
-    (review) => review.author_id === session?.user.id
-  );
+  const myReaction = (reviewId: string) => {
+    return myProfile?.review_reaction.find(
+      (reaction) => reaction.review_id === reviewId
+    )?.reaction;
+  };
+
+  const myReview =
+    session?.user &&
+    bookReviews.find((review) => review.author_id === session.user.id);
 
   const otherReviews = bookReviews.filter((review) => review !== myReview);
 
@@ -168,12 +177,13 @@ export default async function BookPage({
             {myReview && (
               <Review
                 profileData={myReview.profile}
-                reactions={myReview.review_reaction}
                 reviewCreatedAt={myReview.created_at}
                 reviewUpdatedAt={myReview.updated_at}
-                score={myReview.score}
                 isLiked={isBookLiked(myReview.author_id)}
+                score={myReview.score}
                 text={myReview.text}
+                reactions={myReview.review_reaction}
+                userReaction={myReaction(myReview.id)}
                 isMyReview
               />
             )}
@@ -184,10 +194,11 @@ export default async function BookPage({
               profileData={review.profile}
               reviewCreatedAt={review.created_at}
               reviewUpdatedAt={review.updated_at}
-              score={review.score}
               isLiked={isBookLiked(review.author_id)}
+              score={review.score}
               text={review.text}
               reactions={review.review_reaction}
+              userReaction={myReaction(review.id)}
             />
           ))}
         </div>

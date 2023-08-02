@@ -15,10 +15,12 @@ export const Navbar: FC = async () => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  const userData = await db.profile.findFirst({
-    where: { id: session?.user.id },
-    select: { full_name: true },
-  });
+  const userData =
+    session?.user &&
+    (await db.profile.findFirst({
+      where: { id: session.user.id },
+      select: { full_name: true },
+    }));
 
   return (
     <>

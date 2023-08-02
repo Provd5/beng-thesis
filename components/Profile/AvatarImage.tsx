@@ -34,6 +34,7 @@ export const AvatarImage: FC<AvatarImageProps> = ({
         <Image
           sizes={sizes[size]}
           fill
+          priority
           src={avatarSrc}
           alt="Profile Avatar"
           className="pointer-events-none rounded-full"
