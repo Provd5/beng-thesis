@@ -176,6 +176,7 @@ export default async function BookPage({
           >
             {myReview && (
               <Review
+              id={myReview.id}
                 profileData={myReview.profile}
                 reviewCreatedAt={myReview.created_at}
                 reviewUpdatedAt={myReview.updated_at}
@@ -191,6 +192,7 @@ export default async function BookPage({
           {otherReviews.map((review) => (
             <Review
               key={review.id}
+              id={review.id}
               profileData={review.profile}
               reviewCreatedAt={review.created_at}
               reviewUpdatedAt={review.updated_at}

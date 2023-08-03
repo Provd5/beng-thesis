@@ -1,9 +1,11 @@
 "use client";
 
 import { type FC, useEffect, useRef, useState } from "react";
+import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { type reactionType } from "@prisma/client";
+import axios from "axios";
 import clsx from "clsx";
 
 import { type IconType } from "react-icons";
@@ -14,12 +16,15 @@ import {
 } from "react-icons/bs";
 import { FaFaceLaughBeam, FaFaceMeh } from "react-icons/fa6";
 
+import { ReviewReactionValidator } from "~/lib/validations/book/manage";
+import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
 
 import { AvatarImage } from "../Profile/AvatarImage";
 import { ButtonLink } from "../ui/Buttons";
 
 interface ReviewProps {
+  id: string;
   profileData: {
     avatar_url: string | null;
     full_name: string | null;
@@ -42,6 +47,7 @@ interface ReviewProps {
 }
 
 export const Review: FC<ReviewProps> = ({
+  id,
   profileData,
   reviewCreatedAt,
   reviewUpdatedAt,
@@ -53,6 +59,7 @@ export const Review: FC<ReviewProps> = ({
   isMyReview,
 }) => {
   const t = useTranslations("Book.Review");
+  const te = useTranslations("Errors");
 
   const filterReaction = (reaction: reactionType) => {
     const filterArrayByReaction = reactionsState.filter(
@@ -77,7 +84,6 @@ export const Review: FC<ReviewProps> = ({
     ) {
       setRenderButton(true);
     }
-    console.log(userReactionState);
   }, []);
 
   const renderReaction = (reaction: reactionType, Icon: IconType) => {
@@ -107,11 +113,14 @@ export const Review: FC<ReviewProps> = ({
     );
   };
 
-  const handleReaction = (reaction: reactionType) => {
+  const handleReaction = async (reaction: reactionType) => {
     setIsLoading(true);
+    const prevUserReaction = userReactionState;
+    const prevReactions = reactionsState;
 
     // set active reaction
     setUserReactionState(userReactionState === reaction ? undefined : reaction);
+
     const index = reactionsState.findIndex(
       (item) => item.reaction === userReactionState
     );
@@ -122,8 +131,23 @@ export const Review: FC<ReviewProps> = ({
       setReactionsState((prev) => [...prev, { reaction }]);
 
     try {
-      // on success
+      ReviewReactionValidator.parse({
+        formData: { reviewId: id, reaction: reaction },
+      });
+      const { data }: { data: string } = await axios.post(
+        `/api/book/manage/review/reaction/`,
+        { formData: { reviewId: id, reaction: reaction } }
+      );
+
+      if (data !== GlobalErrors.SUCCESS) {
+        toast.error(te(data));
+        setUserReactionState(prevUserReaction);
+        setReactionsState(prevReactions);
+      }
     } catch (error) {
+      toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
+      setUserReactionState(prevUserReaction);
+      setReactionsState(prevReactions);
     } finally {
       setTimeout(() => {
         setIsLoading(false);
