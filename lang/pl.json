@@ -22,6 +22,7 @@
 
     "UNAUTHORIZED": "Nie jesteś zalogowany",
     "SOMETHING_WENT_WRONG": "Coś poszło nie tak, spróbuj ponownie za chwilę",
+    "PENDING": "W toku...",
     "SUCCESS": "Sukces"
   },
   "NotFoundPage": {
@@ -94,7 +95,8 @@
       "ALREADY_READ": "Przeczytane",
       "ABANDONED": "Porzucone",
       "READING": "W trakcie",
-      "REVIEWS": "Recenzje"
+      "REVIEWS": "Recenzje",
+      "OTHER": "Inne"
     },
     "BookCard": {
       "score": "Ocena",
@@ -120,10 +122,15 @@
     },
     "ManageBookshelf": {
       "on a shelf": "Na półce",
-      "add to shelf": "dodaj na półkę"
+      "add to shelf": "dodaj na półkę",
+      "remove from shelf": "Usuń z półki"
     },
     "ManageOwnedAs": {
-      "owned as": "Posiadana jako"
+      "owned as": "Posiadasz jako",
+      "added as:": "Dodano jako:",
+      "BOOK": "Książka",
+      "EBOOK": "E-book",
+      "AUDIOBOOK": "Audiobook"
     },
     "ManageReviews": {
       "reviews": "Recenzje",
@@ -133,12 +140,11 @@
       "express your opinion": "Wyraź swoją opinię...",
       "your score": "Twoja ocena",
       "add review": "Dodaj recenzję",
-      "edit review": "Edytuj recenzję",
-      "review added": "Recenzja dodana",
-      "review updated": "Recenzja zaktualizowana"
+      "edit review": "Edytuj recenzję"
     },
     "MyReview": {
-      "your review": "Twoja recenzja"
+      "your review": "Twoja recenzja",
+      "cancel": "Anuluj"
     },
     "Review": {
       "was this review useful?": "Czy recenzja była przydatna?",

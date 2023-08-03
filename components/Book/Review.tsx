@@ -16,7 +16,7 @@ import {
 } from "react-icons/bs";
 import { FaFaceLaughBeam, FaFaceMeh } from "react-icons/fa6";
 
-import { ReviewReactionValidator } from "~/lib/validations/book/manage";
+import { ReviewReactionValidator } from "~/lib/validations/book/reviewReaction";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
 
@@ -90,7 +90,7 @@ export const Review: FC<ReviewProps> = ({
     return (
       <button
         disabled={isLoading}
-        className="flex items-center gap-1"
+        className="flex items-center gap-1 py-0.5"
         onClick={() => handleReaction(reaction)}
       >
         <Icon
@@ -115,8 +115,9 @@ export const Review: FC<ReviewProps> = ({
 
   const handleReaction = async (reaction: reactionType) => {
     setIsLoading(true);
-    const prevUserReaction = userReactionState;
-    const prevReactions = reactionsState;
+    const loadingToast = toast.loading(te(GlobalErrors.PENDING));
+    const prevUserReaction = userReaction;
+    const prevReactions = reactions;
 
     // set active reaction
     setUserReactionState(userReactionState === reaction ? undefined : reaction);
@@ -130,25 +131,29 @@ export const Review: FC<ReviewProps> = ({
     userReactionState !== reaction &&
       setReactionsState((prev) => [...prev, { reaction }]);
 
+    const formData = { reviewId: id, reaction: reaction };
+
     try {
       ReviewReactionValidator.parse({
-        formData: { reviewId: id, reaction: reaction },
+        formData: formData,
       });
       const { data }: { data: string } = await axios.post(
         `/api/book/manage/review/reaction/`,
-        { formData: { reviewId: id, reaction: reaction } }
+        { formData: formData }
       );
 
       if (data !== GlobalErrors.SUCCESS) {
         toast.error(te(data));
         setUserReactionState(prevUserReaction);
         setReactionsState(prevReactions);
+        return;
       }
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       setUserReactionState(prevUserReaction);
       setReactionsState(prevReactions);
     } finally {
+      toast.dismiss(loadingToast);
       setTimeout(() => {
         setIsLoading(false);
       }, 500);
@@ -160,7 +165,7 @@ export const Review: FC<ReviewProps> = ({
       className={clsx(
         "relative flex w-full flex-col gap-1 py-3 sm:flex-row",
         isMyReview &&
-          "min-h-[355px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[275px] before:sm:rounded-md"
+          "min-h-[360px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[280px] before:sm:rounded-md"
       )}
     >
       <Link
@@ -217,14 +222,14 @@ export const Review: FC<ReviewProps> = ({
           <p
             ref={reviewParagraphRef}
             className={clsx(
-              "px-1.5",
+              "pl-1 pr-1 sm:pr-3",
               !isExpanded && "line-clamp-[10] max-h-[152px]"
             )}
           >
             {text}
           </p>
         </div>
-        <div className="mt-2 flex flex-wrap justify-between">
+        <div className="mt-1.5 flex flex-wrap justify-between">
           {renderButton ? (
             <ButtonLink
               size="sm"
@@ -238,7 +243,7 @@ export const Review: FC<ReviewProps> = ({
           ) : (
             <div />
           )}
-          <div className="flex flex-col items-end gap-1">
+          <div className="flex flex-col items-end gap-0.5">
             <p className="text-right text-xs">{t("was this review useful?")}</p>
             <div className="flex gap-5 px-1 text-black-light dark:text-white-dark">
               {renderReaction("OK", FaFaceLaughBeam)}

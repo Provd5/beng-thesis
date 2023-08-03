@@ -22,6 +22,7 @@
 
     "UNAUTHORIZED": "You are not logged in",
     "SOMETHING_WENT_WRONG": "Something went wrong, try again in a moment",
+    "PENDING": "Pending...",
     "SUCCESS": "Success"
   },
   "NotFoundPage": {
@@ -94,7 +95,8 @@
       "ALREADY_READ": "Already read",
       "ABANDONED": "Abandoned",
       "READING": "Reading",
-      "REVIEWS": "Reviews"
+      "REVIEWS": "Reviews",
+      "OTHER": "Other"
     },
     "BookCard": {
       "score": "Score",
@@ -120,10 +122,14 @@
     },
     "ManageBookshelf": {
       "on a shelf": "On a shelf",
-      "add to shelf": "add to shelf"
+      "add to shelf": "add to shelf",
+      "remove from shelf": "Remove from shelf"
     },
     "ManageOwnedAs": {
-      "owned as": "Owned as"
+      "owned as": "Owned as",
+      "BOOK": "Book",
+      "EBOOK": "E-book",
+      "AUDIOBOOK": "Audiobook"
     },
     "ManageReviews": {
       "reviews": "Reviews",
@@ -133,12 +139,11 @@
       "express your opinion": "Express your opinion...",
       "your score": "Your score",
       "add review": "Add review",
-      "edit review": "Edit review",
-      "review added": "Review added",
-      "review updated": "Review updated"
+      "edit review": "Edit review"
     },
     "MyReview": {
-      "your review": "Your review"
+      "your review": "Your review",
+      "cancel": "Cancel"
     },
     "Review": {
       "was this review useful?": "Was this review useful?",

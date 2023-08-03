@@ -14,21 +14,35 @@ interface BookmarksWrapperProps {
     | "yellow"
     | "gradient"
     | "default";
+  size?: "default" | "sm";
 }
 
 export const BookmarksWrapper: FC<BookmarksWrapperProps> = ({
   Icon,
   color,
+  size = "default",
 }) => {
-  const sharedClass = "h-auto w-7 drop-shadow-icon";
   const colorClass =
     color === "gradient"
       ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
       : `text-${color}`;
 
+  const sizeClass = {
+    default: "h-auto w-7 pt-1",
+    sm: "h-auto w-4",
+  };
+
   return (
-    <div className="flex pt-1">
-      <Icon className={clsx(sharedClass, color !== "default" && colorClass)} />
+    <div className="flex">
+      <Icon
+        className={clsx(
+          "drop-shadow-icon",
+          color === "default"
+            ? "text-black-light dark:text-white-dark"
+            : colorClass,
+          sizeClass[size]
+        )}
+      />
     </div>
   );
 };

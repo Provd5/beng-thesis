@@ -3,10 +3,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { z } from "zod";
 
 import { db } from "~/lib/db";
-import {
-  CreateReviewResponse,
-  CreateReviewValidator,
-} from "~/lib/validations/book/manage";
+import { CreateReviewValidator } from "~/lib/validations/book/createReview";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
 export async function POST(req: Request) {
@@ -39,7 +36,6 @@ export async function POST(req: Request) {
       select: { id: true },
     });
 
-    // on success
     if (reviewExists) {
       await db.review.update({
         where: { id: reviewExists.id },
@@ -48,7 +44,6 @@ export async function POST(req: Request) {
           score: formData.score,
         },
       });
-      return new Response(CreateReviewResponse.UPDATED);
     } else {
       await db.review.create({
         data: {
@@ -59,8 +54,9 @@ export async function POST(req: Request) {
           updated_at: null,
         },
       });
-      return new Response(CreateReviewResponse.CREATED);
     }
+    // on success
+    return new Response(GlobalErrors.SUCCESS);
   } catch (error) {
     if (error instanceof z.ZodError) {
       error.issues.map((error) => {

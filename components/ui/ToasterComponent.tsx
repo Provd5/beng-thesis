@@ -5,17 +5,15 @@ import clsx from "clsx";
 import { BsCheck } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 
+import { Loader } from "./Loader";
+
 export const ToasterComponent: FC<ToasterProps> = ({}) => {
-  const sharedClass = "!rounded-xl !bg-white-light !font-semibold !text-base";
+  const sharedClass = "!rounded-lg !bg-white-light !font-semibold !text-sm";
 
   return (
     <Toaster
-      containerStyle={{
-        top: 68,
-        left: 10,
-        bottom: 68,
-        right: 10,
-      }}
+      gutter={4}
+      containerClassName="!inset-x-[10px] !top-[10px] mb-3 !bottom-[var(--nav-height)] md:!bottom-[10px]"
       toastOptions={{
         className: clsx(sharedClass, "!text-blue"),
         duration: 2000,
@@ -29,8 +27,18 @@ export const ToasterComponent: FC<ToasterProps> = ({}) => {
           icon: <RxCross2 className="mb-[-2px] mr-[-8px] shrink-0 text-lg" />,
           id: "errorToast",
         },
+        loading: {
+          className: clsx(sharedClass, "!text-gray !text-xs"),
+          icon: (
+            <div className="mr-[-8px] h-3.5 w-3.5 shrink-0">
+              <Loader />
+            </div>
+          ),
+          id: "loadingToast",
+          duration: Infinity,
+        },
       }}
-      position="bottom-center"
+      position="bottom-left"
     />
   );
 };
