@@ -135,30 +135,39 @@ export default async function BookPage({
               />
             </div>
           </div>
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-5 px-2 md:max-w-[400px] md:justify-end">
-            <div className="flex max-w-[320px] flex-wrap items-start justify-center gap-x-8 gap-y-5 sm:justify-between">
-              <ManageBookshelf
-                bookshelf={bookshelfData?.bookshelf}
-                title={bookshelfData?.title}
-                updatedAt={bookshelfData?.updated_at}
-              />
-              <ManageOwnedAs
-                addedEbookAt={ownedAsData?.added_ebook_at}
-                addedAudiobookAt={ownedAsData?.added_audiobook_at}
-                addedBookAt={ownedAsData?.added_book_at}
-              />
+          <div className="flex flex-wrap content-start justify-center gap-8 px-2 md:max-w-[400px] md:justify-end">
+            <div className="flex h-fit flex-wrap items-start justify-center gap-x-4 gap-y-5 sm:justify-between">
+              <div className="w-36">
+                <ManageBookshelf
+                  bookId={book.id}
+                  bookshelf={bookshelfData?.bookshelf}
+                  updatedAt={bookshelfData?.updated_at}
+                />
+              </div>
+              <div className="w-36">
+                <ManageOwnedAs
+                  bookId={book.id}
+                  addedEbookAt={ownedAsData?.added_ebook_at}
+                  addedAudiobookAt={ownedAsData?.added_audiobook_at}
+                  addedBookAt={ownedAsData?.added_book_at}
+                />
+              </div>
             </div>
-            <div className="flex max-w-[320px] flex-wrap items-start justify-center gap-x-8 gap-y-5 sm:justify-between">
-              <ManageLikes
-                bookId={book.id}
-                liked={isBookLiked(session?.user.id)}
-                quantity={book.liked_by.length}
-              />
-              <ManageReviews
-                myReview={!!myReview}
-                quantity={bookReviews.length}
-                createdAt={myReview?.created_at}
-              />
+            <div className="flex h-fit flex-wrap items-start justify-center gap-x-4 gap-y-5 sm:justify-between">
+              <div className="w-36">
+                <ManageLikes
+                  bookId={book.id}
+                  liked={isBookLiked(session?.user.id)}
+                  quantity={book.liked_by.length}
+                />
+              </div>
+              <div className="w-36">
+                <ManageReviews
+                  myReview={!!myReview}
+                  quantity={bookReviews.length}
+                  createdAt={myReview?.created_at}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -176,7 +185,7 @@ export default async function BookPage({
           >
             {myReview && (
               <Review
-              id={myReview.id}
+                id={myReview.id}
                 profileData={myReview.profile}
                 reviewCreatedAt={myReview.created_at}
                 reviewUpdatedAt={myReview.updated_at}

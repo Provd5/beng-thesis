@@ -108,9 +108,9 @@ model bookshelf {
 }
 
 model book_owned_as {
-  added_book_at      DateTime? @updatedAt @db.Timestamptz(6)
-  added_ebook_at     DateTime? @updatedAt @db.Timestamptz(6)
-  added_audiobook_at DateTime? @updatedAt @db.Timestamptz(6)
+  added_book_at      DateTime? @db.Timestamptz(6)
+  added_ebook_at     DateTime? @db.Timestamptz(6)
+  added_audiobook_at DateTime? @db.Timestamptz(6)
 
   user_id String  @db.Uuid
   book_id String  @db.Uuid

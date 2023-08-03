@@ -8,10 +8,7 @@ import axios from "axios";
 import clsx from "clsx";
 import { z } from "zod";
 
-import {
-  CreateReviewResponse,
-  CreateReviewValidator,
-} from "~/lib/validations/book/manage";
+import { CreateReviewValidator } from "~/lib/validations/book/createReview";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
 import { ModalWrapper } from "../Modals/ModalWrapper";
@@ -53,6 +50,8 @@ export const CreateReview: FC<CreateReviewProps> = ({
 
   const handleAddReview = async () => {
     setIsLoading(true);
+    const loadingToast = toast.loading(te(GlobalErrors.PENDING));
+
     try {
       const formData = {
         bookId: bookId,
@@ -71,18 +70,14 @@ export const CreateReview: FC<CreateReviewProps> = ({
         { formData: formData }
       );
 
-      if (
-        data === CreateReviewResponse.UPDATED ||
-        data === CreateReviewResponse.CREATED
-      ) {
-        pullReviewState(false);
-        router.refresh();
-        data === CreateReviewResponse.UPDATED
-          ? toast(t("review added"))
-          : toast(t("review updated"));
-      } else {
+      if (data !== GlobalErrors.SUCCESS) {
         toast.error(te(data));
+        return;
       }
+
+      // on success
+      pullReviewState(false);
+      router.refresh();
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(te(error.issues[0].message));
@@ -90,12 +85,13 @@ export const CreateReview: FC<CreateReviewProps> = ({
         toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       }
     } finally {
+      toast.dismiss(loadingToast);
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="relative flex min-h-[355px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[275px] sm:flex-row">
+    <div className="relative flex min-h-[360px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[280px] sm:flex-row">
       <div className="flex shrink-0 items-start gap-1 px-2 font-medium sm:w-24 sm:flex-col sm:items-center">
         <AvatarImage
           className="drop-shadow-icon"
@@ -135,24 +131,19 @@ export const CreateReview: FC<CreateReviewProps> = ({
               >
                 <div className="flex flex-col gap-0.5 py-1.5 text-base">
                   {scoreValues.map((score) => (
-                    <a
+                    <button
+                      key={score}
                       className={clsx(
                         "flex h-6 w-7 cursor-pointer items-center justify-center",
                         score === yourScore &&
                           "bg-gradient-dark bg-clip-text font-bold text-transparent dark:bg-gradient-light"
                       )}
-                      tabIndex={0}
-                      onKeyDown={(e) =>
-                        e.key === "Enter" &&
-                        (setYourScore(score), setIsModalOpen(false))
-                      }
                       onClick={() => (
                         setYourScore(score), setIsModalOpen(false)
                       )}
-                      key={score}
                     >
                       {score}
-                    </a>
+                    </button>
                   ))}
                 </div>
               </ModalWrapper>

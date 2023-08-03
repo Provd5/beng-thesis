@@ -8,7 +8,7 @@ import axios from "axios";
 
 import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
 
-import { LikeBookValidator, LikeResponse } from "~/lib/validations/book/manage";
+import { LikeBookValidator } from "~/lib/validations/book/likeBook";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
 import { BookmarksWrapper } from "./BookmarksWrapper";
@@ -34,6 +34,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
 
   const handleLike = async () => {
     setIsLoading(true);
+    const loadingToast = toast.loading(te(GlobalErrors.PENDING));
     const wasLiked = isLiked;
     const prevQuantity = likesQuantity;
     setLikesQuantity((prev) => (wasLiked ? prev - 1 : prev + 1));
@@ -46,23 +47,21 @@ export const ManageLikes: FC<ManageLikesProps> = ({
         { bookId: bookId }
       );
 
-      // on success
-      if (data === LikeResponse.ADDED || data === LikeResponse.REMOVED) {
-        router.refresh();
-
-        data === LikeResponse.ADDED
-          ? toast(t("added to liked"))
-          : toast(t("removed from liked"));
-      } else {
+      if (data !== GlobalErrors.SUCCESS) {
         toast.error(te(data));
         setIsLiked(wasLiked);
         setLikesQuantity(prevQuantity);
+        return;
       }
+
+      // on success
+      router.refresh();
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       setIsLiked(wasLiked);
       setLikesQuantity(prevQuantity);
     } finally {
+      toast.dismiss(loadingToast);
       setTimeout(() => {
         setIsLoading(false);
       }, 500);

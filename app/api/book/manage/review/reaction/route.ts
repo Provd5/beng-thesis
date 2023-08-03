@@ -3,7 +3,7 @@ import { type reactionType } from "@prisma/client";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { db } from "~/lib/db";
-import { ReviewReactionValidator } from "~/lib/validations/book/manage";
+import { ReviewReactionValidator } from "~/lib/validations/book/reviewReaction";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
 export async function POST(req: Request) {
@@ -38,7 +38,6 @@ export async function POST(req: Request) {
           },
         },
       });
-      return new Response(GlobalErrors.SUCCESS);
     } else {
       await db.review_reaction.upsert({
         where: {
@@ -56,8 +55,10 @@ export async function POST(req: Request) {
           reaction: formData.reaction,
         },
       });
-      return new Response(GlobalErrors.SUCCESS);
     }
+
+    // on success
+    return new Response(GlobalErrors.SUCCESS);
   } catch (error) {
     return new Response(GlobalErrors.SOMETHING_WENT_WRONG);
   }

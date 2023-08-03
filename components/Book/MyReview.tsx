@@ -4,6 +4,7 @@ import { type FC, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { FaPenToSquare } from "react-icons/fa6";
+import { RxCross2 } from "react-icons/rx";
 
 import { CreateReview } from "./CreateReview";
 
@@ -40,16 +41,27 @@ export const MyReview: FC<MyReviewProps> = ({
 
   return (
     <>
-      <div className="flex w-full justify-end px-3 py-0.5">
+      <div className="flex w-full justify-end px-3">
         {isReviewExists && (
           <button
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 py-0.5"
             onClick={() => setShowEditReview(!showEditReview)}
           >
-            <p className="text-base text-black-light/50 dark:text-white-dark/50">
-              {t("your review")}
-            </p>
-            <FaPenToSquare className="text-md text-black-light dark:text-white-dark" />
+            {showEditReview ? (
+              <>
+                <p className="text-base text-black-light/50 dark:text-white-dark/50">
+                  {t("cancel")}
+                </p>
+                <RxCross2 className="text-md text-black-light dark:text-white-dark" />
+              </>
+            ) : (
+              <>
+                <p className="text-base text-black-light/50 dark:text-white-dark/50">
+                  {t("your review")}
+                </p>
+                <FaPenToSquare className="text-md text-black-light dark:text-white-dark" />
+              </>
+            )}
           </button>
         )}
       </div>
