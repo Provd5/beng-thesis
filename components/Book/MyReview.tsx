@@ -10,10 +10,13 @@ import { CreateReview } from "./CreateReview";
 interface MyReviewProps {
   children: React.ReactNode;
   bookId: string;
-  myProfileData: {
-    avatar_url: string | null;
-    full_name: string | null;
-  } | null;
+  myProfileData:
+    | {
+        avatar_url: string | null;
+        full_name: string | null;
+      }
+    | null
+    | undefined;
   isReviewExists: boolean;
   score?: number;
   text?: string;

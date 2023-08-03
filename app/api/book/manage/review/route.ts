@@ -56,6 +56,7 @@ export async function POST(req: Request) {
           book_id: formData.bookId,
           text: formData.text,
           score: formData.score,
+          updated_at: null,
         },
       });
       return new Response(CreateReviewResponse.CREATED);

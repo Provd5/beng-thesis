@@ -4,6 +4,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { Settings } from "~/components/Modals/Settings";
 import { defaultLocale, type localeTypes } from "~/i18n";
+import { db } from "~/lib/db";
 
 export default async function AuthLayout({
   children,
@@ -19,7 +20,12 @@ export default async function AuthLayout({
   } = await supabase.auth.getSession();
 
   if (session?.user) {
-    redirect(`/profile`);
+    const userData = await db.profile.findFirst({
+      where: { id: session.user.id },
+      select: { full_name: true },
+    });
+
+    redirect(`/profile/${userData?.full_name ?? ""}`);
   }
 
   const currentLang = (cookies().get("lang")?.value ??

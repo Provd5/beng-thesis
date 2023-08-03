@@ -135,20 +135,20 @@
       "add review": "Dodaj recenzję",
       "edit review": "Edytuj recenzję",
       "review added": "Recenzja dodana",
-      "review updated": "Review zaktualizowana"
+      "review updated": "Recenzja zaktualizowana"
     },
     "MyReview": {
       "your review": "Twoja recenzja"
     },
     "Review": {
+      "was this review useful?": "Czy recenzja była przydatna?",
+      "OK": "Tak",
+      "MEH": "Nie",
       "joined:": "dołączył:",
       "posted:": "Zamieszczono:",
       "edited:": "Edytowano:",
       "rate:": "Ocena:",
       "likes it": "lubi to",
-      "was this review useful?": "Czy recenzja była przydatna?",
-      "yes": "Tak",
-      "no": "Nie",
       "collapse": "zwiń",
       "expand": "rozwiń"
     }

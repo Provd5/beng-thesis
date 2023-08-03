@@ -41,11 +41,11 @@ export default async function ProfilePage({
     where: { full_name: fullname },
     select: { id: true, avatar_url: true, private: true, full_name: true },
   });
-  if (!publicUserData) notFound();
+  if (!publicUserData || !session?.user) notFound();
 
   const userData = await db.profile.findFirst({
     where: {
-      OR: [{ id: session?.user.id }, { id: publicUserData.id, private: false }],
+      OR: [{ id: session.user.id }, { id: publicUserData.id, private: false }],
     },
     select: {
       followed_by: true,

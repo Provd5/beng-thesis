@@ -95,7 +95,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
   };
 
   return (
-    <div className="relative flex min-h-[260px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[215px] sm:flex-row">
+    <div className="relative flex min-h-[355px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[275px] sm:flex-row">
       <div className="flex shrink-0 items-start gap-1 px-2 font-medium sm:w-24 sm:flex-col sm:items-center">
         <AvatarImage
           className="drop-shadow-icon"
@@ -114,7 +114,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
           autoComplete="off"
           minLength={1}
           maxLength={5000}
-          className="min-h-[115px] rounded-l-md rounded-tr-md p-3"
+          className="min-h-[214px] rounded-l-md rounded-tr-md p-3 sm:min-h-[198px]"
           placeholder={t("express your opinion")}
           defaultValue={text ?? ""}
         />
@@ -142,10 +142,13 @@ export const CreateReview: FC<CreateReviewProps> = ({
                           "bg-gradient-dark bg-clip-text font-bold text-transparent dark:bg-gradient-light"
                       )}
                       tabIndex={0}
-                      onClick={() => {
-                        setYourScore(score);
-                        setIsModalOpen(false);
-                      }}
+                      onKeyDown={(e) =>
+                        e.key === "Enter" &&
+                        (setYourScore(score), setIsModalOpen(false))
+                      }
+                      onClick={() => (
+                        setYourScore(score), setIsModalOpen(false)
+                      )}
                       key={score}
                     >
                       {score}

@@ -45,6 +45,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
           alt="Flag Of The United Kingdom"
           width={28}
           height={21}
+          sizes="28px"
         />
         <p
           className={clsx(
@@ -71,6 +72,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
           alt="Flag of Poland"
           width={28}
           height={21}
+          sizes="28px"
         />
         <p
           className={clsx(
