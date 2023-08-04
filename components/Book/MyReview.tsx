@@ -11,13 +11,8 @@ import { CreateReview } from "./CreateReview";
 interface MyReviewProps {
   children: React.ReactNode;
   bookId: string;
-  myProfileData:
-    | {
-        avatar_url: string | null;
-        full_name: string | null;
-      }
-    | null
-    | undefined;
+  avatarUrl: string | null | undefined;
+  fullName: string | null | undefined;
   isReviewExists: boolean;
   score?: number;
   text?: string;
@@ -26,7 +21,8 @@ interface MyReviewProps {
 export const MyReview: FC<MyReviewProps> = ({
   children,
   bookId,
-  myProfileData,
+  avatarUrl,
+  fullName,
   isReviewExists,
   score,
   text,
@@ -65,18 +61,19 @@ export const MyReview: FC<MyReviewProps> = ({
           </button>
         )}
       </div>
-      {!showEditReview
-        ? children
-        : myProfileData && (
-            <CreateReview
-              isReviewExists={isReviewExists}
-              bookId={bookId}
-              profileData={myProfileData}
-              score={score}
-              text={text}
-              pullReviewState={pullReviewState}
-            />
-          )}
+      {!showEditReview ? (
+        children
+      ) : (
+        <CreateReview
+          isReviewExists={isReviewExists}
+          bookId={bookId}
+          avatarUrl={avatarUrl}
+          fullName={fullName}
+          score={score}
+          text={text}
+          pullReviewState={pullReviewState}
+        />
+      )}
     </>
   );
 };

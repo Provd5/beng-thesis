@@ -84,7 +84,8 @@ export const Review: FC<ReviewProps> = ({
     ) {
       setRenderButton(true);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reviewParagraphRef.current]);
 
   const renderReaction = (reaction: reactionType, Icon: IconType) => {
     return (
@@ -222,7 +223,7 @@ export const Review: FC<ReviewProps> = ({
           <p
             ref={reviewParagraphRef}
             className={clsx(
-              "pl-1 pr-1 sm:pr-3",
+              "pl-1 pr-1 text-sm sm:pr-3",
               !isExpanded && "line-clamp-[10] max-h-[152px]"
             )}
           >
@@ -245,7 +246,7 @@ export const Review: FC<ReviewProps> = ({
           )}
           <div className="flex flex-col items-end gap-0.5">
             <p className="text-right text-xs">{t("was this review useful?")}</p>
-            <div className="flex gap-5 px-1 text-black-light dark:text-white-dark">
+            <div className="flex gap-5 px-1 text-sm text-black-light dark:text-white-dark">
               {renderReaction("OK", FaFaceLaughBeam)}
               {renderReaction("MEH", FaFaceMeh)}
             </div>

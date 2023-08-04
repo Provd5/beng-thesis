@@ -33,7 +33,8 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
     ) {
       setRenderButton(true);
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [descriptionParagraphRef.current]);
 
   switch (variant) {
     case "averge score:":
