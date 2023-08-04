@@ -23,7 +23,11 @@ export const NotFoundPage: FC<NotFoundPageProps> = ({ variant }) => {
           <span className="font-semibold">{t("doesn't exist")}</span>
         </p>
         <div className="flex items-center justify-center text-xs underline">
-          <Link href={`/profile`}>{t("back to your profile")}</Link>
+          {variant === "profile" ? (
+            <Link href={`/profile`}>{t("return to your profile")}</Link>
+          ) : (
+            <Link href={"/"}>{t("return to main page")}</Link>
+          )}
         </div>
       </div>
     </div>

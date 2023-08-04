@@ -31,7 +31,8 @@
     "profile": "Taki profil",
     "book": "Taka książka",
     "doesn't exist": "nie istnieje",
-    "back to your profile": "wróć do swojego profilu"
+    "return to your profile": "wróć do swojego profilu",
+    "return to main page": "wróć do strony głównej"
   },
   "Other": {
     "logout": "Wyloguj",
@@ -114,8 +115,6 @@
       "show less": "pokaż mniej"
     },
     "ManageLikes": {
-      "added to liked": "Dodano do polubionych",
-      "removed from liked": "Usunięto z polubionych",
       "likes": "Polubienia",
       "liked": "polubiono",
       "like": "polub"
@@ -127,7 +126,6 @@
     },
     "ManageOwnedAs": {
       "owned as": "Posiadasz jako",
-      "added as:": "Dodano jako:",
       "BOOK": "Książka",
       "EBOOK": "E-book",
       "AUDIOBOOK": "Audiobook"

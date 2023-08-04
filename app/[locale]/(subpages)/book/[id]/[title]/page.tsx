@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { z } from "zod";
 
 import { BookCover } from "~/components/Book/BookCover";
 import { BookDetails } from "~/components/Book/BookDetails";
@@ -18,7 +19,13 @@ export default async function BookPage({
   params: { id },
 }: {
   params: { id: string };
-}) {
+}) {  
+  try {
+    z.string().uuid().parse(id)    
+  } catch (error) {
+    notFound()
+  }
+
   const supabase = createServerComponentClient({
     cookies,
   });

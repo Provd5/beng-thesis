@@ -25,12 +25,12 @@ export const Navbar: FC = async () => {
   return (
     <>
       <nav className="fixed inset-x-0 bottom-0 z-50 flex h-[var(--nav-height)] shrink-0 items-center justify-center gap-12 rounded-t-lg bg-white text-black-dark drop-shadow-light before:absolute before:z-[-1] before:h-[68px] before:w-[68px] before:rounded-full before:bg-white dark:bg-black dark:text-white-light dark:drop-shadow-dark before:dark:bg-black md:sticky md:top-0 md:h-[58px] md:rounded-none before:md:hidden">
-        <NavbarLink href="explore" />
+        <NavbarLink pageUrl="explore" />
         <NavbarLink
           fullname={userData?.full_name}
-          href={session ? "profile" : "login"}
+          pageUrl={session ? "profile" : "login"}
         />
-        <NavbarLink href="search" />
+        <NavbarLink pageUrl="search" />
       </nav>
     </>
   );

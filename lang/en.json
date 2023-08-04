@@ -31,7 +31,8 @@
     "profile": "Such profile",
     "book": "Such book",
     "doesn't exist": "doesn't exist",
-    "back to your profile": "back to your profile"
+    "return to your profile": "return to your profile",
+    "return to main page": "return to main page"
   },
   "Other": {
     "logout": "Logout",
@@ -114,8 +115,6 @@
       "show less": "show less"
     },
     "ManageLikes": {
-      "added to liked": "Added to liked",
-      "removed from liked": "Removed from liked",
       "likes": "Likes",
       "liked": "liked",
       "like": "like"
