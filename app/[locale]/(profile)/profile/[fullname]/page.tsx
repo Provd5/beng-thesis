@@ -41,6 +41,7 @@ export default async function ProfilePage({
     where: { full_name: fullname },
     select: { id: true, avatar_url: true, private: true, full_name: true },
   });
+
   if (!publicUserData || !session?.user) notFound();
 
   const userData = await db.profile.findFirst({

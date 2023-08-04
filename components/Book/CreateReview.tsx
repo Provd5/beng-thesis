@@ -16,10 +16,8 @@ import { AvatarImage } from "../Profile/AvatarImage";
 import { Button, ButtonLink } from "../ui/Buttons";
 
 interface CreateReviewProps {
-  profileData: {
-    avatar_url: string | null;
-    full_name: string | null;
-  };
+  avatarUrl: string | null | undefined;
+  fullName: string | null | undefined;
   bookId: string;
   isReviewExists: boolean;
   score?: number;
@@ -28,7 +26,8 @@ interface CreateReviewProps {
 }
 
 export const CreateReview: FC<CreateReviewProps> = ({
-  profileData,
+  avatarUrl,
+  fullName,
   bookId,
   isReviewExists,
   score,
@@ -52,14 +51,14 @@ export const CreateReview: FC<CreateReviewProps> = ({
     setIsLoading(true);
     const loadingToast = toast.loading(te(GlobalErrors.PENDING));
 
-    try {
-      const formData = {
-        bookId: bookId,
-        text: reviewTextarea.current?.value,
-        score: yourScore,
-      };
-      CreateReviewValidator.parse({ formData: formData });
+    const formData = {
+      bookId: bookId,
+      text: reviewTextarea.current?.value,
+      score: yourScore,
+    };
 
+    try {
+      CreateReviewValidator.parse({ formData: formData });
       if (formData.score === score && formData.text === text) {
         pullReviewState(false);
         return;
@@ -96,11 +95,9 @@ export const CreateReview: FC<CreateReviewProps> = ({
         <AvatarImage
           className="drop-shadow-icon"
           size="sm"
-          avatarSrc={profileData.avatar_url}
+          avatarSrc={avatarUrl}
         />
-        <h1 className="line-clamp-3 break-all font-semibold">
-          {profileData.full_name}
-        </h1>
+        <h1 className="line-clamp-3 break-all font-semibold">{fullName}</h1>
       </div>
       <div className="flex w-full flex-auto flex-col justify-between gap-2 font-medium">
         <textarea

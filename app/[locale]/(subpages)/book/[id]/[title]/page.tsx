@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { z } from "zod";
 
 import { BookCover } from "~/components/Book/BookCover";
 import { BookDetails } from "~/components/Book/BookDetails";
@@ -15,10 +16,16 @@ import { db } from "~/lib/db";
 import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
 
 export default async function BookPage({
-  params: { id },
+  params: { id, title },
 }: {
-  params: { id: string };
+  params: { id: string; title: string };
 }) {
+  try {
+    z.string().uuid().parse(id);
+  } catch (error) {
+    notFound();
+  }
+
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -27,65 +34,57 @@ export default async function BookPage({
     data: { session },
   } = await supabase.auth.getSession();
 
-  const book = await db.book.findFirst({
-    where: { id: id },
-    include: {
-      liked_by: { select: { user_id: true } },
-      bookshelf: session ? { where: { user_id: session.user.id } } : false,
-      book_owned_as: session ? { where: { user_id: session.user.id } } : false,
-    },
-  });
-
-  if (!book) notFound();
-  const bookshelfData = book.bookshelf ? book.bookshelf[0] : null;
-  const ownedAsData = book.book_owned_as ? book.book_owned_as[0] : null;
-  const isBookLiked = (userId: string | undefined) => {
-    return book.liked_by.some((profile) => profile.user_id === userId);
-  };
-
-  const bookReviews = await db.review.findMany({
-    where: { book_id: book.id },
-    include: {
-      review_reaction: { select: { reaction: true } },
-      profile: {
-        select: {
-          id: true,
-          avatar_url: true,
-          full_name: true,
-          created_at: true,
-          _count: {
+  const [book, bookReviews, myReview] = await Promise.all([
+    db.book.findFirst({
+      where: { id: id },
+      include: {
+        liked_by: true,
+        bookshelf: session ? { where: { user_id: session.user.id } } : false,
+        book_owned_as: session
+          ? { where: { user_id: session.user.id } }
+          : false,
+      },
+    }),
+    db.review.findMany({
+      where: { book_id: id },
+      select: { score: true },
+    }),
+    session?.user &&
+      db.review.findFirst({
+        where: { book_id: id, author_id: session.user.id },
+        include: {
+          review_reaction: {
+            where: { user_id: session.user.id },
+            select: { reaction: true },
+          },
+          profile: {
             select: {
-              bookshelf: { where: { bookshelf: { equals: "ALREADY_READ" } } },
-              review: true,
+              id: true,
+              avatar_url: true,
+              full_name: true,
+              created_at: true,
+              _count: {
+                select: {
+                  bookshelf: {
+                    where: { bookshelf: { equals: "ALREADY_READ" } },
+                  },
+                  review: true,
+                },
+              },
             },
           },
         },
-      },
-    },
-  });
+      }),
+  ]);
 
-  const myProfile =
-    session?.user &&
-    (await db.profile.findFirst({
-      where: { id: session.user.id },
-      select: {
-        avatar_url: true,
-        full_name: true,
-        review_reaction: { select: { review_id: true, reaction: true } },
-      },
-    }));
+  if (!book) notFound();
 
-  const myReaction = (reviewId: string) => {
-    return myProfile?.review_reaction.find(
-      (reaction) => reaction.review_id === reviewId
-    )?.reaction;
-  };
-
-  const myReview =
-    session?.user &&
-    bookReviews.find((review) => review.author_id === session.user.id);
-
-  const otherReviews = bookReviews.filter((review) => review !== myReview);
+  const myBookshelfData = book.bookshelf?.[0];
+  const myOwnedAsData = book.book_owned_as?.[0];
+  const doILikeThisBook = book.liked_by.some(
+    (profile) => session && profile.user_id === session.user.id
+  );
+  const myReaction = myReview?.review_reaction?.[0]?.reaction;
 
   return (
     <div className="container mx-auto pb-5 pt-10 text-sm font-normal">
@@ -140,16 +139,16 @@ export default async function BookPage({
               <div className="w-36">
                 <ManageBookshelf
                   bookId={book.id}
-                  bookshelf={bookshelfData?.bookshelf}
-                  updatedAt={bookshelfData?.updated_at}
+                  bookshelf={myBookshelfData?.bookshelf}
+                  updatedAt={myBookshelfData?.updated_at}
                 />
               </div>
               <div className="w-36">
                 <ManageOwnedAs
                   bookId={book.id}
-                  addedEbookAt={ownedAsData?.added_ebook_at}
-                  addedAudiobookAt={ownedAsData?.added_audiobook_at}
-                  addedBookAt={ownedAsData?.added_book_at}
+                  addedEbookAt={myOwnedAsData?.added_ebook_at}
+                  addedAudiobookAt={myOwnedAsData?.added_audiobook_at}
+                  addedBookAt={myOwnedAsData?.added_book_at}
                 />
               </div>
             </div>
@@ -157,13 +156,13 @@ export default async function BookPage({
               <div className="w-36">
                 <ManageLikes
                   bookId={book.id}
-                  liked={isBookLiked(session?.user.id)}
+                  liked={doILikeThisBook}
                   quantity={book.liked_by.length}
                 />
               </div>
               <div className="w-36">
                 <ManageReviews
-                  myReview={!!myReview}
+                  isReviewExists={!!myReview}
                   quantity={bookReviews.length}
                   createdAt={myReview?.created_at}
                 />
@@ -175,11 +174,16 @@ export default async function BookPage({
           <BookDetails variant="description:" text={book.description} />
         )}
         <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
-          <CategoryLink variant="REVIEWS" href={"/#"} withoutIcon />
+          <CategoryLink
+            variant="REVIEWS"
+            href={`/book/${id}/${title}/reviews`}
+            withoutIcon
+          />
           <MyReview
-            isReviewExists={!!myReview?.id}
+            isReviewExists={!!myReview}
             bookId={book.id}
-            myProfileData={myProfile}
+            avatarUrl={myReview?.profile.avatar_url}
+            fullName={myReview?.profile.full_name}
             score={myReview?.score}
             text={myReview?.text}
           >
@@ -189,29 +193,15 @@ export default async function BookPage({
                 profileData={myReview.profile}
                 reviewCreatedAt={myReview.created_at}
                 reviewUpdatedAt={myReview.updated_at}
-                isLiked={isBookLiked(myReview.author_id)}
+                isLiked={doILikeThisBook}
                 score={myReview.score}
                 text={myReview.text}
                 reactions={myReview.review_reaction}
-                userReaction={myReaction(myReview.id)}
+                userReaction={myReaction}
                 isMyReview
               />
             )}
           </MyReview>
-          {otherReviews.map((review) => (
-            <Review
-              key={review.id}
-              id={review.id}
-              profileData={review.profile}
-              reviewCreatedAt={review.created_at}
-              reviewUpdatedAt={review.updated_at}
-              isLiked={isBookLiked(review.author_id)}
-              score={review.score}
-              text={review.text}
-              reactions={review.review_reaction}
-              userReaction={myReaction(review.id)}
-            />
-          ))}
         </div>
       </div>
     </div>

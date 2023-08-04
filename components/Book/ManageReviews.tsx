@@ -10,13 +10,13 @@ import { dateFormater } from "~/utils/dateFormater";
 import { BookmarksWrapper } from "./BookmarksWrapper";
 
 interface ManageReviewsProps {
-  myReview: boolean;
+  isReviewExists: boolean;
   quantity: number;
   createdAt?: Date;
 }
 
 export const ManageReviews: FC<ManageReviewsProps> = ({
-  myReview,
+  isReviewExists,
   quantity,
   createdAt,
 }) => {
@@ -24,7 +24,7 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
 
   return (
     <div className="flex gap-1">
-      {myReview ? (
+      {isReviewExists ? (
         <BookmarksWrapper Icon={BsBookmarkStarFill} color="yellow" />
       ) : (
         <BookmarksWrapper Icon={BsBookmarkStar} color="gradient" />

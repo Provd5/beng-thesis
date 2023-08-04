@@ -15,7 +15,7 @@ import {
 } from "react-icons/bs";
 import { MdNavigateNext } from "react-icons/md";
 
-type variantTypes =
+export type categoryTitleTypes =
   | bookshelfType
   | "STATISTICS"
   | "OWNED"
@@ -23,7 +23,7 @@ type variantTypes =
   | "REVIEWS";
 
 interface CategoryLinkProps {
-  variant: variantTypes;
+  variant: categoryTitleTypes;
   href: `/${string}`;
   withoutIcon?: boolean;
   quantity?: number;
@@ -37,7 +37,7 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
 }) => {
   const t = useTranslations("Book.BookselfTypes");
 
-  const getBookshelfIcon = (bookshelf: variantTypes) => {
+  const getBookshelfIcon = (bookshelf: categoryTitleTypes) => {
     switch (bookshelf) {
       case "LIKED":
         return (
@@ -70,7 +70,7 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
         href={href}
         className="flex grow items-center justify-between gap-3 md:grow-0 md:justify-start"
       >
-        <div className="mb-0.5 bg-gradient-dark bg-clip-text text-lg font-semibold text-transparent dark:bg-gradient-light">
+        <div className="bg-gradient-dark bg-clip-text text-lg font-semibold text-transparent dark:bg-gradient-light">
           <div className="flex items-center gap-1">
             {!withoutIcon && getBookshelfIcon(variant)}
             <h1>
