@@ -85,6 +85,9 @@
       "following:": "Obserwowani:",
       "reviews:": "Recenzje:",
       "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}"
+    },
+    "CategoryContentCard": {
+      "this shelf is currently empty": "Ta półka jest obecnie pusta"
     }
   },
   "Book": {

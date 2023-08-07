@@ -171,7 +171,7 @@ export const Review: FC<ReviewProps> = ({
     >
       <Link
         href={profileData.full_name ? `/profile/${profileData.full_name}` : "#"}
-        className="flex h-fit shrink-0 gap-x-1.5 gap-y-1 font-medium sm:w-24 sm:flex-col sm:items-center"
+        className="flex h-fit flex-none gap-x-1.5 gap-y-1 font-medium sm:w-24 sm:flex-col sm:items-center"
       >
         <AvatarImage
           className="drop-shadow-icon"

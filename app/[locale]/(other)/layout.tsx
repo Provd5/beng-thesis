@@ -25,10 +25,10 @@ export default async function AuthLayout({
       select: { full_name: true },
     });
 
-    redirect(`/profile/${userData?.full_name ?? ""}`);
+    redirect(`/profile/${userData?.full_name || ""}`);
   }
 
-  const currentLang = (cookies().get("lang")?.value ??
+  const currentLang = (cookies().get("lang")?.value ||
     defaultLocale) as localeTypes;
   // eslint-disable-next-line @typescript-eslint/require-await
   const setLangCookie = async (data: localeTypes) => {

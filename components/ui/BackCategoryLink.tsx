@@ -6,10 +6,10 @@ import { useTranslations } from "next-intl";
 
 import { MdNavigateBefore } from "react-icons/md";
 
-import { type categoryTitleTypes } from "./CategoryLink";
+import { type categoryTypes } from "./CategoryLink";
 
 interface BackCategoryLinkProps {
-  variant: categoryTitleTypes;
+  variant: categoryTypes;
   href: `/${string}`;
 }
 

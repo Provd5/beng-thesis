@@ -15,15 +15,10 @@ import {
 } from "react-icons/bs";
 import { MdNavigateNext } from "react-icons/md";
 
-export type categoryTitleTypes =
-  | bookshelfType
-  | "STATISTICS"
-  | "OWNED"
-  | "LIKED"
-  | "REVIEWS";
+export type categoryTypes = bookshelfType | "OWNED" | "LIKED" | "REVIEWS";
 
 interface CategoryLinkProps {
-  variant: categoryTitleTypes;
+  variant: categoryTypes | "STATISTICS";
   href: `/${string}`;
   withoutIcon?: boolean;
   quantity?: number;
@@ -37,7 +32,7 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
 }) => {
   const t = useTranslations("Book.BookselfTypes");
 
-  const getBookshelfIcon = (bookshelf: categoryTitleTypes) => {
+  const getBookshelfIcon = (bookshelf: categoryTypes | "STATISTICS") => {
     switch (bookshelf) {
       case "LIKED":
         return (

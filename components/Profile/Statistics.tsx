@@ -44,12 +44,12 @@ export const Box: FC<BoxProps> = ({
 }) => {
   return (
     <>
-      <div className="flex w-52 shrink-0 flex-col gap-2 rounded-lg bg-white-light px-6 py-4 dark:bg-black-dark">
-        <div className="flex grow-0 flex-col">
+      <div className="flex w-52 flex-none flex-col gap-2 rounded-lg bg-white-light px-6 py-4 dark:bg-black-dark">
+        <div className="flex flex-col">
           <h1 className="mb-1 text-xs font-bold">{firstTitle}</h1>
           <p className="truncate text-sm">{firstText}</p>
         </div>
-        <div className="flex grow-0 flex-col">
+        <div className="flex flex-col">
           <h1 className="mb-1 text-xs font-bold">{secondTitle}</h1>
           <p className="truncate text-sm">{secondText}</p>
         </div>

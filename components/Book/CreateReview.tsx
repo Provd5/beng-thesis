@@ -91,7 +91,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
 
   return (
     <div className="relative flex min-h-[360px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[280px] sm:flex-row">
-      <div className="flex shrink-0 items-start gap-1 px-2 font-medium sm:w-24 sm:flex-col sm:items-center">
+      <div className="flex flex-none items-start gap-1 px-2 font-medium sm:w-24 sm:flex-col sm:items-center">
         <AvatarImage
           className="drop-shadow-icon"
           size="sm"
@@ -109,7 +109,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
           maxLength={5000}
           className="min-h-[214px] rounded-l-md rounded-tr-md p-3 sm:min-h-[198px]"
           placeholder={t("express your opinion")}
-          defaultValue={text ?? ""}
+          defaultValue={text || ""}
         />
         <div className="flex flex-wrap justify-between gap-2 px-2">
           <div className="relative flex h-fit items-center gap-1">

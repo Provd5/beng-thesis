@@ -8,18 +8,12 @@ import { type bookshelfType } from "@prisma/client";
 import axios from "axios";
 import clsx from "clsx";
 
-import {
-  BsBookmarkPlus,
-  BsFillBookmarkCheckFill,
-  BsFillBookmarkDashFill,
-  BsFillBookmarkFill,
-  BsFillBookmarksFill,
-  BsFillBookmarkXFill,
-} from "react-icons/bs";
+import { BsBookmarkPlus } from "react-icons/bs";
 
 import { ChangeBookshelfValidator } from "~/lib/validations/book/changeBookshelf";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
+import { getBookshelfIcon } from "~/utils/getBookshelfIcon";
 
 import { ModalWrapper } from "../Modals/ModalWrapper";
 import { ButtonLink } from "../ui/Buttons";
@@ -56,51 +50,6 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
     "READING",
     "OTHER",
   ];
-  const getBookshelfIcon = (bookshelf: bookshelfType, size?: "sm") => {
-    switch (bookshelf) {
-      case "TO_READ":
-        return (
-          <BookmarksWrapper
-            size={size}
-            Icon={BsFillBookmarkDashFill}
-            color="blue"
-          />
-        );
-      case "ALREADY_READ":
-        return (
-          <BookmarksWrapper
-            size={size}
-            Icon={BsFillBookmarkCheckFill}
-            color="green"
-          />
-        );
-      case "ABANDONED":
-        return (
-          <BookmarksWrapper
-            size={size}
-            Icon={BsFillBookmarkXFill}
-            color="red"
-          />
-        );
-      case "READING":
-        return (
-          <BookmarksWrapper
-            size={size}
-            Icon={BsFillBookmarkFill}
-            color="gray"
-          />
-        );
-      case "OTHER":
-      default:
-        return (
-          <BookmarksWrapper
-            size={size}
-            Icon={BsFillBookmarksFill}
-            color="default"
-          />
-        );
-    }
-  };
 
   const handleChangeBookshelf = async (bookshelf: bookshelfType | null) => {
     setIsModalOpen(false);

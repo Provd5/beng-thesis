@@ -29,10 +29,10 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-none gap-3">
       <button
         disabled={language === "en"}
-        className="flex shrink-0 flex-col items-center text-sm"
+        className="flex flex-col items-center text-sm"
         onClick={() => handleSetLanguage("en")}
       >
         <Image
@@ -59,7 +59,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
       </button>
       <button
         disabled={language === "pl"}
-        className="flex shrink-0 flex-col items-center text-sm"
+        className="flex flex-col items-center text-sm"
         onClick={() => handleSetLanguage("pl")}
       >
         <Image

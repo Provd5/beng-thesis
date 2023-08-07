@@ -8,7 +8,7 @@ import clsx from "clsx";
 
 import { locales, type localeTypes } from "~/i18n";
 
-import { ExploreIcon, ProfileIcon, SearchIcon } from "./NavIcons";
+import { ExploreIcon, ProfileIcon, SearchIcon } from "../ui/SvgIcons/NavIcons";
 
 type ValidUrl = "explore" | "login" | "profile" | "search";
 
@@ -53,7 +53,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
           : `/${pageUrl}`
       }
       className={clsx(
-        "flex shrink-0 items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50",
+        "flex flex-none items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50",
         pageUrl === "login" || pageUrl === "profile"
           ? "h-[52px] w-[52px]"
           : "h-[48px] w-[48px]",

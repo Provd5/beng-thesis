@@ -20,17 +20,17 @@ export const ToasterComponent: FC<ToasterProps> = ({}) => {
         icon: null,
         success: {
           className: clsx(sharedClass, "!text-green"),
-          icon: <BsCheck className="mb-[-2px] mr-[-10px] shrink-0 text-xl" />,
+          icon: <BsCheck className="mb-[-2px] mr-[-10px] flex-none text-xl" />,
         },
         error: {
           className: clsx(sharedClass, "!text-red"),
-          icon: <RxCross2 className="mb-[-2px] mr-[-8px] shrink-0 text-lg" />,
+          icon: <RxCross2 className="mb-[-2px] mr-[-8px] flex-none text-lg" />,
           id: "errorToast",
         },
         loading: {
           className: clsx(sharedClass, "!text-gray !text-xs"),
           icon: (
-            <div className="mr-[-8px] h-3.5 w-3.5 shrink-0">
+            <div className="mr-[-8px] h-3.5 w-3.5 flex-none">
               <Loader />
             </div>
           ),

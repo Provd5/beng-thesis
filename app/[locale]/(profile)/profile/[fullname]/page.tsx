@@ -1,14 +1,16 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { createTranslator } from "next-intl";
-import { type bookshelfType } from "@prisma/client";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
+import { CategoryContentCard } from "~/components/Profile/CategoryContentCard";
+import { CategoryContentCardPlaceholder } from "~/components/Profile/CategoryContentCardPlaceholder";
 import { FollowLinks } from "~/components/Profile/FollowLinks";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
 import { Statistics } from "~/components/Profile/Statistics";
-import { CategoryLink } from "~/components/ui/CategoryLink";
+import { CategoryLink, type categoryTypes } from "~/components/ui/CategoryLink";
+import { DragContainer } from "~/components/ui/DragContainer";
 import { ProfilePageContainer } from "~/components/ui/PageContainer";
 import { db } from "~/lib/db";
 
@@ -49,21 +51,47 @@ export default async function ProfilePage({
       OR: [{ id: session.user.id }, { id: publicUserData.id, private: false }],
     },
     select: {
-      followed_by: true,
-      following: true,
-      review: true,
-      liked_book: true,
-      bookshelf: true,
-      book_owned_as: true,
+      id: true,
+      _count: {
+        select: {
+          followed_by: true,
+          following: true,
+          book_owned_as: true,
+          liked_book: true,
+          review: true,
+        },
+      },
+      bookshelf: { select: { bookshelf: true } },
     },
   });
 
-  function quantityOfBookshelfType(bookshelfType: bookshelfType) {
-    return (
-      userData?.bookshelf.filter((type) => type.bookshelf === bookshelfType)
-        .length ?? 0
-    );
-  }
+  const CategoryArray: categoryTypes[] = [
+    "OWNED",
+    "LIKED",
+    "ALREADY_READ",
+    "TO_READ",
+    "ABANDONED",
+    "READING",
+    "OTHER",
+    "REVIEWS",
+  ];
+
+  const quantityPerVariant = (bookshelfVariant: categoryTypes): number => {
+    switch (bookshelfVariant) {
+      case "OWNED":
+        return userData?._count.book_owned_as || 0;
+      case "LIKED":
+        return userData?._count.liked_book || 0;
+      case "REVIEWS":
+        return userData?._count.review || 0;
+      default:
+        return (
+          userData?.bookshelf.filter(
+            (variant) => variant.bookshelf === bookshelfVariant
+          ).length || 0
+        );
+    }
+  };
 
   return (
     <ProfilePageContainer>
@@ -79,52 +107,44 @@ export default async function ProfilePage({
             <h1 className="mx-0.5 my-2 break-all bg-gradient-dark bg-clip-text text-xl font-semibold text-transparent dark:bg-gradient-light">
               {publicUserData.full_name}
             </h1>
-            <FollowLinks
-              followers={userData?.followed_by.length ?? 0}
-              following={userData?.following.length ?? 0}
-              reviews={userData?.review.length ?? 0}
-            />
+            {userData && (
+              <FollowLinks
+                followers={userData._count.followed_by}
+                following={userData._count.following}
+                reviews={userData._count.review}
+              />
+            )}
           </div>
         </div>
-        <div className="flex flex-col gap-3">
-          <CategoryLink variant="STATISTICS" href={"/#"} />
-          <Statistics />
-          <CategoryLink
-            variant="OWNED"
-            href={"/#"}
-            quantity={userData?.book_owned_as.length}
-          />
-          <CategoryLink
-            variant="LIKED"
-            href={"/#"}
-            quantity={userData?.liked_book.length}
-          />
-          <CategoryLink
-            variant="TO_READ"
-            href={"/#"}
-            quantity={quantityOfBookshelfType("TO_READ")}
-          />
-          <CategoryLink
-            variant="ALREADY_READ"
-            href={"/#"}
-            quantity={quantityOfBookshelfType("ALREADY_READ")}
-          />
-          <CategoryLink
-            variant="ABANDONED"
-            href={"/#"}
-            quantity={quantityOfBookshelfType("ABANDONED")}
-          />
-          <CategoryLink
-            variant="READING"
-            href={"/#"}
-            quantity={quantityOfBookshelfType("READING")}
-          />
-          <CategoryLink
-            variant="REVIEWS"
-            href={"/#"}
-            quantity={userData?.review.length}
-          />
-        </div>
+        {userData && (
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
+              <CategoryLink variant="STATISTICS" href={"/statistics"} />
+              <Statistics />
+            </div>
+            {CategoryArray.map((bookshelfVariant) => (
+              <div key={bookshelfVariant} className="flex flex-col gap-1">
+                <CategoryLink
+                  variant={bookshelfVariant}
+                  href={`/${bookshelfVariant
+                    .toLocaleLowerCase()
+                    .replace("_", "-")}`}
+                  quantity={quantityPerVariant(bookshelfVariant)}
+                />
+                <DragContainer>
+                  {quantityPerVariant(bookshelfVariant) > 0 ? (
+                    <CategoryContentCard
+                      bookshelfVariant={bookshelfVariant}
+                      userId={userData.id}
+                    />
+                  ) : (
+                    <CategoryContentCardPlaceholder />
+                  )}
+                </DragContainer>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </ProfilePageContainer>
   );

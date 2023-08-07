@@ -85,6 +85,9 @@
       "following:": "Following:",
       "reviews:": "Reviews:",
       "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}"
+    },
+    "CategoryContentCard": {
+      "this shelf is currently empty": "This shelf is currently empty"
     }
   },
   "Book": {

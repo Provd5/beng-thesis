@@ -3,7 +3,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { db } from "~/lib/db";
 import {
-  type ownedAsEnum,
+  type ownedAsType,
   OwnedAsValidator,
 } from "~/lib/validations/book/ownedAs";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
@@ -23,11 +23,21 @@ export async function POST(req: Request) {
     }
 
     const body = (await req.json()) as {
-      formData: { bookId: string; ownedAs: ownedAsEnum };
+      formData: { bookId: string; ownedAs: ownedAsType };
     };
     const { formData } = OwnedAsValidator.parse(body);
 
-    const propertyToUpdate = `added_${formData.ownedAs.toLowerCase()}_at`;
+    const ownedAsTypeToManage = `added_${formData.ownedAs.toLowerCase()}_at`;
+
+    const ownedAsData = await db.book_owned_as.findFirst({
+      where: { book_id: formData.bookId, user_id: session.user.id },
+      select: { [ownedAsTypeToManage]: true },
+    });
+
+    const ownedAsExists =
+      !!ownedAsData?.added_audiobook_at ||
+      !!ownedAsData?.added_book_at ||
+      !!ownedAsData?.added_ebook_at;
 
     await db.book_owned_as.upsert({
       where: {
@@ -37,12 +47,12 @@ export async function POST(req: Request) {
         },
       },
       update: {
-        [propertyToUpdate]: new Date(),
+        [ownedAsTypeToManage]: ownedAsExists ? null : new Date(),
       },
       create: {
         book_id: formData.bookId,
         user_id: session.user.id,
-        [propertyToUpdate]: new Date(),
+        [ownedAsTypeToManage]: new Date(),
       },
     });
 
