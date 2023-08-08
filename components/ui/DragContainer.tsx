@@ -7,9 +7,13 @@ import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 
 interface DragContainerProps {
   children: React.ReactNode;
+  itemsQuantity: number;
 }
 
-export const DragContainer: FC<DragContainerProps> = ({ children }) => {
+export const DragContainer: FC<DragContainerProps> = ({
+  children,
+  itemsQuantity,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [renderLeftButton, setRenderLeftButton] = useState(false);
@@ -48,26 +52,34 @@ export const DragContainer: FC<DragContainerProps> = ({ children }) => {
       >
         {children}
       </div>
-      <button
-        className={clsx(
-          "left-[-7px]",
-          buttonClass,
-          renderLeftButton ? "opacity-100" : "opacity-0"
-        )}
-        onClick={() => handleClickToScroll(-128)}
-      >
-        <MdNavigateBefore className="h-full w-full" />
-      </button>
-      <button
-        className={clsx(
-          "right-[-7px]",
-          buttonClass,
-          renderRightButton ? "opacity-100" : "opacity-0"
-        )}
-        onClick={() => handleClickToScroll(128)}
-      >
-        <MdNavigateNext className="h-full w-full" />
-      </button>
+      {itemsQuantity >= 10 && (
+        <>
+          <button
+            tabIndex={renderLeftButton ? 0 : -1}
+            className={clsx(
+              "left-[-7px]",
+              buttonClass,
+              renderLeftButton ? "opacity-100" : "pointer-events-none opacity-0"
+            )}
+            onClick={() => handleClickToScroll(-256)}
+          >
+            <MdNavigateBefore className="h-full w-full" />
+          </button>
+          <button
+            tabIndex={renderRightButton ? 0 : -1}
+            className={clsx(
+              "right-[-7px]",
+              buttonClass,
+              renderRightButton
+                ? "opacity-100"
+                : "pointer-events-none opacity-0"
+            )}
+            onClick={() => handleClickToScroll(256)}
+          >
+            <MdNavigateNext className="h-full w-full" />
+          </button>
+        </>
+      )}
     </div>
   );
 };

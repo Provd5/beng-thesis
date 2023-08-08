@@ -1,15 +1,18 @@
-import { AsAudiobook, AsBook, AsEbook } from "~/components/Book/OwnedAsIcons";
+import {
+  AsAudiobook,
+  AsBook,
+  AsEbook,
+} from "~/components/ui/SvgIcons/OwnedAsIcons";
 import { type ownedAsType } from "~/lib/validations/book/ownedAs";
 
 export const getOwnedAsIcon = (
-  condition: boolean,
   ownedAs: ownedAsType,
-  size: "default" | "sm" | "xs" = "default"
+  size: "lg" | "default" | "sm" = "default"
 ) => {
   const sizeClass = {
-    default: "h-8 w-8",
-    sm: "h-7 w-7",
-    xs: "h-5 w-5",
+    lg: "h-8 w-8",
+    default: "h-7 w-7",
+    sm: "h-6 w-6",
   };
 
   const renderIcon = (ownedAs: ownedAsType) => {
@@ -23,7 +26,5 @@ export const getOwnedAsIcon = (
     }
   };
 
-  return condition ? (
-    <div className={sizeClass[size]}>{renderIcon(ownedAs)}</div>
-  ) : null;
+  return <div className={sizeClass[size]}>{renderIcon(ownedAs)}</div>;
 };

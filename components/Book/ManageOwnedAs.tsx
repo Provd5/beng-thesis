@@ -5,13 +5,13 @@ import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import axios from "axios";
 
+import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
 import {
   type ownedAsType,
   OwnedAsValidator,
 } from "~/lib/validations/book/ownedAs";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
-import { getOwnedAsIcon } from "~/utils/getOwnedAsIcon";
 
 import { ModalWrapper } from "../Modals/ModalWrapper";
 import { ButtonLink } from "../ui/Buttons";
@@ -87,6 +87,7 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
   return (
     <div className="relative flex flex-col">
       <ButtonLink
+        active={isModalOpen}
         className="self-start"
         onClick={() => setIsModalOpen(!isModalOpen)}
       >
@@ -134,9 +135,9 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
         </ModalWrapper>
       )}
       <div className="flex gap-1">
-        {getOwnedAsIcon(!!addedBookAtState, "BOOK")}
-        {getOwnedAsIcon(!!addedEbookAtState, "EBOOK")}
-        {getOwnedAsIcon(!!addedAudiobookAtState, "AUDIOBOOK")}
+        {addedBookAtState && getOwnedAsIcon("BOOK", "lg")}
+        {addedEbookAtState && getOwnedAsIcon("EBOOK", "lg")}
+        {addedAudiobookAtState && getOwnedAsIcon("AUDIOBOOK", "lg")}
         {!addedBookAtState && !addedEbookAtState && !addedAudiobookAtState && (
           <p className="h-8 w-8">–</p>
         )}

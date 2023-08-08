@@ -49,8 +49,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
         />
         <p
           className={clsx(
-            language === "en" &&
-              "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light",
+            language === "en" && "text-secondary dark:text-secondary-light",
             "font-semibold"
           )}
         >
@@ -76,8 +75,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
         />
         <p
           className={clsx(
-            language === "pl" &&
-              "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light",
+            language === "pl" && "text-secondary dark:text-secondary-light",
             "font-semibold"
           )}
         >

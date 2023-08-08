@@ -21,7 +21,7 @@ export const FollowLinks: FC<FollowLinksProps> = ({
 
   return (
     <>
-      <div className="flex flex-col gap-1 text-sm">
+      <div className="flex w-fit flex-col gap-1 text-sm">
         <Link href="/#">
           <InnerLink text={t("followers:")} quantity={followers} />
         </Link>
@@ -45,8 +45,8 @@ const InnerLink: FC<InnerLinkProps> = ({ text, quantity }) => {
   return (
     <>
       <div className="flex items-center">
-        <p>{text}</p>
-        <p className="ml-1 font-normal">{quantity.toString()}</p>
+        <h1 className="font-semibold">{text}</h1>
+        <p className="ml-1">{quantity.toString()}</p>
         <MdNavigateNext className="text-lg" />
       </div>
     </>

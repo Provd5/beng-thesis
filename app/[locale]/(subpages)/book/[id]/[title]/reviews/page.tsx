@@ -82,7 +82,7 @@ export default async function BookReviewsPage({
   };
 
   return (
-    <div className="container mx-auto pb-5 pt-10 text-sm font-normal">
+    <div className="container pb-5 pt-10 text-sm">
       <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
         <BackCategoryLink href={`/book/${id}/${title}`} variant="REVIEWS" />
         <div className="flex w-full gap-1 px-3 py-6 xs:gap-3">
@@ -90,7 +90,7 @@ export default async function BookReviewsPage({
 
           <div className="mt-0.5 flex flex-col gap-3">
             <div className="flex flex-col gap-1">
-              <h1 className="text-base font-medium">{book.title}</h1>
+              <h1 className="text-base font-semibold">{book.title}</h1>
               {book.subtitle && <h2>{book.subtitle}</h2>}
             </div>
 

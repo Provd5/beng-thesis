@@ -40,19 +40,20 @@ export const MyReview: FC<MyReviewProps> = ({
       <div className="flex w-full justify-end px-3">
         {isReviewExists && (
           <button
+            id="review-edit-button"
             className="flex items-center gap-1 py-0.5"
             onClick={() => setShowEditReview(!showEditReview)}
           >
             {showEditReview ? (
               <>
-                <p className="text-base text-black-light/50 dark:text-white-dark/50">
+                <p className="select-none text-base text-black-light/50 dark:text-white-dark/50">
                   {t("cancel")}
                 </p>
                 <RxCross2 className="text-md text-black-light dark:text-white-dark" />
               </>
             ) : (
               <>
-                <p className="text-base text-black-light/50 dark:text-white-dark/50">
+                <p className="select-none text-base text-black-light/50 dark:text-white-dark/50">
                   {t("your review")}
                 </p>
                 <FaPenToSquare className="text-md text-black-light dark:text-white-dark" />

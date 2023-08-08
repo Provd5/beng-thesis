@@ -13,11 +13,11 @@ import { BsBookmarkPlus } from "react-icons/bs";
 import { ChangeBookshelfValidator } from "~/lib/validations/book/changeBookshelf";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
-import { getBookshelfIcon } from "~/utils/getBookshelfIcon";
 
 import { ModalWrapper } from "../Modals/ModalWrapper";
+import { BookmarksWrapper } from "../ui/BookmarksWrapper";
 import { ButtonLink } from "../ui/Buttons";
-import { BookmarksWrapper } from "./BookmarksWrapper";
+import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface ManageBookshelfProps {
   bookId: string;
@@ -99,9 +99,9 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
         onClick={() => setIsModalOpen(!isModalOpen)}
       >
         {currentBookshelf ? (
-          getBookshelfIcon(currentBookshelf)
+          getBookmarkIcon(currentBookshelf, "lg")
         ) : (
-          <BookmarksWrapper Icon={BsBookmarkPlus} color="gradient" />
+          <BookmarksWrapper Icon={BsBookmarkPlus} color="gradient" size="lg" />
         )}
       </div>
 
@@ -123,12 +123,12 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
                   className="flex items-center gap-1 py-1"
                   onClick={() => handleChangeBookshelf(bookshelf)}
                 >
-                  {getBookshelfIcon(bookshelf, "sm")}
+                  {getBookmarkIcon(bookshelf, "sm")}
                   <span
                     className={clsx(
                       "whitespace-nowrap text-base",
                       currentBookshelf === bookshelf &&
-                        "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light"
+                        "font-semibold text-secondary dark:text-secondary-light"
                     )}
                   >
                     {tb(bookshelf)}

@@ -3,8 +3,8 @@ import clsx from "clsx";
 
 import { BsCheck } from "react-icons/bs";
 
+import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
 import { type ownedAsType } from "~/lib/validations/book/ownedAs";
-import { getOwnedAsIcon } from "~/utils/getOwnedAsIcon";
 
 interface ManageOwnedAsModalContentProps {
   text: string;
@@ -28,13 +28,12 @@ export const ManageOwnedAsModalContent: FC<ManageOwnedAsModalContentProps> = ({
       className="flex flex-auto justify-between gap-2 py-1"
     >
       <div className="flex items-center gap-1.5">
-        {getOwnedAsIcon(true, ownedAs, "sm")}
+        {getOwnedAsIcon(ownedAs)}
         <div className="flex h-8 flex-col items-start justify-center">
           <h1
             className={clsx(
               "text-base",
-              addedState &&
-                "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light"
+              addedState && "text-secondary dark:text-secondary-light"
             )}
           >
             {text}

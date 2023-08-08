@@ -2,7 +2,9 @@
 
 import { type FC, useState } from "react";
 
-import { type modalSizes, ModalWrapper } from "./ModalWrapper";
+import { type modalSizes } from "~/types/sizes";
+
+import { ModalWrapper } from "./ModalWrapper";
 
 interface ModalInitiatorProps {
   children: React.ReactNode;

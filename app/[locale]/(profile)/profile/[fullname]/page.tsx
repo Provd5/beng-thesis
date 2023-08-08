@@ -1,30 +1,20 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { createTranslator } from "next-intl";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import { type categoryTypes } from "~/types/categoryTypes";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
 import { CategoryContentCard } from "~/components/Profile/CategoryContentCard";
 import { CategoryContentCardPlaceholder } from "~/components/Profile/CategoryContentCardPlaceholder";
 import { FollowLinks } from "~/components/Profile/FollowLinks";
+import { PrivateProfilePage } from "~/components/Profile/PrivateProfilePage";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
 import { Statistics } from "~/components/Profile/Statistics";
-import { CategoryLink, type categoryTypes } from "~/components/ui/CategoryLink";
+import { CategoryLink } from "~/components/ui/CategoryLink";
 import { DragContainer } from "~/components/ui/DragContainer";
 import { ProfilePageContainer } from "~/components/ui/PageContainer";
 import { db } from "~/lib/db";
-
-import { getMessages, type PageProps } from "../../../layout";
-
-export async function generateMetadata({ params: { locale } }: PageProps) {
-  const messages = await getMessages(locale);
-
-  const t = createTranslator({ locale, messages });
-
-  return {
-    title: t("Nav.CategoryTitles.profile"),
-  };
-}
 
 export default async function ProfilePage({
   params: { fullname },
@@ -39,31 +29,49 @@ export default async function ProfilePage({
     data: { session },
   } = await supabase.auth.getSession();
 
-  const publicUserData = await db.profile.findFirst({
-    where: { full_name: fullname },
-    select: { id: true, avatar_url: true, private: true, full_name: true },
-  });
+  const [publicUserData, myFullname] = await Promise.all([
+    db.profile.findFirst({
+      where: { full_name: fullname },
+      select: { id: true, avatar_url: true, private: true, full_name: true },
+    }),
+    session?.user &&
+      db.profile.findFirst({
+        where: { id: session.user.id },
+        select: { id: true, full_name: true },
+      }),
+  ]);
 
-  if (!publicUserData || !session?.user) notFound();
+  if (!publicUserData?.full_name || !myFullname?.full_name) notFound();
 
-  const userData = await db.profile.findFirst({
-    where: {
-      OR: [{ id: session.user.id }, { id: publicUserData.id, private: false }],
-    },
-    select: {
-      id: true,
-      _count: {
-        select: {
-          followed_by: true,
-          following: true,
-          book_owned_as: true,
-          liked_book: true,
-          review: true,
-        },
+  const commonSelect = {
+    id: true,
+    _count: {
+      select: {
+        followed_by: true,
+        following: true,
+        book_owned_as: true,
+        liked_book: true,
+        review: true,
       },
-      bookshelf: { select: { bookshelf: true } },
     },
-  });
+    bookshelf: { select: { bookshelf: true } },
+  };
+
+  const userData =
+    publicUserData.full_name === myFullname.full_name
+      ? await db.profile.findFirst({
+          where: {
+            id: myFullname.id,
+          },
+          select: commonSelect,
+        })
+      : await db.profile.findFirst({
+          where: {
+            id: publicUserData.id,
+            private: false,
+          },
+          select: commonSelect,
+        });
 
   const CategoryArray: categoryTypes[] = [
     "OWNED",
@@ -95,7 +103,7 @@ export default async function ProfilePage({
 
   return (
     <ProfilePageContainer>
-      <div className="container mx-auto pb-3">
+      <div className="container pb-6">
         <div className="mb-6 flex gap-1 xs:gap-3">
           <div className="ml-0 mt-[-30px] xs:ml-6">
             <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
@@ -116,34 +124,48 @@ export default async function ProfilePage({
             )}
           </div>
         </div>
-        {userData && (
+        {userData ? (
           <div className="flex flex-col gap-3">
             <div className="flex flex-col gap-1">
               <CategoryLink variant="STATISTICS" href={"/statistics"} />
               <Statistics />
             </div>
-            {CategoryArray.map((bookshelfVariant) => (
-              <div key={bookshelfVariant} className="flex flex-col gap-1">
-                <CategoryLink
-                  variant={bookshelfVariant}
-                  href={`/${bookshelfVariant
-                    .toLocaleLowerCase()
-                    .replace("_", "-")}`}
-                  quantity={quantityPerVariant(bookshelfVariant)}
-                />
-                <DragContainer>
-                  {quantityPerVariant(bookshelfVariant) > 0 ? (
-                    <CategoryContentCard
-                      bookshelfVariant={bookshelfVariant}
-                      userId={userData.id}
-                    />
-                  ) : (
-                    <CategoryContentCardPlaceholder />
-                  )}
-                </DragContainer>
-              </div>
-            ))}
+            {CategoryArray.map((bookshelfVariant) => {
+              const variantUrl = bookshelfVariant
+                .toLocaleLowerCase()
+                .replace("_", "-");
+              const variantQuantity = quantityPerVariant(bookshelfVariant);
+
+              return (
+                <div key={bookshelfVariant} className="flex flex-col gap-1">
+                  <CategoryLink
+                    variant={bookshelfVariant}
+                    href={`/${variantUrl}`}
+                    quantity={variantQuantity}
+                  />
+                  <DragContainer itemsQuantity={variantQuantity}>
+                    {variantQuantity > 0 ? (
+                      <>
+                        <CategoryContentCard
+                          bookshelfVariant={bookshelfVariant}
+                          userId={userData.id}
+                        />
+                        {variantQuantity > 10 && (
+                          <CategoryContentCardPlaceholder
+                            href={`/${variantUrl}`}
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <CategoryContentCardPlaceholder href="/explore" isEmpty />
+                    )}
+                  </DragContainer>
+                </div>
+              );
+            })}
           </div>
+        ) : (
+          <PrivateProfilePage />
         )}
       </div>
     </ProfilePageContainer>

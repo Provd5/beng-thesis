@@ -3,11 +3,12 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { BsBookmarkStar, BsBookmarkStarFill } from "react-icons/bs";
+import { BsBookmarkStar } from "react-icons/bs";
 
 import { dateFormater } from "~/utils/dateFormater";
 
-import { BookmarksWrapper } from "./BookmarksWrapper";
+import { BookmarksWrapper } from "../ui/BookmarksWrapper";
+import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface ManageReviewsProps {
   isReviewExists: boolean;
@@ -22,16 +23,31 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
 }) => {
   const t = useTranslations("Book.ManageReviews");
 
+  const handleFocusReview = () => {
+    const reviewEditButton = document.getElementById(
+      "review-edit-button"
+    ) as HTMLButtonElement | null;
+    const reviewTextarea = document.getElementById(
+      "review-textarea"
+    ) as HTMLTextAreaElement | null;
+
+    !reviewTextarea && reviewEditButton?.click();
+    reviewTextarea?.focus();
+    reviewTextarea?.select();
+  };
+
   return (
     <div className="flex gap-1">
-      {isReviewExists ? (
-        <BookmarksWrapper Icon={BsBookmarkStarFill} color="yellow" />
-      ) : (
-        <BookmarksWrapper Icon={BsBookmarkStar} color="gradient" />
-      )}
+      <button onClick={handleFocusReview}>
+        {isReviewExists ? (
+          getBookmarkIcon("REVIEWS", "lg")
+        ) : (
+          <BookmarksWrapper Icon={BsBookmarkStar} color="gradient" size="lg" />
+        )}
+      </button>
       <div className="flex flex-col">
         <div className="flex h-[24px] items-center">
-          <h3 className="bg-gradient-dark bg-clip-text text-base font-semibold text-transparent dark:bg-gradient-light">
+          <h3 className="text-base font-semibold text-secondary dark:text-secondary-light">
             {t("reviews")}
           </h3>
         </div>
@@ -40,7 +56,12 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
           {createdAt ? (
             dateFormater(createdAt)
           ) : (
-            <span className="underline">{t("write yours")}</span>
+            <span
+              onClick={handleFocusReview}
+              className="cursor-pointer select-none underline"
+            >
+              {t("write yours")}
+            </span>
           )}
         </p>
       </div>

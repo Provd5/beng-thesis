@@ -37,27 +37,27 @@ export const BookCard: FC<BookCardProps> = ({ bookData }) => {
         <div className="flex flex-col gap-3">
           <div className="leading-tight">
             <h1 className="line-clamp-2">{bookData.title}</h1>
-            <h2 className="text-sm font-normal text-black-light dark:text-white-dark">
+            <h2 className="text-sm text-black-light dark:text-white-dark">
               {bookData.authors.join(", ")}
             </h2>
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-sm font-normal">
+          <div className="flex flex-wrap items-center gap-3 text-sm">
             <div className="flex flex-col">
-              <h3 className="bg-gradient-dark bg-clip-text text-base text-transparent dark:bg-gradient-light">
+              <h3 className="text-base text-secondary dark:text-secondary-light">
                 {t("score")}
               </h3>
-              <p className="text-md font-medium">
+              <p className="text-md">
                 {`${arithmeticMeanOfScores(bookData.review)}/5`}
               </p>
             </div>
             <div className="flex flex-col">
-              <h3 className="bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light">
+              <h3 className="text-secondary dark:text-secondary-light">
                 {t("likes")}
               </h3>
               <p>{bookData._count.liked_by}</p>
             </div>
             <div className="flex flex-col">
-              <h3 className="bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light">
+              <h3 className="text-secondary dark:text-secondary-light">
                 {t("reviews")}
               </h3>
               <p>{bookData._count.review}</p>

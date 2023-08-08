@@ -4,7 +4,7 @@ interface NavIconsProps {
   isActive: boolean;
 }
 
-const className = "h-full w-full text-black-dark dark:text-white-light";
+const className = "h-full w-full fill-black-dark dark:fill-white-light";
 const activeClassName =
   "h-full w-full fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]";
 

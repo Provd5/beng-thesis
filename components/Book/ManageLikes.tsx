@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import axios from "axios";
 
-import { BsBookmarkHeart, BsBookmarkHeartFill } from "react-icons/bs";
+import { BsBookmarkHeart } from "react-icons/bs";
 
 import { LikeBookValidator } from "~/lib/validations/book/likeBook";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
-import { BookmarksWrapper } from "./BookmarksWrapper";
+import { BookmarksWrapper } from "../ui/BookmarksWrapper";
+import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface ManageLikesProps {
   bookId: string;
@@ -72,14 +73,14 @@ export const ManageLikes: FC<ManageLikesProps> = ({
     <div className="flex gap-1">
       <button disabled={isLoading} onClick={handleLike}>
         {isLiked ? (
-          <BookmarksWrapper Icon={BsBookmarkHeartFill} color="pink" />
+          getBookmarkIcon("LIKED", "lg")
         ) : (
-          <BookmarksWrapper Icon={BsBookmarkHeart} color="gradient" />
+          <BookmarksWrapper Icon={BsBookmarkHeart} color="gradient" size="lg" />
         )}
       </button>
       <div className="flex flex-col">
         <div className="flex h-[24px] items-center">
-          <h3 className="bg-gradient-dark bg-clip-text text-base font-semibold text-transparent dark:bg-gradient-light">
+          <h3 className="text-base font-semibold text-secondary dark:text-secondary-light">
             {t("likes")}
           </h3>
         </div>
@@ -90,7 +91,9 @@ export const ManageLikes: FC<ManageLikesProps> = ({
           ) : (
             <span
               onClick={handleLike}
-              className={isLoading ? "" : "cursor-pointer underline"}
+              className={
+                isLoading ? "" : "cursor-pointer select-none underline"
+              }
             >
               {t("like")}
             </span>

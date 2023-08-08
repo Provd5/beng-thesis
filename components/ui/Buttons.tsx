@@ -105,8 +105,7 @@ export const ButtonLink: FC<
       disabled={loading}
       className={clsx(
         sharedClass,
-        defaultColor &&
-          "bg-gradient-dark bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light",
+        defaultColor && "text-secondary dark:text-secondary-light",
         sizeClass[size],
         className
       )}
@@ -117,8 +116,7 @@ export const ButtonLink: FC<
         <MdKeyboardArrowDown
           className={clsx(
             "flex-none text-xl",
-            defaultColor &&
-              "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
+            defaultColor && "fill-primary dark:fill-secondary-light"
           )}
         />
       </span>

@@ -18,7 +18,7 @@ export const ThemeSwitcher: FC = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         <ThemeButton
           setCurrentTheme={setCurrentTheme}
           active={currentTheme === "default"}
@@ -86,7 +86,7 @@ const ThemeButton: FC<ThemeButtonProps> = ({
 
   return (
     <button
-      className="flex items-center gap-1 text-base"
+      className="flex items-center gap-1 py-0.5 text-base"
       onClick={() => handleToggleTheme(theme)}
     >
       <Icon
@@ -98,13 +98,7 @@ const ThemeButton: FC<ThemeButtonProps> = ({
         )}
       />
 
-      <p
-        className={
-          active
-            ? "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light"
-            : ""
-        }
-      >
+      <p className={active ? "text-secondary dark:text-secondary-light" : ""}>
         {theme === "dark" && t("dark")}
         {theme === "default" && t("default")}
         {theme === "light" && t("light")}
