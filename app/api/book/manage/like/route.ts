@@ -24,6 +24,7 @@ export async function POST(req: Request) {
 
     const alreadyLiked = await db.liked_books.findFirst({
       where: { book_id: bookId, user_id: session.user.id },
+      select: { book_id: true },
     });
 
     if (alreadyLiked) {

@@ -9,11 +9,6 @@ import axios from "axios";
 import clsx from "clsx";
 
 import { type IconType } from "react-icons";
-import {
-  BsBookmarkHeartFill,
-  BsBookmarkStarFill,
-  BsFillBookmarkCheckFill,
-} from "react-icons/bs";
 import { FaFaceLaughBeam, FaFaceMeh } from "react-icons/fa6";
 
 import { ReviewReactionValidator } from "~/lib/validations/book/reviewReaction";
@@ -22,6 +17,7 @@ import { dateFormater } from "~/utils/dateFormater";
 
 import { AvatarImage } from "../Profile/AvatarImage";
 import { ButtonLink } from "../ui/Buttons";
+import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface ReviewProps {
   id: string;
@@ -104,7 +100,7 @@ export const Review: FC<ReviewProps> = ({
         <p
           className={
             userReactionState === reaction
-              ? "bg-gradient-dark bg-clip-text font-bold text-transparent dark:bg-gradient-light"
+              ? "font-semibold text-secondary dark:text-secondary-light"
               : ""
           }
         >
@@ -171,14 +167,14 @@ export const Review: FC<ReviewProps> = ({
     >
       <Link
         href={profileData.full_name ? `/profile/${profileData.full_name}` : "#"}
-        className="flex h-fit shrink-0 gap-x-1.5 gap-y-1 font-medium sm:w-24 sm:flex-col sm:items-center"
+        className="flex h-fit flex-none gap-x-1.5 gap-y-1 sm:w-24 sm:flex-col sm:items-center"
       >
         <AvatarImage
           className="drop-shadow-icon"
           avatarSrc={profileData.avatar_url}
         />
         <div className="flex flex-col gap-0.5 sm:items-center">
-          <h1 className="line-clamp-3 break-all font-semibold">
+          <h1 className="line-clamp-3 break-all font-bold">
             {profileData.full_name}
           </h1>
           <h2 className="flex flex-wrap text-xs text-black-light dark:text-white-dark sm:justify-center">
@@ -186,17 +182,17 @@ export const Review: FC<ReviewProps> = ({
           </h2>
           <div className="my-1 flex gap-2 text-base">
             <div className="flex items-center gap-0.5">
-              <BsFillBookmarkCheckFill className="text-green/70" />
+              {getBookmarkIcon("ALREADY_READ", "sm")}
               <p>{profileData._count.bookshelf}</p>
             </div>
             <div className="flex items-center gap-0.5">
-              <BsBookmarkStarFill className="text-yellow/70" />
+              {getBookmarkIcon("REVIEWS", "sm")}
               <p>{profileData._count.review}</p>
             </div>
           </div>
         </div>
       </Link>
-      <div className="flex w-full flex-auto flex-col justify-between font-medium">
+      <div className="flex w-full flex-auto flex-col justify-between">
         <div>
           <h2 className="flex flex-col text-xs text-black-light dark:text-white-dark">
             {t("posted:")} {dateFormater(reviewCreatedAt, true)}
@@ -206,18 +202,18 @@ export const Review: FC<ReviewProps> = ({
               </span>
             )}
           </h2>
-          <div className="my-1 flex flex-wrap items-center gap-x-2 text-base font-semibold">
-            <h1 className="whitespace-nowrap">
+          <div className="my-1 flex flex-wrap items-center gap-x-2 text-base">
+            <h1 className="whitespace-nowrap font-semibold">
               {t("rate:")}{" "}
-              <span className="bg-gradient-dark bg-clip-text font-bold text-transparent dark:bg-gradient-light">
+              <span className="font-bold text-secondary dark:text-secondary-light">
                 {`${score}/5`}
               </span>
             </h1>
             {isLiked && (
-              <p className="flex items-center">
-                <BsBookmarkHeartFill className="mt-0.5 text-pink/70" />{" "}
-                <span className="text-xs font-normal">{t("likes it")}</span>
-              </p>
+              <div className="flex items-center gap-0.5">
+                {getBookmarkIcon("LIKED", "sm")}
+                <span className="text-xs">{t("likes it")}</span>
+              </div>
             )}
           </div>
           <p

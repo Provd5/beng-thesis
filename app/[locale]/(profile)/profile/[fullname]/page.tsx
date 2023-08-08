@@ -1,28 +1,20 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
-import { createTranslator } from "next-intl";
-import { type bookshelfType } from "@prisma/client";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
+import { type categoryTypes } from "~/types/categoryTypes";
+
 import { AvatarImage } from "~/components/Profile/AvatarImage";
+import { CategoryContentCard } from "~/components/Profile/CategoryContentCard";
+import { CategoryContentCardPlaceholder } from "~/components/Profile/CategoryContentCardPlaceholder";
 import { FollowLinks } from "~/components/Profile/FollowLinks";
+import { PrivateProfilePage } from "~/components/Profile/PrivateProfilePage";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
 import { Statistics } from "~/components/Profile/Statistics";
 import { CategoryLink } from "~/components/ui/CategoryLink";
+import { DragContainer } from "~/components/ui/DragContainer";
 import { ProfilePageContainer } from "~/components/ui/PageContainer";
 import { db } from "~/lib/db";
-
-import { getMessages, type PageProps } from "../../../layout";
-
-export async function generateMetadata({ params: { locale } }: PageProps) {
-  const messages = await getMessages(locale);
-
-  const t = createTranslator({ locale, messages });
-
-  return {
-    title: t("Nav.CategoryTitles.profile"),
-  };
-}
 
 export default async function ProfilePage({
   params: { fullname },
@@ -37,37 +29,81 @@ export default async function ProfilePage({
     data: { session },
   } = await supabase.auth.getSession();
 
-  const publicUserData = await db.profile.findFirst({
-    where: { full_name: fullname },
-    select: { id: true, avatar_url: true, private: true, full_name: true },
-  });
+  const [publicUserData, myFullname] = await Promise.all([
+    db.profile.findFirst({
+      where: { full_name: fullname },
+      select: { id: true, avatar_url: true, private: true, full_name: true },
+    }),
+    session?.user &&
+      db.profile.findFirst({
+        where: { id: session.user.id },
+        select: { id: true, full_name: true },
+      }),
+  ]);
 
-  if (!publicUserData || !session?.user) notFound();
+  if (!publicUserData?.full_name || !myFullname?.full_name) notFound();
 
-  const userData = await db.profile.findFirst({
-    where: {
-      OR: [{ id: session.user.id }, { id: publicUserData.id, private: false }],
+  const commonSelect = {
+    id: true,
+    _count: {
+      select: {
+        followed_by: true,
+        following: true,
+        book_owned_as: true,
+        liked_book: true,
+        review: true,
+      },
     },
-    select: {
-      followed_by: true,
-      following: true,
-      review: true,
-      liked_book: true,
-      bookshelf: true,
-      book_owned_as: true,
-    },
-  });
+    bookshelf: { select: { bookshelf: true } },
+  };
 
-  function quantityOfBookshelfType(bookshelfType: bookshelfType) {
-    return (
-      userData?.bookshelf.filter((type) => type.bookshelf === bookshelfType)
-        .length ?? 0
-    );
-  }
+  const userData =
+    publicUserData.full_name === myFullname.full_name
+      ? await db.profile.findFirst({
+          where: {
+            id: myFullname.id,
+          },
+          select: commonSelect,
+        })
+      : await db.profile.findFirst({
+          where: {
+            id: publicUserData.id,
+            private: false,
+          },
+          select: commonSelect,
+        });
+
+  const CategoryArray: categoryTypes[] = [
+    "OWNED",
+    "LIKED",
+    "ALREADY_READ",
+    "TO_READ",
+    "ABANDONED",
+    "READING",
+    "OTHER",
+    "REVIEWS",
+  ];
+
+  const quantityPerVariant = (bookshelfVariant: categoryTypes): number => {
+    switch (bookshelfVariant) {
+      case "OWNED":
+        return userData?._count.book_owned_as || 0;
+      case "LIKED":
+        return userData?._count.liked_book || 0;
+      case "REVIEWS":
+        return userData?._count.review || 0;
+      default:
+        return (
+          userData?.bookshelf.filter(
+            (variant) => variant.bookshelf === bookshelfVariant
+          ).length || 0
+        );
+    }
+  };
 
   return (
     <ProfilePageContainer>
-      <div className="container mx-auto pb-3">
+      <div className="container pb-6">
         <div className="mb-6 flex gap-1 xs:gap-3">
           <div className="ml-0 mt-[-30px] xs:ml-6">
             <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
@@ -79,52 +115,58 @@ export default async function ProfilePage({
             <h1 className="mx-0.5 my-2 break-all bg-gradient-dark bg-clip-text text-xl font-semibold text-transparent dark:bg-gradient-light">
               {publicUserData.full_name}
             </h1>
-            <FollowLinks
-              followers={userData?.followed_by.length ?? 0}
-              following={userData?.following.length ?? 0}
-              reviews={userData?.review.length ?? 0}
-            />
+            {userData && (
+              <FollowLinks
+                followers={userData._count.followed_by}
+                following={userData._count.following}
+                reviews={userData._count.review}
+              />
+            )}
           </div>
         </div>
-        <div className="flex flex-col gap-3">
-          <CategoryLink variant="STATISTICS" href={"/#"} />
-          <Statistics />
-          <CategoryLink
-            variant="OWNED"
-            href={"/#"}
-            quantity={userData?.book_owned_as.length}
-          />
-          <CategoryLink
-            variant="LIKED"
-            href={"/#"}
-            quantity={userData?.liked_book.length}
-          />
-          <CategoryLink
-            variant="TO_READ"
-            href={"/#"}
-            quantity={quantityOfBookshelfType("TO_READ")}
-          />
-          <CategoryLink
-            variant="ALREADY_READ"
-            href={"/#"}
-            quantity={quantityOfBookshelfType("ALREADY_READ")}
-          />
-          <CategoryLink
-            variant="ABANDONED"
-            href={"/#"}
-            quantity={quantityOfBookshelfType("ABANDONED")}
-          />
-          <CategoryLink
-            variant="READING"
-            href={"/#"}
-            quantity={quantityOfBookshelfType("READING")}
-          />
-          <CategoryLink
-            variant="REVIEWS"
-            href={"/#"}
-            quantity={userData?.review.length}
-          />
-        </div>
+        {userData ? (
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1">
+              <CategoryLink variant="STATISTICS" href={"/statistics"} />
+              <Statistics />
+            </div>
+            {CategoryArray.map((bookshelfVariant) => {
+              const variantUrl = bookshelfVariant
+                .toLocaleLowerCase()
+                .replace("_", "-");
+              const variantQuantity = quantityPerVariant(bookshelfVariant);
+
+              return (
+                <div key={bookshelfVariant} className="flex flex-col gap-1">
+                  <CategoryLink
+                    variant={bookshelfVariant}
+                    href={`/${variantUrl}`}
+                    quantity={variantQuantity}
+                  />
+                  <DragContainer itemsQuantity={variantQuantity}>
+                    {variantQuantity > 0 ? (
+                      <>
+                        <CategoryContentCard
+                          bookshelfVariant={bookshelfVariant}
+                          userId={userData.id}
+                        />
+                        {variantQuantity > 10 && (
+                          <CategoryContentCardPlaceholder
+                            href={`/${variantUrl}`}
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <CategoryContentCardPlaceholder href="/explore" isEmpty />
+                    )}
+                  </DragContainer>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <PrivateProfilePage />
+        )}
       </div>
     </ProfilePageContainer>
   );

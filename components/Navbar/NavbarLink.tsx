@@ -8,7 +8,7 @@ import clsx from "clsx";
 
 import { locales, type localeTypes } from "~/i18n";
 
-import { ExploreIcon, ProfileIcon, SearchIcon } from "./NavIcons";
+import { ExploreIcon, ProfileIcon, SearchIcon } from "../ui/SvgIcons/NavIcons";
 
 type ValidUrl = "explore" | "login" | "profile" | "search";
 
@@ -53,12 +53,11 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
           : `/${pageUrl}`
       }
       className={clsx(
-        "flex shrink-0 items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50",
+        "flex flex-none items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50",
         pageUrl === "login" || pageUrl === "profile"
           ? "h-[52px] w-[52px]"
           : "h-[48px] w-[48px]",
-        isActive() &&
-          "pointer-events-none cursor-default bg-white-light dark:bg-black-dark"
+        isActive() && "pointer-events-none cursor-default"
       )}
     >
       <div className="mt-[-4px] flex flex-col items-center justify-center gap-0.5">
@@ -73,7 +72,14 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
           {pageUrl === "explore" && <ExploreIcon isActive={isActive()} />}
           {pageUrl === "search" && <SearchIcon isActive={isActive()} />}
         </div>
-        <p className="text-2xs">{t(pageUrl)}</p>
+        <p
+          className={clsx(
+            "text-2xs",
+            isActive() && "text-secondary dark:text-secondary-light"
+          )}
+        >
+          {t(pageUrl)}
+        </p>
       </div>
     </Link>
   );

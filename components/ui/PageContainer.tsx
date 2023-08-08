@@ -7,8 +7,8 @@ interface PageContainerProps {
 export const PageContainer: FC<PageContainerProps> = ({ children }) => {
   return (
     <>
-      <div className="h-7 shrink-0" />
-      <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/95 px-[10px] dark:bg-black/95">
+      <div className="h-7 flex-none" />
+      <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/95 dark:bg-black/95">
         {children}
       </div>
     </>
@@ -18,8 +18,8 @@ export const PageContainer: FC<PageContainerProps> = ({ children }) => {
 export const ProfilePageContainer: FC<PageContainerProps> = ({ children }) => {
   return (
     <>
-      <div className="h-[68px] shrink-0" />
-      <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/95 px-[10px] dark:bg-black/95">
+      <div className="h-[68px] flex-none" />
+      <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/95 dark:bg-black/95">
         {children}
       </div>
     </>

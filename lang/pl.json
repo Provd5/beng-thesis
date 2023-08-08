@@ -84,7 +84,12 @@
       "followers:": "Obserwujących:",
       "following:": "Obserwowani:",
       "reviews:": "Recenzje:",
-      "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}"
+      "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}",
+      "this profile is private": "Ten profil został ustawiony jako prywatny"
+    },
+    "CategoryContentCard": {
+      "this shelf is currently empty": "Ta półka jest obecnie pusta",
+      "show more": "zobacz więcej"
     }
   },
   "Book": {
@@ -155,6 +160,12 @@
       "likes it": "lubi to",
       "collapse": "zwiń",
       "expand": "rozwiń"
+    }
+  },
+  "Explore": {
+    "Page": {
+      "books": "Książki",
+      "community": "Społeczność"
     }
   }
 }

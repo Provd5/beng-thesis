@@ -2,14 +2,12 @@ import type { FC } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 
-import { AvatarPlaceholder } from "./AvatarPlaceholder";
-
-type sizes = "default" | "sm" | "lg";
+import { AvatarPlaceholder } from "../ui/SvgIcons/AvatarPlaceholder";
 
 interface AvatarImageProps {
   avatarSrc?: string | null;
   className?: string;
-  size?: sizes;
+  size?: "default" | "sm" | "lg";
 }
 
 export const AvatarImage: FC<AvatarImageProps> = ({
@@ -29,7 +27,7 @@ export const AvatarImage: FC<AvatarImageProps> = ({
   };
 
   return (
-    <div className={clsx("relative shrink-0", sizeClass[size], className)}>
+    <div className={clsx("relative flex-none", sizeClass[size], className)}>
       {avatarSrc ? (
         <Image
           sizes={sizes[size]}

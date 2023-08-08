@@ -39,18 +39,18 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
   switch (variant) {
     case "averge score:":
       return (
-        <div className="flex flex-col gap-0.5">
-          <h3 className="bg-gradient-dark bg-clip-text font-semibold text-transparent dark:bg-gradient-light">
+        <div className="flex flex-col gap-0.5 font-semibold">
+          <h3 className="text-base text-secondary dark:text-secondary-light">
             {t(variant)}
           </h3>
-          <p className="text-md font-medium">{text}</p>
+          <p className="text-md">{text}</p>
         </div>
       );
     case "description:":
       return (
         <div>
           <div className="flex flex-col gap-1">
-            <h3 className="font-medium">{t(variant)}</h3>
+            <h3 className="font-semibold">{t(variant)}</h3>
             <p
               ref={descriptionParagraphRef}
               className={isExpanded ? "" : "line-clamp-4 max-h-[56px]"}
@@ -74,7 +74,7 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
     default:
       return (
         <div className="flex flex-wrap gap-1">
-          <h3 className="font-medium">{t(variant)}</h3>
+          <h3 className="font-semibold">{t(variant)}</h3>
           <p>{text}</p>
         </div>
       );

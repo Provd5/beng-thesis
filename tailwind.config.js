@@ -12,6 +12,8 @@ module.exports = {
         md: "768px",
         lg: "1024px",
       },
+      center: true,
+      padding: "10px",
     },
     extend: {
       screens: {
@@ -27,7 +29,7 @@ module.exports = {
         xl: ["24px", "32px"],
       },
       dropShadow: {
-        icon: "0 1px 1px rgba(0, 0, 0, 0.2)",
+        icon: "0 1px 0px rgba(0, 0, 0, 0.3)",
         modal: "-5px 5px 5px rgba(0, 0, 0, 0.1)",
         book: "-2px 2px 3px rgba(0, 0, 0, 0.1)",
         light: "0 0 1px rgb(var(--white-light) / 1)",

@@ -84,7 +84,12 @@
       "followers:": "Followers:",
       "following:": "Following:",
       "reviews:": "Reviews:",
-      "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}"
+      "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}",
+      "this profile is private": "This profile has been set as private"
+    },
+    "CategoryContentCard": {
+      "this shelf is currently empty": "This shelf is currently empty",
+      "show more": "show more"
     }
   },
   "Book": {
@@ -155,6 +160,12 @@
       "likes it": "likes it",
       "collapse": "collapse",
       "expand": "expand"
+    }
+  },
+  "Explore": {
+    "Page": {
+      "books": "Books",
+      "community": "Community"
     }
   }
 }

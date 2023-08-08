@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 
 import { Navbar } from "~/components/Navbar/Navbar";
-import { SvgPainter } from "~/components/ui/SvgPainter";
+import { SvgPainter } from "~/components/ui/SvgIcons/SvgPainter";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
 import { type localeTypes } from "~/i18n";
 

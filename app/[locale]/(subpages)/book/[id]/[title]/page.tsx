@@ -87,7 +87,7 @@ export default async function BookPage({
   const myReaction = myReview?.review_reaction?.[0]?.reaction;
 
   return (
-    <div className="container mx-auto pb-5 pt-10 text-sm font-normal">
+    <div className="container pb-6 pt-12 text-sm">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-x-10 gap-y-8 px-1 xs:px-3 md:flex-row md:justify-between md:px-6">
           <div className="flex gap-1 xs:gap-3">
@@ -95,7 +95,7 @@ export default async function BookPage({
 
             <div className="mt-0.5 flex flex-col gap-3">
               <div className="flex flex-col gap-1">
-                <h1 className="text-base font-medium">{book.title}</h1>
+                <h1 className="text-base font-semibold">{book.title}</h1>
                 {book.subtitle && <h2>{book.subtitle}</h2>}
               </div>
 

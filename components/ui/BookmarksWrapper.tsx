@@ -3,18 +3,12 @@ import clsx from "clsx";
 
 import { type IconType } from "react-icons/lib";
 
+import { type bookmarkSizes } from "~/types/sizes";
+
 interface BookmarksWrapperProps {
   Icon: IconType;
-  color:
-    | "blue"
-    | "green"
-    | "red"
-    | "gray"
-    | "pink"
-    | "yellow"
-    | "gradient"
-    | "default";
-  size?: "default" | "sm";
+  color: "gradient" | `fill-${string}`;
+  size?: bookmarkSizes;
 }
 
 export const BookmarksWrapper: FC<BookmarksWrapperProps> = ({
@@ -25,23 +19,18 @@ export const BookmarksWrapper: FC<BookmarksWrapperProps> = ({
   const colorClass =
     color === "gradient"
       ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-      : `text-${color}`;
+      : color;
 
   const sizeClass = {
-    default: "h-auto w-7 pt-1",
-    sm: "h-auto w-4",
+    lg: "w-7 pt-1",
+    default: "w-5",
+    sm: "w-4",
   };
 
   return (
     <div className="flex">
       <Icon
-        className={clsx(
-          "drop-shadow-icon",
-          color === "default"
-            ? "text-black-light dark:text-white-dark"
-            : colorClass,
-          sizeClass[size]
-        )}
+        className={clsx("h-auto drop-shadow-icon", colorClass, sizeClass[size])}
       />
     </div>
   );

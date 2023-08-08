@@ -28,10 +28,10 @@ export const AccountSettings: FC<AccountSettingsProps> = ({ userFullname }) => {
           </div>
         }
       >
-        <div className="flex flex-col gap-3 text-base">
+        <div className="flex flex-col gap-2 text-base">
           {userFullname && userFullname.full_name && (
             <Link
-              className="flex items-center gap-1 whitespace-nowrap"
+              className="flex items-center gap-1 whitespace-nowrap py-0.5"
               href="/edit"
             >
               <FaPenToSquare />

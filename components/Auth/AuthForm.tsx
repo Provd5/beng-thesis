@@ -248,7 +248,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
           <p>
             {t.rich("no account yet? sign up", {
               Link: (chunks) => (
-                <Link href="/signup" className="font-medium underline">
+                <Link href="/signup" className="font-semibold underline">
                   {chunks}
                 </Link>
               ),
@@ -259,7 +259,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
           <p>
             {t.rich("already have an account? log in", {
               Link: (chunks) => (
-                <Link href="/login" className="font-medium underline">
+                <Link href="/login" className="font-semibold underline">
                   {chunks}
                 </Link>
               ),

@@ -3,27 +3,15 @@
 import type { FC } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { type bookshelfType } from "@prisma/client";
 
-import {
-  BsFillBookmarkCheckFill,
-  BsFillBookmarkDashFill,
-  BsFillBookmarkFill,
-  BsFillBookmarkHeartFill,
-  BsFillBookmarkStarFill,
-  BsFillBookmarkXFill,
-} from "react-icons/bs";
 import { MdNavigateNext } from "react-icons/md";
 
-export type categoryTitleTypes =
-  | bookshelfType
-  | "STATISTICS"
-  | "OWNED"
-  | "LIKED"
-  | "REVIEWS";
+import { type categoryTypes } from "~/types/categoryTypes";
+
+import { getBookmarkIcon } from "./getBookmarkIcon";
 
 interface CategoryLinkProps {
-  variant: categoryTitleTypes;
+  variant: categoryTypes;
   href: `/${string}`;
   withoutIcon?: boolean;
   quantity?: number;
@@ -37,49 +25,22 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
 }) => {
   const t = useTranslations("Book.BookselfTypes");
 
-  const getBookshelfIcon = (bookshelf: categoryTitleTypes) => {
-    switch (bookshelf) {
-      case "LIKED":
-        return (
-          <BsFillBookmarkHeartFill className="text-pink drop-shadow-icon" />
-        );
-      case "TO_READ":
-        return (
-          <BsFillBookmarkDashFill className="text-blue drop-shadow-icon" />
-        );
-      case "ALREADY_READ":
-        return (
-          <BsFillBookmarkCheckFill className="text-green drop-shadow-icon" />
-        );
-      case "ABANDONED":
-        return <BsFillBookmarkXFill className="text-red drop-shadow-icon" />;
-      case "READING":
-        return <BsFillBookmarkFill className="text-gray drop-shadow-icon" />;
-      case "REVIEWS":
-        return (
-          <BsFillBookmarkStarFill className="text-yellow drop-shadow-icon" />
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="flex w-full">
       <Link
         href={href}
         className="flex grow items-center justify-between gap-3 md:grow-0 md:justify-start"
       >
-        <div className="bg-gradient-dark bg-clip-text text-lg font-semibold text-transparent dark:bg-gradient-light">
+        <div className="text-lg font-semibold text-secondary dark:text-secondary-light">
           <div className="flex items-center gap-1">
-            {!withoutIcon && getBookshelfIcon(variant)}
+            {!withoutIcon && getBookmarkIcon(variant)}
             <h1>
               {t(variant)}
               {quantity !== undefined && ` – ${quantity}`}
             </h1>
           </div>
         </div>
-        <MdNavigateNext className="fill-[var(--svg-gradient-dark)] text-xl dark:fill-[var(--svg-gradient)]" />
+        <MdNavigateNext className="text-xl text-secondary dark:text-secondary-light" />
       </Link>
     </div>
   );

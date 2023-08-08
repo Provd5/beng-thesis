@@ -122,6 +122,8 @@ model book_owned_as {
 }
 
 model liked_books {
+  updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+
   book_id String  @db.Uuid
   user_id String  @db.Uuid
   book    book    @relation(fields: [book_id], references: [id])

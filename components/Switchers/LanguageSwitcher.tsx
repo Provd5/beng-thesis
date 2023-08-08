@@ -29,10 +29,10 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
   };
 
   return (
-    <div className="flex gap-3">
+    <div className="flex flex-none gap-3">
       <button
         disabled={language === "en"}
-        className="flex shrink-0 flex-col items-center text-sm"
+        className="flex flex-col items-center text-sm"
         onClick={() => handleSetLanguage("en")}
       >
         <Image
@@ -49,8 +49,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
         />
         <p
           className={clsx(
-            language === "en" &&
-              "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light",
+            language === "en" && "text-secondary dark:text-secondary-light",
             "font-semibold"
           )}
         >
@@ -59,7 +58,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
       </button>
       <button
         disabled={language === "pl"}
-        className="flex shrink-0 flex-col items-center text-sm"
+        className="flex flex-col items-center text-sm"
         onClick={() => handleSetLanguage("pl")}
       >
         <Image
@@ -76,8 +75,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
         />
         <p
           className={clsx(
-            language === "pl" &&
-              "bg-gradient-dark bg-clip-text text-transparent dark:bg-gradient-light",
+            language === "pl" && "text-secondary dark:text-secondary-light",
             "font-semibold"
           )}
         >
