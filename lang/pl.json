@@ -37,7 +37,9 @@
   "Other": {
     "logout": "Wyloguj",
     "loading": "Ładowanie",
-    "customise": "Personalizuj"
+    "customise": "Personalizuj",
+    "collapse": "zwiń",
+    "expand": "rozwiń"
   },
   "Nav": {
     "Settings": {
@@ -58,6 +60,14 @@
     }
   },
   "Profile": {
+    "Page": {
+      "followers:": "Obserwujących:",
+      "following:": "Obserwowani:",
+      "reviews:": "Recenzje:",
+      "profile description:": "Opis profilu:",
+      "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}",
+      "this profile is private": "Ten profil został ustawiony jako prywatny"
+    },
     "Auth": {
       "logIn": "Zaloguj się",
       "signUp": "Stwórz konto",
@@ -79,13 +89,6 @@
       "change/create your username:": "{view, select, change {Zmień} create {Stwórz} other {Zmień/Stwórz}} nazwę użytkownika:",
       "enter username": "Podaj nazwę...",
       "submit": "Prześlij"
-    },
-    "Page": {
-      "followers:": "Obserwujących:",
-      "following:": "Obserwowani:",
-      "reviews:": "Recenzje:",
-      "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}",
-      "this profile is private": "Ten profil został ustawiony jako prywatny"
     },
     "CategoryContentCard": {
       "this shelf is currently empty": "Ta półka jest obecnie pusta",
@@ -115,9 +118,7 @@
       "release date:": "Data wydania:",
       "genre:": "Gatunek:",
       "averge score:": "Średnia ocen:",
-      "description:": "Opis:",
-      "show more": "pokaż więcej",
-      "show less": "pokaż mniej"
+      "description:": "Opis:"
     },
     "ManageLikes": {
       "likes": "Polubienia",
@@ -157,15 +158,20 @@
       "posted:": "Zamieszczono:",
       "edited:": "Edytowano:",
       "rate:": "Ocena:",
-      "likes it": "lubi to",
-      "collapse": "zwiń",
-      "expand": "rozwiń"
+      "likes it": "lubi to"
     }
   },
   "Explore": {
     "Page": {
       "books": "Książki",
       "community": "Społeczność"
+    },
+    "ProfileCard": {
+      "owned books:": "Posiadane książki:",
+      "followers:": "Obserwujących:",
+      "profile description:": "Opis profilu:",
+      "follow": "obserwuj",
+      "unfollow": "nie obserwuj"
     }
   }
 }

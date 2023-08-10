@@ -35,7 +35,7 @@ export default async function BookPage({
   } = await supabase.auth.getSession();
 
   const [book, bookReviews, myReview] = await Promise.all([
-    db.book.findFirst({
+    db.book.findUnique({
       where: { id: id },
       include: {
         liked_by: true,

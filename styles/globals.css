@@ -44,7 +44,7 @@
     @apply pb-[var(--nav-height)] md:pb-0;
   }
 
-  /* border-primary dark:border-secondary-light */
+  /* border-secondary dark:border-secondary-light */
   /* text-secondary dark:text-secondary-light */
   /* bg-gradient-dark bg-clip-text font-semibold text-transparent dark:bg-gradient-light */
   /* fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)] */

@@ -51,7 +51,7 @@ export const SubpageNavbarButton: FC<SubpageNavbarButtonProps> = ({
       href={pageUrl === "community" ? "/explore/community" : "/explore"}
       className={clsx(
         "flex h-full w-32 items-center justify-center gap-2 xs:w-36",
-        isActive() && "border-b border-primary dark:border-secondary-light"
+        isActive() && "border-b border-secondary dark:border-secondary-light"
       )}
     >
       {pageUrl === "community" ? (

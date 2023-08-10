@@ -17,7 +17,7 @@ export default async function CheckUsernamePage() {
 
   const userData =
     session?.user &&
-    (await db.profile.findFirst({
+    (await db.profile.findUnique({
       where: { id: session.user.id },
       select: { full_name: true, avatar_url: true, created_at: true },
     }));

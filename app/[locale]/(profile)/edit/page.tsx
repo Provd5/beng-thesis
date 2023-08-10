@@ -19,7 +19,7 @@ export default async function EditPage() {
 
   const userData =
     session?.user &&
-    (await db.profile.findFirst({
+    (await db.profile.findUnique({
       where: { id: session.user.id },
     }));
 

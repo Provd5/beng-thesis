@@ -30,7 +30,7 @@ export default async function BookReviewsPage({
   } = await supabase.auth.getSession();
 
   const [book, bookReviews, myReactions] = await Promise.all([
-    db.book.findFirst({
+    db.book.findUnique({
       where: { id: id },
       select: {
         authors: true,
@@ -61,7 +61,7 @@ export default async function BookReviewsPage({
       },
     }),
     session?.user &&
-      (await db.profile.findFirst({
+      (await db.profile.findUnique({
         where: { id: session.user.id },
         select: {
           review_reaction: { select: { review_id: true, reaction: true } },

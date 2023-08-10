@@ -17,7 +17,7 @@ export const Navbar: FC = async () => {
 
   const userData =
     session?.user &&
-    (await db.profile.findFirst({
+    (await db.profile.findUnique({
       where: { id: session.user.id },
       select: { full_name: true },
     }));

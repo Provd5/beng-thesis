@@ -37,7 +37,9 @@
   "Other": {
     "logout": "Logout",
     "loading": "Loading",
-    "customise": "Customise"
+    "customise": "Customise",
+    "collapse": "collapse",
+    "expand": "expand"
   },
   "Nav": {
     "Settings": {
@@ -58,6 +60,14 @@
     }
   },
   "Profile": {
+    "Page": {
+      "followers:": "Followers:",
+      "following:": "Following:",
+      "reviews:": "Reviews:",
+      "profile description:": "Profile descrtiption:",
+      "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}",
+      "this profile is private": "This profile has been set as private"
+    },
     "Auth": {
       "logIn": "Log in",
       "signUp": "Sign up",
@@ -79,13 +89,6 @@
       "change/create your username:": "{view, select, change {Change} create {Create} other {Change/Create}} username:",
       "enter username": "Enter username...",
       "submit": "Submit"
-    },
-    "Page": {
-      "followers:": "Followers:",
-      "following:": "Following:",
-      "reviews:": "Reviews:",
-      "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}",
-      "this profile is private": "This profile has been set as private"
     },
     "CategoryContentCard": {
       "this shelf is currently empty": "This shelf is currently empty",
@@ -115,9 +118,7 @@
       "release date:": "Release date:",
       "genre:": "Genre:",
       "averge score:": "Averge score:",
-      "description:": "Description:",
-      "show more": "show more",
-      "show less": "show less"
+      "description:": "Description:"
     },
     "ManageLikes": {
       "likes": "Likes",
@@ -157,15 +158,20 @@
       "posted:": "Posted:",
       "edited:": "Edited:",
       "rate:": "Rate:",
-      "likes it": "likes it",
-      "collapse": "collapse",
-      "expand": "expand"
+      "likes it": "likes it"
     }
   },
   "Explore": {
     "Page": {
       "books": "Books",
       "community": "Community"
+    },
+    "ProfileCard": {
+      "owned books:": "Owned books:",
+      "followers:": "Followers:",
+      "profile description:": "Profile description:",
+      "follow": "follow",
+      "unfollow": "unfollow"
     }
   }
 }
