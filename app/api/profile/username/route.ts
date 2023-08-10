@@ -24,7 +24,7 @@ export async function PATCH(req: Request) {
     const { username } = UsernameValidator.parse(body);
 
     // check if username is taken
-    const isUsernameExists = await db.profile.findFirst({
+    const isUsernameExists = await db.profile.findUnique({
       where: {
         full_name: username,
       },

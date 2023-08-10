@@ -20,7 +20,7 @@ export default async function AuthLayout({
   } = await supabase.auth.getSession();
 
   if (session?.user) {
-    const userData = await db.profile.findFirst({
+    const userData = await db.profile.findUnique({
       where: { id: session.user.id },
       select: { full_name: true },
     });

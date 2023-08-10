@@ -41,9 +41,12 @@ export const CreateUsername: FC<CreateUsernameProps> = ({ fullName }) => {
       }
 
       UsernameValidator.parse({ username: username.value });
-      const { data }: { data: string } = await axios.patch(`/api/username/`, {
-        username: username.value,
-      });
+      const { data }: { data: string } = await axios.patch(
+        `/api/profile/username/`,
+        {
+          username: username.value,
+        }
+      );
 
       // on success
       if (data === username.value) {

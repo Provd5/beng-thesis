@@ -14,7 +14,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const sharedClass =
   "flex items-center justify-center font-semibold whitespace-nowrap h-fit";
 
-export const Button: FC<ButtonProps & { size?: "default" | "sm" }> = ({
+export const Button: FC<ButtonProps & { size?: "default" | "sm" | "xs" }> = ({
   children,
   size = "default",
   loading,
@@ -25,6 +25,13 @@ export const Button: FC<ButtonProps & { size?: "default" | "sm" }> = ({
   const sizeClass = {
     default: "rounded-xl px-8 py-3.5 text-base",
     sm: "rounded-lg px-6 py-3 text-sm",
+    xs: "rounded-sm px-3 py-1.5 text-sm",
+  };
+
+  const LoadingSizeClass = {
+    default: "w-[1.125rem] h-[1.125rem]",
+    sm: "w-4 h-4",
+    xs: "w-4 h-4",
   };
 
   return (
@@ -40,7 +47,7 @@ export const Button: FC<ButtonProps & { size?: "default" | "sm" }> = ({
       )}
       {...restProps}
     >
-      {loading && <Loader className="text-md" />}
+      {loading && <Loader className={LoadingSizeClass[size]} />}
       {children}
     </button>
   );
@@ -56,6 +63,11 @@ export const ButtonWhite: FC<ButtonProps & { size?: "default" | "sm" }> = ({
   const sizeClass = {
     default: "rounded-xl px-8 py-3.5 text-base",
     sm: "rounded-lg px-6 py-3 text-sm",
+  };
+
+  const LoadingSizeClass = {
+    default: "w-[1.125rem] h-[1.125rem]",
+    sm: "w-4 h-4",
   };
 
   return (
@@ -75,7 +87,12 @@ export const ButtonWhite: FC<ButtonProps & { size?: "default" | "sm" }> = ({
         )}
       >
         {loading && (
-          <Loader className="stroke-[var(--svg-gradient-dark)] text-md" />
+          <Loader
+            className={clsx(
+              "stroke-[var(--svg-gradient-dark)]",
+              LoadingSizeClass[size]
+            )}
+          />
         )}
         {children}
       </div>

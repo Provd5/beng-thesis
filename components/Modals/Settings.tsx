@@ -28,7 +28,7 @@ export const Settings: FC<SettingsProps> = ({ setLangCookie, currentLang }) => {
           </div>
         }
       >
-        <div className="flex grow flex-col items-center gap-3">
+        <div className="flex grow flex-col items-center gap-3 whitespace-nowrap">
           <p className="text-xs">{t("app style")}</p>
           <ThemeSwitcher />
           <p className="text-xs">{t("app language")}</p>

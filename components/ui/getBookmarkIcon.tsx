@@ -47,7 +47,7 @@ export const getBookmarkIcon = (
         <BookmarksWrapper
           size={size}
           Icon={BsFillBookmarkFill}
-          color="fill-primary"
+          color="fill-primary-light"
         />
       );
     case "OTHER":

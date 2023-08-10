@@ -21,6 +21,7 @@ interface BookDetailsProps {
 
 export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
   const t = useTranslations("Book.Details");
+  const to = useTranslations("Other");
 
   const [renderButton, setRenderButton] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -29,7 +30,7 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
   useEffect(() => {
     if (
       descriptionParagraphRef.current &&
-      descriptionParagraphRef.current.clientHeight >= 56
+      descriptionParagraphRef.current.clientHeight >= 58
     ) {
       setRenderButton(true);
     }
@@ -53,7 +54,7 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
             <h3 className="font-semibold">{t(variant)}</h3>
             <p
               ref={descriptionParagraphRef}
-              className={isExpanded ? "" : "line-clamp-4 max-h-[56px]"}
+              className={isExpanded ? "" : "line-clamp-4 max-h-[58px]"}
             >
               {text}
             </p>
@@ -65,7 +66,7 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
               active={isExpanded}
               onClick={() => setIsExpanded(!isExpanded)}
             >
-              {isExpanded ? t("show less") : t("show more")}
+              {isExpanded ? to("collapse") : to("expand")}
             </ButtonLink>
           )}
         </div>

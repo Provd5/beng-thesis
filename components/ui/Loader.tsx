@@ -8,7 +8,5 @@ interface LoaderProps {
 }
 
 export const Loader: FC<LoaderProps> = ({ className }) => {
-  return (
-    <TbLoader3 className={clsx(className, "h-full w-full animate-spin")} />
-  );
+  return <TbLoader3 className={clsx(className, "animate-spin")} />;
 };

@@ -24,7 +24,7 @@ export default async function ProfileLayout({
     redirect(`/login`);
   }
 
-  const userFullname = await db.profile.findFirst({
+  const userFullname = await db.profile.findUnique({
     where: { id: session.user.id },
     select: { full_name: true },
   });

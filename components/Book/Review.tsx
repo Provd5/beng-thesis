@@ -55,6 +55,7 @@ export const Review: FC<ReviewProps> = ({
   isMyReview,
 }) => {
   const t = useTranslations("Book.Review");
+  const to = useTranslations("Other");
   const te = useTranslations("Errors");
 
   const filterReaction = (reaction: reactionType) => {
@@ -76,7 +77,7 @@ export const Review: FC<ReviewProps> = ({
   useEffect(() => {
     if (
       reviewParagraphRef.current &&
-      reviewParagraphRef.current.clientHeight >= 152
+      reviewParagraphRef.current.clientHeight >= 154
     ) {
       setRenderButton(true);
     }
@@ -220,7 +221,7 @@ export const Review: FC<ReviewProps> = ({
             ref={reviewParagraphRef}
             className={clsx(
               "pl-1 pr-1 text-sm sm:pr-3",
-              !isExpanded && "line-clamp-[10] max-h-[152px]"
+              !isExpanded && "line-clamp-[10] max-h-[154px]"
             )}
           >
             {text}
@@ -235,7 +236,7 @@ export const Review: FC<ReviewProps> = ({
               }}
               active={isExpanded}
             >
-              {isExpanded ? t("collapse") : t("expand")}
+              {isExpanded ? to("collapse") : to("expand")}
             </ButtonLink>
           ) : (
             <div />

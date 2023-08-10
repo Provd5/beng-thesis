@@ -112,7 +112,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
           defaultValue={text || ""}
         />
         <div className="flex flex-wrap justify-between gap-2 px-2">
-          <div className="relative flex h-fit items-center gap-1">
+          <div className="flex h-fit items-center gap-1">
             <ButtonLink
               active={isModalOpen}
               className="relative"
@@ -121,33 +121,35 @@ export const CreateReview: FC<CreateReviewProps> = ({
             >
               {t("your score")}
             </ButtonLink>
-            {isModalOpen && (
-              <ModalWrapper
-                size="xs"
-                closeModalHandler={() => setIsModalOpen(false)}
-              >
-                <div className="flex flex-col gap-0.5 py-1.5 text-base">
-                  {scoreValues.map((score) => (
-                    <button
-                      key={score}
-                      className={clsx(
-                        "flex h-6 w-7 cursor-pointer items-center justify-center",
-                        score === yourScore &&
-                          "font-bold text-secondary dark:text-secondary-light"
-                      )}
-                      onClick={() => (
-                        setYourScore(score), setIsModalOpen(false)
-                      )}
-                    >
-                      {score}
-                    </button>
-                  ))}
-                </div>
-              </ModalWrapper>
-            )}
-            <div className="min-w-[36px] text-right text-lg font-bold">{`${
-              yourScore ? yourScore : "–"
-            }/5`}</div>
+            <div className="relative">
+              <div className="min-w-[36px] text-right text-lg font-bold">{`${
+                yourScore ? yourScore : "–"
+              }/5`}</div>
+              {isModalOpen && (
+                <ModalWrapper
+                  size="xs"
+                  closeModalHandler={() => setIsModalOpen(false)}
+                >
+                  <div className="flex flex-col gap-0.5 py-1.5 text-base">
+                    {scoreValues.map((score) => (
+                      <button
+                        key={score}
+                        className={clsx(
+                          "flex h-6 w-7 cursor-pointer items-center justify-center",
+                          score === yourScore &&
+                            "font-bold text-secondary dark:text-secondary-light"
+                        )}
+                        onClick={() => (
+                          setYourScore(score), setIsModalOpen(false)
+                        )}
+                      >
+                        {score}
+                      </button>
+                    ))}
+                  </div>
+                </ModalWrapper>
+              )}
+            </div>
           </div>
 
           <Button
