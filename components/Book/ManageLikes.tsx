@@ -36,8 +36,8 @@ export const ManageLikes: FC<ManageLikesProps> = ({
   const handleLike = async () => {
     setIsLoading(true);
     const loadingToast = toast.loading(te(GlobalErrors.PENDING));
-    const wasLiked = liked;
-    const prevQuantity = quantity;
+    const wasLiked = isLiked;
+    const prevQuantity = likesQuantity;
     setLikesQuantity((prev) => (wasLiked ? prev - 1 : prev + 1));
     setIsLiked(!wasLiked);
 

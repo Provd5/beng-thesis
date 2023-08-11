@@ -114,8 +114,8 @@ export const Review: FC<ReviewProps> = ({
   const handleReaction = async (reaction: reactionType) => {
     setIsLoading(true);
     const loadingToast = toast.loading(te(GlobalErrors.PENDING));
-    const prevUserReaction = userReaction;
-    const prevReactions = reactions;
+    const prevReactions = reactionsState;
+    const prevUserReaction = userReactionState;
 
     // set active reaction
     setUserReactionState(userReactionState === reaction ? undefined : reaction);
@@ -142,14 +142,14 @@ export const Review: FC<ReviewProps> = ({
 
       if (data !== GlobalErrors.SUCCESS) {
         toast.error(te(data));
-        setUserReactionState(prevUserReaction);
         setReactionsState(prevReactions);
+        setUserReactionState(prevUserReaction);
         return;
       }
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
-      setUserReactionState(prevUserReaction);
       setReactionsState(prevReactions);
+      setUserReactionState(prevUserReaction);
     } finally {
       toast.dismiss(loadingToast);
       setTimeout(() => {

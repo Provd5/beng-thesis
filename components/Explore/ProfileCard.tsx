@@ -50,8 +50,8 @@ export const ProfileCard: FC<ProfileCardProps> = ({
 
   const handleFollow = async () => {
     setIsLoading(true);
-    const wasFollowed = isFollowed;
-    const prevFollowedByQuantity = followedByQuantity;
+    const wasFollowed = isFollowedState;
+    const prevFollowedByQuantity = followedByQuantityState;
     setFollowedByQuantityState((prev) => (wasFollowed ? prev - 1 : prev + 1));
     setIsFollowedState(!isFollowedState);
 

@@ -58,8 +58,8 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
     setIsLoading(true);
     const loadingToast = toast.loading(te(GlobalErrors.PENDING));
 
-    const prevBookshelf = bookshelf;
-    const prevDate = updatedAt && dateFormater(updatedAt);
+    const prevBookshelf = currentBookshelf;
+    const prevDate = updatedAtState;
 
     setCurrentBookshelf(bookshelf);
     setUpdatedAtState(dateFormater(new Date()));
