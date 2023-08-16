@@ -88,7 +88,7 @@ export default async function ProfilePage({
                 href={`/${variantUrl}`}
                 quantity={variantQuantity}
               />
-              <DragContainer itemsQuantity={variantQuantity}>
+              <DragContainer>
                 {variantQuantity > 0 ? (
                   <>
                     <CategoryContentCard

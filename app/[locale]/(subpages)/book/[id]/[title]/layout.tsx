@@ -14,10 +14,10 @@ import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
 
 export default async function BookLayout({
   children,
-  params: { id, title },
+  params: { id },
 }: {
   children: React.ReactNode;
-  params: { id: string; title: string };
+  params: { id: string };
 }) {
   try {
     z.string().uuid().parse(id);

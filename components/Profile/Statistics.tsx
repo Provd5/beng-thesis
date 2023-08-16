@@ -1,8 +1,6 @@
 import type { FC } from "react";
 
-interface StatisticsProps {}
-
-export const Statistics: FC<StatisticsProps> = ({}) => {
+export const Statistics: FC = () => {
   return (
     <div className="flex gap-2">
       <Box
