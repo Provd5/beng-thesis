@@ -7,13 +7,9 @@ import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 
 interface DragContainerProps {
   children: React.ReactNode;
-  itemsQuantity: number;
 }
 
-export const DragContainer: FC<DragContainerProps> = ({
-  children,
-  itemsQuantity,
-}) => {
+export const DragContainer: FC<DragContainerProps> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [renderLeftButton, setRenderLeftButton] = useState(false);

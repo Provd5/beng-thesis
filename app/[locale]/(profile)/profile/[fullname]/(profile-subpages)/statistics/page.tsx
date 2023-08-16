@@ -1,20 +1,17 @@
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-
 import { BackCategoryLink } from "~/components/ui/BackCategoryLink";
 
-export default async function StatisticsPage({
+export default function StatisticsPage({
   params: { fullname },
 }: {
   params: { fullname: string };
 }) {
-  const supabase = createServerComponentClient({
-    cookies,
-  });
+  // const supabase = createServerComponentClient({
+  //   cookies,
+  // });
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+  // const {
+  //   data: { session },
+  // } = await supabase.auth.getSession();
 
   // const [publicUserData, myFullname] = await Promise.all([
   //   db.profile.findUnique({
