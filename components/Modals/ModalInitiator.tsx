@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, useState } from "react";
+import { type FC, useRef, useState } from "react";
 
 import { type modalSizes } from "~/types/sizes";
 
@@ -20,16 +20,20 @@ export const ModalInitiator: FC<ModalInitiatorProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const openModalButtonRef = useRef<HTMLButtonElement>(null);
+
   return (
     <div className="relative flex">
       <button
-        onKeyDown={(e) => e.key === "Escape" && setIsModalOpen(false)}
+        ref={openModalButtonRef}
+        aria-label="open-modal-button"
         onClick={() => setIsModalOpen(!isModalOpen)}
       >
         {initiatorStyle}
       </button>
       {isModalOpen && (
         <ModalWrapper
+          openModalButtonRef={openModalButtonRef}
           size={size}
           closeModalHandler={() => setIsModalOpen(false)}
         >

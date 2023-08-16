@@ -9,14 +9,9 @@ import { MdNavigateNext } from "react-icons/md";
 interface FollowLinksProps {
   followers: number;
   following: number;
-  reviews: number;
 }
 
-export const FollowLinks: FC<FollowLinksProps> = ({
-  followers,
-  following,
-  reviews,
-}) => {
+export const FollowLinks: FC<FollowLinksProps> = ({ followers, following }) => {
   const t = useTranslations("Profile.Page");
 
   return (
@@ -27,9 +22,6 @@ export const FollowLinks: FC<FollowLinksProps> = ({
         </Link>
         <Link href="/#">
           <InnerLink text={t("following:")} quantity={following} />
-        </Link>
-        <Link href="/#">
-          <InnerLink text={t("reviews:")} quantity={reviews} />
         </Link>
       </div>
     </>

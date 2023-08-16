@@ -11,7 +11,6 @@ interface ManageOwnedAsModalContentProps {
   ownedAs: ownedAsType;
   addedState: string | null;
   onClickFunc: () => void;
-  isLoading: boolean;
 }
 
 export const ManageOwnedAsModalContent: FC<ManageOwnedAsModalContentProps> = ({
@@ -19,11 +18,9 @@ export const ManageOwnedAsModalContent: FC<ManageOwnedAsModalContentProps> = ({
   ownedAs,
   addedState,
   onClickFunc,
-  isLoading,
 }) => {
   return (
     <button
-      disabled={isLoading}
       onClick={onClickFunc}
       className="flex flex-auto justify-between gap-2 py-1"
     >

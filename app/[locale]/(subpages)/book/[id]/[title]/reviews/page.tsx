@@ -3,12 +3,10 @@ import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { z } from "zod";
 
-import { BookCover } from "~/components/Book/BookCover";
-import { BookDetails } from "~/components/Book/BookDetails";
 import { Review } from "~/components/Book/Review";
+import { ReviewsNotFound } from "~/components/Book/ReviewsNotFound";
 import { BackCategoryLink } from "~/components/ui/BackCategoryLink";
 import { db } from "~/lib/db";
-import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
 
 export default async function BookReviewsPage({
   params: { id, title },
@@ -29,17 +27,7 @@ export default async function BookReviewsPage({
     data: { session },
   } = await supabase.auth.getSession();
 
-  const [book, bookReviews, myReactions] = await Promise.all([
-    db.book.findUnique({
-      where: { id: id },
-      select: {
-        authors: true,
-        title: true,
-        subtitle: true,
-        thumbnail_url: true,
-        liked_by: { select: { user_id: true } },
-      },
-    }),
+  const [bookReviews, myReactions] = await Promise.all([
     db.review.findMany({
       where: { book_id: id },
       include: {
@@ -54,6 +42,7 @@ export default async function BookReviewsPage({
               select: {
                 bookshelf: { where: { bookshelf: { equals: "ALREADY_READ" } } },
                 review: true,
+                liked_book: { where: { book_id: id } },
               },
             },
           },
@@ -69,12 +58,6 @@ export default async function BookReviewsPage({
       })),
   ]);
 
-  if (!book) notFound();
-
-  const isBookLiked = (userId: string | undefined) => {
-    return book.liked_by.some((profile) => profile.user_id === userId);
-  };
-
   const myReaction = (reviewId: string) => {
     return myReactions?.review_reaction.find(
       (reaction) => reaction.review_id === reviewId
@@ -82,43 +65,26 @@ export default async function BookReviewsPage({
   };
 
   return (
-    <div className="container pb-5 pt-10 text-sm">
-      <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
-        <BackCategoryLink href={`/book/${id}/${title}`} variant="REVIEWS" />
-        <div className="flex w-full gap-1 px-3 py-6 xs:gap-3">
-          <BookCover coverUrl={book.thumbnail_url} />
-
-          <div className="mt-0.5 flex flex-col gap-3">
-            <div className="flex flex-col gap-1">
-              <h1 className="text-base font-semibold">{book.title}</h1>
-              {book.subtitle && <h2>{book.subtitle}</h2>}
-            </div>
-
-            <p className="text-black-light dark:text-white-dark">
-              {book.authors.join(", ")}
-            </p>
-
-            <BookDetails
-              variant="averge score:"
-              text={`${arithmeticMeanOfScores(bookReviews)}/5`}
-            />
-          </div>
-        </div>
-        {bookReviews.map((review) => (
+    <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
+      <BackCategoryLink href={`/book/${id}/${title}`} variant="REVIEWS" />
+      {bookReviews.filter((review) => review.text !== null).length > 0 ? (
+        bookReviews.map((review) => (
           <Review
             key={review.id}
             id={review.id}
             profileData={review.profile}
             reviewCreatedAt={review.created_at}
             reviewUpdatedAt={review.updated_at}
-            isLiked={isBookLiked(review.author_id)}
+            isLiked={!!review.profile._count.liked_book}
             score={review.score}
             text={review.text}
             reactions={review.review_reaction}
             userReaction={myReaction(review.id)}
           />
-        ))}
-      </div>
+        ))
+      ) : (
+        <ReviewsNotFound backToHref={`/book/${id}/${title}`} />
+      )}
     </div>
   );
 }

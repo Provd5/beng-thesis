@@ -1,4 +1,5 @@
-import type { ButtonHTMLAttributes, FC } from "react";
+import type { ButtonHTMLAttributes } from "react";
+import React, { forwardRef } from "react";
 import { clsx } from "clsx";
 
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -14,64 +15,70 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const sharedClass =
   "flex items-center justify-center font-semibold whitespace-nowrap h-fit";
 
-export const Button: FC<ButtonProps & { size?: "default" | "sm" | "xs" }> = ({
-  children,
-  size = "default",
-  loading,
-  defaultColor = true,
-  className,
-  ...restProps
-}) => {
+const Button = forwardRef<
+  HTMLButtonElement,
+  ButtonProps & { size?: "default" | "sm" | "xs" }
+>(
+  (
+    {
+      children,
+      size = "default",
+      loading,
+      defaultColor = true,
+      className,
+      ...restProps
+    },
+    ref
+  ) => {
+    const sizeClass = {
+      default: "rounded-xl px-8 py-3.5 text-base",
+      sm: "rounded-lg px-6 py-3 text-sm",
+      xs: "rounded-sm px-4 py-2 text-sm",
+    };
+
+    const LoadingSizeClass = {
+      default: "w-[1.125rem] h-[1.125rem]",
+      sm: "w-4 h-4",
+      xs: "w-4 h-4",
+    };
+
+    return (
+      <button
+        ref={ref}
+        disabled={loading}
+        className={clsx(
+          sharedClass,
+          "gap-1 hover:scale-105",
+          defaultColor &&
+            "bg-gradient-dark text-white-light hover:bg-gradient-light dark:bg-gradient-light dark:hover:bg-gradient-dark",
+          sizeClass[size],
+          className
+        )}
+        {...restProps}
+      >
+        {loading && <Loader className={LoadingSizeClass[size]} />}
+        {children}
+      </button>
+    );
+  }
+);
+const ButtonWhite = forwardRef<
+  HTMLButtonElement,
+  ButtonProps & { size?: "default" | "sm" }
+>(({ children, size = "default", loading, className, ...restProps }, ref) => {
   const sizeClass = {
     default: "rounded-xl px-8 py-3.5 text-base",
     sm: "rounded-lg px-6 py-3 text-sm",
-    xs: "rounded-sm px-3 py-1.5 text-sm",
   };
 
   const LoadingSizeClass = {
     default: "w-[1.125rem] h-[1.125rem]",
     sm: "w-4 h-4",
-    xs: "w-4 h-4",
   };
 
   return (
     <button
-      disabled={loading}
-      className={clsx(
-        sharedClass,
-        "gap-1 hover:scale-105",
-        defaultColor &&
-          "bg-gradient-dark text-white-light hover:bg-gradient-light dark:bg-gradient-light dark:hover:bg-gradient-dark",
-        sizeClass[size],
-        className
-      )}
-      {...restProps}
-    >
-      {loading && <Loader className={LoadingSizeClass[size]} />}
-      {children}
-    </button>
-  );
-};
-
-export const ButtonWhite: FC<ButtonProps & { size?: "default" | "sm" }> = ({
-  children,
-  size = "default",
-  loading,
-  className,
-  ...restProps
-}) => {
-  const sizeClass = {
-    default: "rounded-xl px-8 py-3.5 text-base",
-    sm: "rounded-lg px-6 py-3 text-sm",
-  };
-
-  const LoadingSizeClass = {
-    default: "w-[1.125rem] h-[1.125rem]",
-    sm: "w-4 h-4",
-  };
-
-  return (
-    <button
+      ref={ref}
       disabled={loading}
       className={clsx(
         "bg-white-light hover:scale-105 hover:bg-white-light/80",
@@ -98,45 +105,57 @@ export const ButtonWhite: FC<ButtonProps & { size?: "default" | "sm" }> = ({
       </div>
     </button>
   );
-};
+});
 
-export const ButtonLink: FC<
+const ButtonLink = forwardRef<
+  HTMLButtonElement,
   ButtonProps & { active?: boolean; size?: "default" | "sm" | "lg" }
-> = ({
-  children,
-  size = "default",
-  defaultColor = true,
-  loading,
-  className,
-  active,
-  ...restProps
-}) => {
-  const sizeClass = {
-    default: "text-base",
-    sm: "text-sm",
-    lg: "text-md",
-  };
+>(
+  (
+    {
+      children,
+      size = "default",
+      defaultColor = true,
+      loading,
+      className,
+      active,
+      ...restProps
+    },
+    ref
+  ) => {
+    const sizeClass = {
+      default: "text-base",
+      sm: "text-sm",
+      lg: "text-md",
+    };
 
-  return (
-    <button
-      disabled={loading}
-      className={clsx(
-        sharedClass,
-        defaultColor && "text-secondary dark:text-secondary-light",
-        sizeClass[size],
-        className
-      )}
-      {...restProps}
-    >
-      {children}
-      <span className={clsx("transition-transform", active && "rotate-180")}>
-        <MdKeyboardArrowDown
-          className={clsx(
-            "flex-none text-xl",
-            defaultColor && "fill-primary dark:fill-secondary-light"
-          )}
-        />
-      </span>
-    </button>
-  );
-};
+    return (
+      <button
+        ref={ref}
+        disabled={loading}
+        className={clsx(
+          sharedClass,
+          defaultColor && "text-secondary dark:text-secondary-light",
+          sizeClass[size],
+          className
+        )}
+        {...restProps}
+      >
+        {children}
+        <span className={clsx("transition-transform", active && "rotate-180")}>
+          <MdKeyboardArrowDown
+            className={clsx(
+              "flex-none text-xl",
+              defaultColor && "fill-primary dark:fill-secondary-light"
+            )}
+          />
+        </span>
+      </button>
+    );
+  }
+);
+
+Button.displayName = "Button";
+ButtonWhite.displayName = "ButtonWhite";
+ButtonLink.displayName = "ButtonLink";
+export { Button, ButtonWhite, ButtonLink };

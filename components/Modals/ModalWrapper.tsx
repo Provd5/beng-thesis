@@ -2,6 +2,7 @@ import {
   type DetailedHTMLProps,
   type FC,
   type HTMLAttributes,
+  type RefObject,
   useEffect,
   useRef,
   useState,
@@ -13,12 +14,14 @@ import { type modalSizes } from "~/types/sizes";
 interface ModalWrapperProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children: React.ReactNode;
+  openModalButtonRef: RefObject<HTMLButtonElement>;
   closeModalHandler: () => void;
   size?: modalSizes;
 }
 
 export const ModalWrapper: FC<ModalWrapperProps> = ({
   children,
+  openModalButtonRef,
   closeModalHandler,
   size = "default",
 }) => {
@@ -36,6 +39,7 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
     "right-0" | "left-0" | null
   >(null);
 
+  // Changing the position of the modal when it's too close to the edge
   useEffect(() => {
     const modal = containerRef?.current;
     if (!modal) return;
@@ -64,16 +68,44 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
     }
   }, []);
 
+  // Close modal when click outside
+  useEffect(() => {
+    const listener = (event: Event) => {
+      if (event instanceof KeyboardEvent && event.key === "Escape") {
+        closeModalHandler();
+      }
+
+      const el = containerRef?.current;
+      const buttonEl = openModalButtonRef?.current;
+
+      if (
+        !el ||
+        el.contains((event?.target as Node) || null) ||
+        buttonEl?.contains((event?.target as Node) || null)
+      ) {
+        return;
+      }
+
+      closeModalHandler(); // Call handler if click is outside modal
+    };
+
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+    document.addEventListener("keydown", listener);
+
+    return () => {
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
+      document.removeEventListener("keydown", listener);
+    };
+  }, [closeModalHandler, openModalButtonRef]);
+
   return (
     <>
       <div
-        className="fixed inset-0 z-10 cursor-pointer"
-        onClick={closeModalHandler}
-      />
-      <div
         ref={containerRef}
         className={clsx(
-          "absolute z-20 mt-1 flex cursor-default bg-white-light text-black-light drop-shadow-modal transition-opacity dark:bg-black-light dark:text-white",
+          "absolute z-20 my-1 flex cursor-default bg-white-light text-black-light drop-shadow-modal transition-opacity dark:bg-black-light dark:text-white",
           sizeClass[size],
           topPosition,
           rightPosiotion,

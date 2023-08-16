@@ -33,7 +33,7 @@ interface ReviewProps {
   reviewCreatedAt: Date;
   reviewUpdatedAt: Date | null;
   score: number;
-  text: string;
+  text: string | null;
   isLiked: boolean;
   reactions: {
     reaction: reactionType;
@@ -54,7 +54,7 @@ export const Review: FC<ReviewProps> = ({
   userReaction,
   isMyReview,
 }) => {
-  const t = useTranslations("Book.Review");
+  const t = useTranslations("Reviews.Review");
   const to = useTranslations("Other");
   const te = useTranslations("Errors");
 
@@ -65,7 +65,6 @@ export const Review: FC<ReviewProps> = ({
     return filterArrayByReaction;
   };
 
-  const [isLoading, setIsLoading] = useState(false);
   const [reactionsState, setReactionsState] = useState(reactions);
   const [userReactionState, setUserReactionState] = useState(userReaction);
 
@@ -87,7 +86,6 @@ export const Review: FC<ReviewProps> = ({
   const renderReaction = (reaction: reactionType, Icon: IconType) => {
     return (
       <button
-        disabled={isLoading}
         className="flex items-center gap-1 py-0.5"
         onClick={() => handleReaction(reaction)}
       >
@@ -112,8 +110,6 @@ export const Review: FC<ReviewProps> = ({
   };
 
   const handleReaction = async (reaction: reactionType) => {
-    setIsLoading(true);
-    const loadingToast = toast.loading(te(GlobalErrors.PENDING));
     const prevReactions = reactionsState;
     const prevUserReaction = userReactionState;
 
@@ -150,11 +146,6 @@ export const Review: FC<ReviewProps> = ({
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       setReactionsState(prevReactions);
       setUserReactionState(prevUserReaction);
-    } finally {
-      toast.dismiss(loadingToast);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
     }
   };
 
@@ -241,13 +232,17 @@ export const Review: FC<ReviewProps> = ({
           ) : (
             <div />
           )}
-          <div className="flex flex-col items-end gap-0.5">
-            <p className="text-right text-xs">{t("was this review useful?")}</p>
-            <div className="flex gap-5 px-1 text-sm text-black-light dark:text-white-dark">
-              {renderReaction("OK", FaFaceLaughBeam)}
-              {renderReaction("MEH", FaFaceMeh)}
+          {text && (
+            <div className="flex flex-col items-end gap-0.5">
+              <p className="text-right text-xs">
+                {t("was this review useful?")}
+              </p>
+              <div className="flex gap-5 px-1 text-sm text-black-light dark:text-white-dark">
+                {renderReaction("OK", FaFaceLaughBeam)}
+                {renderReaction("MEH", FaFaceMeh)}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

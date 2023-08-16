@@ -21,25 +21,27 @@ export const DragContainer: FC<DragContainerProps> = ({
 
   useEffect(() => {
     const container = containerRef.current;
-    const handleScroll = () => {
-      if (container) {
-        const { scrollLeft, offsetWidth, scrollWidth } = container;
-        setRenderLeftButton(scrollLeft > 0);
-        setRenderRightButton(scrollLeft + offsetWidth < scrollWidth);
-      }
-    };
+    if (!container) return;
 
-    container?.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      const { scrollLeft, offsetWidth, scrollWidth } = container;
+      setRenderLeftButton(scrollLeft > 0);
+      setRenderRightButton(scrollLeft + offsetWidth < scrollWidth);
+    };
     handleScroll();
 
+    container.addEventListener("scroll", handleScroll);
     return () => {
-      container?.removeEventListener("scroll", handleScroll);
+      container.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   const handleClickToScroll = (offset: number) => {
     containerRef.current?.scrollBy({ left: offset, behavior: "smooth" });
   };
+
+  const isScrollable =
+    containerRef.current && containerRef.current?.scrollWidth > 0;
 
   const buttonClass =
     "absolute hidden md:block top-[70px] h-10 w-10 rounded-full bg-gray/90 drop-shadow-icon text-white-light transition-opacity";
@@ -52,7 +54,7 @@ export const DragContainer: FC<DragContainerProps> = ({
       >
         {children}
       </div>
-      {itemsQuantity >= 10 && (
+      {isScrollable && (
         <>
           <button
             tabIndex={renderLeftButton ? 0 : -1}

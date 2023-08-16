@@ -16,21 +16,21 @@ import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface ManageLikesProps {
   bookId: string;
-  liked: boolean;
-  quantity: number;
+  doILikeThisBook: boolean;
+  likesQuantity: number;
 }
 
 export const ManageLikes: FC<ManageLikesProps> = ({
-  liked,
-  quantity,
+  doILikeThisBook,
+  likesQuantity,
   bookId,
 }) => {
   const t = useTranslations("Book.ManageLikes");
   const te = useTranslations("Errors");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isLiked, setIsLiked] = useState(liked);
-  const [likesQuantity, setLikesQuantity] = useState(quantity);
+  const [isLiked, setIsLiked] = useState(doILikeThisBook);
+  const [likesQuantityState, setLikesQuantityState] = useState(likesQuantity);
   const router = useRouter();
 
   const handleLike = async () => {
@@ -38,7 +38,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
     const loadingToast = toast.loading(te(GlobalErrors.PENDING));
     const wasLiked = isLiked;
     const prevQuantity = likesQuantity;
-    setLikesQuantity((prev) => (wasLiked ? prev - 1 : prev + 1));
+    setLikesQuantityState((prev) => (wasLiked ? prev - 1 : prev + 1));
     setIsLiked(!wasLiked);
 
     try {
@@ -51,7 +51,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
       if (data !== GlobalErrors.SUCCESS) {
         toast.error(te(data));
         setIsLiked(wasLiked);
-        setLikesQuantity(prevQuantity);
+        setLikesQuantityState(prevQuantity);
         return;
       }
 
@@ -60,12 +60,10 @@ export const ManageLikes: FC<ManageLikesProps> = ({
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       setIsLiked(wasLiked);
-      setLikesQuantity(prevQuantity);
+      setLikesQuantityState(prevQuantity);
     } finally {
       toast.dismiss(loadingToast);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
+      setIsLoading(false);
     }
   };
 
@@ -84,7 +82,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
             {t("likes")}
           </h3>
         </div>
-        <p>{likesQuantity}</p>
+        <p>{likesQuantityState}</p>
         <p className="text-xs text-black-light dark:text-white-dark">
           {isLiked ? (
             t("liked")

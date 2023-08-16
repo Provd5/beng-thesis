@@ -16,7 +16,6 @@
     "EMAIL_NOT_CONFIRMED": "Email not confirmed",
     "SAME_USERNAME": "Given username is the same as the current",
 
-    "REVIEW_REQUIRED": "Your review cannot be empty",
     "REVIEW_TOO_LONG_5000": "Your review is too long",
     "WRONG_SCORE": "Give an adequate rating first",
 
@@ -37,7 +36,7 @@
   "Other": {
     "logout": "Logout",
     "loading": "Loading",
-    "customise": "Customise",
+    "edit profile": "Edit profile",
     "collapse": "collapse",
     "expand": "expand"
   },
@@ -128,7 +127,12 @@
     "ManageBookshelf": {
       "on a shelf": "On a shelf",
       "add to shelf": "add to shelf",
-      "remove from shelf": "Remove from shelf"
+      "remove from shelf": "Remove from shelf",
+      "read times:": "Read times:",
+      "began reading:": "Began reading:",
+      "on this shelf since:": "On this shelf since:",
+      "back": "back",
+      "ok": "ok"
     },
     "ManageOwnedAs": {
       "owned as": "Owned as",
@@ -139,7 +143,9 @@
     "ManageReviews": {
       "reviews": "Reviews",
       "write yours": "write yours"
-    },
+    }
+  },
+  "Reviews": {
     "CreateReview": {
       "express your opinion": "Express your opinion...",
       "your score": "Your score",
@@ -159,6 +165,10 @@
       "edited:": "Edited:",
       "rate:": "Rate:",
       "likes it": "likes it"
+    },
+    "ReviewsNotFound": {
+      "This book has no written reviews yet": "This book has no written reviews yet",
+      "back": "back"
     }
   },
   "Explore": {

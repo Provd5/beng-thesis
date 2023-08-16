@@ -7,7 +7,7 @@ import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 import { Navbar } from "~/components/Navbar/Navbar";
 import { SvgPainter } from "~/components/ui/SvgIcons/SvgPainter";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
-import { type localeTypes } from "~/i18n";
+import { locales, type localeTypes } from "~/i18n";
 
 import "~/styles/globals.css";
 import Loading from "./loading";
@@ -19,9 +19,9 @@ const quicksandFont = Quicksand({
 });
 
 // eslint-disable-next-line @typescript-eslint/require-await
-// export async function generateStaticParams() {
-//   return locales.map((locale) => getLocaleFrom({ locale }));
-// }
+export async function generateStaticParams() {
+  return locales.map((locale) => locale.toLowerCase());
+}
 
 export async function getMessages(locale: localeTypes) {
   try {

@@ -1,6 +1,12 @@
 "use client";
 
-import { type Dispatch, type FC, type SetStateAction, useState } from "react";
+import {
+  type Dispatch,
+  type FC,
+  type SetStateAction,
+  useRef,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import axios from "axios";
@@ -19,9 +25,9 @@ import { ManageOwnedAsModalContent } from "./ManageOwnedAsModalContent";
 
 interface ManageOwnedAsProps {
   bookId: string;
-  addedEbookAt?: Date | null;
-  addedAudiobookAt?: Date | null;
-  addedBookAt?: Date | null;
+  addedEbookAt: Date | null | undefined;
+  addedAudiobookAt: Date | null | undefined;
+  addedBookAt: Date | null | undefined;
 }
 
 export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
@@ -33,7 +39,6 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
   const t = useTranslations("Book.ManageOwnedAs");
   const te = useTranslations("Errors");
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [addedBookAtState, setAddedBookAtState] = useState(
@@ -46,12 +51,13 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
     addedAudiobookAt ? dateFormater(addedAudiobookAt) : null
   );
 
+  const openModalButtonRef = useRef<HTMLButtonElement>(null);
+
   const handleAddOwnedAs = async (
     ownedAs: ownedAsType,
     addedState: string | null,
     addedSetState: Dispatch<SetStateAction<string | null>>
   ) => {
-    setIsLoading(true);
     const loadingToast = toast.loading(te(GlobalErrors.PENDING));
     const prevState = addedState;
     addedState ? addedSetState(null) : addedSetState(dateFormater(new Date()));
@@ -78,15 +84,14 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
       addedSetState(prevState);
     } finally {
       toast.dismiss(loadingToast);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
     }
   };
 
   return (
     <div className="relative flex flex-col">
       <ButtonLink
+        ref={openModalButtonRef}
+        aria-label="open-modal-button"
         active={isModalOpen}
         className="self-start"
         onClick={() => setIsModalOpen(!isModalOpen)}
@@ -94,7 +99,10 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
         {t("owned as")}
       </ButtonLink>
       {isModalOpen && (
-        <ModalWrapper closeModalHandler={() => setIsModalOpen(false)}>
+        <ModalWrapper
+          closeModalHandler={() => setIsModalOpen(false)}
+          openModalButtonRef={openModalButtonRef}
+        >
           <div className="flex flex-col gap-2">
             <ManageOwnedAsModalContent
               text={t("BOOK")}
@@ -103,7 +111,6 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
               onClickFunc={() =>
                 handleAddOwnedAs("BOOK", addedBookAtState, setAddedBookAtState)
               }
-              isLoading={isLoading}
             />
             <ManageOwnedAsModalContent
               text={t("EBOOK")}
@@ -116,7 +123,6 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
                   setAddedEbookAtState
                 )
               }
-              isLoading={isLoading}
             />
             <ManageOwnedAsModalContent
               text={t("AUDIOBOOK")}
@@ -129,7 +135,6 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
                   setAddedAudiobookAtState
                 )
               }
-              isLoading={isLoading}
             />
           </div>
         </ModalWrapper>

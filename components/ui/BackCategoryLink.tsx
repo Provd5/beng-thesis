@@ -23,10 +23,10 @@ export const BackCategoryLink: FC<BackCategoryLinkProps> = ({
     <div className="flex">
       <Link
         href={href}
-        className="flex grow items-center justify-between gap-1 md:grow-0 md:justify-start"
+        className="flex grow items-center gap-3 md:grow-0 md:justify-start"
       >
         <MdNavigateBefore className="fill-primary text-xl dark:fill-secondary-light" />
-        <div className="text-md font-semibold text-secondary dark:text-secondary-light">
+        <div className="text-lg font-semibold text-secondary dark:text-secondary-light">
           <h1>{t(variant)}</h1>
         </div>
       </Link>

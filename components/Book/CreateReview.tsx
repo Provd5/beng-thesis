@@ -20,9 +20,9 @@ interface CreateReviewProps {
   fullName: string | null | undefined;
   bookId: string;
   isReviewExists: boolean;
-  score?: number;
-  text?: string;
-  pullReviewState: (data: boolean) => void;
+  score: number | undefined;
+  text: string | null | undefined;
+  closeReview: () => void;
 }
 
 export const CreateReview: FC<CreateReviewProps> = ({
@@ -32,9 +32,9 @@ export const CreateReview: FC<CreateReviewProps> = ({
   isReviewExists,
   score,
   text,
-  pullReviewState,
+  closeReview,
 }) => {
-  const t = useTranslations("Book.CreateReview");
+  const t = useTranslations("Reviews.CreateReview");
   const te = useTranslations("Errors");
 
   const scoreValues = [1, 2, 3, 4, 5];
@@ -44,23 +44,28 @@ export const CreateReview: FC<CreateReviewProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const reviewTextarea = useRef<HTMLTextAreaElement>(null);
+  const openModalButtonRef = useRef<HTMLButtonElement>(null);
 
   const router = useRouter();
 
   const handleAddReview = async () => {
     setIsLoading(true);
     const loadingToast = toast.loading(te(GlobalErrors.PENDING));
+    const textareaInput = reviewTextarea.current;
 
     const formData = {
       bookId: bookId,
-      text: reviewTextarea.current?.value,
+      text:
+        textareaInput && textareaInput.value.length > 0
+          ? reviewTextarea.current.value
+          : null,
       score: yourScore,
     };
 
     try {
       CreateReviewValidator.parse({ formData: formData });
       if (formData.score === score && formData.text === text) {
-        pullReviewState(false);
+        closeReview();
         return;
       }
 
@@ -75,7 +80,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
       }
 
       // on success
-      pullReviewState(false);
+      closeReview();
       router.refresh();
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -114,6 +119,8 @@ export const CreateReview: FC<CreateReviewProps> = ({
         <div className="flex flex-wrap justify-between gap-2 px-2">
           <div className="flex h-fit items-center gap-1">
             <ButtonLink
+              ref={openModalButtonRef}
+              aria-label="open-modal-button"
               active={isModalOpen}
               className="relative"
               size="lg"
@@ -129,13 +136,14 @@ export const CreateReview: FC<CreateReviewProps> = ({
                 <ModalWrapper
                   size="xs"
                   closeModalHandler={() => setIsModalOpen(false)}
+                  openModalButtonRef={openModalButtonRef}
                 >
-                  <div className="flex flex-col gap-0.5 py-1.5 text-base">
+                  <div className="flex flex-col gap-1.5 py-1.5 text-md">
                     {scoreValues.map((score) => (
                       <button
                         key={score}
                         className={clsx(
-                          "flex h-6 w-7 cursor-pointer items-center justify-center",
+                          "flex h-8 w-8 cursor-pointer items-center justify-center rounded-full",
                           score === yourScore &&
                             "font-bold text-secondary dark:text-secondary-light"
                         )}
