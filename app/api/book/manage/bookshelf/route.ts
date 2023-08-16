@@ -21,9 +21,32 @@ export async function POST(req: Request) {
     }
 
     const body = (await req.json()) as {
-      formData: { bookId: string; bookshelf: bookshelfType | null };
+      formData: {
+        bookId: string;
+        bookshelf: bookshelfType | null;
+        beganReadingAt: string | null;
+        updatedAt: string | null;
+        readQuantity: number | null;
+      };
     };
     const { formData } = ChangeBookshelfValidator.parse(body);
+
+    const upsertData: {
+      began_reading_at: Date | null;
+      updated_at: Date | null;
+      read_quantity: number | null;
+    } = {
+      began_reading_at: formData.beganReadingAt
+        ? new Date(formData.beganReadingAt)
+        : null,
+      updated_at: formData.updatedAt ? new Date(formData.updatedAt) : null,
+      read_quantity: formData.readQuantity,
+    };
+
+    // Filter out properties with null values
+    const filteredUpsertData = Object.fromEntries(
+      Object.entries(upsertData).filter(([_, value]) => value !== null)
+    );
 
     await db.bookshelf.upsert({
       where: {
@@ -31,11 +54,13 @@ export async function POST(req: Request) {
       },
       update: {
         bookshelf: formData.bookshelf,
+        ...filteredUpsertData,
       },
       create: {
         book_id: formData.bookId,
         user_id: session.user.id,
         bookshelf: formData.bookshelf,
+        ...filteredUpsertData,
       },
     });
 

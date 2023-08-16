@@ -12,13 +12,13 @@ import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface ManageReviewsProps {
   isReviewExists: boolean;
-  quantity: number;
-  createdAt?: Date;
+  reviewsQuantity: number;
+  createdAt: Date | undefined;
 }
 
 export const ManageReviews: FC<ManageReviewsProps> = ({
   isReviewExists,
-  quantity,
+  reviewsQuantity,
   createdAt,
 }) => {
   const t = useTranslations("Book.ManageReviews");
@@ -51,7 +51,7 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
             {t("reviews")}
           </h3>
         </div>
-        <p>{quantity}</p>
+        <p>{reviewsQuantity}</p>
         <p className="text-xs text-black-light dark:text-white-dark">
           {createdAt ? (
             dateFormater(createdAt)

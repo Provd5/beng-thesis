@@ -13,5 +13,8 @@ export const ChangeBookshelfValidator = z.object({
         bookshelfType.TO_READ,
       ])
       .nullable(),
+    beganReadingAt: z.string().nonempty().datetime().nullable(),
+    updatedAt: z.string().nonempty().datetime().nullable(),
+    readQuantity: z.number().min(0).nullable(),
   }),
 });

@@ -16,7 +16,6 @@
     "EMAIL_NOT_CONFIRMED": "Email nie został potwierdzony",
     "SAME_USERNAME": "Podana nazwa użytkownika jest taka sama jak bieżąca",
 
-    "REVIEW_REQUIRED": "Twoja recenzja nie może być pusta",
     "REVIEW_TOO_LONG_5000": "Twoja recenzja jest zbyt długa",
     "WRONG_SCORE": "Najpierw wystaw odpowiednią ocenę",
 
@@ -37,7 +36,7 @@
   "Other": {
     "logout": "Wyloguj",
     "loading": "Ładowanie",
-    "customise": "Personalizuj",
+    "edit profile": "Edytuj profil",
     "collapse": "zwiń",
     "expand": "rozwiń"
   },
@@ -128,7 +127,12 @@
     "ManageBookshelf": {
       "on a shelf": "Na półce",
       "add to shelf": "dodaj na półkę",
-      "remove from shelf": "Usuń z półki"
+      "remove from shelf": "Usuń z półki",
+      "read times:": "Przeczytano razy:",
+      "began reading:": "Rozpoczęto czytanie:",
+      "on this shelf since:": "Na tej półce od:",
+      "back": "wróć",
+      "ok": "ok"
     },
     "ManageOwnedAs": {
       "owned as": "Posiadasz jako",
@@ -139,7 +143,9 @@
     "ManageReviews": {
       "reviews": "Recenzje",
       "write yours": "napisz swoją"
-    },
+    }
+  },
+  "Reviews": {
     "CreateReview": {
       "express your opinion": "Wyraź swoją opinię...",
       "your score": "Twoja ocena",
@@ -159,6 +165,10 @@
       "edited:": "Edytowano:",
       "rate:": "Ocena:",
       "likes it": "lubi to"
+    },
+    "ReviewsNotFound": {
+      "This book has no written reviews yet": "Ta książka nie ma jeszcze napisanych recenzji",
+      "back": "wróć"
     }
   },
   "Explore": {

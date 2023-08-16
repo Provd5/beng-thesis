@@ -14,8 +14,8 @@ interface MyReviewProps {
   avatarUrl: string | null | undefined;
   fullName: string | null | undefined;
   isReviewExists: boolean;
-  score?: number;
-  text?: string;
+  score: number | undefined;
+  text: string | null | undefined;
 }
 
 export const MyReview: FC<MyReviewProps> = ({
@@ -27,13 +27,9 @@ export const MyReview: FC<MyReviewProps> = ({
   score,
   text,
 }) => {
-  const t = useTranslations("Book.MyReview");
+  const t = useTranslations("Reviews.MyReview");
 
   const [showEditReview, setShowEditReview] = useState(!isReviewExists);
-
-  const pullReviewState = (data: boolean) => {
-    setShowEditReview(data);
-  };
 
   return (
     <>
@@ -72,7 +68,7 @@ export const MyReview: FC<MyReviewProps> = ({
           fullName={fullName}
           score={score}
           text={text}
-          pullReviewState={pullReviewState}
+          closeReview={() => setShowEditReview(false)}
         />
       )}
     </>

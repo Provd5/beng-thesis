@@ -24,14 +24,14 @@ export const Settings: FC<SettingsProps> = ({ setLangCookie, currentLang }) => {
       <ModalInitiator
         initiatorStyle={
           <div className="hover:scale-105">
-            <SlOptions className="text-lg" />
+            <SlOptions className="h-6 w-6" />
           </div>
         }
       >
         <div className="flex grow flex-col items-center gap-3 whitespace-nowrap">
-          <p className="text-xs">{t("app style")}</p>
+          <p className="text-sm">{t("app style")}</p>
           <ThemeSwitcher />
-          <p className="text-xs">{t("app language")}</p>
+          <p className="text-sm">{t("app language")}</p>
           <LanguageSwitcher
             currentLang={currentLang}
             setLangCookie={setLangCookie}

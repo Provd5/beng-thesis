@@ -29,7 +29,7 @@ export const ProfileDescription: FC<ProfileDescriptionProps> = ({
 
   return (
     <div>
-      <div className="mt-3 flex flex-col">
+      <div className="flex flex-col">
         <h1 className="mb-0.5 text-sm font-semibold">
           {t("profile description:")}
         </h1>

@@ -3,14 +3,7 @@ import { NextResponse } from "next/server";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import langParser from "accept-language-parser";
 
-import { defaultLocale, locales, type localeTypes } from "./i18n";
-
-const getLocale = ({ locale }: { locale: string }) => {
-  const localeParts = locale.toLowerCase();
-  return {
-    lang: localeParts,
-  };
-};
+import { defaultLocale, locales } from "./i18n";
 
 const findBestMatchingLocale = (acceptLangHeader: string) => {
   const parsedLangs = langParser.parse(acceptLangHeader);
@@ -18,8 +11,8 @@ const findBestMatchingLocale = (acceptLangHeader: string) => {
   for (let i = 0; i < parsedLangs.length; i++) {
     const parsedLang = parsedLangs[i];
     const matchedLocale = locales.find((locale) => {
-      const localeParts = getLocale({ locale });
-      return parsedLang.code === localeParts.lang;
+      const localePart = locale.toLowerCase();
+      return parsedLang.code === localePart;
     });
     if (matchedLocale) {
       return matchedLocale;
@@ -37,33 +30,39 @@ export async function middleware(req: NextRequest) {
   await supabase.auth.getSession();
 
   // localization
-  const pathname = req.nextUrl.pathname;
+  const { pathname } = req.nextUrl;
+  const localeFromPathname = pathname.split("/")[1];
+  const langCookie = req.cookies.get("lang");
 
   const pathnameIsMissingValidLocale = locales.every((locale) => {
-    const localePart = getLocale({ locale });
-    return !pathname.startsWith(`/${localePart.lang}`);
+    const localePart = locale.toLowerCase();
+    return !pathname.startsWith(`/${localePart}`);
   });
 
   if (pathnameIsMissingValidLocale) {
-    const matchedLocale = findBestMatchingLocale(
-      req.headers.get("Accept-Language") || defaultLocale
-    );
-
-    const langCookie = req.cookies.get("lang");
-    const langCookieValue = langCookie?.value as localeTypes;
-    if (locales.includes(langCookieValue)) {
+    if (langCookie && locales.includes(langCookie.value)) {
       const res = NextResponse.redirect(
-        new URL(`/${langCookieValue}${pathname}`, req.url)
+        new URL(`/${langCookie.value}${pathname}`, req.url)
       );
       return res;
-    }
+    } else {
+      const matchedLocale = findBestMatchingLocale(
+        req.headers.get("Accept-Language") || defaultLocale
+      );
 
-    const matchedLocalePart = getLocale({ locale: matchedLocale });
-    const res = NextResponse.redirect(
-      new URL(`/${matchedLocalePart.lang}${pathname}`, req.url)
-    );
-    res.cookies.set("lang", matchedLocalePart.lang);
-    return res;
+      const matchedLocalePart = matchedLocale.toLowerCase();
+      const res = NextResponse.redirect(
+        new URL(`/${matchedLocalePart}${pathname}`, req.url)
+      );
+      res.cookies.set("lang", matchedLocalePart);
+      return res;
+    }
+  } else if (
+    langCookie &&
+    !pathname.startsWith(`/${langCookie.value}`) &&
+    locales.includes(localeFromPathname)
+  ) {
+    res.cookies.set("lang", localeFromPathname);
   }
 
   // color theme initialization

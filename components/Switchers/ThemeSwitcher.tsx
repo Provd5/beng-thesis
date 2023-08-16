@@ -86,7 +86,7 @@ const ThemeButton: FC<ThemeButtonProps> = ({
 
   return (
     <button
-      className="flex items-center gap-1 py-0.5 text-base"
+      className="flex items-center gap-1.5 py-0.5 text-md"
       onClick={() => handleToggleTheme(theme)}
     >
       <Icon
@@ -94,7 +94,7 @@ const ThemeButton: FC<ThemeButtonProps> = ({
           active
             ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
             : "fill-black-light dark:fill-white",
-          "text-md"
+          "text-lg"
         )}
       />
 
