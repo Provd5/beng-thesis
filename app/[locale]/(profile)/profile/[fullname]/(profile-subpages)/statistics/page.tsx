@@ -1,79 +1,65 @@
+import { PrivateProfilePage } from "~/components/Profile/PrivateProfilePage";
+import { AlreadyReadStatisticsCard } from "~/components/Profile/Statistics/AlreadyReadStatistics/AlreadyReadStatisticsCard";
+import { MainStatisticsCard } from "~/components/Profile/Statistics/MainStatisticsCard";
+import { OwnedAsStatisticsCard } from "~/components/Profile/Statistics/OwnedAsStatistics/OwnedAsStatisticsCard";
+import { StatisticsCategoryWrapper } from "~/components/Profile/Statistics/StatisticsCategoryWrapper";
 import { BackCategoryLink } from "~/components/ui/BackCategoryLink";
+import { db } from "~/lib/db";
 
-export default function StatisticsPage({
+export default async function StatisticsPage({
   params: { fullname },
 }: {
   params: { fullname: string };
 }) {
-  // const supabase = createServerComponentClient({
-  //   cookies,
-  // });
+  const userData = await db.profile.findUnique({
+    where: {
+      full_name: fullname,
+      private: { not: true },
+    },
+    select: {
+      id: true,
+    },
+  });
 
-  // const {
-  //   data: { session },
-  // } = await supabase.auth.getSession();
+  const StatisticsTypesArray = [
+    "Finished books:",
+    "Owned books:",
+    "Liked books:",
+    "Reviews written:",
+    "Latest read book:",
+    "Pages read:",
+    "Most pages:",
+    "Most-read author:",
+    "Read books from this author:",
+    "Most read genre:",
+  ];
 
-  // const [publicUserData, myFullname] = await Promise.all([
-  //   db.profile.findUnique({
-  //     where: { full_name: fullname },
-  //     select: {
-  //       id: true,
-  //       avatar_url: true,
-  //       private: true,
-  //       full_name: true,
-  //       description: true,
-  //     },
-  //   }),
-  //   session?.user &&
-  //     db.profile.findUnique({
-  //       where: { id: session.user.id },
-  //       select: { id: true, full_name: true },
-  //     }),
-  // ]);
-
-  return (
+  return userData ? (
     <>
       <div className="flex flex-col gap-3 pt-6">
         <BackCategoryLink variant="STATISTICS" href={`/profile/${fullname}`} />
-        <div>
-          <h1>Finished books:</h1>
-          <p></p>
-        </div>
-        <div>
-          <h1>Owned books:</h1>
-          <p></p>
-        </div>
-        <div>
-          <h1>Liked books:</h1>
-          <p></p>
-        </div>
-        <div>
-          <h1>Reviews written:</h1>
-          <p></p>
-        </div>
-        <div>
-          <h1>Latest read book:</h1>
-          <p></p>
-        </div>
-        <div>
-          <h1>Pages read:</h1>
-          <p></p>
-        </div>
-        <div>
-          <h1>Most pages:</h1>
-          <p></p>
-        </div>
-        <div>
-          <h1>Most-read author:</h1>
-          <p></p>
-          <h1>Read books from this author:</h1>
-          <p></p>
-        </div>
-        <div>
-          <h1>Most read genre:</h1>
-          <p></p>
-        </div>
+
+        {/* all categories statistics */}
+        <StatisticsCategoryWrapper variant="main statistics">
+          <MainStatisticsCard userId={userData.id} />
+        </StatisticsCategoryWrapper>
+
+        {/* owned category statistics */}
+        <StatisticsCategoryWrapper variant="owned books">
+          <OwnedAsStatisticsCard userId={userData.id} />
+        </StatisticsCategoryWrapper>
+
+        {/* reading category statistics */}
+        <StatisticsCategoryWrapper variant="read books">
+          <AlreadyReadStatisticsCard userId={userData.id} />
+        </StatisticsCategoryWrapper>
+
+        <StatisticsCategoryWrapper variant="read books">
+          {/* <MostReadStatisticsCard userId={userData.id} /> */}
+        </StatisticsCategoryWrapper>
       </div>
     </>
+  ) : (
+    <PrivateProfilePage />
   );
 }

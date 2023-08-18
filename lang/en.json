@@ -24,6 +24,7 @@
     "PENDING": "Pending...",
     "SUCCESS": "Success"
   },
+
   "NotFoundPage": {
     "not found": "Not found",
     "page": "Such page",
@@ -33,6 +34,7 @@
     "return to your profile": "return to your profile",
     "return to main page": "return to main page"
   },
+
   "Other": {
     "logout": "Logout",
     "loading": "Loading",
@@ -40,6 +42,7 @@
     "collapse": "collapse",
     "expand": "expand"
   },
+
   "Nav": {
     "Settings": {
       "app style": "app style",
@@ -58,6 +61,7 @@
       "search": "Search"
     }
   },
+
   "Profile": {
     "Page": {
       "followers:": "Followers:",
@@ -94,6 +98,28 @@
       "show more": "show more"
     }
   },
+
+  "Statistics": {
+    "CategoryTitles": {
+      "main statistics": "Main statistics",
+      "owned books": "Owned Books",
+      "read books": "Read Books"
+    },
+    "OwnedBooks": {
+      "unique:": "Unique:",
+      "total in all forms:": "Total in all forms:"
+    },
+    "ReadBooks": {
+      "shortest-read:": "Shortest-read:",
+      "longest-read:": "Longest-read:",
+      "last:": "Last:",
+      "book with most pages:": "Book with most pages:",
+      "read in": "read in <span>{numDays, plural, =0 {less than a day} =1 {# day} other {# days}}</span>",
+      "pages:": "pages:",
+      "total pages read:": "Total pages read:"
+    }
+  },
+
   "Book": {
     "BookselfTypes": {
       "STATISTICS": "Statistics",
@@ -145,6 +171,7 @@
       "write yours": "write yours"
     }
   },
+
   "Reviews": {
     "CreateReview": {
       "express your opinion": "Express your opinion...",
@@ -171,6 +198,7 @@
       "back": "back"
     }
   },
+
   "Explore": {
     "Page": {
       "books": "Books",

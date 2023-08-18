@@ -11,7 +11,7 @@ import { BookCover } from "../Book/BookCover";
 import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface CategoryContentCardProps {
-  bookshelfVariant: categoryTypes;
+  categoryVariant: categoryTypes;
   userId: string;
 }
 
@@ -44,7 +44,7 @@ type bookDataType = {
 };
 
 export const CategoryContentCard: FC<CategoryContentCardProps> = async ({
-  bookshelfVariant,
+  categoryVariant,
   userId,
 }) => {
   let ownedAsData: ownedAsDataType[] | null = null;
@@ -56,7 +56,7 @@ export const CategoryContentCard: FC<CategoryContentCardProps> = async ({
     },
   };
 
-  switch (bookshelfVariant) {
+  switch (categoryVariant) {
     case "OWNED":
       ownedAsData = await db.book_owned_as.findMany({
         take: 10,
@@ -113,7 +113,7 @@ export const CategoryContentCard: FC<CategoryContentCardProps> = async ({
       bookData = await db.bookshelf.findMany({
         take: 10,
         orderBy: { updated_at: "desc" },
-        where: { bookshelf: bookshelfVariant, user_id: userId },
+        where: { bookshelf: categoryVariant, user_id: userId },
         select: commonSelect,
       });
       break;

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
 import langParser from "accept-language-parser";
 
-import { defaultLocale, locales } from "./i18n";
+import { defaultLocale, locales, type localeTypes } from "./i18n";
 
 const findBestMatchingLocale = (acceptLangHeader: string) => {
   const parsedLangs = langParser.parse(acceptLangHeader);
@@ -31,8 +31,8 @@ export async function middleware(req: NextRequest) {
 
   // localization
   const { pathname } = req.nextUrl;
-  const localeFromPathname = pathname.split("/")[1];
-  const langCookie = req.cookies.get("lang");
+  const localeFromPathname = pathname.split("/")[1] as localeTypes;
+  const langCookie = req.cookies.get("lang")?.value as localeTypes | undefined;
 
   const pathnameIsMissingValidLocale = locales.every((locale) => {
     const localePart = locale.toLowerCase();
@@ -40,9 +40,9 @@ export async function middleware(req: NextRequest) {
   });
 
   if (pathnameIsMissingValidLocale) {
-    if (langCookie && locales.includes(langCookie.value)) {
+    if (langCookie && locales.includes(langCookie)) {
       const res = NextResponse.redirect(
-        new URL(`/${langCookie.value}${pathname}`, req.url)
+        new URL(`/${langCookie}${pathname}`, req.url)
       );
       return res;
     } else {
@@ -58,8 +58,7 @@ export async function middleware(req: NextRequest) {
       return res;
     }
   } else if (
-    langCookie &&
-    !pathname.startsWith(`/${langCookie.value}`) &&
+    ((langCookie && !pathname.startsWith(`/${langCookie}`)) || !langCookie) &&
     locales.includes(localeFromPathname)
   ) {
     res.cookies.set("lang", localeFromPathname);
