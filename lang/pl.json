@@ -24,6 +24,7 @@
     "PENDING": "W toku...",
     "SUCCESS": "Sukces"
   },
+
   "NotFoundPage": {
     "not found": "Nie znaleziono",
     "page": "Ta strona",
@@ -33,6 +34,7 @@
     "return to your profile": "wróć do swojego profilu",
     "return to main page": "wróć do strony głównej"
   },
+
   "Other": {
     "logout": "Wyloguj",
     "loading": "Ładowanie",
@@ -40,6 +42,7 @@
     "collapse": "zwiń",
     "expand": "rozwiń"
   },
+
   "Nav": {
     "Settings": {
       "app style": "styl aplikacji",
@@ -58,6 +61,7 @@
       "search": "Szukaj"
     }
   },
+
   "Profile": {
     "Page": {
       "followers:": "Obserwujących:",
@@ -94,6 +98,28 @@
       "show more": "zobacz więcej"
     }
   },
+
+  "Statistics": {
+    "CategoryTitles": {
+      "main statistics": "Główne statystyki",
+      "owned books": "Posiadane książki",
+      "read books": "Przeczytane książki"
+    },
+    "OwnedBooks": {
+      "unique:": "Unikalne:",
+      "total in all forms:": "Łącznie w każdej postaci:"
+    },
+    "ReadBooks": {
+      "shortest-read:": "Najkrócej czytane:",
+      "longest-read:": "Najdłużej czytane:",
+      "last:": "Ostatnio:",
+      "book with most pages:": "Książka z największą liczbą stron:",
+      "read in": "przeczytano w <span>{numDays, plural, =0 {mniej niż dzień} =1 {# dzień} other {# dni}}</span>",
+      "pages:": "stron:",
+      "total pages read:": "Suma przeczytanych stron:"
+    }
+  },
+
   "Book": {
     "BookselfTypes": {
       "STATISTICS": "Statystyki",
@@ -145,6 +171,7 @@
       "write yours": "napisz swoją"
     }
   },
+
   "Reviews": {
     "CreateReview": {
       "express your opinion": "Wyraź swoją opinię...",
@@ -171,6 +198,7 @@
       "back": "wróć"
     }
   },
+
   "Explore": {
     "Page": {
       "books": "Książki",

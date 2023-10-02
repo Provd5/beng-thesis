@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { Settings } from "~/components/Modals/Settings";
-import { defaultLocale, type localeTypes } from "~/i18n";
+import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 
 export default async function AuthLayout({
@@ -28,8 +28,6 @@ export default async function AuthLayout({
     redirect(`/profile/${userData?.full_name || ""}`);
   }
 
-  const currentLang = (cookies().get("lang")?.value ||
-    defaultLocale) as localeTypes;
   // eslint-disable-next-line @typescript-eslint/require-await
   const setLangCookie = async (data: localeTypes) => {
     "use server";
@@ -39,7 +37,7 @@ export default async function AuthLayout({
   return (
     <main className="nav-padding relative flex h-full flex-col text-xl text-white-light">
       <div className="absolute right-4 top-3 md:right-6 md:top-5">
-        <Settings currentLang={currentLang} setLangCookie={setLangCookie} />
+        <Settings setLangCookie={setLangCookie} />
       </div>
       {children}
     </main>

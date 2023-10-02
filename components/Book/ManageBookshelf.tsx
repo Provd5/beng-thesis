@@ -43,14 +43,17 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSelectDate, setIsSelectDate] = useState(false);
 
-  const [currentBookshelf, setCurrentBookshelf] = useState(bookshelf);
-  const [selectedBookshelf, setSelectedBookshelf] = useState(bookshelf);
+  const [currentBookshelf, setCurrentBookshelf] = useState(bookshelf || null);
+  const [selectedBookshelf, setSelectedBookshelf] = useState(bookshelf || null);
 
-  const [beganReadingAtState, setBeganReadingAtState] =
-    useState(beganReadingAt);
-  const [updatedAtState, setUpdatedAtState] = useState(updatedAt);
+  const [beganReadingAtState, setBeganReadingAtState] = useState(
+    beganReadingAt || null
+  );
+  const [updatedAtState, setUpdatedAtState] = useState(updatedAt || null);
 
-  const [readQuantityState, setReadQuantityState] = useState(readQuantity || 0);
+  const [readQuantityState, setReadQuantityState] = useState(
+    readQuantity && readQuantity > 1 ? readQuantity : 1
+  );
 
   const openModalButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -234,9 +237,7 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
                               className="w-10 bg-white-light px-1 py-2 text-center text-md text-black-dark dark:bg-black dark:text-white"
                               name="read-quantity-number-input"
                               id="read-quantity-number-input"
-                              value={
-                                readQuantityState > 0 ? readQuantityState : 1
-                              }
+                              value={readQuantityState}
                             />
                             <button
                               className="h-full w-10 rounded-r bg-white-light text-lg font-semibold dark:bg-black-dark"

@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-export function dateFormater(date: Date, withHours?: boolean) {
+export function dateFormater(date: Date, withHours?: boolean): string {
   {
     const formatedDate = format(
       date,

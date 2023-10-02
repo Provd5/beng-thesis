@@ -13,10 +13,9 @@ import { ModalInitiator } from "./ModalInitiator";
 
 interface SettingsProps {
   setLangCookie: (data: localeTypes) => Promise<void>;
-  currentLang: localeTypes;
 }
 
-export const Settings: FC<SettingsProps> = ({ setLangCookie, currentLang }) => {
+export const Settings: FC<SettingsProps> = ({ setLangCookie }) => {
   const t = useTranslations("Nav.Settings");
 
   return (
@@ -32,10 +31,7 @@ export const Settings: FC<SettingsProps> = ({ setLangCookie, currentLang }) => {
           <p className="text-sm">{t("app style")}</p>
           <ThemeSwitcher />
           <p className="text-sm">{t("app language")}</p>
-          <LanguageSwitcher
-            currentLang={currentLang}
-            setLangCookie={setLangCookie}
-          />
+          <LanguageSwitcher setLangCookie={setLangCookie} />
         </div>
       </ModalInitiator>
     </>

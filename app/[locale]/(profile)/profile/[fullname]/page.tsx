@@ -1,4 +1,4 @@
-import { type categoryTypes } from "~/types/categoryTypes";
+import { CategoryArray } from "~/types/categoryTypes";
 
 import { CategoryContentCard } from "~/components/Profile/CategoryContentCard";
 import { CategoryContentCardPlaceholder } from "~/components/Profile/CategoryContentCardPlaceholder";
@@ -8,6 +8,7 @@ import { Statistics } from "~/components/Profile/Statistics";
 import { CategoryLink } from "~/components/ui/CategoryLink";
 import { DragContainer } from "~/components/ui/DragContainer";
 import { db } from "~/lib/db";
+import { quantityPerCategoryType } from "~/utils/quantityPerCategoryType";
 
 export default async function ProfilePage({
   params: { fullname },
@@ -35,32 +36,10 @@ export default async function ProfilePage({
     },
   });
 
-  const CategoryArray: categoryTypes[] = [
-    "OWNED",
-    "LIKED",
-    "ALREADY_READ",
-    "TO_READ",
-    "ABANDONED",
-    "READING",
-    "OTHER",
-    "REVIEWS",
-  ];
-
-  const quantityPerVariant = (bookshelfVariant: categoryTypes): number => {
-    switch (bookshelfVariant) {
-      case "OWNED":
-        return userData?._count.book_owned_as || 0;
-      case "LIKED":
-        return userData?._count.liked_book || 0;
-      case "REVIEWS":
-        return userData?._count.review || 0;
-      default:
-        return (
-          userData?.bookshelf.filter(
-            (variant) => variant.bookshelf === bookshelfVariant
-          ).length || 0
-        );
-    }
+  const quantities = {
+    ownedQuantity: userData?._count.book_owned_as,
+    likedQuantity: userData?._count.liked_book,
+    reviewsQuantity: userData?._count.review,
   };
 
   return userData ? (
@@ -76,15 +55,19 @@ export default async function ProfilePage({
           />
           <Statistics />
         </div>
-        {CategoryArray.map((bookshelfVariant) => {
-          const variantUrl = `profile/${fullname}/${bookshelfVariant
+        {CategoryArray.map((categoryVariant) => {
+          const variantUrl = `profile/${fullname}/${categoryVariant
             .toLocaleLowerCase()
             .replace("_", "-")}`;
-          const variantQuantity = quantityPerVariant(bookshelfVariant);
+          const variantQuantity = quantityPerCategoryType(
+            categoryVariant,
+            userData.bookshelf,
+            quantities
+          );
           return (
-            <div key={bookshelfVariant} className="flex flex-col gap-1">
+            <div key={categoryVariant} className="flex flex-col gap-1">
               <CategoryLink
-                variant={bookshelfVariant}
+                variant={categoryVariant}
                 href={`/${variantUrl}`}
                 quantity={variantQuantity}
               />
@@ -92,7 +75,7 @@ export default async function ProfilePage({
                 {variantQuantity > 0 ? (
                   <>
                     <CategoryContentCard
-                      bookshelfVariant={bookshelfVariant}
+                      categoryVariant={categoryVariant}
                       userId={userData.id}
                     />
                     {variantQuantity > 10 && (
