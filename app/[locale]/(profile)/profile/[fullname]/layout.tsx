@@ -1,7 +1,10 @@
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
 import { FollowLinks } from "~/components/Profile/FollowLinks";
+import { PrivateProfilePage } from "~/components/Profile/PrivateProfilePage";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
 import { db } from "~/lib/db";
 
@@ -15,6 +18,7 @@ export default async function ProfileFullnameLayout({
   const publicUserData = await db.profile.findUnique({
     where: { full_name: fullname },
     select: {
+      id: true,
       avatar_url: true,
       private: true,
       full_name: true,
@@ -23,6 +27,14 @@ export default async function ProfileFullnameLayout({
   });
 
   if (!publicUserData) notFound();
+
+  const supabase = createServerComponentClient({
+    cookies,
+  });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   return (
     <>
@@ -43,7 +55,13 @@ export default async function ProfileFullnameLayout({
           />
         </div>
       </div>
-      {children}
+      {session?.user &&
+      publicUserData.id &&
+      session.user.id === publicUserData.id ? (
+        children
+      ) : (
+        <PrivateProfilePage />
+      )}
     </>
   );
 }

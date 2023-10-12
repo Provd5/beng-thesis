@@ -14,7 +14,6 @@ export default async function StatisticsPage({
   const userData = await db.profile.findUnique({
     where: {
       full_name: fullname,
-      private: { not: true },
     },
     select: {
       id: true,
