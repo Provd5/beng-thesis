@@ -27,73 +27,76 @@ export const AlreadyReadStatisticsCard: FC<
     },
   });
 
-  const lastReadBook = alreadyReadBooks[0];
+  const lastReadBook = alreadyReadBooks.length > 0 && alreadyReadBooks[0];
 
-  const lastReadBookReadTimeDiff = lastReadBook.began_reading_at
-    ? lastReadBook.updated_at.getTime() -
-      lastReadBook.began_reading_at.getTime()
-    : -1;
+  const lastReadBookReadTimeDiff =
+    lastReadBook && lastReadBook.began_reading_at
+      ? lastReadBook.updated_at.getTime() -
+        lastReadBook.began_reading_at.getTime()
+      : -1;
 
   const lastReadBookReadIn =
     lastReadBookReadTimeDiff >= 0
       ? convertTimeToDays(lastReadBookReadTimeDiff)
       : null;
 
-  const totalReadPages = alreadyReadBooks.reduce(
-    (acc, num) => acc + num.book.page_count,
-    0
-  );
+  const totalReadPages =
+    alreadyReadBooks.length > 0
+      ? alreadyReadBooks.reduce((acc, num) => acc + num.book.page_count, 0)
+      : 0;
 
-  const mostPagesBook = alreadyReadBooks.reduce(
-    (mostPagesBook, currentBook) => {
+  const mostPagesBook =
+    alreadyReadBooks.length > 0 &&
+    alreadyReadBooks.reduce((mostPagesBook, currentBook) => {
       const currentPages = currentBook.book.page_count;
       if (currentPages > mostPagesBook.book.page_count) {
         return currentBook;
       } else {
         return mostPagesBook;
       }
-    }
-  );
+    });
 
-  const readingTimeDifference = alreadyReadBooks.reduce(
-    (result, entry) => {
-      if (
-        entry.began_reading_at !== null &&
-        entry.updated_at > entry.began_reading_at
-      ) {
-        const timeDifference =
-          entry.updated_at.getTime() - entry.began_reading_at.getTime();
-
+  const readingTimeDifference =
+    alreadyReadBooks.length > 0 &&
+    alreadyReadBooks.reduce(
+      (result, entry) => {
         if (
-          timeDifference > 0 &&
-          timeDifference < result.shortestReadTimeDiff
+          entry.began_reading_at !== null &&
+          entry.updated_at > entry.began_reading_at
         ) {
-          result.shortestReadTimeDiff = convertTimeToDays(timeDifference);
-          result.shortestReadBook = entry.book;
-        }
+          const timeDifference =
+            entry.updated_at.getTime() - entry.began_reading_at.getTime();
 
-        if (timeDifference > result.longestReadTimeDiff) {
-          result.longestReadTimeDiff = convertTimeToDays(timeDifference);
-          result.longestReadBook = entry.book;
+          if (
+            timeDifference > 0 &&
+            timeDifference < result.shortestReadTimeDiff
+          ) {
+            result.shortestReadTimeDiff = convertTimeToDays(timeDifference);
+            result.shortestReadBook = entry.book;
+          }
+
+          if (timeDifference > result.longestReadTimeDiff) {
+            result.longestReadTimeDiff = convertTimeToDays(timeDifference);
+            result.longestReadBook = entry.book;
+          }
         }
+        return result;
+      },
+      {
+        shortestReadTimeDiff: Infinity,
+        shortestReadBook: {} as {
+          title: string;
+          authors: string[];
+          page_count: number;
+        },
+        longestReadTimeDiff: -Infinity,
+        longestReadBook: {} as {
+          title: string;
+          authors: string[];
+          page_count: number;
+        },
       }
-      return result;
-    },
-    {
-      shortestReadTimeDiff: Infinity,
-      shortestReadBook: {} as {
-        title: string;
-        authors: string[];
-        page_count: number;
-      },
-      longestReadTimeDiff: -Infinity,
-      longestReadBook: {} as {
-        title: string;
-        authors: string[];
-        page_count: number;
-      },
-    }
-  );
+    );
 
   return (
     <div className="flex flex-col gap-3">
@@ -101,16 +104,17 @@ export const AlreadyReadStatisticsCard: FC<
         {getBookmarkIcon("ALREADY_READ")}
         <h2 className="font-semibold">{alreadyReadBooks.length}</h2>
       </div>
-
-      <AlreadyReadStatisticsLabels
-        variant={"last:"}
-        bookTitle={lastReadBook.book.title}
-        bookAuthors={lastReadBook.book.authors}
-        pages={lastReadBook.book.page_count}
-        readTime={lastReadBookReadIn}
-      />
+      {lastReadBook && (
+        <AlreadyReadStatisticsLabels
+          variant={"last:"}
+          bookTitle={lastReadBook.book.title}
+          bookAuthors={lastReadBook.book.authors}
+          pages={lastReadBook.book.page_count}
+          readTime={lastReadBookReadIn}
+        />
+      )}
       <div className="flex flex-wrap gap-3">
-        {readingTimeDifference.shortestReadTimeDiff !== Infinity && (
+        {readingTimeDifference && (
           <AlreadyReadStatisticsLabels
             variant={"shortest-read:"}
             bookTitle={readingTimeDifference.shortestReadBook.title}
@@ -119,7 +123,7 @@ export const AlreadyReadStatisticsCard: FC<
             readTime={readingTimeDifference.shortestReadTimeDiff}
           />
         )}
-        {readingTimeDifference.longestReadTimeDiff !== Infinity && (
+        {readingTimeDifference && (
           <AlreadyReadStatisticsLabels
             variant={"longest-read:"}
             bookTitle={readingTimeDifference.longestReadBook.title}
@@ -129,16 +133,18 @@ export const AlreadyReadStatisticsCard: FC<
           />
         )}
       </div>
-      <AlreadyReadStatisticsLabels
-        variant={"book with most pages:"}
-        bookTitle={mostPagesBook.book.title}
-        bookAuthors={mostPagesBook.book.authors}
-        pages={mostPagesBook.book.page_count}
-        readTime={calculateReadingTime(
-          mostPagesBook.began_reading_at,
-          mostPagesBook.updated_at
-        )}
-      />
+      {mostPagesBook && (
+        <AlreadyReadStatisticsLabels
+          variant={"book with most pages:"}
+          bookTitle={mostPagesBook.book.title}
+          bookAuthors={mostPagesBook.book.authors}
+          pages={mostPagesBook.book.page_count}
+          readTime={calculateReadingTime(
+            mostPagesBook.began_reading_at,
+            mostPagesBook.updated_at
+          )}
+        />
+      )}
       <TotalReadPagesStatistics totalReadPages={totalReadPages} />
     </div>
   );
