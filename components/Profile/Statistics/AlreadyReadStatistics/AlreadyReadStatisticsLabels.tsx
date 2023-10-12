@@ -22,11 +22,9 @@ export const AlreadyReadStatisticsLabels: FC<
 
   return (
     <div className="flex flex-col gap-1">
-      <h2 className="font-semibold">{t(variant)}</h2>
+      <h2 className="text-secondary dark:text-secondary-light">{t(variant)}</h2>
       <div className="flex max-w-[250px] flex-col gap-0.5 text-sm">
-        <h3 className="text-base text-secondary dark:text-secondary-light">
-          {bookTitle}
-        </h3>
+        <h3 className="text-base font-semibold">{bookTitle}</h3>
         <p>{bookAuthors.join(", ")}</p>
         {pages > 0 && (
           <p>

@@ -101,7 +101,7 @@
 
   "Statistics": {
     "CategoryTitles": {
-      "main statistics": "Główne statystyki",
+      "profile statistics": "Statystyki profilu",
       "owned books": "Posiadane książki",
       "read books": "Przeczytane książki"
     },
@@ -121,7 +121,7 @@
   },
 
   "Book": {
-    "BookselfTypes": {
+    "bookshelfTypes": {
       "STATISTICS": "Statystyki",
       "OWNED": "Posiadane",
       "LIKED": "Polubione",
@@ -130,6 +130,7 @@
       "ABANDONED": "Porzucone",
       "READING": "W trakcie",
       "REVIEWS": "Recenzje",
+      "MY_REVIEW": "Moja recenzja",
       "OTHER": "Inne"
     },
     "BookCard": {
@@ -181,6 +182,7 @@
     },
     "MyReview": {
       "your review": "Twoja recenzja",
+      "all reviews": "wszystkie recenzje",
       "cancel": "Anuluj"
     },
     "Review": {
@@ -194,7 +196,7 @@
       "likes it": "lubi to"
     },
     "ReviewsNotFound": {
-      "This book has no written reviews yet": "Ta książka nie ma jeszcze napisanych recenzji",
+      "this book has no written reviews yet": "Ta książka nie ma jeszcze napisanych recenzji",
       "back": "wróć"
     }
   },

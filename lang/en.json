@@ -101,7 +101,7 @@
 
   "Statistics": {
     "CategoryTitles": {
-      "main statistics": "Main statistics",
+      "profile statistics": "Profile statistics",
       "owned books": "Owned Books",
       "read books": "Read Books"
     },
@@ -121,7 +121,7 @@
   },
 
   "Book": {
-    "BookselfTypes": {
+    "bookshelfTypes": {
       "STATISTICS": "Statistics",
       "OWNED": "Owned",
       "LIKED": "Liked",
@@ -130,6 +130,7 @@
       "ABANDONED": "Abandoned",
       "READING": "Reading",
       "REVIEWS": "Reviews",
+      "MY_REVIEW": "My review",
       "OTHER": "Other"
     },
     "BookCard": {
@@ -181,6 +182,7 @@
     },
     "MyReview": {
       "your review": "Your review",
+      "all reviews": "all reviews",
       "cancel": "Cancel"
     },
     "Review": {
@@ -194,7 +196,7 @@
       "likes it": "likes it"
     },
     "ReviewsNotFound": {
-      "This book has no written reviews yet": "This book has no written reviews yet",
+      "this book has no written reviews yet": "This book has no written reviews yet",
       "back": "back"
     }
   },

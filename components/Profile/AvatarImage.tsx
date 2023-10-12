@@ -7,7 +7,7 @@ import { AvatarPlaceholder } from "../ui/SvgIcons/AvatarPlaceholder";
 interface AvatarImageProps {
   avatarSrc?: string | null;
   className?: string;
-  size?: "default" | "sm" | "lg";
+  size?: "default" | "sm" | "xs" | "lg";
 }
 
 export const AvatarImage: FC<AvatarImageProps> = ({
@@ -17,11 +17,13 @@ export const AvatarImage: FC<AvatarImageProps> = ({
 }) => {
   const sizes = {
     default: "75px",
+    xs: "25px",
     sm: "50px",
     lg: "100px",
   };
   const sizeClass = {
     default: "h-[75px] w-[75px]",
+    xs: "h-[25px] w-[25px]",
     sm: "h-[50px] w-[50px]",
     lg: "h-[100px] w-[100px]",
   };
