@@ -86,7 +86,12 @@ export const Review: FC<ReviewProps> = ({
   const renderReaction = (reaction: reactionType, Icon: IconType) => {
     return (
       <button
-        className="flex items-center gap-1 py-0.5"
+        className={clsx(
+          "flex items-center gap-1 rounded-sm border-2 px-2 py-1.5",
+          userReactionState === reaction
+            ? "border-secondary dark:border-secondary-light"
+            : "border-black dark:border-white"
+        )}
         onClick={() => handleReaction(reaction)}
       >
         <Icon
@@ -96,15 +101,16 @@ export const Review: FC<ReviewProps> = ({
               : ""
           }
         />
-        <p
-          className={
-            userReactionState === reaction
-              ? "font-semibold text-secondary dark:text-secondary-light"
-              : ""
-          }
+        <div
+          className={clsx(
+            "flex gap-2 font-semibold",
+            userReactionState === reaction &&
+              "text-secondary dark:text-secondary-light"
+          )}
         >
-          {`${t(reaction)} – ${filterReaction(reaction).length}`}
-        </p>
+          <p>{t(reaction)}</p>
+          <p>{filterReaction(reaction).length}</p>
+        </div>
       </button>
     );
   };
@@ -233,11 +239,11 @@ export const Review: FC<ReviewProps> = ({
             <div />
           )}
           {text && (
-            <div className="flex flex-col items-end gap-0.5">
+            <div className="flex flex-col items-end gap-1">
               <p className="text-right text-xs">
                 {t("was this review useful?")}
               </p>
-              <div className="flex gap-5 px-1 text-sm text-black-light dark:text-white-dark">
+              <div className="flex gap-1 px-1 text-sm text-black-light dark:text-white-dark">
                 {renderReaction("OK", FaFaceLaughBeam)}
                 {renderReaction("MEH", FaFaceMeh)}
               </div>

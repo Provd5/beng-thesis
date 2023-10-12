@@ -35,7 +35,7 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   readQuantity,
 }) => {
   const t = useTranslations("Book.ManageBookshelf");
-  const tb = useTranslations("Book.BookselfTypes");
+  const tb = useTranslations("Book.bookshelfTypes");
   const te = useTranslations("Errors");
 
   const router = useRouter();
@@ -149,7 +149,7 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
           readQuantity &&
           readQuantity > 1 && (
             <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red text-xs">
-              <p>×{readQuantity}</p>
+              <p className="text-white-light">×{readQuantity}</p>
             </div>
           )}
       </div>

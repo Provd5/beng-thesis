@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 
 interface StatisticsCategoryWrapperProps {
   children: React.ReactNode;
-  variant?: "main statistics" | "owned books" | "read books";
+  variant?: "profile statistics" | "owned books" | "read books";
 }
 
 export const StatisticsCategoryWrapper: FC<StatisticsCategoryWrapperProps> = ({

@@ -80,7 +80,7 @@ export const ProfileCard: FC<ProfileCardProps> = ({
   };
 
   return (
-    <div className="flex h-full w-full max-w-[400px] flex-col gap-2 rounded-md bg-white px-6 py-3 dark:bg-black">
+    <div className="flex h-full w-full max-w-[400px] flex-col gap-2 rounded-md bg-white px-6 py-3 drop-shadow dark:bg-black">
       <div className="flex flex-auto flex-col gap-1">
         <Link href={`/profile/${fullName}`} className="flex gap-1">
           <AvatarImage
@@ -109,11 +109,11 @@ export const ProfileCard: FC<ProfileCardProps> = ({
           </div>
         </Link>
         <div className="flex flex-col gap-0.5 text-xs">
-          <p className="">
+          <p>
             <span>{t("owned books:")} </span>
             {OwnedAsQuantity}
           </p>
-          <p className="">
+          <p>
             <span>{t("followers:")} </span>
             {followedByQuantityState}
           </p>
@@ -137,12 +137,12 @@ export const ProfileCard: FC<ProfileCardProps> = ({
         {isFollowedState
           ? !isLoading && (
               <>
-                <IoMdEyeOff /> {t("unfollow")}
+                <IoMdEyeOff className="text-red" /> {t("unfollow")}
               </>
             )
           : !isLoading && (
               <>
-                <IoMdEye /> {t("follow")}
+                <IoMdEye className="text-green" /> {t("follow")}
               </>
             )}
       </Button>

@@ -8,9 +8,15 @@ const config = {
   images: {
     remotePatterns: [
       {
+        //discord avatar images
         hostname: "cdn.discordapp.com",
       },
       {
+        //google avatar images
+        hostname: "lh3.googleusercontent.com",
+      },
+      {
+        //google books covers
         hostname: "books.google.com",
       },
     ],

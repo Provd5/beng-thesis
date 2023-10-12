@@ -66,8 +66,8 @@ export default async function BookReviewsPage({
 
   return (
     <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
-      <BackCategoryLink href={`/book/${id}/${title}`} variant="REVIEWS" />
-      {bookReviews.filter((review) => review.text !== null).length > 0 ? (
+      <BackCategoryLink href={`/book/${id}/${title}`} variant="MY_REVIEW" />
+      {bookReviews.length > 0 ? (
         bookReviews.map((review) => (
           <Review
             key={review.id}

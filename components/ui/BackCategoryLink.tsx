@@ -9,7 +9,7 @@ import { MdNavigateBefore } from "react-icons/md";
 import { type categoryTypes } from "~/types/categoryTypes";
 
 interface BackCategoryLinkProps {
-  variant: categoryTypes;
+  variant: categoryTypes | "MY_REVIEW";
   href: `/${string}`;
 }
 
@@ -17,7 +17,7 @@ export const BackCategoryLink: FC<BackCategoryLinkProps> = ({
   variant,
   href,
 }) => {
-  const t = useTranslations("Book.BookselfTypes");
+  const t = useTranslations("Book.bookshelfTypes");
 
   return (
     <div className="flex">

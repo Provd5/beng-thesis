@@ -3,7 +3,7 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { SlOptions } from "react-icons/sl";
+import { FaCog } from "react-icons/fa";
 
 import { type localeTypes } from "~/i18n";
 
@@ -22,8 +22,8 @@ export const Settings: FC<SettingsProps> = ({ setLangCookie }) => {
     <>
       <ModalInitiator
         initiatorStyle={
-          <div className="hover:scale-105">
-            <SlOptions className="h-6 w-6" />
+          <div className="transition-transform hover:rotate-90 hover:scale-110">
+            <FaCog className="h-6 w-6" />
           </div>
         }
       >

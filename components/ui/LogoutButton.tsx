@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { ImExit } from "react-icons/im";
+import { LuLogOut } from "react-icons/lu";
 
 import { Loader } from "./Loader";
 
@@ -29,7 +29,7 @@ export const LogoutButton: FC = () => {
       disabled={isLoading}
       onClick={signOut}
     >
-      <div>{isLoading ? <Loader /> : <ImExit />}</div>
+      <div>{isLoading ? <Loader /> : <LuLogOut />}</div>
       <p>{t("logout")}</p>
     </button>
   );

@@ -21,42 +21,27 @@ export default async function StatisticsPage({
     },
   });
 
-  const StatisticsTypesArray = [
-    "Finished books:",
-    "Owned books:",
-    "Liked books:",
-    "Reviews written:",
-    "Latest read book:",
-    "Pages read:",
-    "Most pages:",
-    "Most-read author:",
-    "Read books from this author:",
-    "Most read genre:",
-  ];
-
   return userData ? (
     <>
       <div className="flex flex-col gap-3 pt-6">
         <BackCategoryLink variant="STATISTICS" href={`/profile/${fullname}`} />
 
-        {/* all categories statistics */}
-        <StatisticsCategoryWrapper variant="main statistics">
-          <MainStatisticsCard userId={userData.id} />
-        </StatisticsCategoryWrapper>
+        <div className="flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+          {/* all categories statistics */}
+          <StatisticsCategoryWrapper variant="profile statistics">
+            <MainStatisticsCard userId={userData.id} />
+          </StatisticsCategoryWrapper>
 
-        {/* owned category statistics */}
-        <StatisticsCategoryWrapper variant="owned books">
-          <OwnedAsStatisticsCard userId={userData.id} />
-        </StatisticsCategoryWrapper>
+          {/* owned category statistics */}
+          <StatisticsCategoryWrapper variant="owned books">
+            <OwnedAsStatisticsCard userId={userData.id} />
+          </StatisticsCategoryWrapper>
 
-        {/* reading category statistics */}
-        <StatisticsCategoryWrapper variant="read books">
-          <AlreadyReadStatisticsCard userId={userData.id} />
-        </StatisticsCategoryWrapper>
-
-        <StatisticsCategoryWrapper variant="read books">
-          {/* <MostReadStatisticsCard userId={userData.id} /> */}
-        </StatisticsCategoryWrapper>
+          {/* reading category statistics */}
+          <StatisticsCategoryWrapper variant="read books">
+            <AlreadyReadStatisticsCard userId={userData.id} />
+          </StatisticsCategoryWrapper>
+        </div>
       </div>
     </>
   ) : (

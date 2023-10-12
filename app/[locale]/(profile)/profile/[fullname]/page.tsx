@@ -1,3 +1,6 @@
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import { CategoryArray } from "~/types/categoryTypes";
 
 import { CategoryContentCard } from "~/components/Profile/CategoryContentCard";
@@ -15,11 +18,33 @@ export default async function ProfilePage({
 }: {
   params: { fullname: string };
 }) {
-  const userData = await db.profile.findUnique({
+  const supabase = createServerComponentClient({
+    cookies,
+  });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const userId = await db.profile.findUnique({
     where: {
       full_name: fullname,
-      private: { not: true },
     },
+    select: {
+      id: true,
+    },
+  });
+
+  const userData = await db.profile.findUnique({
+    where:
+      session?.user && userId && session.user.id === userId.id
+        ? {
+            full_name: fullname,
+          }
+        : {
+            full_name: fullname,
+            private: { not: true },
+          },
     select: {
       id: true,
       description: true,
@@ -53,7 +78,7 @@ export default async function ProfilePage({
             variant="STATISTICS"
             href={`/profile/${fullname}/statistics`}
           />
-          <Statistics />
+          <Statistics userId={userData.id} userFullname={fullname} />
         </div>
         {CategoryArray.map((categoryVariant) => {
           const variantUrl = `profile/${fullname}/${categoryVariant

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { z } from "zod";
 
+import { AllReviewsButton } from "~/components/Book/AllReviewsButton";
 import { MyReview } from "~/components/Book/MyReview";
 import { Review } from "~/components/Book/Review";
 import { CategoryLink } from "~/components/ui/CategoryLink";
@@ -60,35 +61,38 @@ export default async function BookPage({
   const myReaction = myReview?.review_reaction?.[0]?.reaction;
 
   return (
-    <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
-      <CategoryLink
-        variant="REVIEWS"
-        href={`/book/${id}/${title}/reviews`}
-        withoutIcon
-      />
-      <MyReview
-        isReviewExists={!!myReview}
-        bookId={id}
-        avatarUrl={myReview?.profile.avatar_url}
-        fullName={myReview?.profile.full_name}
-        score={myReview?.score}
-        text={myReview?.text}
-      >
-        {myReview && (
-          <Review
-            id={myReview.id}
-            profileData={myReview.profile}
-            reviewCreatedAt={myReview.created_at}
-            reviewUpdatedAt={myReview.updated_at}
-            isLiked={doILikeThisBook}
-            score={myReview.score}
-            text={myReview.text}
-            reactions={myReview.review_reaction}
-            userReaction={myReaction}
-            isMyReview
-          />
-        )}
-      </MyReview>
-    </div>
+    <>
+      <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
+        <CategoryLink
+          variant="REVIEWS"
+          href={`/book/${id}/${title}/reviews`}
+          withoutIcon
+        />
+        <MyReview
+          isReviewExists={!!myReview}
+          bookId={id}
+          avatarUrl={myReview?.profile.avatar_url}
+          fullName={myReview?.profile.full_name}
+          score={myReview?.score}
+          text={myReview?.text}
+        >
+          {myReview && (
+            <Review
+              id={myReview.id}
+              profileData={myReview.profile}
+              reviewCreatedAt={myReview.created_at}
+              reviewUpdatedAt={myReview.updated_at}
+              isLiked={doILikeThisBook}
+              score={myReview.score}
+              text={myReview.text}
+              reactions={myReview.review_reaction}
+              userReaction={myReaction}
+              isMyReview
+            />
+          )}
+        </MyReview>
+      </div>
+      <AllReviewsButton href={`/book/${id}/${title}/reviews`} />
+    </>
   );
 }

@@ -13,14 +13,18 @@ import {
   UsernameValidatorErrors,
 } from "~/lib/validations/errorsEnums";
 
-import { ButtonWhite } from "../ui/Buttons";
-import { Input } from "../ui/Input";
+import { Button, ButtonWhite } from "../../ui/Buttons";
+import { Input } from "../../ui/Input";
 
 interface CreateUsernameProps {
   fullName: string | null;
+  cancelForm: () => void;
 }
 
-export const CreateUsername: FC<CreateUsernameProps> = ({ fullName }) => {
+export const CreateUsername: FC<CreateUsernameProps> = ({
+  fullName,
+  cancelForm,
+}) => {
   const t = useTranslations("Profile.EditUsername");
   const te = useTranslations("Errors");
 
@@ -68,7 +72,7 @@ export const CreateUsername: FC<CreateUsernameProps> = ({ fullName }) => {
 
   return (
     <form
-      className="flex flex-col items-center justify-center gap-1"
+      className="mt-3 flex h-full flex-col items-start justify-between gap-1"
       onSubmit={handleCreateUsername}
     >
       <Input
@@ -82,10 +86,23 @@ export const CreateUsername: FC<CreateUsernameProps> = ({ fullName }) => {
         placeholder={t("enter username")}
         required
         autoComplete="off"
+        defaultValue={fullName || ""}
       />
-      <ButtonWhite loading={isLoading} type="submit" className="mt-2 uppercase">
-        {t("submit")}
-      </ButtonWhite>
+      <div className="flex gap-3">
+        <ButtonWhite size="sm" loading={isLoading} type="submit">
+          {t("submit")}
+        </ButtonWhite>
+        {fullName && (
+          <Button
+            size="sm"
+            defaultColor={false}
+            className="bg-red"
+            onClick={() => cancelForm()}
+          >
+            Cancel
+          </Button>
+        )}
+      </div>
     </form>
   );
 };
