@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import Link from "next/link";
 
-import { MainStatisticsCard } from "./Statistics/MainStatisticsCard";
-import { StatisticsCategoryWrapper } from "./Statistics/StatisticsCategoryWrapper";
+import { MainStatisticsCard } from "./MainStatisticsCard";
+import { StatisticsCategoryWrapper } from "./StatisticsCategoryWrapper";
 
 interface StatisticsProps {
   userId: string;

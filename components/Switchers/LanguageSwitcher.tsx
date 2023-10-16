@@ -23,7 +23,9 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
   const handleSetLanguage = (language: localeTypes) => {
     setLanguage(language);
     pathnameArr[1] = language;
-    void setLangCookie(language).then(() => router.push(pathnameArr.join("/")));
+    void setLangCookie(language).then(() =>
+      router.replace(pathnameArr.join("/"))
+    );
   };
 
   const getFlagFromLocale = (locale: localeTypes) => {

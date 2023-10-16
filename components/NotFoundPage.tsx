@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 interface NotFoundPageProps {
@@ -11,6 +11,8 @@ interface NotFoundPageProps {
 export const NotFoundPage: FC<NotFoundPageProps> = ({ variant }) => {
   const t = useTranslations("NotFoundPage");
 
+  const router = useRouter();
+
   return (
     <div className="absolute inset-5 flex items-center justify-center text-white-light dark:text-white">
       <div className="mb-10 max-w-sm text-md">
@@ -18,16 +20,12 @@ export const NotFoundPage: FC<NotFoundPageProps> = ({ variant }) => {
           <h1 className="text-[68px] font-semibold leading-[78px]">404</h1>
           <h2>{t("not found")} 😵</h2>
         </div>
-        <p className="my-10 text-center">
+        <p className="mt-10 text-center">
           {t(variant)}{" "}
           <span className="font-semibold">{t("doesn't exist")}</span>
         </p>
-        <div className="flex items-center justify-center text-xs underline">
-          {variant === "profile" ? (
-            <Link href={`/profile`}>{t("return to your profile")}</Link>
-          ) : (
-            <Link href={"/"}>{t("return to main page")}</Link>
-          )}
+        <div className="mt-3 flex items-center justify-center text-lg underline">
+          <button onClick={() => router.back()}>{t("return")}</button>
         </div>
       </div>
     </div>

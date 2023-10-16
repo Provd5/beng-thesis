@@ -34,13 +34,18 @@ export const AccountSettings: FC<AccountSettingsProps> = ({
         <div className="flex flex-col gap-2 whitespace-nowrap text-md">
           {userFullname && (
             <>
-              <Link
-                className="mx-[-14px] flex items-center gap-1.5 py-1 text-sm"
-                href={`/profile/${userFullname}`}
-              >
-                <AvatarImage avatarSrc={userAvatarUrl} size="xs" />
-                <span className="max-w-[150px] truncate">{userFullname}</span>
-              </Link>
+              <div>
+                <h1 className="my-1 text-center font-semibold text-secondary dark:text-secondary-light">
+                  {t("my account")}
+                </h1>
+                <Link
+                  className="mx-[-14px] flex items-center gap-1.5 py-1 text-sm"
+                  href="/profile"
+                >
+                  <AvatarImage avatarSrc={userAvatarUrl} size="xs" />
+                  <span className="max-w-[150px] truncate">{userFullname}</span>
+                </Link>
+              </div>
               <hr className="mx-[-10px] h-px border-0 bg-black-light dark:bg-white-dark" />
             </>
           )}

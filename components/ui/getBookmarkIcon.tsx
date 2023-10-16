@@ -74,7 +74,6 @@ export const getBookmarkIcon = (
           color="fill-yellow"
         />
       );
-    case "OWNED":
     default:
       return null;
   }
