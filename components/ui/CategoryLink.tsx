@@ -23,7 +23,7 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
   withoutIcon,
   quantity,
 }) => {
-  const t = useTranslations("Book.bookshelfTypes");
+  const t = useTranslations("Book.BookshelfTypes");
 
   return (
     <div className="flex w-full">

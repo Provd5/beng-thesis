@@ -31,13 +31,13 @@
     "profile": "Such profile",
     "book": "Such book",
     "doesn't exist": "doesn't exist",
-    "return to your profile": "return to your profile",
-    "return to main page": "return to main page"
+    "return": "return"
   },
 
   "Other": {
     "logout": "Logout",
     "loading": "Loading",
+    "my account": "My account",
     "edit profile": "Edit profile",
     "collapse": "collapse",
     "expand": "expand"
@@ -120,8 +120,12 @@
     }
   },
 
+  "Bookshelves": {
+    "books quantity": "<span>{numBooks, plural, =0 {No books} =1 {# book} other {# books}}</span> on this bookshelf"
+  },
+
   "Book": {
-    "bookshelfTypes": {
+    "BookshelfTypes": {
       "STATISTICS": "Statistics",
       "OWNED": "Owned",
       "LIKED": "Liked",
@@ -130,8 +134,11 @@
       "ABANDONED": "Abandoned",
       "READING": "Reading",
       "REVIEWS": "Reviews",
-      "MY_REVIEW": "My review",
       "OTHER": "Other"
+    },
+    "BackCategoryLink": {
+      "RETURN": "Return",
+      "MY_REVIEW": "My review"
     },
     "BookCard": {
       "score": "Score",

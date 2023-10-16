@@ -31,13 +31,13 @@
     "profile": "Taki profil",
     "book": "Taka książka",
     "doesn't exist": "nie istnieje",
-    "return to your profile": "wróć do swojego profilu",
-    "return to main page": "wróć do strony głównej"
+    "return": "wróć"
   },
 
   "Other": {
     "logout": "Wyloguj",
     "loading": "Ładowanie",
+    "my account": "Moje konto",
     "edit profile": "Edytuj profil",
     "collapse": "zwiń",
     "expand": "rozwiń"
@@ -120,8 +120,12 @@
     }
   },
 
+  "Bookshelves": {
+    "books quantity": "<span>{numBooks, plural, =0 {Brak książek} =1 {# książka} few {# książki} other {# książek}}</span> na tej półce"
+  },
+
   "Book": {
-    "bookshelfTypes": {
+    "BookshelfTypes": {
       "STATISTICS": "Statystyki",
       "OWNED": "Posiadane",
       "LIKED": "Polubione",
@@ -130,8 +134,11 @@
       "ABANDONED": "Porzucone",
       "READING": "W trakcie",
       "REVIEWS": "Recenzje",
-      "MY_REVIEW": "Moja recenzja",
       "OTHER": "Inne"
+    },
+    "BackCategoryLink": {
+      "RETURN": "Powrót",
+      "MY_REVIEW": "Moja recenzja"
     },
     "BookCard": {
       "score": "Ocena",

@@ -59,6 +59,10 @@ html.dark {
   color-scheme: dark;
 }
 
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   height: 6px;
   width: 6px;

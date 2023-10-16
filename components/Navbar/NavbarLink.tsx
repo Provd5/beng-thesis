@@ -6,8 +6,6 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
-import { locales, type localeTypes } from "~/i18n";
-
 import { ExploreIcon, ProfileIcon, SearchIcon } from "../ui/SvgIcons/NavIcons";
 
 type ValidUrl = "explore" | "login" | "profile" | "search";
@@ -21,24 +19,16 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
   const t = useTranslations("Nav.CategoryTitles");
 
   const pathname = usePathname();
+  const pathnameParts = pathname.split("/");
 
   const isActive = () => {
-    const pathnameWithoutLocale: string[] | undefined = pathname
-      .split("/")
-      .filter((element) => !locales.includes(element as localeTypes));
-
-    if (!pathnameWithoutLocale) return false;
-
-    if (
-      pathnameWithoutLocale[1] !== "profile" &&
-      pathnameWithoutLocale[1] === pageUrl
-    )
+    if (pathnameParts[2] !== "profile" && pathnameParts[2] === pageUrl)
       return true;
 
     if (
-      pathnameWithoutLocale[1] === "profile" &&
+      pathnameParts[2] === "profile" &&
       fullname &&
-      pathnameWithoutLocale[2] === fullname
+      pathnameParts[3] === fullname
     )
       return true;
 

@@ -10,6 +10,7 @@ export type categoryTypes =
   | "STATISTICS";
 
 export const CategoryArray: categoryTypes[] = [
+  "STATISTICS",
   "OWNED",
   "LIKED",
   "ALREADY_READ",

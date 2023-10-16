@@ -9,8 +9,6 @@ import clsx from "clsx";
 import { BsBookFill } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 
-import { locales, type localeTypes } from "~/i18n";
-
 type ValidUrl = "explore" | "community";
 
 interface SubpageNavbarButtonProps {
@@ -23,24 +21,13 @@ export const SubpageNavbarButton: FC<SubpageNavbarButtonProps> = ({
   const t = useTranslations("Explore.Page");
 
   const pathname = usePathname();
+  const pathnameParts = pathname.split("/");
 
   const isActive = () => {
-    const pathnameWithoutLocale: string[] | undefined = pathname
-      .split("/")
-      .filter((element) => !locales.includes(element as localeTypes));
-
-    if (!pathnameWithoutLocale) return false;
-
-    if (
-      pathnameWithoutLocale[1] === pageUrl &&
-      pathnameWithoutLocale[2] !== "community"
-    )
+    if (pathnameParts[2] === pageUrl && pathnameParts[3] !== "community")
       return true;
 
-    if (
-      pathnameWithoutLocale[1] === "explore" &&
-      pathnameWithoutLocale[2] === pageUrl
-    )
+    if (pathnameParts[2] === "explore" && pathnameParts[3] === pageUrl)
       return true;
 
     return false;

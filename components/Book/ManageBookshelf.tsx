@@ -35,7 +35,7 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   readQuantity,
 }) => {
   const t = useTranslations("Book.ManageBookshelf");
-  const tb = useTranslations("Book.bookshelfTypes");
+  const tb = useTranslations("Book.BookshelfTypes");
   const te = useTranslations("Errors");
 
   const router = useRouter();

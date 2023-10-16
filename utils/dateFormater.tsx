@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-export function dateFormater(date: Date, withHours?: boolean): string {
+export const dateFormater = (date: Date, withHours?: boolean): string => {
   {
     const formatedDate = format(
       date,
@@ -8,4 +8,4 @@ export function dateFormater(date: Date, withHours?: boolean): string {
     );
     return formatedDate;
   }
-}
+};

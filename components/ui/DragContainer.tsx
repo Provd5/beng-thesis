@@ -7,9 +7,25 @@ import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 
 interface DragContainerProps {
   children: React.ReactNode;
+  arrowSize?: "sm" | "default";
+  containerClassName?: string;
+  arrowsClassName?: string;
 }
 
-export const DragContainer: FC<DragContainerProps> = ({ children }) => {
+export const DragContainer: FC<DragContainerProps> = ({
+  children,
+  arrowSize = "default",
+  containerClassName,
+  arrowsClassName,
+}) => {
+  const arrowSizeClass = {
+    default: "h-10 w-10",
+    sm: "h-8 w-8",
+  };
+
+  const arrowsCommonClass =
+    "hidden md:block rounded-full bg-gray/90 drop-shadow-icon text-white-light transition-opacity";
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [renderLeftButton, setRenderLeftButton] = useState(false);
@@ -39,43 +55,51 @@ export const DragContainer: FC<DragContainerProps> = ({ children }) => {
   const isScrollable =
     containerRef.current && containerRef.current?.scrollWidth > 0;
 
-  const buttonClass =
-    "absolute hidden md:block top-[70px] h-10 w-10 rounded-full bg-gray/90 drop-shadow-icon text-white-light transition-opacity";
-
   return (
     <div className="relative">
       <div
         ref={containerRef}
-        className="custom-scrollbar flex snap-x scroll-px-3 gap-3 overflow-x-auto overflow-y-hidden px-3 pb-2 pt-0.5"
+        className={clsx(
+          "overflow-x-auto overflow-y-hidden",
+          containerClassName
+        )}
       >
         {children}
       </div>
       {isScrollable && (
         <>
-          <button
-            tabIndex={renderLeftButton ? 0 : -1}
-            className={clsx(
-              "left-[-7px]",
-              buttonClass,
-              renderLeftButton ? "opacity-100" : "pointer-events-none opacity-0"
-            )}
-            onClick={() => handleClickToScroll(-256)}
-          >
-            <MdNavigateBefore className="h-full w-full" />
-          </button>
-          <button
-            tabIndex={renderRightButton ? 0 : -1}
-            className={clsx(
-              "right-[-7px]",
-              buttonClass,
-              renderRightButton
-                ? "opacity-100"
-                : "pointer-events-none opacity-0"
-            )}
-            onClick={() => handleClickToScroll(256)}
-          >
-            <MdNavigateNext className="h-full w-full" />
-          </button>
+          <div className="pointer-events-none absolute bottom-0 left-[-20px] top-0 flex items-center">
+            <button
+              tabIndex={renderLeftButton ? 0 : -1}
+              className={clsx(
+                arrowSizeClass[arrowSize],
+                arrowsCommonClass,
+                renderLeftButton
+                  ? "pointer-events-auto opacity-100"
+                  : "pointer-events-none opacity-0",
+                arrowsClassName
+              )}
+              onClick={() => handleClickToScroll(-256)}
+            >
+              <MdNavigateBefore className="h-full w-full" />
+            </button>
+          </div>
+          <div className="pointer-events-none absolute bottom-0 right-[-20px] top-0 flex items-center">
+            <button
+              tabIndex={renderRightButton ? 0 : -1}
+              className={clsx(
+                arrowSizeClass[arrowSize],
+                arrowsCommonClass,
+                renderRightButton
+                  ? "pointer-events-auto opacity-100"
+                  : "pointer-events-none opacity-0",
+                arrowsClassName
+              )}
+              onClick={() => handleClickToScroll(256)}
+            >
+              <MdNavigateNext className="h-full w-full" />
+            </button>
+          </div>
         </>
       )}
     </div>

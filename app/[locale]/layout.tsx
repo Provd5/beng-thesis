@@ -28,10 +28,6 @@ export async function getMessages(locale: localeTypes) {
   }
 }
 
-export type PageProps = {
-  params: { locale: localeTypes };
-};
-
 export const metadata = {
   title: {
     default: "Being Thesis",
@@ -44,8 +40,9 @@ export const metadata = {
 export default async function RootLayout({
   children,
   params: { locale },
-}: PageProps & {
+}: {
   children: React.ReactNode;
+  params: { locale: localeTypes };
 }) {
   const messages = await getMessages(locale);
   const preferTheme = headers().get("sec-ch-prefers-color-scheme");

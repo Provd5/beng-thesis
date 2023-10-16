@@ -38,26 +38,27 @@ export default async function ProfileFullnameLayout({
 
   return (
     <>
-      <div className="mb-6 flex gap-1 xs:gap-3">
-        <div className="ml-0 mt-[-30px] xs:ml-6">
-          <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
-            <AvatarImage size="lg" avatarSrc={publicUserData.avatar_url} />
-            <ProfileStatus isPrivate={publicUserData.private} />
+      <div className="mb-2 flex flex-col">
+        <div className="flex gap-1 xs:gap-3">
+          <div className="ml-0 mt-[-30px] xs:ml-6">
+            <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
+              <AvatarImage size="lg" avatarSrc={publicUserData.avatar_url} />
+              <ProfileStatus isPrivate={publicUserData.private} />
+            </div>
+          </div>
+          <div className="mx-0.5 my-3">
+            <FollowLinks
+              followers={publicUserData._count.followed_by}
+              following={publicUserData._count.following}
+            />
           </div>
         </div>
-        <div>
-          <h1 className="mx-0.5 my-2 break-all bg-gradient-dark bg-clip-text text-xl font-semibold text-transparent dark:bg-gradient-light">
-            {publicUserData.full_name}
-          </h1>
-          <FollowLinks
-            followers={publicUserData._count.followed_by}
-            following={publicUserData._count.following}
-          />
-        </div>
+        <h1 className="break-word mx-1 my-2 text-xl font-semibold text-primary dark:text-primary-light">
+          {publicUserData.full_name}
+        </h1>
       </div>
-      {session?.user &&
-      publicUserData.id &&
-      session.user.id === publicUserData.id ? (
+      {(session?.user && session.user.id === publicUserData.id) ||
+      !publicUserData.private ? (
         children
       ) : (
         <PrivateProfilePage />

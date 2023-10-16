@@ -44,6 +44,7 @@ export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
           CategoryQuantityData?.bookshelf || [],
           quantities
         );
+        if (categoryVariant === "STATISTICS") return null;
 
         return (
           <div
