@@ -1,18 +1,13 @@
 "use client";
 
 import { type FC, useState } from "react";
-import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import axios from "axios";
 
-import { IoMdEye, IoMdEyeOff } from "react-icons/io";
-
-import { GlobalErrors } from "~/lib/validations/errorsEnums";
-import { FollowProfileValidator } from "~/lib/validations/followProfile";
+import { MdNavigateNext } from "react-icons/md";
 
 import { AvatarImage } from "../Profile/AvatarImage";
-import { Button } from "../ui/Buttons";
+import { FollowProfileButton } from "../ui/FollowProfileButton";
 import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface ProfileCardProps {
@@ -41,43 +36,10 @@ export const ProfileCard: FC<ProfileCardProps> = ({
   isFollowed,
 }) => {
   const t = useTranslations("Explore.ProfileCard");
-  const te = useTranslations("Errors");
 
-  const [isLoading, setIsLoading] = useState(false);
   const [isFollowedState, setIsFollowedState] = useState(isFollowed);
   const [followedByQuantityState, setFollowedByQuantityState] =
     useState(followedByQuantity);
-
-  const handleFollow = async () => {
-    setIsLoading(true);
-    const wasFollowed = isFollowedState;
-    const prevFollowedByQuantity = followedByQuantityState;
-    setFollowedByQuantityState((prev) => (wasFollowed ? prev - 1 : prev + 1));
-    setIsFollowedState(!isFollowedState);
-
-    try {
-      FollowProfileValidator.parse({ profileId: id });
-      const { data }: { data: string } = await axios.post(
-        `/api/profile/follow/`,
-        { profileId: id }
-      );
-
-      if (data !== GlobalErrors.SUCCESS) {
-        toast.error(te(data));
-        setIsFollowedState(wasFollowed);
-        setFollowedByQuantityState(prevFollowedByQuantity);
-        return;
-      }
-    } catch (error) {
-      toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
-      setIsFollowedState(wasFollowed);
-      setFollowedByQuantityState(prevFollowedByQuantity);
-    } finally {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500);
-    }
-  };
 
   return (
     <div className="flex h-full w-full max-w-[400px] flex-col gap-2 rounded-md bg-white px-6 py-3 drop-shadow dark:bg-black">
@@ -107,6 +69,9 @@ export const ProfileCard: FC<ProfileCardProps> = ({
               </div>
             </div>
           </div>
+          <div className="flex w-full items-center justify-end">
+            <MdNavigateNext className="h-8 w-8" />
+          </div>
         </Link>
         <div className="flex flex-col gap-0.5 text-xs">
           <p>
@@ -127,25 +92,14 @@ export const ProfileCard: FC<ProfileCardProps> = ({
           )}
         </div>
       </div>
-      <Button
-        onClick={handleFollow}
-        loading={isLoading}
-        defaultColor={false}
-        size="xs"
-        className="w-2/3 max-w-[200px] self-end bg-white-light dark:bg-black-dark"
-      >
-        {isFollowedState
-          ? !isLoading && (
-              <>
-                <IoMdEyeOff className="text-red" /> {t("unfollow")}
-              </>
-            )
-          : !isLoading && (
-              <>
-                <IoMdEye className="text-green" /> {t("follow")}
-              </>
-            )}
-      </Button>
+      <FollowProfileButton
+        id={id}
+        isFollowedState={isFollowedState}
+        setIsFollowedState={setIsFollowedState}
+        followedByQuantityState={followedByQuantityState}
+        setFollowedByQuantityState={setFollowedByQuantityState}
+        className="w-2/3 max-w-[200px] self-end"
+      />
     </div>
   );
 };

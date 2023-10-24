@@ -96,6 +96,10 @@
     "CategoryContentCard": {
       "this shelf is currently empty": "This shelf is currently empty",
       "show more": "show more"
+    },
+    "FollowProfile": {
+      "follow": "follow",
+      "unfollow": "unfollow"
     }
   },
 
@@ -216,9 +220,7 @@
     "ProfileCard": {
       "owned books:": "Owned books:",
       "followers:": "Followers:",
-      "profile description:": "Profile description:",
-      "follow": "follow",
-      "unfollow": "unfollow"
+      "profile description:": "Profile description:"
     }
   }
 }

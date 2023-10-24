@@ -52,7 +52,7 @@ export default async function ProfilePage({
       )}
       <div className="mt-6 flex flex-col gap-3">
         {CategoryArray.map((categoryVariant) => {
-          const variantUrl = `profile/${fullname}/${convertTypeEnumToPathname(
+          const variantUrl = `${fullname}/${convertTypeEnumToPathname(
             categoryVariant
           )}`;
           const variantQuantity = quantityPerCategoryType(
@@ -67,7 +67,7 @@ export default async function ProfilePage({
                 <>
                   <CategoryLink
                     variant="STATISTICS"
-                    href={`/profile/${fullname}/statistics`}
+                    href={`${fullname}/statistics`}
                   />
                   <Statistics userId={userData.id} userFullname={fullname} />
                 </>
@@ -75,7 +75,7 @@ export default async function ProfilePage({
                 <>
                   <CategoryLink
                     variant={categoryVariant}
-                    href={`/${variantUrl}`}
+                    href={variantUrl}
                     quantity={variantQuantity}
                   />
                   <DragContainer
@@ -89,9 +89,7 @@ export default async function ProfilePage({
                           userId={userData.id}
                         />
                         {variantQuantity > 10 && (
-                          <CategoryContentCardPlaceholder
-                            href={`/${variantUrl}`}
-                          />
+                          <CategoryContentCardPlaceholder href={variantUrl} />
                         )}
                       </>
                     ) : (

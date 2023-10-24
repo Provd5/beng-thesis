@@ -11,12 +11,12 @@ export default function ProfileSubpagesLayout({
 }) {
   return (
     <div className="mt-6 flex flex-col gap-3">
-      <BackCategoryLink variant="RETURN" href={`/profile/${fullname}`} />
+      <BackCategoryLink variant="RETURN" href={`../${fullname}`} />
       <DragContainer
         arrowSize="sm"
         containerClassName="flex-start py-1 px-0.5 hidden-scrollbar flex gap-1"
       >
-        <CategoryLinksContainer userFullname={fullname} />
+        <CategoryLinksContainer />
       </DragContainer>
       {children}
     </div>

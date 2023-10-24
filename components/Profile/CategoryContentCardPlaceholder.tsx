@@ -8,7 +8,7 @@ import { AddBookPlaceholder } from "../ui/SvgIcons/AddBookPlaceholder";
 import { ShowMorePlaceholder } from "../ui/SvgIcons/ShowMorePlaceholder";
 
 interface CategoryContentCardPlaceholderProps {
-  href: `/${string}`;
+  href: string;
   isEmpty?: boolean;
 }
 

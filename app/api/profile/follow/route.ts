@@ -22,6 +22,10 @@ export async function POST(req: Request) {
     const body = (await req.json()) as { profileId: string };
     const { profileId } = FollowProfileValidator.parse(body);
 
+    if (session.user.id === profileId) {
+      return new Response(GlobalErrors.SOMETHING_WENT_WRONG);
+    }
+
     const alreadyFollowed = await db.follows.findFirst({
       where: { follower_id: session.user.id, following_id: profileId },
       select: { following_id: true },

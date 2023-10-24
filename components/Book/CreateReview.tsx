@@ -95,7 +95,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
   };
 
   return (
-    <div className="relative flex min-h-[360px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[280px] sm:flex-row">
+    <div className="relative flex min-h-[346px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[256px] sm:flex-row">
       <div className="flex flex-none items-start gap-1 px-2 sm:w-24 sm:flex-col sm:items-center">
         <AvatarImage
           className="drop-shadow-icon"
@@ -112,7 +112,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
           autoComplete="off"
           minLength={1}
           maxLength={5000}
-          className="min-h-[214px] rounded-l-md rounded-tr-md p-3 sm:min-h-[198px]"
+          className="min-h-[214px] rounded-l-md rounded-tr-md p-3 sm:min-h-[180px]"
           placeholder={t("express your opinion")}
           defaultValue={text || ""}
         />

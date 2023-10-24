@@ -24,7 +24,7 @@ export const DragContainer: FC<DragContainerProps> = ({
   };
 
   const arrowsCommonClass =
-    "hidden md:block rounded-full bg-gray/90 drop-shadow-icon text-white-light transition-opacity";
+    "hidden md:block rounded-full drop-shadow-icon text-white-light transition-opacity bg-secondary dark:bg-secondary-light";
 
   const containerRef = useRef<HTMLDivElement>(null);
 

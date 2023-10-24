@@ -29,7 +29,13 @@ export default async function BookReviewsPage({
 
   const [bookReviews, myReactions] = await Promise.all([
     db.review.findMany({
-      where: { book_id: id },
+      where: {
+        book_id: id,
+        text: { not: null },
+        profile: {
+          full_name: { not: null },
+        },
+      },
       include: {
         review_reaction: { select: { reaction: true } },
         profile: {
@@ -66,7 +72,7 @@ export default async function BookReviewsPage({
 
   return (
     <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
-      <BackCategoryLink href={`/book/${id}/${title}`} variant="MY_REVIEW" />
+      <BackCategoryLink href={`../${title}`} variant="MY_REVIEW" hrefReplace />
       {bookReviews.length > 0 ? (
         bookReviews.map((review) => (
           <Review
