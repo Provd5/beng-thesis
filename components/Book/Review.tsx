@@ -76,7 +76,7 @@ export const Review: FC<ReviewProps> = ({
   useEffect(() => {
     if (
       reviewParagraphRef.current &&
-      reviewParagraphRef.current.clientHeight >= 154
+      reviewParagraphRef.current.clientHeight >= 122
     ) {
       setRenderButton(true);
     }
@@ -87,7 +87,7 @@ export const Review: FC<ReviewProps> = ({
     return (
       <button
         className={clsx(
-          "flex items-center gap-1 rounded-sm border-2 px-2 py-1.5",
+          "flex items-center gap-1 rounded-sm border px-2 py-1.5",
           userReactionState === reaction
             ? "border-secondary dark:border-secondary-light"
             : "border-black dark:border-white"
@@ -160,7 +160,7 @@ export const Review: FC<ReviewProps> = ({
       className={clsx(
         "relative flex w-full flex-col gap-1 py-3 sm:flex-row",
         isMyReview &&
-          "min-h-[360px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[280px] before:sm:rounded-md"
+          "min-h-[346px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[256px] before:sm:rounded-md"
       )}
     >
       <Link
@@ -218,7 +218,7 @@ export const Review: FC<ReviewProps> = ({
             ref={reviewParagraphRef}
             className={clsx(
               "pl-1 pr-1 text-sm sm:pr-3",
-              !isExpanded && "line-clamp-[10] max-h-[154px]"
+              !isExpanded && "line-clamp-[10] max-h-[122px]"
             )}
           >
             {text}

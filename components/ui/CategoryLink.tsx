@@ -12,7 +12,8 @@ import { getBookmarkIcon } from "./getBookmarkIcon";
 
 interface CategoryLinkProps {
   variant: categoryTypes;
-  href: `/${string}`;
+  href: string;
+  hrefReplace?: boolean;
   withoutIcon?: boolean;
   quantity?: number;
 }
@@ -20,6 +21,7 @@ interface CategoryLinkProps {
 export const CategoryLink: FC<CategoryLinkProps> = ({
   variant,
   href,
+  hrefReplace = false,
   withoutIcon,
   quantity,
 }) => {
@@ -28,6 +30,7 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
   return (
     <div className="flex w-full">
       <Link
+        replace={hrefReplace}
         href={href}
         className="flex grow items-center justify-between gap-3 md:grow-0 md:justify-start"
       >

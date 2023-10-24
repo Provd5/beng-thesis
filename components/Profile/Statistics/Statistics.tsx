@@ -11,8 +11,8 @@ interface StatisticsProps {
 
 export const Statistics: FC<StatisticsProps> = ({ userId, userFullname }) => {
   return (
-    <div className="flex justify-center">
-      <Link href={`/profile/${userFullname}/statistics`}>
+    <div className="flex justify-center md:justify-start">
+      <Link href={`${userFullname}/statistics`}>
         <StatisticsCategoryWrapper variant="profile statistics">
           <MainStatisticsCard userId={userId} />
         </StatisticsCategoryWrapper>

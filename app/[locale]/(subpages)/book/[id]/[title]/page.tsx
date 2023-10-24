@@ -65,7 +65,8 @@ export default async function BookPage({
       <div className="flex flex-col items-start divide-y-2 divide-y-reverse divide-white-dark dark:divide-black-light">
         <CategoryLink
           variant="REVIEWS"
-          href={`/book/${id}/${title}/reviews`}
+          hrefReplace
+          href={`${title}/reviews`}
           withoutIcon
         />
         <MyReview
@@ -92,7 +93,7 @@ export default async function BookPage({
           )}
         </MyReview>
       </div>
-      <AllReviewsButton href={`/book/${id}/${title}/reviews`} />
+      <AllReviewsButton href={`${title}/reviews`} />
     </>
   );
 }

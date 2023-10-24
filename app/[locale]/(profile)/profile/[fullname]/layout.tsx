@@ -22,6 +22,7 @@ export default async function ProfileFullnameLayout({
       avatar_url: true,
       private: true,
       full_name: true,
+      followed_by: true,
       _count: { select: { followed_by: true, following: true } },
     },
   });
@@ -36,24 +37,38 @@ export default async function ProfileFullnameLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
+  const doIAlreadyFollow = (
+    followedBy: {
+      follower_id: string;
+    }[]
+  ) => {
+    return followedBy.some(
+      (follower) => follower.follower_id === session?.user.id
+    );
+  };
+
   return (
     <>
       <div className="mb-2 flex flex-col">
-        <div className="flex gap-1 xs:gap-3">
+        <div className="flex min-h-[100px] gap-3">
           <div className="ml-0 mt-[-30px] xs:ml-6">
             <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
               <AvatarImage size="lg" avatarSrc={publicUserData.avatar_url} />
               <ProfileStatus isPrivate={publicUserData.private} />
             </div>
           </div>
-          <div className="mx-0.5 my-3">
+          <div className="mx-0.5 mt-3">
             <FollowLinks
+              id={publicUserData.id}
+              fullname={fullname}
+              isMyProfile={session?.user.id === publicUserData.id}
+              isFollowed={doIAlreadyFollow(publicUserData.followed_by)}
               followers={publicUserData._count.followed_by}
               following={publicUserData._count.following}
             />
           </div>
         </div>
-        <h1 className="break-word mx-1 my-2 text-xl font-semibold text-primary dark:text-primary-light">
+        <h1 className="break-word mx-0 mb-3 mt-1 text-xl font-semibold text-primary dark:text-primary-light xs:mx-6">
           {publicUserData.full_name}
         </h1>
       </div>

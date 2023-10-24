@@ -35,7 +35,7 @@ export default async function EditProfilePage() {
 
   return (
     <>
-      <div className="flex gap-1 xs:gap-3">
+      <div className="flex gap-3">
         <div className="ml-0 mt-[-30px] xs:ml-6">
           <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
             <AvatarImage size="lg" avatarSrc={userData.avatar_url} />

@@ -10,13 +10,7 @@ import { CategoryArray } from "~/types/categoryTypes";
 
 import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 
-interface CategoryLinksContainerProps {
-  userFullname: string;
-}
-
-export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
-  userFullname,
-}) => {
+export const CategoryLinksContainer: FC = () => {
   const t = useTranslations("Book.BookshelfTypes");
 
   const pathname = usePathname();
@@ -34,7 +28,8 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
     return (
       <Link
         key={categoryVariant}
-        href={`/profile/${userFullname}/${categoryVariantPathname}`}
+        replace
+        href={`${categoryVariantPathname}`}
         className={clsx(
           "whitespace-nowrap rounded-xl border border-secondary px-5 py-2.5 text-sm dark:border-secondary-light",
           isActive()

@@ -9,6 +9,7 @@ import { ManageBookshelf } from "~/components/Book/ManageBookshelf";
 import { ManageLikes } from "~/components/Book/ManageLikes";
 import { ManageOwnedAs } from "~/components/Book/ManageOwnedAs";
 import { ManageReviews } from "~/components/Book/ManageReviews";
+import { BackCategoryButton } from "~/components/ui/BackCategoryLink";
 import { db } from "~/lib/db";
 import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
 
@@ -63,10 +64,11 @@ export default async function BookLayout({
   const myReviewData = myData?.review?.[0];
 
   return (
-    <div className="container pb-6 pt-12 text-sm">
-      <div className="flex flex-col gap-8">
+    <div className="container py-8 text-sm">
+      <BackCategoryButton />
+      <div className="mt-3 flex flex-col gap-8">
         <div className="flex flex-col gap-x-10 gap-y-8 px-1 xs:px-3 md:flex-row md:justify-between md:px-6">
-          <div className="flex gap-1 xs:gap-3">
+          <div className="flex gap-3">
             <BookCover size="lg" coverUrl={book.thumbnail_url} />
 
             <div className="mt-0.5 flex flex-col gap-3">
