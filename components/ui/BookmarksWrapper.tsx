@@ -22,13 +22,13 @@ export const BookmarksWrapper: FC<BookmarksWrapperProps> = ({
       : color;
 
   const sizeClass = {
-    lg: "w-7 pt-1",
-    default: "w-5",
-    sm: "w-4",
+    lg: "w-7 py-2",
+    default: "w-5 py-1",
+    sm: "w-4 py-0.5",
   };
 
   return (
-    <div className="flex">
+    <div className="flex self-start">
       <Icon
         className={clsx("h-auto drop-shadow-icon", colorClass, sizeClass[size])}
       />

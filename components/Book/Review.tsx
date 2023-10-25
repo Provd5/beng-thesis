@@ -241,7 +241,7 @@ export const Review: FC<ReviewProps> = ({
           {text && (
             <div className="flex flex-col items-end gap-1">
               <p className="text-right text-xs">
-                {t("was this review useful?")}
+                {t("was this review helpful?")}
               </p>
               <div className="flex gap-1 px-1 text-sm text-black-light dark:text-white-dark">
                 {renderReaction("OK", FaFaceLaughBeam)}

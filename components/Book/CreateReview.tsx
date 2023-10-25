@@ -14,6 +14,7 @@ import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { ModalWrapper } from "../Modals/ModalWrapper";
 import { AvatarImage } from "../Profile/AvatarImage";
 import { Button, ButtonLink } from "../ui/Buttons";
+import { Input } from "../ui/Input";
 
 interface CreateReviewProps {
   avatarUrl: string | null | undefined;
@@ -56,8 +57,8 @@ export const CreateReview: FC<CreateReviewProps> = ({
     const formData = {
       bookId: bookId,
       text:
-        textareaInput && textareaInput.value.length > 0
-          ? reviewTextarea.current.value
+        textareaInput && textareaInput.value.trim().length > 0
+          ? textareaInput.value
           : null,
       score: yourScore,
     };
@@ -105,14 +106,16 @@ export const CreateReview: FC<CreateReviewProps> = ({
         <h1 className="line-clamp-3 break-all font-bold">{fullName}</h1>
       </div>
       <div className="flex w-full flex-auto flex-col justify-between gap-2">
-        <textarea
+        <Input
+          isTextarea
+          loading={isLoading}
           ref={reviewTextarea}
           id="review-textarea"
-          name="review"
+          name="review-textarea"
           autoComplete="off"
           minLength={1}
           maxLength={5000}
-          className="min-h-[214px] rounded-l-md rounded-tr-md p-3 sm:min-h-[180px]"
+          className="min-h-[214px] sm:min-h-[180px]"
           placeholder={t("express your opinion")}
           defaultValue={text || ""}
         />

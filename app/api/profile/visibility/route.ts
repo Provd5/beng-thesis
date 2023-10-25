@@ -3,8 +3,8 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { z } from "zod";
 
 import { db } from "~/lib/db";
-import { UsernameValidator } from "~/lib/validations/auth";
-import { AuthErrors, GlobalErrors } from "~/lib/validations/errorsEnums";
+import { GlobalErrors } from "~/lib/validations/errorsEnums";
+import { ProfileVisibilityValidator } from "~/lib/validations/profileVisibility";
 
 export async function PATCH(req: Request) {
   try {
@@ -20,20 +20,8 @@ export async function PATCH(req: Request) {
       return new Response(GlobalErrors.UNAUTHORIZED);
     }
 
-    const body = (await req.json()) as { username: string };
-    const { username } = UsernameValidator.parse(body);
-
-    // check if username is taken
-    const isUsernameExists = await db.profile.findFirst({
-      where: {
-        full_name: { equals: username, mode: "insensitive" },
-      },
-      select: { full_name: true },
-    });
-
-    if (isUsernameExists) {
-      return new Response(AuthErrors.USERNAME_EXISTS);
-    }
+    const body = (await req.json()) as { isPrivate: boolean };
+    const { isPrivate } = ProfileVisibilityValidator.parse(body);
 
     // update username
     await db.profile.update({
@@ -41,7 +29,7 @@ export async function PATCH(req: Request) {
         id: session.user.id,
       },
       data: {
-        full_name: username,
+        private: isPrivate,
       },
     });
 

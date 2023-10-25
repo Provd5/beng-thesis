@@ -69,7 +69,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
 
   return (
     <div className="flex gap-1">
-      <button disabled={isLoading} onClick={handleLike}>
+      <button className="flex h-fit" disabled={isLoading} onClick={handleLike}>
         {isLiked ? (
           getBookmarkIcon("LIKED", "lg")
         ) : (

@@ -16,6 +16,9 @@
     "EMAIL_NOT_CONFIRMED": "Email not confirmed",
     "SAME_USERNAME": "Given username is the same as the current",
 
+    "DESCRIPTION_TOO_LONG_5000": "Description must be less than 5000 characters",
+    "SAME_DESCRIPTION": "Given description is the same as the current",
+
     "REVIEW_TOO_LONG_5000": "Your review is too long",
     "WRONG_SCORE": "Give an adequate rating first",
 
@@ -86,12 +89,16 @@
       "already have an account? log in": "Already have an account? <Link>Log in</Link>",
       "check your email to continue login": "Check your email ({email}), to continue login"
     },
-    "EditUsername": {
-      "account created:": "Account created:",
-      "created by:": "Created by:",
-      "change/create your username:": "{view, select, change {Change} create {Create} other {Change/Create}} username:",
+    "EditProfile": {
+      "account created using:": "Account created using:",
+      "your profile name:": "Your profile name:",
+      "your profile description:": "Your profile description:",
       "enter username": "Enter username...",
-      "submit": "Submit"
+      "add profile description": "Add profile description...",
+      "profile visibility:": "Profile visibility:",
+      "public/private": "{view, select, public {Pubilc} private {Private} other {}}",
+      "edit": "Edit",
+      "save": "Save"
     },
     "CategoryContentCard": {
       "this shelf is currently empty": "This shelf is currently empty",
@@ -197,7 +204,7 @@
       "cancel": "Cancel"
     },
     "Review": {
-      "was this review useful?": "Was this review useful?",
+      "was this review helpful?": "Was this review helpful?",
       "OK": "Yes",
       "MEH": "No",
       "joined:": "joined:",
@@ -209,6 +216,12 @@
     "ReviewsNotFound": {
       "this book has no written reviews yet": "This book has no written reviews yet",
       "back": "back"
+    },
+    "BookReviewCard": {
+      "your rate:": "Your rate:",
+      "posted:": "Posted:",
+      "edited:": "Edited:",
+      "users found this review helpful": "<span>{numUsers, plural, =1 {# user} other {# users}}</span> found this review helpful"
     }
   },
 

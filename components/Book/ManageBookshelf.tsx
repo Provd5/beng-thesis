@@ -137,7 +137,7 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   return (
     <div className="flex gap-1">
       <div
-        className="relative flex cursor-pointer"
+        className="relative flex h-fit cursor-pointer"
         onClick={() => setIsModalOpen(!isModalOpen)}
       >
         {currentBookshelf ? (

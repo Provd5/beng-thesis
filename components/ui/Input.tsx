@@ -1,39 +1,57 @@
-import type { DetailedHTMLProps, FC, InputHTMLAttributes } from "react";
+import { forwardRef, type HTMLProps, type Ref } from "react";
 import clsx from "clsx";
 
-interface InputProps
-  extends DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
-  > {
+interface InputProps extends HTMLProps<HTMLInputElement | HTMLTextAreaElement> {
   id: string;
   loading: boolean;
+  isTextarea?: boolean;
   label?: string;
 }
 
-export const Input: FC<InputProps> = ({
-  id,
-  loading,
-  label,
-  className,
-  ...props
-}) => {
+export const Input = forwardRef<
+  HTMLInputElement | HTMLTextAreaElement,
+  InputProps
+>(function InputComponent(
+  { id, loading, isTextarea, label, className, ...props },
+  ref
+) {
+  const commonProps = {
+    disabled: loading,
+    id: id,
+    ...props,
+  };
+
+  const commonClass =
+    "bg-white-light text-black dark:bg-black-dark dark:text-white";
+
   return (
-    <div className="flex flex-col">
+    <div className="flex w-[inherit] flex-col">
       {label && (
         <label className="ml-3" htmlFor={id}>
           {label}
         </label>
       )}
-      <input
-        disabled={loading}
-        className={clsx(
-          "w-64 rounded-lg bg-white px-3 py-2 text-md text-black dark:bg-black dark:text-white",
-          className
-        )}
-        id={id}
-        {...props}
-      />
+      {isTextarea ? (
+        <textarea
+          {...commonProps}
+          className={clsx(
+            "rounded-l-md rounded-tr-md p-3 text-sm",
+            commonClass,
+            className
+          )}
+          ref={ref as Ref<HTMLTextAreaElement>}
+        />
+      ) : (
+        <input
+          {...commonProps}
+          className={clsx(
+            "rounded-lg px-3 py-2 text-md",
+            commonClass,
+            className
+          )}
+          ref={ref as Ref<HTMLInputElement>}
+        />
+      )}
     </div>
   );
-};
+});

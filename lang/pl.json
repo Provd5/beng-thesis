@@ -16,6 +16,9 @@
     "EMAIL_NOT_CONFIRMED": "Email nie został potwierdzony",
     "SAME_USERNAME": "Podana nazwa użytkownika jest taka sama jak bieżąca",
 
+    "DESCRIPTION_TOO_LONG_5000": "Opis nie może zawierać więcej niż 5000 znaków",
+    "SAME_DESCRIPTION": "Podany opis jest taki sam jak bieżący",
+
     "REVIEW_TOO_LONG_5000": "Twoja recenzja jest zbyt długa",
     "WRONG_SCORE": "Najpierw wystaw odpowiednią ocenę",
 
@@ -86,12 +89,16 @@
       "already have an account? log in": "Masz już konto? <Link>Zaloguj się</Link>",
       "check your email to continue login": "Sprawdź swój adres email ({email}), aby kontynuować logowanie"
     },
-    "EditUsername": {
-      "account created:": "Konto utworzone:",
-      "created by:": "Utworzone przez:",
-      "change/create your username:": "{view, select, change {Zmień} create {Stwórz} other {Zmień/Stwórz}} nazwę użytkownika:",
+    "EditProfile": {
+      "account created using:": "konto utworzone za pomocą:",
+      "your profile name:": "Twoja nazwa profilu:",
+      "your profile description:": "Twój opis profilu:",
       "enter username": "Podaj nazwę...",
-      "submit": "Prześlij"
+      "add profile description": "Dodaj opis profilu...",
+      "profile visibility:": "Widoczność profilu:",
+      "public/private": "{view, select, public {Publiczny} private {Prywatny} other {}}",
+      "edit": "Edytuj",
+      "save": "Zapisz"
     },
     "CategoryContentCard": {
       "this shelf is currently empty": "Ta półka jest obecnie pusta",
@@ -197,7 +204,7 @@
       "cancel": "Anuluj"
     },
     "Review": {
-      "was this review useful?": "Czy recenzja była przydatna?",
+      "was this review helpful?": "Czy recenzja była pomocna?",
       "OK": "Tak",
       "MEH": "Nie",
       "joined:": "dołączył:",
@@ -209,6 +216,12 @@
     "ReviewsNotFound": {
       "this book has no written reviews yet": "Ta książka nie ma jeszcze napisanych recenzji",
       "back": "wróć"
+    },
+    "BookReviewCard": {
+      "your rate:": "Twoja ocena:",
+      "posted:": "Zamieszczono:",
+      "edited:": "Edytowano:",
+      "users found this review helpful": "{numUsers, plural, =1 {<span># osoba</span> uznała} few {<span># osoby</span> uznały} other {<span># osób</span> uznało}} tę recenzję za pomocną"
     }
   },
 
