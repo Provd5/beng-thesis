@@ -50,7 +50,7 @@ export const ProfileCard: FC<ProfileCardProps> = ({
             className="drop-shadow-icon"
             avatarSrc={avatarUrl}
           />
-          <div className="flex flex-col gap-0.5">
+          <div className="flex w-full flex-col gap-0.5">
             <h1 className="line-clamp-2 break-all text-sm font-bold">
               {fullName}
             </h1>
@@ -69,7 +69,7 @@ export const ProfileCard: FC<ProfileCardProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex w-full items-center justify-end">
+          <div className="flex items-center justify-end">
             <MdNavigateNext className="h-8 w-8" />
           </div>
         </Link>

@@ -20,7 +20,7 @@ export const NotFoundPage: FC<NotFoundPageProps> = ({ variant }) => {
           <h1 className="text-[68px] font-semibold leading-[78px]">404</h1>
           <h2>{t("not found")} 😵</h2>
         </div>
-        <p className="mt-10 text-center">
+        <p className="mt-10 px-6 text-center">
           {t(variant)}{" "}
           <span className="font-semibold">{t("doesn't exist")}</span>
         </p>

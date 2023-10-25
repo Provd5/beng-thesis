@@ -28,6 +28,7 @@ interface ManageOwnedAsProps {
   addedEbookAt: Date | null | undefined;
   addedAudiobookAt: Date | null | undefined;
   addedBookAt: Date | null | undefined;
+  size?: "sm" | "default" | "lg";
 }
 
 export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
@@ -35,6 +36,7 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
   addedEbookAt,
   addedAudiobookAt,
   addedBookAt,
+  size = "default",
 }) => {
   const t = useTranslations("Book.ManageOwnedAs");
   const te = useTranslations("Errors");
@@ -95,6 +97,7 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
         active={isModalOpen}
         className="self-start"
         onClick={() => setIsModalOpen(!isModalOpen)}
+        size={size}
       >
         {t("owned as")}
       </ButtonLink>
@@ -140,9 +143,9 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
         </ModalWrapper>
       )}
       <div className="flex gap-1">
-        {addedBookAtState && getOwnedAsIcon("BOOK", "lg")}
-        {addedEbookAtState && getOwnedAsIcon("EBOOK", "lg")}
-        {addedAudiobookAtState && getOwnedAsIcon("AUDIOBOOK", "lg")}
+        {addedBookAtState && getOwnedAsIcon("BOOK", size)}
+        {addedEbookAtState && getOwnedAsIcon("EBOOK", size)}
+        {addedAudiobookAtState && getOwnedAsIcon("AUDIOBOOK", size)}
         {!addedBookAtState && !addedEbookAtState && !addedAudiobookAtState && (
           <p className="h-8 w-8">–</p>
         )}
