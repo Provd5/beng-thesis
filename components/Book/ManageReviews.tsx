@@ -38,7 +38,7 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
 
   return (
     <div className="flex gap-1">
-      <button onClick={handleFocusReview}>
+      <button className="flex h-fit" onClick={handleFocusReview}>
         {isReviewExists ? (
           getBookmarkIcon("REVIEWS", "lg")
         ) : (

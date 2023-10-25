@@ -43,7 +43,7 @@ export default async function EditProfilePage() {
         </div>
         <ManageProfileStatus isPrivate={userData.private} />
       </div>
-      <div className="flex flex-col gap-5">
+      <div className="mt-2 flex flex-col gap-5">
         <ManageProfileUsername userFullname={userData.full_name} />
         <ManageProfileDescription userDescription={userData.description} />
       </div>

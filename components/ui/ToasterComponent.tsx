@@ -16,7 +16,7 @@ export const ToasterComponent: FC<ToasterProps> = ({}) => {
       containerClassName="!inset-x-[10px] !top-[10px] mb-3 !bottom-[var(--nav-height)] md:!bottom-[10px]"
       toastOptions={{
         className: clsx(sharedClass, "!text-blue"),
-        duration: 2000,
+        duration: 4000,
         icon: null,
         success: {
           className: clsx(sharedClass, "!text-green"),

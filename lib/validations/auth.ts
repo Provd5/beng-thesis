@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import {
+  DescriptionValidatorErrors,
   LoginValidatorErrors,
   SignupValidatorErrors,
   UsernameValidatorErrors,
@@ -35,4 +36,14 @@ export const UsernameValidator = z.object({
     .regex(/^(?!.*\.\.)[a-zA-Z0-9._-]+$/, {
       message: UsernameValidatorErrors.WRONG_USERNAME,
     }), // can contain both lower and uppercase letters (a-z), numbers (0-9), and (".", "_", "-")
+});
+
+export const DescriptionValidator = z.object({
+  description: z
+    .string()
+    .nonempty()
+    .max(5000, {
+      message: DescriptionValidatorErrors.DESCRIPTION_TOO_LONG_5000,
+    })
+    .nullable(),
 });

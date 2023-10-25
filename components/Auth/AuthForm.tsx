@@ -195,6 +195,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
             onSubmit={view === "logIn" ? handleLogIn : handleSignUp}
           >
             <Input
+              className="w-64"
               loading={isLoading}
               label={t("email:")}
               id="email-input"
@@ -205,6 +206,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
               required
             />
             <Input
+              className="w-64"
               loading={isLoading}
               label={t("password:")}
               id="password-input"
@@ -215,6 +217,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
             />
             {view === "signUp" && (
               <Input
+                className="w-64"
                 loading={isLoading}
                 label={t("repeat password:")}
                 id="password-repeat-input"
