@@ -49,8 +49,23 @@ export default async function BookLayout({
       db.profile.findUnique({
         where: { id: session.user.id },
         select: {
-          bookshelf: { where: { book_id: id } },
-          book_owned_as: { where: { book_id: id } },
+          bookshelf: {
+            where: { book_id: id },
+            select: {
+              bookshelf: true,
+              updated_at: true,
+              began_reading_at: true,
+              read_quantity: true,
+            },
+          },
+          book_owned_as: {
+            where: { book_id: id },
+            select: {
+              added_audiobook_at: true,
+              added_book_at: true,
+              added_ebook_at: true,
+            },
+          },
           review: { where: { book_id: id }, select: { created_at: true } },
           _count: { select: { liked_book: { where: { book_id: id } } } },
         },
@@ -62,6 +77,8 @@ export default async function BookLayout({
   const myBookshelfData = myData?.bookshelf?.[0];
   const myOwnedAsData = myData?.book_owned_as?.[0];
   const myReviewData = myData?.review?.[0];
+  const doILikeThisBook = !!myData?._count.liked_book;
+  const isReviewExists = !!myData?.review;
 
   return (
     <div className="container py-8 text-sm">
@@ -112,7 +129,7 @@ export default async function BookLayout({
               />
             </div>
           </div>
-          <div className="flex flex-wrap content-start justify-center gap-8 px-2 md:max-w-[400px] md:justify-end">
+          <div className="flex flex-wrap content-start justify-center gap-5 px-2 md:max-w-[400px] md:justify-end md:gap-8">
             <div className="flex h-fit flex-wrap items-start justify-center gap-x-4 gap-y-5 sm:justify-between">
               <div className="w-36">
                 <ManageBookshelf
@@ -136,13 +153,13 @@ export default async function BookLayout({
               <div className="w-36">
                 <ManageLikes
                   bookId={book.id}
-                  doILikeThisBook={!!myData?._count.liked_book}
+                  doILikeThisBook={doILikeThisBook}
                   likesQuantity={book._count.liked_by}
                 />
               </div>
               <div className="w-36">
                 <ManageReviews
-                  isReviewExists={!!myData?.review}
+                  isReviewExists={isReviewExists}
                   reviewsQuantity={bookScores.length}
                   createdAt={myReviewData?.created_at}
                 />

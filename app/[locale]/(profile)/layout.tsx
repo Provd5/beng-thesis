@@ -4,7 +4,6 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AccountSettings } from "~/components/Modals/AccountSettings";
 import { Settings } from "~/components/Modals/Settings";
-import { ProfilePageContainer } from "~/components/ui/PageContainer";
 import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 
@@ -38,8 +37,8 @@ export default async function ProfileLayout({
 
   return (
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden">
-      <div className="absolute right-4 top-3 text-white md:right-6 md:top-5">
-        <div className="flex gap-3">
+      <div className="flex h-[68px] flex-none self-end p-3 text-white">
+        <div className="flex h-fit gap-3">
           <AccountSettings
             userFullname={userData?.full_name}
             userAvatarUrl={userData?.avatar_url}
@@ -47,9 +46,9 @@ export default async function ProfileLayout({
           <Settings setLangCookie={setLangCookie} />
         </div>
       </div>
-      <ProfilePageContainer>
+      <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/90 dark:bg-black/90 md:rounded-none">
         <div className="container pb-6">{children}</div>
-      </ProfilePageContainer>
+      </div>
     </main>
   );
 }

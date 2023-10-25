@@ -19,6 +19,15 @@ export const OwnedAsStatisticsCard: FC<OwnedAsStatisticsCardProps> = async ({
     where: { id: userId },
     select: {
       book_owned_as: {
+        where: {
+          NOT: {
+            AND: [
+              { added_audiobook_at: null },
+              { added_book_at: null },
+              { added_ebook_at: null },
+            ],
+          },
+        },
         select: {
           added_audiobook_at: true,
           added_book_at: true,
@@ -35,7 +44,6 @@ export const OwnedAsStatisticsCard: FC<OwnedAsStatisticsCardProps> = async ({
 
   return (
     <div className="flex flex-col items-center gap-3">
-      {" "}
       <div className="flex gap-3">
         {OwnedAsArray.map((ownedAs) => (
           <div

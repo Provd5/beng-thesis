@@ -8,7 +8,9 @@ export const PrivateProfilePage: FC = ({}) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <h1 className="text-center text-lg">{t("this profile is private")} 😥</h1>
+      <h1 className="px-6 text-center text-lg">
+        {t("this profile is private")} 😥
+      </h1>
     </div>
   );
 };

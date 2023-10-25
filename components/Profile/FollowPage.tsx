@@ -4,6 +4,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { ProfileCard } from "~/components/Explore/ProfileCard";
 import { db } from "~/lib/db";
+import { doIAlreadyFollowThisProfile } from "~/utils/doIAlreadyFollowThisProfile";
 
 import { BackCategoryLink } from "../ui/BackCategoryLink";
 
@@ -57,22 +58,22 @@ export default async function FollowPage({
           bookshelf: { where: { bookshelf: "ALREADY_READ" } },
           review: true,
           followed_by: true,
-          book_owned_as: true,
+          book_owned_as: {
+            where: {
+              NOT: {
+                AND: [
+                  { added_audiobook_at: null },
+                  { added_book_at: null },
+                  { added_ebook_at: null },
+                ],
+              },
+            },
+          },
           liked_book: true,
         },
       },
     },
   });
-
-  const doIAlreadyFollow = (
-    followedBy: {
-      follower_id: string;
-    }[]
-  ) => {
-    return followedBy.some(
-      (follower) => follower.follower_id === session?.user.id
-    );
-  };
 
   return (
     <div className="mt-6">
@@ -90,7 +91,10 @@ export default async function FollowPage({
             OwnedAsQuantity={profile._count.book_owned_as}
             followedByQuantity={profile._count.followed_by}
             description={profile.description}
-            isFollowed={doIAlreadyFollow(profile.followed_by)}
+            isFollowed={doIAlreadyFollowThisProfile(
+              profile.followed_by,
+              session?.user.id
+            )}
           />
         ))}
       </div>

@@ -14,7 +14,7 @@ export const ReviewsNotFound: FC<ReviewsNotFoundProps> = ({ backToHref }) => {
   return (
     <>
       <div className="flex w-full flex-col items-center gap-1 py-6">
-        <h1 className="text-lg">
+        <h1 className="px-6 text-center text-lg">
           {t("this book has no written reviews yet")} 😥
         </h1>
         <Link className="underline" href={backToHref}>

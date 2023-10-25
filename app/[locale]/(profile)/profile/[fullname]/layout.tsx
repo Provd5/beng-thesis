@@ -7,6 +7,7 @@ import { FollowLinks } from "~/components/Profile/FollowLinks";
 import { PrivateProfilePage } from "~/components/Profile/PrivateProfilePage";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
 import { db } from "~/lib/db";
+import { doIAlreadyFollowThisProfile } from "~/utils/doIAlreadyFollowThisProfile";
 
 export default async function ProfileFullnameLayout({
   children,
@@ -37,20 +38,10 @@ export default async function ProfileFullnameLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
-  const doIAlreadyFollow = (
-    followedBy: {
-      follower_id: string;
-    }[]
-  ) => {
-    return followedBy.some(
-      (follower) => follower.follower_id === session?.user.id
-    );
-  };
-
   return (
     <>
       <div className="mb-2 flex flex-col">
-        <div className="flex min-h-[100px] gap-3">
+        <div className="flex gap-3">
           <div className="ml-0 mt-[-30px] xs:ml-6">
             <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
               <AvatarImage size="lg" avatarSrc={publicUserData.avatar_url} />
@@ -62,7 +53,10 @@ export default async function ProfileFullnameLayout({
               id={publicUserData.id}
               fullname={fullname}
               isMyProfile={session?.user.id === publicUserData.id}
-              isFollowed={doIAlreadyFollow(publicUserData.followed_by)}
+              isFollowed={doIAlreadyFollowThisProfile(
+                publicUserData.followed_by,
+                session?.user.id
+              )}
               followers={publicUserData._count.followed_by}
               following={publicUserData._count.following}
             />

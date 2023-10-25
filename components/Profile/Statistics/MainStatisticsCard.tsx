@@ -21,7 +21,17 @@ export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
     select: {
       _count: {
         select: {
-          book_owned_as: true,
+          book_owned_as: {
+            where: {
+              NOT: {
+                AND: [
+                  { added_audiobook_at: null },
+                  { added_book_at: null },
+                  { added_ebook_at: null },
+                ],
+              },
+            },
+          },
           liked_book: true,
           review: true,
         },

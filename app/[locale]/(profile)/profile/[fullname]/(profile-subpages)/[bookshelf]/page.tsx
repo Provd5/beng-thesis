@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { CategoryArray, type categoryTypes } from "~/types/categoryTypes";
 
-import { BookCover } from "~/components/Book/BookCover";
+import { BookCard } from "~/components/Explore/BookCard";
 import { BookshelfPageTitle } from "~/components/Profile/Bookshelf/BookshelfPageTitle";
 import { db } from "~/lib/db";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
@@ -14,6 +13,13 @@ type bookDataType = {
     title: string;
     authors: string[];
     thumbnail_url: string | null;
+    review: {
+      score: number;
+    }[];
+    _count: {
+      review: number;
+      liked_by: number;
+    };
   };
 };
 
@@ -28,28 +34,44 @@ export default async function BookshelfPage({
     notFound();
   }
 
-  let bookData: bookDataType[] = [];
+  let books: bookDataType[] = [];
 
   const commonSelect = {
     book: {
-      select: { id: true, title: true, authors: true, thumbnail_url: true },
+      select: {
+        id: true,
+        title: true,
+        authors: true,
+        thumbnail_url: true,
+        review: { select: { score: true } },
+        _count: { select: { review: true, liked_by: true } },
+      },
     },
   };
 
   switch (bookshelfAsType) {
     case "OWNED":
-      bookData = await db.book_owned_as.findMany({
+      books = await db.book_owned_as.findMany({
         orderBy: [
           { added_book_at: "desc" },
           { added_ebook_at: "desc" },
           { added_audiobook_at: "desc" },
         ],
-        where: { profile: { full_name: fullname } },
+        where: {
+          profile: { full_name: fullname },
+          NOT: {
+            AND: [
+              { added_audiobook_at: null },
+              { added_book_at: null },
+              { added_ebook_at: null },
+            ],
+          },
+        },
         select: commonSelect,
       });
       break;
     case "LIKED":
-      bookData = await db.liked_books.findMany({
+      books = await db.liked_books.findMany({
         orderBy: { updated_at: "desc" },
         where: { profile: { full_name: fullname } },
         select: commonSelect,
@@ -60,7 +82,7 @@ export default async function BookshelfPage({
     case "STATISTICS":
       break;
     default:
-      bookData = await db.bookshelf.findMany({
+      books = await db.bookshelf.findMany({
         orderBy: { updated_at: "desc" },
         where: { bookshelf: bookshelfAsType, profile: { full_name: fullname } },
         select: commonSelect,
@@ -71,25 +93,13 @@ export default async function BookshelfPage({
   return (
     <div className="flex flex-col gap-3">
       <BookshelfPageTitle
-        booksQuantity={bookData.length}
+        booksQuantity={books.length}
         categoryVariant={bookshelfAsType}
       />
-      <div className="flex flex-wrap gap-3">
-        {bookData.map((data) => (
-          <Link
-            key={data.book.id}
-            href={`/book/${data.book.id}/${data.book.title}`}
-            className="flex w-32 flex-none snap-center flex-col items-center gap-1 py-0.5 md:snap-start"
-          >
-            <BookCover coverUrl={data.book.thumbnail_url} />
-            <div className="self-start">
-              <h1 className="line-clamp-2">{data.book.title}</h1>
-              <p className="text-sm text-black-light dark:text-white-dark">
-                {data.book.authors.join(", ")}
-              </p>
-            </div>
-          </Link>
-        ))}
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        {books?.map(({ book }) => {
+          return <BookCard key={book.id} bookData={book} />;
+        })}
       </div>
     </div>
   );

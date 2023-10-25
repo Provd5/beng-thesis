@@ -28,7 +28,17 @@ export default async function ProfilePage({
         select: {
           followed_by: true,
           following: true,
-          book_owned_as: true,
+          book_owned_as: {
+            where: {
+              NOT: {
+                AND: [
+                  { added_audiobook_at: null },
+                  { added_book_at: null },
+                  { added_ebook_at: null },
+                ],
+              },
+            },
+          },
           liked_book: true,
           review: true,
         },
@@ -40,9 +50,9 @@ export default async function ProfilePage({
   if (!userData) notFound();
 
   const quantities = {
-    ownedQuantity: userData?._count.book_owned_as,
-    likedQuantity: userData?._count.liked_book,
-    reviewsQuantity: userData?._count.review,
+    ownedQuantity: userData._count.book_owned_as,
+    likedQuantity: userData._count.liked_book,
+    reviewsQuantity: userData._count.review,
   };
 
   return (
