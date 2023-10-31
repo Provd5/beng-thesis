@@ -3,7 +3,7 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { type categoryTypes } from "~/types/categoryTypes";
+import { type categoryTypes } from "~/types/CategoryTypes";
 
 import { getBookmarkIcon } from "~/components/ui/getBookmarkIcon";
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";

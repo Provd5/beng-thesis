@@ -1,26 +1,20 @@
-import { BookCard } from "~/components/Explore/BookCard";
-import { db } from "~/lib/db";
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
+import { BooksFeed } from "~/components/Feed/BooksFeed";
 
 export default async function ExplorePage() {
-  const books = await db.book.findMany({
-    select: {
-      id: true,
-      title: true,
-      authors: true,
-      thumbnail_url: true,
-      review: { select: { score: true } },
-      _count: { select: { review: true, liked_by: true } },
-    },
-    orderBy: { published_date: "desc" },
+  const supabase = createServerComponentClient({
+    cookies,
   });
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   return (
     <div className="container py-6">
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        {books?.map((book) => {
-          return <BookCard key={book.id} bookData={book} />;
-        })}
-      </div>
+      <BooksFeed userId={session?.user.id} />
     </div>
   );
 }

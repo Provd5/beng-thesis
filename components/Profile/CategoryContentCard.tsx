@@ -1,18 +1,18 @@
 import type { FC } from "react";
 import Link from "next/link";
 
-import { type categoryTypes } from "~/types/categoryTypes";
+import { type CategoryTypes } from "~/types/CategoryTypes";
 
 import { db } from "~/lib/db";
 
 import { BookCover } from "../Book/BookCover";
 
 interface CategoryContentCardProps {
-  categoryVariant: categoryTypes;
+  categoryVariant: CategoryTypes;
   userId: string;
 }
 
-type bookDataType = {
+type BookDataType = {
   book: {
     id: string;
     title: string;
@@ -25,7 +25,7 @@ export const CategoryContentCard: FC<CategoryContentCardProps> = async ({
   categoryVariant,
   userId,
 }) => {
-  let books: bookDataType[] = [];
+  let books: BookDataType[] = [];
 
   const commonSelect = {
     book: {

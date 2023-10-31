@@ -1,15 +1,13 @@
 import { type bookshelfType } from "@prisma/client";
 
-import { type ownedAsType } from "~/lib/validations/book/ownedAs";
-
-export type categoryTypes =
+export type CategoryTypes =
   | bookshelfType
   | "OWNED"
   | "LIKED"
   | "REVIEWS"
   | "STATISTICS";
 
-export const CategoryArray: categoryTypes[] = [
+export const categoryArray: CategoryTypes[] = [
   "STATISTICS",
   "OWNED",
   "LIKED",
@@ -21,4 +19,6 @@ export const CategoryArray: categoryTypes[] = [
   "REVIEWS",
 ];
 
-export const OwnedAsArray: ownedAsType[] = ["BOOK", "EBOOK", "AUDIOBOOK"];
+export type OwnedAsType = "BOOK" | "EBOOK" | "AUDIOBOOK";
+
+export const ownedAsArray: OwnedAsType[] = ["BOOK", "EBOOK", "AUDIOBOOK"];

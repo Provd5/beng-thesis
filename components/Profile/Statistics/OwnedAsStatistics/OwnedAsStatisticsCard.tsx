@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { OwnedAsArray } from "~/types/categoryTypes";
+import { ownedAsArray } from "~/types/CategoryTypes";
 
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
 import { db } from "~/lib/db";
@@ -45,7 +45,7 @@ export const OwnedAsStatisticsCard: FC<OwnedAsStatisticsCardProps> = async ({
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="flex gap-3">
-        {OwnedAsArray.map((ownedAs) => (
+        {ownedAsArray.map((ownedAs) => (
           <div
             key={ownedAs}
             className="flex flex-col items-center justify-center gap-0.5"

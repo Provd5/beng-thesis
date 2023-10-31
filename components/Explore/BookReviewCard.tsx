@@ -1,56 +1,49 @@
-"use client";
-
 import type { FC } from "react";
-import { useTranslations } from "next-intl";
+import Link from "next/link";
 
-import { dateFormater } from "~/utils/dateFormater";
+import { type BookReviewCardDataInterface } from "~/types/BookCardDataInterface";
+
+import { BookCover } from "../Book/BookCover";
+import { BookReviewCardDetails } from "./BookReviewCardDetails";
 
 interface BookReviewCardProps {
-  score: number;
-  createdAt: Date;
-  updatedAt: Date | null;
-  text: string | null;
-  okReactions: number;
+  bookData: BookReviewCardDataInterface;
 }
 
-export const BookReviewCard: FC<BookReviewCardProps> = ({
-  score,
-  createdAt,
-  updatedAt,
-  text,
-  okReactions,
-}) => {
-  const t = useTranslations("Reviews.BookReviewCard");
+export const BookReviewCard: FC<BookReviewCardProps> = ({ bookData }) => {
+  const myReview = bookData.review?.[0];
+  const okReactions = myReview?.review_reaction.filter(
+    ({ reaction }) => reaction === "OK"
+  );
 
   return (
-    <>
-      <div className="mt-1 flex flex-col gap-1">
-        <h1>
-          {t("your rate:")}{" "}
-          <span className="text-secondary dark:text-secondary-light">{`${score}/5`}</span>
-        </h1>
-        <h2 className="flex text-xs text-black-light dark:text-white-dark">
-          {t("posted:")} {dateFormater(createdAt, true)}
-          {updatedAt && ` / ${t("edited:")} ${dateFormater(updatedAt, true)}`}
-        </h2>
+    <div key={bookData.id}>
+      <Link
+        href={`/book/${bookData.id}/${bookData.title}`}
+        className="float-left h-fit w-fit pr-3"
+      >
+        <BookCover coverUrl={bookData.thumbnail_url} />
+      </Link>
+      <div>
+        <Link
+          href={`/book/${bookData.id}/${bookData.title}`}
+          className="self-start"
+        >
+          <h1 className="line-clamp-2">{bookData.title}</h1>
+          <p className="text-sm text-black-light dark:text-white-dark">
+            {bookData.authors.join(", ")}
+          </p>
+        </Link>
+        {myReview && (
+          <BookReviewCardDetails
+            score={myReview.score}
+            createdAt={myReview.created_at}
+            updatedAt={myReview.updated_at}
+            text={myReview.text}
+            okReactions={okReactions.length}
+          />
+        )}
       </div>
-      {text && (
-        <div>
-          <p className="py-1 pl-1">{text}</p>
-          {okReactions > 0 && (
-            <p className="text-xs text-black-light dark:text-white-dark">
-              {t.rich("users found this review helpful", {
-                numUsers: okReactions,
-                span: (chunks) => (
-                  <span className="text-secondary dark:text-secondary-light">
-                    {chunks}
-                  </span>
-                ),
-              })}
-            </p>
-          )}
-        </div>
-      )}
-    </>
+    </div>
   );
 };

@@ -1,9 +1,8 @@
 import type { FC } from "react";
-import { cookies } from "next/headers";
 import Link from "next/link";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { db } from "~/lib/db";
+import { type BookCardDataInterface } from "~/types/BookCardDataInterface";
+
 import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
 
 import { BookCover } from "../Book/BookCover";
@@ -13,61 +12,13 @@ import { ManageOwnedAs } from "../Book/ManageOwnedAs";
 import { BookCardDetails } from "./BookCardDetails";
 
 interface BookCardProps {
-  bookData: {
-    id: string;
-    title: string;
-    authors: string[];
-    thumbnail_url: string | null;
-    review: {
-      score: number;
-    }[];
-    _count: {
-      review: number;
-      liked_by: number;
-    };
-  };
+  bookData: BookCardDataInterface;
 }
 
-export const BookCard: FC<BookCardProps> = async ({ bookData }) => {
-  const supabase = createServerComponentClient({
-    cookies,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  const myData =
-    session?.user &&
-    (await db.profile.findUnique({
-      where: { id: session.user.id },
-      select: {
-        bookshelf: {
-          where: { book_id: bookData.id },
-          select: {
-            bookshelf: true,
-            updated_at: true,
-            began_reading_at: true,
-            read_quantity: true,
-          },
-        },
-        book_owned_as: {
-          where: { book_id: bookData.id },
-          select: {
-            added_audiobook_at: true,
-            added_book_at: true,
-            added_ebook_at: true,
-          },
-        },
-        _count: {
-          select: { liked_book: { where: { book_id: bookData.id } } },
-        },
-      },
-    }));
-
-  const myOwnedAsData = myData?.book_owned_as?.[0];
-  const myBookshelfData = myData?.bookshelf?.[0];
-  const doILikeThisBook = !!myData?._count.liked_book;
+export const BookCard: FC<BookCardProps> = ({ bookData }) => {
+  const myOwnedAsData = bookData.book_owned_as?.[0];
+  const myBookshelfData = bookData.bookshelf?.[0];
+  const doILikeThisBook = !!(bookData.liked_by && bookData.liked_by.length > 0);
 
   return (
     <div className="flex justify-center gap-3 md:justify-start">

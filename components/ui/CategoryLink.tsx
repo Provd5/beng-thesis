@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 
 import { MdNavigateNext } from "react-icons/md";
 
-import { type categoryTypes } from "~/types/categoryTypes";
+import { type categoryTypes } from "~/types/CategoryTypes";
 
 import { getBookmarkIcon } from "./getBookmarkIcon";
 

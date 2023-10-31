@@ -1,3 +1,3 @@
-export type bookmarkSizes = "lg" | "default" | "sm";
+export type BookmarkSizes = "lg" | "default" | "sm";
 
-export type modalSizes = "default" | "sm" | "xs";
+export type ModalSizes = "default" | "sm" | "xs";
