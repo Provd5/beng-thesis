@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
-import { categoryArray } from "~/types/categoryTypes";
+import { categoryArray } from "~/types/CategoryTypes";
 
 import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 

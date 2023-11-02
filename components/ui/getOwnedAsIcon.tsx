@@ -1,12 +1,13 @@
+import { type OwnedAsType } from "~/types/CategoryTypes";
+
 import {
   AsAudiobook,
   AsBook,
   AsEbook,
 } from "~/components/ui/SvgIcons/OwnedAsIcons";
-import { type ownedAsType } from "~/lib/validations/book/ownedAs";
 
 export const getOwnedAsIcon = (
-  ownedAs: ownedAsType,
+  ownedAs: OwnedAsType,
   size: "lg" | "default" | "sm" = "default"
 ) => {
   const sizeClass = {
@@ -15,7 +16,7 @@ export const getOwnedAsIcon = (
     sm: "h-6 w-6",
   };
 
-  const renderIcon = (ownedAs: ownedAsType) => {
+  const renderIcon = (ownedAs: OwnedAsType) => {
     switch (ownedAs) {
       case "BOOK":
         return <AsBook />;
