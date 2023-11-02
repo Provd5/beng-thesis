@@ -3,12 +3,13 @@ import clsx from "clsx";
 
 import { BsCheck } from "react-icons/bs";
 
+import { type OwnedAsType } from "~/types/CategoryTypes";
+
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
-import { type ownedAsType } from "~/lib/validations/book/ownedAs";
 
 interface ManageOwnedAsModalContentProps {
   text: string;
-  ownedAs: ownedAsType;
+  ownedAs: OwnedAsType;
   addedState: string | null;
   onClickFunc: () => void;
 }
