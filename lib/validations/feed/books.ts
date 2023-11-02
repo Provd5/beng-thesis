@@ -19,13 +19,13 @@ export const BooksValidator = z.object({
     .enum([
       "title",
       "authors",
-      "liked_by_count",
-      "review_count",
+      "liked_by",
+      "review",
       "published_date",
       "publisher",
     ])
     .nullish(),
-  order: z.enum(["desc", "asc"]).nullish(),
+  order: z.enum(["desc", "asc"]),
   takeLimit: z.string(),
   page: z.string(),
 });

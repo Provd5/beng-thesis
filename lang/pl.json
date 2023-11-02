@@ -24,7 +24,7 @@
 
     "UNAUTHORIZED": "Nie jesteś zalogowany",
     "SOMETHING_WENT_WRONG": "Coś poszło nie tak, spróbuj ponownie za chwilę",
-    "COULD_NOT_FETCH": "Nie można załadować {item, select, books {książek} reviews {recenzji} other {elementów}}",
+    "COULD_NOT_FETCH": "Nie udało się załadować {item, select, books {książek} reviews {recenzji} other {elementów}}",
     "PENDING": "W toku...",
     "SUCCESS": "Sukces"
   },

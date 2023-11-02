@@ -1,20 +1,9 @@
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
 
-import { BooksFeed } from "~/components/Feed/BooksFeed";
-
-export default async function SearchPage() {
-  const supabase = createServerComponentClient({
-    cookies,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
+export default function SearchPage() {
   return (
     <>
-      <BooksFeed userId={session?.user.id} />
+      <FeedWithSorting takeLimit={5} feedVariant={"books"} />
     </>
   );
 }

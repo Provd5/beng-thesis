@@ -1,4 +1,4 @@
-import { type OwnedAsType } from "~/types/categoryTypes";
+import { type OwnedAsType } from "~/types/CategoryTypes";
 
 export const quantityPerOwnedType = (
   ownedAsVariant: OwnedAsType,

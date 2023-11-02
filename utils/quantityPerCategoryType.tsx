@@ -1,6 +1,6 @@
 import { type bookshelfType } from "@prisma/client";
 
-import { type CategoryTypes } from "~/types/categoryTypes";
+import { type CategoryTypes } from "~/types/CategoryTypes";
 
 export const quantityPerCategoryType = (
   categoryVariant: CategoryTypes,

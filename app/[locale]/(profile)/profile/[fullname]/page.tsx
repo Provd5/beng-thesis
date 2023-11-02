@@ -95,8 +95,10 @@ export default async function ProfilePage({
                     {variantQuantity > 0 ? (
                       <>
                         <CategoryContentCard
-                          categoryVariant={categoryVariant}
                           userId={userData.id}
+                          variant={categoryVariant}
+                          profileName={fullname}
+                          dataLength={variantQuantity}
                         />
                         {variantQuantity > 10 && (
                           <CategoryContentCardPlaceholder href={variantUrl} />

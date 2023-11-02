@@ -24,7 +24,7 @@
 
     "UNAUTHORIZED": "You are not logged in",
     "SOMETHING_WENT_WRONG": "Something went wrong, try again in a moment",
-    "COULD_NOT_FETCH": "Unable to load {item, select, books {books} reviews {reviews} other {items}}",
+    "COULD_NOT_FETCH": "Failed to load {item, select, books {books} reviews {reviews} other {items}}",
     "PENDING": "Pending...",
     "SUCCESS": "Success"
   },

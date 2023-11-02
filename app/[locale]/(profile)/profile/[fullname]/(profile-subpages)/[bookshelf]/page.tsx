@@ -4,7 +4,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
 
-import { BooksFeed } from "~/components/Feed/BooksFeed";
+import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
 import { BookshelfPageTitle } from "~/components/Profile/Bookshelf/BookshelfPageTitle";
 import { db } from "~/lib/db";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
@@ -69,21 +69,20 @@ export default async function BookshelfPage({
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col">
       <BookshelfPageTitle
         booksQuantity={booksQuantity || 0}
         categoryVariant={bookshelfAsType}
       />
-      {variant &&
-        (variant === "REVIEWS" ? (
-          <BooksFeed variant="REVIEWS" profileName={fullname} />
-        ) : (
-          <BooksFeed
-            userId={session?.user.id}
-            profileName={fullname}
-            variant={variant}
-          />
-        ))}
+      {variant && (
+        <FeedWithSorting
+          feedVariant="bookshelf"
+          takeLimit={10}
+          userId={session?.user.id}
+          profileName={fullname}
+          variant={variant}
+        />
+      )}
     </div>
   );
 }

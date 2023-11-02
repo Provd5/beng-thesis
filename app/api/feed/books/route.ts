@@ -1,3 +1,9 @@
+import {
+  type BookCardInterface,
+  type BookInterface,
+  type BookReviewCardInterface,
+} from "~/types/BookCardDataInterface";
+
 import { db } from "~/lib/db";
 import { BooksValidator } from "~/lib/validations/feed/books";
 
@@ -16,30 +22,27 @@ export async function GET(req: Request) {
         page: url.searchParams.get("page"),
       });
 
-    let orderByClause = {};
+    const parsedTakeLimit = parseInt(takeLimit);
+    const parsedSkip = (parseInt(page) - 1) * parseInt(takeLimit);
+
+    let orderByClause = null;
     switch (orderBy) {
       case "authors":
-        orderByClause = { authors: order || "desc" };
-        break;
       case "publisher":
-        orderByClause = { publisher: order || "desc" };
-        break;
       case "title":
-        orderByClause = { title: order || "desc" };
+      case "published_date":
+        orderByClause = { [orderBy]: order };
         break;
-      case "liked_by_count":
-        orderByClause = { liked_by: { _count: order || "desc" } };
-        break;
-      case "review_count":
-        orderByClause = { review: { _count: order || "desc" } };
+      case "liked_by":
+      case "review":
+        orderByClause = { [orderBy]: { _count: order } };
         break;
       default:
-      case "published_date":
-        orderByClause = { published_date: order || "desc" };
+        orderByClause = null;
         break;
     }
 
-    const baseSelect = {
+    const commonSelect = {
       id: true,
       title: true,
       authors: true,
@@ -49,18 +52,16 @@ export async function GET(req: Request) {
     const selectClause =
       variant === "REVIEWS"
         ? {
-            ...baseSelect,
+            ...commonSelect,
             review: {
               where: { profile: { full_name: profileName } },
               include: {
-                review_reaction: {
-                  where: { profile: { full_name: profileName } },
-                },
+                review_reaction: true,
               },
             },
           }
         : {
-            ...baseSelect,
+            ...commonSelect,
             _count: { select: { review: true, liked_by: true } },
             review: { select: { score: true } },
             ...(!!userId
@@ -72,86 +73,98 @@ export async function GET(req: Request) {
               : {}),
           };
 
-    let whereClause = {};
+    let books: (BookCardInterface | BookReviewCardInterface | BookInterface)[];
     switch (variant) {
-      case "ABANDONED":
-        whereClause = {
-          bookshelf: {
-            some: {
-              bookshelf: "ABANDONED",
-              profile: { full_name: profileName },
-            },
-          },
-        };
-        break;
-      case "ALREADY_READ":
-        whereClause = {
-          bookshelf: {
-            some: {
-              bookshelf: "ALREADY_READ",
-              profile: { full_name: profileName },
-            },
-          },
-        };
-        break;
-      case "OTHER":
-        whereClause = {
-          bookshelf: {
-            some: { bookshelf: "OTHER", profile: { full_name: profileName } },
-          },
-        };
-        break;
-      case "READING":
-        whereClause = {
-          bookshelf: {
-            some: { bookshelf: "READING", profile: { full_name: profileName } },
-          },
-        };
-        break;
-      case "TO_READ":
-        whereClause = {
-          bookshelf: {
-            some: { bookshelf: "TO_READ", profile: { full_name: profileName } },
-          },
-        };
-        break;
-      case "LIKED":
-        whereClause = {
-          liked_by: { some: { profile: { full_name: profileName } } },
-        };
-        break;
       case "OWNED":
-        whereClause = {
-          book_owned_as: {
-            some: {
-              profile: { full_name: profileName },
-              NOT: {
-                AND: [
-                  { added_audiobook_at: null },
-                  { added_book_at: null },
-                  { added_ebook_at: null },
-                ],
-              },
+        books = (await db.book_owned_as.findMany({
+          where: {
+            profile: { full_name: profileName },
+            NOT: {
+              AND: [
+                { added_audiobook_at: null },
+                { added_book_at: null },
+                { added_ebook_at: null },
+              ],
             },
           },
-        };
+          orderBy: orderByClause
+            ? { book: orderByClause }
+            : [
+                { added_book_at: order },
+                { added_ebook_at: order },
+                { added_audiobook_at: order },
+              ],
+          take: parsedTakeLimit,
+          skip: parsedSkip,
+          select: {
+            book: {
+              select: selectClause,
+            },
+          },
+        })) as BookCardInterface[];
         break;
       case "REVIEWS":
-        whereClause = {
-          review: { some: { profile: { full_name: profileName } } },
-        };
+        books = (await db.review.findMany({
+          where: { profile: { full_name: profileName } },
+          orderBy: orderByClause
+            ? { book: orderByClause }
+            : [{ created_at: order }, { updated_at: order }],
+          take: parsedTakeLimit,
+          skip: parsedSkip,
+          select: {
+            book: {
+              select: selectClause,
+            },
+          },
+        })) as BookReviewCardInterface[];
+        break;
+      case "LIKED":
+        books = (await db.liked_books.findMany({
+          where: { profile: { full_name: profileName } },
+          orderBy: orderByClause
+            ? { book: orderByClause }
+            : { updated_at: order },
+          take: parsedTakeLimit,
+          skip: parsedSkip,
+          select: {
+            book: {
+              select: selectClause,
+            },
+          },
+        })) as BookCardInterface[];
+        break;
+      case null:
+      case undefined:
+        books = (await db.book.findMany({
+          orderBy: orderByClause
+            ? orderByClause
+            : [
+                { liked_by: { _count: order } },
+                { review: { _count: order } },
+                { book_owned_as: { _count: order } },
+                { bookshelf: { _count: order } },
+              ],
+          take: parsedTakeLimit,
+          skip: parsedSkip,
+          select: selectClause,
+        })) as BookInterface[];
         break;
       default:
+        books = (await db.bookshelf.findMany({
+          where: { bookshelf: variant, profile: { full_name: profileName } },
+          orderBy: orderByClause
+            ? { book: orderByClause }
+            : { updated_at: order },
+          take: parsedTakeLimit,
+          skip: parsedSkip,
+          select: {
+            book: {
+              select: selectClause,
+            },
+          },
+        })) as BookCardInterface[];
         break;
     }
-
-    const books = await db.book.findMany({
-      where: whereClause,
-      orderBy: orderByClause,
-      take: parseInt(takeLimit),
-      skip: (parseInt(page) - 1) * parseInt(takeLimit),
-      select: selectClause,
-    });
 
     // on success
     return new Response(JSON.stringify(books));

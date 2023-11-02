@@ -11,11 +11,10 @@ import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import axios from "axios";
 
+import { type OwnedAsType } from "~/types/CategoryTypes";
+
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
-import {
-  type ownedAsType,
-  OwnedAsValidator,
-} from "~/lib/validations/book/ownedAs";
+import { OwnedAsValidator } from "~/lib/validations/book/ownedAs";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
 
@@ -56,7 +55,7 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
   const openModalButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleAddOwnedAs = async (
-    ownedAs: ownedAsType,
+    ownedAs: OwnedAsType,
     addedState: string | null,
     addedSetState: Dispatch<SetStateAction<string | null>>
   ) => {
