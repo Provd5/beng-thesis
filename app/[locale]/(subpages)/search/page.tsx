@@ -1,7 +1,9 @@
+import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
+
 export default function SearchPage() {
   return (
     <>
-      <div>SearchPage</div>
+      <FeedWithSorting takeLimit={5} feedVariant={"explore"} />
     </>
   );
 }

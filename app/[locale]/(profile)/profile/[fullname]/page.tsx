@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { CategoryArray } from "~/types/categoryTypes";
+import { categoryArray } from "~/types/CategoryTypes";
 
 import { CategoryContentCard } from "~/components/Profile/CategoryContentCard";
 import { CategoryContentCardPlaceholder } from "~/components/Profile/CategoryContentCardPlaceholder";
@@ -61,7 +61,7 @@ export default async function ProfilePage({
         <ProfileDescription description={userData.description} />
       )}
       <div className="mt-6 flex flex-col gap-3">
-        {CategoryArray.map((categoryVariant) => {
+        {categoryArray.map((categoryVariant) => {
           const variantUrl = `${fullname}/${convertTypeEnumToPathname(
             categoryVariant
           )}`;
@@ -95,8 +95,10 @@ export default async function ProfilePage({
                     {variantQuantity > 0 ? (
                       <>
                         <CategoryContentCard
-                          categoryVariant={categoryVariant}
                           userId={userData.id}
+                          variant={categoryVariant}
+                          profileName={fullname}
+                          dataLength={variantQuantity}
                         />
                         {variantQuantity > 10 && (
                           <CategoryContentCardPlaceholder href={variantUrl} />

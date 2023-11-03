@@ -1,62 +1,38 @@
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { CategoryArray, type categoryTypes } from "~/types/categoryTypes";
+import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
 
-import { BookCard } from "~/components/Explore/BookCard";
+import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
 import { BookshelfPageTitle } from "~/components/Profile/Bookshelf/BookshelfPageTitle";
 import { db } from "~/lib/db";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
-
-type bookDataType = {
-  book: {
-    id: string;
-    title: string;
-    authors: string[];
-    thumbnail_url: string | null;
-    review: {
-      score: number;
-    }[];
-    _count: {
-      review: number;
-      liked_by: number;
-    };
-  };
-};
 
 export default async function BookshelfPage({
   params: { bookshelf, fullname },
 }: {
   params: { bookshelf: string; fullname: string };
 }) {
-  const bookshelfAsType = convertPathnameToTypeEnum(bookshelf) as categoryTypes;
+  const supabase = createServerComponentClient({
+    cookies,
+  });
 
-  if (!CategoryArray.includes(bookshelfAsType)) {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const bookshelfAsType = convertPathnameToTypeEnum(bookshelf) as CategoryTypes;
+
+  if (!categoryArray.includes(bookshelfAsType)) {
     notFound();
   }
 
-  let books: bookDataType[] = [];
-
-  const commonSelect = {
-    book: {
-      select: {
-        id: true,
-        title: true,
-        authors: true,
-        thumbnail_url: true,
-        review: { select: { score: true } },
-        _count: { select: { review: true, liked_by: true } },
-      },
-    },
-  };
-
+  let booksQuantity;
+  let variant;
   switch (bookshelfAsType) {
     case "OWNED":
-      books = await db.book_owned_as.findMany({
-        orderBy: [
-          { added_book_at: "desc" },
-          { added_ebook_at: "desc" },
-          { added_audiobook_at: "desc" },
-        ],
+      booksQuantity = await db.book_owned_as.count({
         where: {
           profile: { full_name: fullname },
           NOT: {
@@ -67,40 +43,46 @@ export default async function BookshelfPage({
             ],
           },
         },
-        select: commonSelect,
       });
+      variant = bookshelfAsType;
       break;
     case "LIKED":
-      books = await db.liked_books.findMany({
-        orderBy: { updated_at: "desc" },
+      booksQuantity = await db.liked_books.count({
         where: { profile: { full_name: fullname } },
-        select: commonSelect,
       });
+      variant = bookshelfAsType;
       break;
     case "REVIEWS":
+      booksQuantity = await db.review.count({
+        where: { profile: { full_name: fullname } },
+      });
+      variant = bookshelfAsType;
       break;
     case "STATISTICS":
       break;
     default:
-      books = await db.bookshelf.findMany({
-        orderBy: { updated_at: "desc" },
+      booksQuantity = await db.bookshelf.count({
         where: { bookshelf: bookshelfAsType, profile: { full_name: fullname } },
-        select: commonSelect,
       });
+      variant = bookshelfAsType;
       break;
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col">
       <BookshelfPageTitle
-        booksQuantity={books.length}
+        booksQuantity={booksQuantity || 0}
         categoryVariant={bookshelfAsType}
       />
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        {books?.map(({ book }) => {
-          return <BookCard key={book.id} bookData={book} />;
-        })}
-      </div>
+      {variant && (
+        <FeedWithSorting
+          feedVariant="bookshelf"
+          takeLimit={10}
+          userId={session?.user.id}
+          profileName={fullname}
+          variant={variant}
+        />
+      )}
     </div>
   );
 }

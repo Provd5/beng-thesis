@@ -1,7 +1,7 @@
-import { type ownedAsType } from "~/lib/validations/book/ownedAs";
+import { type OwnedAsType } from "~/types/CategoryTypes";
 
 export const quantityPerOwnedType = (
-  ownedAsVariant: ownedAsType,
+  ownedAsVariant: OwnedAsType,
   bookOwnedAsArray:
     | {
         added_audiobook_at: Date | null;

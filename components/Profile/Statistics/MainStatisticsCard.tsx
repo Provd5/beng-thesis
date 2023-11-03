@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { CategoryArray } from "~/types/categoryTypes";
+import { categoryArray } from "~/types/CategoryTypes";
 
 import { getBookmarkIcon } from "~/components/ui/getBookmarkIcon";
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
@@ -48,7 +48,7 @@ export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
 
   return (
     <div className="flex flex-wrap justify-center gap-2">
-      {CategoryArray.map((categoryVariant) => {
+      {categoryArray.map((categoryVariant) => {
         const variantQuantity = quantityPerCategoryType(
           categoryVariant,
           CategoryQuantityData?.bookshelf || [],

@@ -9,14 +9,14 @@ import {
 } from "react";
 import clsx from "clsx";
 
-import { type modalSizes } from "~/types/sizes";
+import { type ModalSizes } from "~/types/Sizes";
 
 interface ModalWrapperProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children: React.ReactNode;
   openModalButtonRef: RefObject<HTMLButtonElement>;
   closeModalHandler: () => void;
-  size?: modalSizes;
+  size?: ModalSizes;
 }
 
 export const ModalWrapper: FC<ModalWrapperProps> = ({

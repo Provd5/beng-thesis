@@ -6,12 +6,12 @@ import { useTranslations } from "next-intl";
 
 import { MdNavigateNext } from "react-icons/md";
 
-import { type categoryTypes } from "~/types/categoryTypes";
+import { type CategoryTypes } from "~/types/CategoryTypes";
 
 import { getBookmarkIcon } from "./getBookmarkIcon";
 
 interface CategoryLinkProps {
-  variant: categoryTypes;
+  variant: CategoryTypes;
   href: string;
   hrefReplace?: boolean;
   withoutIcon?: boolean;

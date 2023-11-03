@@ -1,73 +1,29 @@
 import type { FC } from "react";
-import { cookies } from "next/headers";
 import Link from "next/link";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
-import { db } from "~/lib/db";
+import {
+  type BookInterface,
+  type BookOwnedAsInterface,
+  type BookshelfInterface,
+} from "~/types/BookCardDataInterface";
+
 import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
 
 import { BookCover } from "../Book/BookCover";
 import { ManageBookshelf } from "../Book/ManageBookshelf";
 import { ManageLikes } from "../Book/ManageLikes";
 import { ManageOwnedAs } from "../Book/ManageOwnedAs";
+import { TextLoader } from "../ui/Loader";
 import { BookCardDetails } from "./BookCardDetails";
 
 interface BookCardProps {
-  bookData: {
-    id: string;
-    title: string;
-    authors: string[];
-    thumbnail_url: string | null;
-    review: {
-      score: number;
-    }[];
-    _count: {
-      review: number;
-      liked_by: number;
-    };
-  };
+  bookData: BookInterface;
 }
 
-export const BookCard: FC<BookCardProps> = async ({ bookData }) => {
-  const supabase = createServerComponentClient({
-    cookies,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  const myData =
-    session?.user &&
-    (await db.profile.findUnique({
-      where: { id: session.user.id },
-      select: {
-        bookshelf: {
-          where: { book_id: bookData.id },
-          select: {
-            bookshelf: true,
-            updated_at: true,
-            began_reading_at: true,
-            read_quantity: true,
-          },
-        },
-        book_owned_as: {
-          where: { book_id: bookData.id },
-          select: {
-            added_audiobook_at: true,
-            added_book_at: true,
-            added_ebook_at: true,
-          },
-        },
-        _count: {
-          select: { liked_book: { where: { book_id: bookData.id } } },
-        },
-      },
-    }));
-
-  const myOwnedAsData = myData?.book_owned_as?.[0];
-  const myBookshelfData = myData?.bookshelf?.[0];
-  const doILikeThisBook = !!myData?._count.liked_book;
+export const BookCard: FC<BookCardProps> = ({ bookData }) => {
+  const myOwnedAsData = bookData.book_owned_as?.[0] as BookOwnedAsInterface;
+  const myBookshelfData = bookData.bookshelf?.[0] as BookshelfInterface;
+  const doILikeThisBook = !!bookData.liked_by?.length;
 
   return (
     <div className="flex justify-center gap-3 md:justify-start">
@@ -113,6 +69,26 @@ export const BookCard: FC<BookCardProps> = async ({ bookData }) => {
             beganReadingAt={myBookshelfData?.began_reading_at}
             readQuantity={myBookshelfData?.read_quantity}
           />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const BookCardLoader: FC = () => {
+  return (
+    <div className="flex animate-pulse justify-center gap-3 md:justify-start">
+      <BookCover coverUrl={null} />
+      <div className="flex w-full max-w-[300px] flex-col gap-1.5">
+        <TextLoader height="h1" className="w-32" />
+        <TextLoader height="h2" className="w-24" />
+        <div className="flex flex-wrap justify-between gap-3">
+          <div className="h-12 w-32 rounded-sm bg-gray" />
+          <div className="h-12 w-32 rounded-sm bg-gray" />
+        </div>
+        <div className="flex flex-wrap justify-between gap-3">
+          <div className="h-12 w-32 rounded-sm bg-gray" />
+          <div className="h-12 w-32 rounded-sm bg-gray" />
         </div>
       </div>
     </div>

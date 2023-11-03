@@ -25,7 +25,9 @@ export default async function AuthLayout({
       select: { full_name: true },
     });
 
-    redirect(`/profile/${userData?.full_name || ""}`);
+    redirect(
+      userData?.full_name ? `/profile/${userData.full_name}` : "/edit-profile"
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/require-await

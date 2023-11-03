@@ -1,11 +1,10 @@
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
+import { type OwnedAsType } from "~/types/CategoryTypes";
+
 import { db } from "~/lib/db";
-import {
-  type ownedAsType,
-  OwnedAsValidator,
-} from "~/lib/validations/book/ownedAs";
+import { OwnedAsValidator } from "~/lib/validations/book/ownedAs";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
 export async function POST(req: Request) {
@@ -23,7 +22,7 @@ export async function POST(req: Request) {
     }
 
     const body = (await req.json()) as {
-      formData: { bookId: string; ownedAs: ownedAsType };
+      formData: { bookId: string; ownedAs: OwnedAsType };
     };
     const { formData } = OwnedAsValidator.parse(body);
 

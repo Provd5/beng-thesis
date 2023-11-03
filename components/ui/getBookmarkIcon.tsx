@@ -8,14 +8,14 @@ import {
   BsFillBookmarkXFill,
 } from "react-icons/bs";
 
-import { type categoryTypes } from "~/types/categoryTypes";
-import { type bookmarkSizes } from "~/types/sizes";
+import { type CategoryTypes } from "~/types/CategoryTypes";
+import { type BookmarkSizes } from "~/types/Sizes";
 
 import { BookmarksWrapper } from "~/components/ui/BookmarksWrapper";
 
 export const getBookmarkIcon = (
-  category: categoryTypes,
-  size: bookmarkSizes = "default"
+  category: CategoryTypes,
+  size: BookmarkSizes = "default"
 ) => {
   switch (category) {
     case "TO_READ":

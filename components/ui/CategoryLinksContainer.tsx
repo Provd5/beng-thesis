@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
-import { CategoryArray } from "~/types/categoryTypes";
+import { categoryArray } from "~/types/CategoryTypes";
 
 import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 
@@ -16,7 +16,7 @@ export const CategoryLinksContainer: FC = () => {
   const pathname = usePathname();
   const pathnameParts = pathname.split("/");
 
-  return CategoryArray.map((categoryVariant) => {
+  return categoryArray.map((categoryVariant) => {
     const categoryVariantPathname = convertTypeEnumToPathname(categoryVariant);
 
     const isActive = () => {

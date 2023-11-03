@@ -3,13 +3,13 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { type categoryTypes } from "~/types/categoryTypes";
+import { type CategoryTypes } from "~/types/CategoryTypes";
 
 import { getBookmarkIcon } from "~/components/ui/getBookmarkIcon";
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
 
 interface BookshelfPageTitleProps {
-  categoryVariant: categoryTypes;
+  categoryVariant: CategoryTypes;
   booksQuantity: number;
 }
 
