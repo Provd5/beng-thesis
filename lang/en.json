@@ -24,7 +24,7 @@
 
     "UNAUTHORIZED": "You are not logged in",
     "SOMETHING_WENT_WRONG": "Something went wrong, try again in a moment",
-    "COULD_NOT_FETCH": "Failed to load {item, select, books {books} reviews {reviews} other {items}}",
+    "COULD_NOT_FETCH": "Failed to load {item, select, books {books} reviews {reviews} profiles {profiles} other {items}}",
     "PENDING": "Pending...",
     "SUCCESS": "Success"
   },
@@ -207,8 +207,6 @@
     },
     "Review": {
       "was this review helpful?": "Was this review helpful?",
-      "OK": "Yes",
-      "MEH": "No",
       "joined:": "joined:",
       "posted:": "Posted:",
       "edited:": "Edited:",

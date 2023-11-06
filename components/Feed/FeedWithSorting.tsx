@@ -9,35 +9,37 @@ import { type OrderByArrayType } from "~/types/feed/OrderVariants";
 
 import { ModalInitiator } from "../Modals/ModalInitiator";
 import { BooksFeed } from "./BooksFeed";
+import { ProfilesFeed } from "./ProfilesFeed";
 import { ReviewsFeed } from "./ReviewsFeed";
 
 interface CommonProps {
   orderArray: OrderByArrayType;
   takeLimit: number;
+  sessionId: string | undefined;
 }
 
 interface BooksFeedProps extends CommonProps {
   feedVariant: "books";
-  variant?: bookshelfType | "OWNED" | "LIKED" | "REVIEWS";
-  userId?: string;
-  profileName?: string;
+  variant: bookshelfType | "OWNED" | "LIKED" | "REVIEWS" | undefined;
   bookId?: never;
+  profileName: string | undefined;
+  userId?: never;
 }
 
 interface ReviewsFeedProps extends CommonProps {
   feedVariant: "reviews";
-  bookId: string;
-  userId?: string;
   variant?: never;
+  bookId: string;
   profileName?: never;
+  userId?: never;
 }
 
 interface ProfilesFeedProps extends CommonProps {
   feedVariant: "profiles";
-  userId: string;
-  variant?: never;
-  profileName?: never;
+  variant: "following" | "followers" | undefined;
   bookId?: never;
+  profileName?: never;
+  userId: string | undefined;
 }
 
 export const FeedWithSorting: FC<
@@ -48,6 +50,7 @@ export const FeedWithSorting: FC<
   takeLimit,
   variant,
   userId,
+  sessionId,
   profileName,
   bookId,
 }) => {
@@ -104,7 +107,7 @@ export const FeedWithSorting: FC<
       {feedVariant === "books" && (
         <BooksFeed
           takeLimit={takeLimit}
-          userId={userId}
+          sessionId={sessionId}
           profileName={profileName}
           variant={variant}
           order={sortOrderState}
@@ -117,13 +120,35 @@ export const FeedWithSorting: FC<
         <ReviewsFeed
           takeLimit={takeLimit}
           bookId={bookId}
-          userId={userId}
+          sessionId={sessionId}
           order={sortOrderState}
           orderBy={
             orderByState === defaultSortCategory ? undefined : orderByState
           }
         />
       )}
+      {feedVariant === "profiles" &&
+        (variant && userId ? (
+          <ProfilesFeed
+            takeLimit={takeLimit}
+            variant={variant}
+            userId={userId}
+            sessionId={sessionId}
+            order={sortOrderState}
+            orderBy={
+              orderByState === defaultSortCategory ? undefined : orderByState
+            }
+          />
+        ) : (
+          <ProfilesFeed
+            takeLimit={takeLimit}
+            sessionId={sessionId}
+            order={sortOrderState}
+            orderBy={
+              orderByState === defaultSortCategory ? undefined : orderByState
+            }
+          />
+        ))}
     </>
   );
 };

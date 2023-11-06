@@ -8,10 +8,10 @@ import clsx from "clsx";
 
 import { MdNavigateNext } from "react-icons/md";
 
-import { FollowProfileButton } from "../ui/FollowProfileButton";
+import { ManageFollow } from "./ManageFollow";
 
 interface FollowLinksProps {
-  id: string;
+  userId: string;
   fullname: string;
   isMyProfile: boolean;
   isFollowed: boolean;
@@ -20,7 +20,7 @@ interface FollowLinksProps {
 }
 
 export const FollowLinks: FC<FollowLinksProps> = ({
-  id,
+  userId,
   fullname,
   isMyProfile,
   isFollowed,
@@ -50,8 +50,8 @@ export const FollowLinks: FC<FollowLinksProps> = ({
           </Link>
         )}
         {!isMyProfile && (
-          <FollowProfileButton
-            id={id}
+          <ManageFollow
+            userId={userId}
             isFollowedState={isFollowedState}
             setIsFollowedState={setIsFollowedState}
             className="ml-[-15px] w-40"

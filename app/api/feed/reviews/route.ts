@@ -7,10 +7,10 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const { bookId, userId, orderBy, order, takeLimit, page } =
+    const { bookId, sessionId, orderBy, order, takeLimit, page } =
       ReviewsValidator.parse({
         bookId: url.searchParams.get("bookId"),
-        userId: url.searchParams.get("userId"),
+        sessionId: url.searchParams.get("sessionId"),
         orderBy: url.searchParams.get("orderBy"),
         order: url.searchParams.get("order"),
         takeLimit: url.searchParams.get("takeLimit"),
@@ -26,16 +26,17 @@ export async function GET(req: Request) {
       case "score":
         orderByClause = { [orderBy]: order };
         break;
+      case "review":
       case "review_reaction":
-        orderByClause = { review_reaction: { _count: order } };
+        orderByClause = { [orderBy]: { _count: order } };
         break;
       default:
         orderByClause = null;
         break;
     }
 
-    const whereClause = userId
-      ? { AND: [{ book_id: bookId }, { author_id: userId }] }
+    const whereClause = sessionId
+      ? { AND: [{ book_id: bookId }, { author_id: sessionId }] }
       : {
           book_id: bookId,
           text: { not: null },
@@ -52,9 +53,12 @@ export async function GET(req: Request) {
         ? orderByClause
         : // sort by profile traffic
           [
-            { profile: { followed_by: { _count: order } } },
-            { profile: { bookshelf: { _count: order } } },
             { profile: { review: { _count: order } } },
+            { profile: { review_reaction: { _count: order } } },
+            { profile: { followed_by: { _count: order } } },
+            { profile: { following: { _count: order } } },
+            { profile: { book_owned_as: { _count: order } } },
+            { profile: { bookshelf: { _count: order } } },
             { profile: { liked_book: { _count: order } } },
           ],
       select: {

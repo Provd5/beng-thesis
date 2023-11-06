@@ -14,16 +14,16 @@ interface CommonProps {
   order?: "desc" | "asc";
 }
 
-export interface FetchBooksProps extends CommonProps {
+export type FetchBooksProps = CommonProps & {
   variant?: bookshelfType | "OWNED" | "LIKED" | "REVIEWS";
-  userId?: string;
+  sessionId: string | undefined;
   profileName?: string;
-}
+};
 
 export function useFetchBooks({
   takeLimit,
   variant,
-  userId,
+  sessionId,
   profileName,
   orderBy,
   order,
@@ -40,7 +40,7 @@ export function useFetchBooks({
   const fetchMore = async () => {
     setIsLoading(true);
 
-    const userIdParam = userId ? `&userId=${userId}` : "";
+    const sessionIdParam = sessionId ? `&sessionId=${sessionId}` : "";
     const profileNameParam = profileName ? `&profileName=${profileName}` : "";
     const variantParam = variant ? `&variant=${variant}` : "";
     const orderByParam = orderBy ? `&orderBy=${orderBy}` : "";
@@ -48,7 +48,7 @@ export function useFetchBooks({
 
     const query =
       `/api/feed/books?takeLimit=${takeLimit}&page=${pageNumber}` +
-      userIdParam +
+      sessionIdParam +
       profileNameParam +
       variantParam +
       orderByParam +

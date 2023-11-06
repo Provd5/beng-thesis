@@ -46,7 +46,7 @@ export default async function BookReviewsPage({
         orderArray={reviewsOrderByArray}
         takeLimit={reviewsQuantity < 10 ? reviewsQuantity : 10}
         bookId={id}
-        userId={session?.user.id}
+        sessionId={session?.user.id}
       />
     </div>
   );

@@ -5,8 +5,6 @@ import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import axios from "axios";
 
-import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
-
 import { GlobalErrors } from "../../lib/validations/errorsEnums";
 
 interface CommonProps {
@@ -15,46 +13,62 @@ interface CommonProps {
   order?: "desc" | "asc";
 }
 
-export type FetchReviewsProps = CommonProps & {
-  bookId: string;
+interface FollowProfilesProps extends CommonProps {
+  variant: "following" | "followers";
+  userId: string;
   sessionId: string | undefined;
-};
+}
 
-export function useFetchReviews({
-  bookId,
-  takeLimit,
+interface AllProfilesProps extends CommonProps {
+  variant?: never;
+  userId?: never;
+  sessionId?: string;
+}
+
+export type FetchProfilesProps = FollowProfilesProps | AllProfilesProps;
+
+export function useFetchProfiles({
+  userId,
   sessionId,
+  variant,
+  takeLimit,
   orderBy,
   order,
-}: FetchReviewsProps) {
+}: FetchProfilesProps) {
   const te = useTranslations("Errors");
 
   const isInitialRender = useRef(true);
   const [isLoading, setIsLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
-  const [fetchedData, setFetchedData] = useState<ReviewCardDataInterface[]>([]);
+  const [fetchedData, setFetchedData] = useState<ProfileCardDataInterface[]>(
+    []
+  );
 
   const fetchMore = async () => {
     setIsLoading(true);
 
+    const userIdParam = userId ? `&userId=${userId}` : "";
     const sessionIdParam = sessionId ? `&sessionId=${sessionId}` : "";
+    const variantParam = variant ? `&variant=${variant}` : "";
     const orderByParam = orderBy ? `&orderBy=${orderBy}` : "";
     const orderParam = order ? `&order=${order}` : `&order=desc`;
 
     const query =
-      `/api/feed/reviews?takeLimit=${takeLimit}&page=${pageNumber}&bookId=${bookId}` +
+      `/api/feed/profiles?takeLimit=${takeLimit}&page=${pageNumber}` +
+      userIdParam +
       sessionIdParam +
+      variantParam +
       orderByParam +
       orderParam;
 
     await axios
       .get(query)
-      .then(({ data }: { data: ReviewCardDataInterface[] }) => {
+      .then(({ data }: { data: ProfileCardDataInterface[] }) => {
         setFetchedData((prevData) => [...prevData, ...data]);
         setPageNumber((prev) => prev + 1);
       })
       .catch(() =>
-        toast.error(te(GlobalErrors.COULD_NOT_FETCH, { item: "reviews" }))
+        toast.error(te(GlobalErrors.COULD_NOT_FETCH, { item: "profiles" }))
       )
       .finally(() => setIsLoading(false));
   };

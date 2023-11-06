@@ -44,8 +44,8 @@ export const ReviewCardLoader: FC<ReviewCardLoaderProps> = ({ isMyReview }) => {
         <div className="flex flex-col items-end gap-1 self-end">
           <TextLoader height="h3" className="w-44" />
           <div className="flex gap-1">
-            <div className="h-8 w-20 rounded-sm bg-gray" />
-            <div className="h-8 w-20 rounded-sm bg-gray" />
+            <div className="h-8 w-14 rounded-sm bg-gray" />
+            <div className="h-8 w-14 rounded-sm bg-gray" />
           </div>
         </div>
       </div>

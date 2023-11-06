@@ -11,10 +11,10 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { FollowProfileValidator } from "~/lib/validations/followProfile";
 
-import { Button } from "./Buttons";
+import { Button } from "../ui/Buttons";
 
-interface FollowProfileButtonProps {
-  id: string;
+interface ManageFollowProps {
+  userId: string;
   isFollowedState: boolean;
   setIsFollowedState: Dispatch<SetStateAction<boolean>>;
   followedByQuantityState?: number;
@@ -22,8 +22,8 @@ interface FollowProfileButtonProps {
   className?: string;
 }
 
-export const FollowProfileButton: FC<FollowProfileButtonProps> = ({
-  id,
+export const ManageFollow: FC<ManageFollowProps> = ({
+  userId,
   isFollowedState,
   followedByQuantityState,
   setFollowedByQuantityState,
@@ -46,10 +46,10 @@ export const FollowProfileButton: FC<FollowProfileButtonProps> = ({
     setIsFollowedState(!isFollowedState);
 
     try {
-      FollowProfileValidator.parse({ profileId: id });
+      FollowProfileValidator.parse({ profileId: userId });
       const { data }: { data: string } = await axios.post(
         `/api/profile/follow/`,
-        { profileId: id }
+        { profileId: userId }
       );
 
       if (data !== GlobalErrors.SUCCESS) {
