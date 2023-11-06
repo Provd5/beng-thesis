@@ -176,7 +176,7 @@ export const ReviewCard: FC<ReviewCardProps> = ({
                 {`${reviewData.score}/5`}
               </span>
             </h1>
-            {reviewData.profile._count.liked_book && (
+            {reviewData.profile._count.liked_book > 0 && (
               <div className="flex items-center gap-0.5">
                 {getBookmarkIcon("LIKED", "sm")}
                 <span className="text-xs">{t("likes it")}</span>

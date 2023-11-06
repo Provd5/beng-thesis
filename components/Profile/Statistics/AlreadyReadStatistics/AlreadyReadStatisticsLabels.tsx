@@ -31,7 +31,7 @@ export const AlreadyReadStatisticsLabels: FC<
             {t("pages:")} {pages}
           </p>
         )}
-        {readTime && (
+        {!!readTime && (
           <p>
             {t.rich("read in", {
               numDays: readTime,

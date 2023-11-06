@@ -35,7 +35,7 @@ export default async function BookPage({
           hrefReplace
           withoutIcon
         />
-        <MyReview bookId={id} userId={session?.user.id} />
+        <MyReview bookId={id} sessionId={session?.user.id} />
       </div>
       <AllReviewsButton href={`${title}/reviews`} />
     </>

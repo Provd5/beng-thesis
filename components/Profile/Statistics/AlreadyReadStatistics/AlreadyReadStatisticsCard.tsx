@@ -64,28 +64,28 @@ export const AlreadyReadStatisticsCard: FC<AlreadyReadStatisticsCardProps> = ({
 
           if (
             timeDifference > 0 &&
-            timeDifference < result.shortestReadTimeDiff
+            timeDifference < result.longestReadTimeDiff
           ) {
-            result.shortestReadTimeDiff = convertTimeToDays(timeDifference);
-            result.shortestReadBook = entry.book;
-          }
-
-          if (timeDifference > result.longestReadTimeDiff) {
             result.longestReadTimeDiff = convertTimeToDays(timeDifference);
             result.longestReadBook = entry.book;
+          }
+
+          if (timeDifference > result.shortestReadTimeDiff) {
+            result.shortestReadTimeDiff = convertTimeToDays(timeDifference);
+            result.shortestReadBook = entry.book;
           }
         }
         return result;
       },
       {
-        shortestReadTimeDiff: Infinity,
-        shortestReadBook: {} as {
+        longestReadTimeDiff: Infinity,
+        longestReadBook: {} as {
           title: string;
           authors: string[];
           page_count: number;
         },
-        longestReadTimeDiff: -Infinity,
-        longestReadBook: {} as {
+        shortestReadTimeDiff: -Infinity,
+        shortestReadBook: {} as {
           title: string;
           authors: string[];
           page_count: number;
@@ -111,20 +111,20 @@ export const AlreadyReadStatisticsCard: FC<AlreadyReadStatisticsCardProps> = ({
       <div className="flex flex-wrap gap-x-6 gap-y-3">
         {readingTimeDifference && (
           <AlreadyReadStatisticsLabels
-            variant={"shortest-read:"}
-            bookTitle={readingTimeDifference.shortestReadBook.title}
-            bookAuthors={readingTimeDifference.shortestReadBook.authors}
-            pages={readingTimeDifference.shortestReadBook.page_count}
-            readTime={readingTimeDifference.shortestReadTimeDiff}
-          />
-        )}
-        {readingTimeDifference && (
-          <AlreadyReadStatisticsLabels
             variant={"longest-read:"}
             bookTitle={readingTimeDifference.longestReadBook.title}
             bookAuthors={readingTimeDifference.longestReadBook.authors}
             pages={readingTimeDifference.longestReadBook.page_count}
             readTime={readingTimeDifference.longestReadTimeDiff}
+          />
+        )}
+        {readingTimeDifference && (
+          <AlreadyReadStatisticsLabels
+            variant={"shortest-read:"}
+            bookTitle={readingTimeDifference.shortestReadBook.title}
+            bookAuthors={readingTimeDifference.shortestReadBook.authors}
+            pages={readingTimeDifference.shortestReadBook.page_count}
+            readTime={readingTimeDifference.shortestReadTimeDiff}
           />
         )}
       </div>

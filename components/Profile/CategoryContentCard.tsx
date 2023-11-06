@@ -10,21 +10,19 @@ import { SmallBookCardLoader } from "../ui/Loaders/Skeletons/SmallBookCardLoader
 
 interface CategoryContentCardProps {
   variant: bookshelfType | "OWNED" | "LIKED" | "REVIEWS";
-  userId: string | undefined;
   profileName: string;
   dataLength: number;
 }
 
 export const CategoryContentCard: FC<CategoryContentCardProps> = ({
   variant,
-  userId,
   profileName,
   dataLength,
 }) => {
   const { fetchedData, isLoading } = useFetchBooks({
     takeLimit: 10,
     variant,
-    userId,
+    sessionId: undefined,
     profileName,
   });
 

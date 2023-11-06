@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const ReviewsValidator = z.object({
   bookId: z.string(),
+  userId: z.string().nullish(),
   sessionId: z.string().nullish(),
   orderBy: z
     .enum(["created_at", "score", "review_reaction", "review"])

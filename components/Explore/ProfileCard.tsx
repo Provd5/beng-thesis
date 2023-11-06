@@ -12,12 +12,16 @@ import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface ProfileCardProps {
   profileData: ProfileCardDataInterface;
+  sessionId: string | undefined;
 }
 
-export const ProfileCard: FC<ProfileCardProps> = ({ profileData }) => {
+export const ProfileCard: FC<ProfileCardProps> = ({
+  profileData,
+  sessionId,
+}) => {
   const t = useTranslations("Explore.ProfileCard");
   const isFollowed = profileData.followed_by.some(
-    (follower) => follower.follower_id === profileData.id
+    (follower) => follower.follower_id === sessionId
   );
 
   const [isFollowedState, setIsFollowedState] = useState(isFollowed);

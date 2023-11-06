@@ -43,10 +43,11 @@ export default async function BookReviewsPage({
       <BackCategoryLink href={`../${title}`} variant="MY_REVIEW" hrefReplace />
       <FeedWithSorting
         feedVariant="reviews"
+        sessionId={session?.user.id}
+        userId={undefined}
         orderArray={reviewsOrderByArray}
         takeLimit={reviewsQuantity < 10 ? reviewsQuantity : 10}
         bookId={id}
-        sessionId={session?.user.id}
       />
     </div>
   );

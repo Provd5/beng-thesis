@@ -15,9 +15,9 @@ interface CommonProps {
 }
 
 export type FetchBooksProps = CommonProps & {
-  variant?: bookshelfType | "OWNED" | "LIKED" | "REVIEWS";
+  variant: bookshelfType | "OWNED" | "LIKED" | "REVIEWS" | undefined;
   sessionId: string | undefined;
-  profileName?: string;
+  profileName: string | undefined;
 };
 
 export function useFetchBooks({

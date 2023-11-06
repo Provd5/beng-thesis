@@ -24,7 +24,11 @@ export const ProfilesFeed: FC<FetchProfilesProps> = (props) => {
             <ProfileCardLoader key={i} />
           ))}
         {fetchedData.map((data) => (
-          <ProfileCard key={data.id} profileData={data} />
+          <ProfileCard
+            key={data.id}
+            profileData={data}
+            sessionId={props.sessionId}
+          />
         ))}
       </div>
       <FetchMoreButton

@@ -1,45 +1,39 @@
 "use client";
 
 import React, { type FC, useState } from "react";
-import { type bookshelfType } from "@prisma/client";
 
 import { TbSortAscending2, TbSortDescending2 } from "react-icons/tb";
 
 import { type OrderByArrayType } from "~/types/feed/OrderVariants";
+
+import { type FetchBooksProps } from "~/hooks/feed/useFetchBooks";
+import { type FetchProfilesProps } from "~/hooks/feed/useFetchProfiles";
+import { type FetchReviewsProps } from "~/hooks/feed/useFetchReviews";
 
 import { ModalInitiator } from "../Modals/ModalInitiator";
 import { BooksFeed } from "./BooksFeed";
 import { ProfilesFeed } from "./ProfilesFeed";
 import { ReviewsFeed } from "./ReviewsFeed";
 
-interface CommonProps {
-  orderArray: OrderByArrayType;
-  takeLimit: number;
-  sessionId: string | undefined;
-}
-
-interface BooksFeedProps extends CommonProps {
+interface BooksFeedProps extends FetchBooksProps {
   feedVariant: "books";
-  variant: bookshelfType | "OWNED" | "LIKED" | "REVIEWS" | undefined;
+  orderArray: OrderByArrayType;
   bookId?: never;
-  profileName: string | undefined;
   userId?: never;
 }
 
-interface ReviewsFeedProps extends CommonProps {
+interface ReviewsFeedProps extends FetchReviewsProps {
   feedVariant: "reviews";
+  orderArray: OrderByArrayType;
   variant?: never;
-  bookId: string;
   profileName?: never;
-  userId?: never;
 }
 
-interface ProfilesFeedProps extends CommonProps {
+interface ProfilesFeedProps extends FetchProfilesProps {
   feedVariant: "profiles";
-  variant: "following" | "followers" | undefined;
+  orderArray: OrderByArrayType;
   bookId?: never;
   profileName?: never;
-  userId: string | undefined;
 }
 
 export const FeedWithSorting: FC<
@@ -119,6 +113,7 @@ export const FeedWithSorting: FC<
       {feedVariant === "reviews" && (
         <ReviewsFeed
           takeLimit={takeLimit}
+          userId={undefined}
           bookId={bookId}
           sessionId={sessionId}
           order={sortOrderState}
@@ -142,6 +137,8 @@ export const FeedWithSorting: FC<
         ) : (
           <ProfilesFeed
             takeLimit={takeLimit}
+            variant={undefined}
+            userId={undefined}
             sessionId={sessionId}
             order={sortOrderState}
             orderBy={

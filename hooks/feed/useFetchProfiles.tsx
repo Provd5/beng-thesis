@@ -13,19 +13,11 @@ interface CommonProps {
   order?: "desc" | "asc";
 }
 
-interface FollowProfilesProps extends CommonProps {
-  variant: "following" | "followers";
-  userId: string;
+export type FetchProfilesProps = CommonProps & {
+  variant: "following" | "followers" | undefined;
+  userId: string | undefined;
   sessionId: string | undefined;
-}
-
-interface AllProfilesProps extends CommonProps {
-  variant?: never;
-  userId?: never;
-  sessionId?: string;
-}
-
-export type FetchProfilesProps = FollowProfilesProps | AllProfilesProps;
+};
 
 export function useFetchProfiles({
   userId,

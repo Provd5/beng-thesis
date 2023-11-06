@@ -13,12 +13,8 @@ import { ReviewCardLoader } from "../ui/Loaders/Skeletons/ReviewCardLoader";
 import { FetchMoreButton } from "./FetchMoreButton";
 
 export const ReviewsFeed: FC<FetchReviewsProps> = (props) => {
-  const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchReviews({
-    bookId: props.bookId,
-    takeLimit: props.takeLimit,
-    order: props.order,
-    orderBy: props.orderBy,
-  });
+  const { fetchedData, fetchMore, isLoading, pageNumber } =
+    useFetchReviews(props);
 
   return (
     <>

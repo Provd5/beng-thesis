@@ -7,9 +7,10 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const { bookId, sessionId, orderBy, order, takeLimit, page } =
+    const { bookId, userId, sessionId, orderBy, order, takeLimit, page } =
       ReviewsValidator.parse({
         bookId: url.searchParams.get("bookId"),
+        userId: url.searchParams.get("userId"),
         sessionId: url.searchParams.get("sessionId"),
         orderBy: url.searchParams.get("orderBy"),
         order: url.searchParams.get("order"),
@@ -35,15 +36,16 @@ export async function GET(req: Request) {
         break;
     }
 
-    const whereClause = sessionId
-      ? { AND: [{ book_id: bookId }, { author_id: sessionId }] }
-      : {
-          book_id: bookId,
-          text: { not: null },
-          profile: {
-            full_name: { not: null },
-          },
-        };
+    const whereClause =
+      userId && sessionId
+        ? { AND: [{ book_id: bookId }, { author_id: sessionId }] }
+        : {
+            book_id: bookId,
+            text: { not: null },
+            profile: {
+              full_name: { not: null },
+            },
+          };
 
     const reviews = (await db.review.findMany({
       take: parsedTakeLimit,
