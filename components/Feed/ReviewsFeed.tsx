@@ -13,12 +13,8 @@ import { ReviewCardLoader } from "../ui/Loaders/Skeletons/ReviewCardLoader";
 import { FetchMoreButton } from "./FetchMoreButton";
 
 export const ReviewsFeed: FC<FetchReviewsProps> = (props) => {
-  const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchReviews({
-    bookId: props.bookId,
-    takeLimit: props.takeLimit,
-    order: props.order,
-    orderBy: props.orderBy,
-  });
+  const { fetchedData, fetchMore, isLoading, pageNumber } =
+    useFetchReviews(props);
 
   return (
     <>
@@ -32,14 +28,17 @@ export const ReviewsFeed: FC<FetchReviewsProps> = (props) => {
             </div>
           ))}
         {fetchedData.map((data) => {
-          const isMyReview = data.profile.id === props.userId;
+          const isMyReview = data.profile.id === props.sessionId;
 
           return (
             <div key={data.id} className="contents">
               <ReviewCard
                 isMyReview={isMyReview}
                 reviewData={data}
-                myReaction={findMyReaction(data.review_reaction, props.userId)}
+                myReaction={findMyReaction(
+                  data.review_reaction,
+                  props.sessionId
+                )}
               />
               <hr className="h-px border-0 bg-gray" />
             </div>

@@ -13,13 +13,13 @@ export const BookCardLoader: FC = ({}) => {
           <TextLoader height="h1" className="w-32" />
           <TextLoader height="h2" className="w-24" />
         </div>
-        <div className="flex flex-wrap justify-between gap-3">
-          <div className="h-11 w-32 rounded-sm bg-gray" />
-          <div className="h-11 w-32 rounded-sm bg-gray" />
+        <div className="flex flex-wrap justify-between gap-x-3 gap-y-2">
+          <div className="h-11 w-[120px] rounded-sm bg-gray" />
+          <div className="h-11 w-[120px] rounded-sm bg-gray" />
         </div>
-        <div className="flex flex-wrap justify-between gap-3">
-          <div className="h-14 w-32 rounded-sm bg-gray" />
-          <div className="h-14 w-32 rounded-sm bg-gray" />
+        <div className="flex flex-wrap justify-between gap-x-3 gap-y-2">
+          <div className="h-14 w-[120px] rounded-sm bg-gray" />
+          <div className="h-14 w-[120px] rounded-sm bg-gray" />
         </div>
       </div>
     </div>

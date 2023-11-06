@@ -15,20 +15,21 @@ import { ReviewCard } from "./ReviewCard";
 
 interface MyReviewProps {
   bookId: string;
-  userId: string | undefined;
+  sessionId: string | undefined;
 }
 
-export const MyReview: FC<MyReviewProps> = ({ bookId, userId }) => {
+export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
   const t = useTranslations("Reviews.MyReview");
   const { fetchedData, isLoading } = useFetchReviews({
     bookId,
-    userId,
+    sessionId,
+    userId: sessionId,
     takeLimit: 1,
   });
 
   const myReviewData = fetchedData ? fetchedData[0] : undefined;
   const myReaction = myReviewData
-    ? findMyReaction(myReviewData.review_reaction, userId)
+    ? findMyReaction(myReviewData.review_reaction, sessionId)
     : undefined;
 
   const [showCreateReview, setShowCreateReview] = useState(!!myReviewData);
@@ -62,7 +63,13 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, userId }) => {
       </div>
       {isLoading ? (
         <ReviewCardLoader isMyReview />
-      ) : showCreateReview ? (
+      ) : myReviewData && !showCreateReview ? (
+        <ReviewCard
+          isMyReview
+          reviewData={myReviewData}
+          myReaction={myReaction}
+        />
+      ) : (
         <CreateReview
           isReviewExists={!!myReviewData}
           bookId={bookId}
@@ -72,14 +79,6 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, userId }) => {
           text={myReviewData?.text}
           closeReview={() => setShowCreateReview(false)}
         />
-      ) : (
-        myReviewData && (
-          <ReviewCard
-            isMyReview
-            reviewData={myReviewData}
-            myReaction={myReaction}
-          />
-        )
       )}
     </>
   );

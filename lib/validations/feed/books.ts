@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const BooksValidator = z.object({
-  userId: z.string().nullish(),
+  sessionId: z.string().nullish(),
   profileName: z.string().nullish(),
   variant: z
     .enum([

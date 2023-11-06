@@ -78,7 +78,7 @@ export default async function BookshelfPage({
           takeLimit={
             booksQuantity ? (booksQuantity < 10 ? booksQuantity : 10) : 0
           }
-          userId={session?.user.id}
+          sessionId={session?.user.id}
           profileName={fullname}
           variant={variant}
           orderArray={bookshelvesOrderByArray}

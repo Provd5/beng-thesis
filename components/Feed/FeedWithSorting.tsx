@@ -1,43 +1,39 @@
 "use client";
 
 import React, { type FC, useState } from "react";
-import { type bookshelfType } from "@prisma/client";
 
 import { TbSortAscending2, TbSortDescending2 } from "react-icons/tb";
 
 import { type OrderByArrayType } from "~/types/feed/OrderVariants";
 
+import { type FetchBooksProps } from "~/hooks/feed/useFetchBooks";
+import { type FetchProfilesProps } from "~/hooks/feed/useFetchProfiles";
+import { type FetchReviewsProps } from "~/hooks/feed/useFetchReviews";
+
 import { ModalInitiator } from "../Modals/ModalInitiator";
 import { BooksFeed } from "./BooksFeed";
+import { ProfilesFeed } from "./ProfilesFeed";
 import { ReviewsFeed } from "./ReviewsFeed";
 
-interface CommonProps {
-  orderArray: OrderByArrayType;
-  takeLimit: number;
-}
-
-interface BooksFeedProps extends CommonProps {
+interface BooksFeedProps extends FetchBooksProps {
   feedVariant: "books";
-  variant?: bookshelfType | "OWNED" | "LIKED" | "REVIEWS";
-  userId?: string;
-  profileName?: string;
+  orderArray: OrderByArrayType;
   bookId?: never;
+  userId?: never;
 }
 
-interface ReviewsFeedProps extends CommonProps {
+interface ReviewsFeedProps extends FetchReviewsProps {
   feedVariant: "reviews";
-  bookId: string;
-  userId?: string;
+  orderArray: OrderByArrayType;
   variant?: never;
   profileName?: never;
 }
 
-interface ProfilesFeedProps extends CommonProps {
+interface ProfilesFeedProps extends FetchProfilesProps {
   feedVariant: "profiles";
-  userId: string;
-  variant?: never;
-  profileName?: never;
+  orderArray: OrderByArrayType;
   bookId?: never;
+  profileName?: never;
 }
 
 export const FeedWithSorting: FC<
@@ -48,6 +44,7 @@ export const FeedWithSorting: FC<
   takeLimit,
   variant,
   userId,
+  sessionId,
   profileName,
   bookId,
 }) => {
@@ -104,7 +101,7 @@ export const FeedWithSorting: FC<
       {feedVariant === "books" && (
         <BooksFeed
           takeLimit={takeLimit}
-          userId={userId}
+          sessionId={sessionId}
           profileName={profileName}
           variant={variant}
           order={sortOrderState}
@@ -116,14 +113,39 @@ export const FeedWithSorting: FC<
       {feedVariant === "reviews" && (
         <ReviewsFeed
           takeLimit={takeLimit}
+          userId={undefined}
           bookId={bookId}
-          userId={userId}
+          sessionId={sessionId}
           order={sortOrderState}
           orderBy={
             orderByState === defaultSortCategory ? undefined : orderByState
           }
         />
       )}
+      {feedVariant === "profiles" &&
+        (variant && userId ? (
+          <ProfilesFeed
+            takeLimit={takeLimit}
+            variant={variant}
+            userId={userId}
+            sessionId={sessionId}
+            order={sortOrderState}
+            orderBy={
+              orderByState === defaultSortCategory ? undefined : orderByState
+            }
+          />
+        ) : (
+          <ProfilesFeed
+            takeLimit={takeLimit}
+            variant={undefined}
+            userId={undefined}
+            sessionId={sessionId}
+            order={sortOrderState}
+            orderBy={
+              orderByState === defaultSortCategory ? undefined : orderByState
+            }
+          />
+        ))}
     </>
   );
 };

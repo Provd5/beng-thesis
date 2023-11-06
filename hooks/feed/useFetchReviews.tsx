@@ -15,15 +15,17 @@ interface CommonProps {
   order?: "desc" | "asc";
 }
 
-export interface FetchReviewsProps extends CommonProps {
+export type FetchReviewsProps = CommonProps & {
   bookId: string;
-  userId?: string;
-}
+  userId: string | undefined;
+  sessionId: string | undefined;
+};
 
 export function useFetchReviews({
   bookId,
-  takeLimit,
   userId,
+  sessionId,
+  takeLimit,
   orderBy,
   order,
 }: FetchReviewsProps) {
@@ -38,12 +40,14 @@ export function useFetchReviews({
     setIsLoading(true);
 
     const userIdParam = userId ? `&userId=${userId}` : "";
+    const sessionIdParam = sessionId ? `&sessionId=${sessionId}` : "";
     const orderByParam = orderBy ? `&orderBy=${orderBy}` : "";
     const orderParam = order ? `&order=${order}` : `&order=desc`;
 
     const query =
       `/api/feed/reviews?takeLimit=${takeLimit}&page=${pageNumber}&bookId=${bookId}` +
       userIdParam +
+      sessionIdParam +
       orderByParam +
       orderParam;
 

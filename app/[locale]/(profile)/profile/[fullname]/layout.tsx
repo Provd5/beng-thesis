@@ -50,7 +50,7 @@ export default async function ProfileFullnameLayout({
           </div>
           <div className="mx-0.5 mt-3">
             <FollowLinks
-              id={publicUserData.id}
+              userId={publicUserData.id}
               fullname={fullname}
               isMyProfile={session?.user.id === publicUserData.id}
               isFollowed={doIAlreadyFollowThisProfile(

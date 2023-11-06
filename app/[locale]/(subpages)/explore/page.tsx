@@ -17,10 +17,12 @@ export default async function ExplorePage() {
   return (
     <div className="container pb-6">
       <FeedWithSorting
-        takeLimit={20}
-        userId={session?.user.id}
         feedVariant="books"
         orderArray={booksOrderByArray}
+        sessionId={session?.user.id}
+        takeLimit={20}
+        profileName={undefined}
+        variant={undefined}
       />
     </div>
   );

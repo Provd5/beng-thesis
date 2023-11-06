@@ -1,25 +1,19 @@
 "use client";
 
 import { type FC, useEffect, useRef, useState } from "react";
-import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { type reactionType } from "@prisma/client";
-import axios from "axios";
 import clsx from "clsx";
-
-import { type IconType } from "react-icons";
-import { FaFaceLaughBeam, FaFaceMeh } from "react-icons/fa6";
 
 import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
 
-import { ReviewReactionValidator } from "~/lib/validations/book/reviewReaction";
-import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
 
 import { AvatarImage } from "../Profile/AvatarImage";
 import { ButtonLink } from "../ui/Buttons";
 import { getBookmarkIcon } from "../ui/getBookmarkIcon";
+import { ManageReaction } from "./Manage/ManageReaction";
 
 interface ReviewCardProps {
   reviewData: ReviewCardDataInterface;
@@ -34,12 +28,6 @@ export const ReviewCard: FC<ReviewCardProps> = ({
 }) => {
   const t = useTranslations("Reviews.Review");
   const to = useTranslations("Other");
-  const te = useTranslations("Errors");
-
-  const [reactionsState, setReactionsState] = useState(
-    reviewData.review_reaction
-  );
-  const [userReactionState, setUserReactionState] = useState(myReaction);
 
   const [renderButton, setRenderButton] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -55,85 +43,83 @@ export const ReviewCard: FC<ReviewCardProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewParagraphRef.current]);
+  //   return reactionsState.filter((type) => type.reaction === reaction);
+  // };
 
-  const filterByReaction = (reaction: reactionType) => {
-    return reactionsState.filter((type) => type.reaction === reaction);
-  };
+  // const renderReaction = (reaction: reactionType, Icon: IconType) => {
+  //   return (
+  //     <button
+  //       className={clsx(
+  //         "flex items-center gap-1 rounded-sm border px-2 py-1.5",
+  //         userReactionState === reaction
+  //           ? "border-secondary dark:border-secondary-light"
+  //           : "border-black dark:border-white"
+  //       )}
+  //       onClick={() => handleReaction(reaction)}
+  //     >
+  //       <Icon
+  //         className={
+  //           userReactionState === reaction
+  //             ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
+  //             : ""
+  //         }
+  //       />
+  //       <div
+  //         className={clsx(
+  //           "flex gap-2 font-semibold",
+  //           userReactionState === reaction &&
+  //             "text-secondary dark:text-secondary-light"
+  //         )}
+  //       >
+  //         <p>{t(reaction)}</p>
+  //         <p>{filterByReaction(reaction).length}</p>
+  //       </div>
+  //     </button>
+  //   );
+  // };
 
-  const renderReaction = (reaction: reactionType, Icon: IconType) => {
-    return (
-      <button
-        className={clsx(
-          "flex items-center gap-1 rounded-sm border px-2 py-1.5",
-          userReactionState === reaction
-            ? "border-secondary dark:border-secondary-light"
-            : "border-black dark:border-white"
-        )}
-        onClick={() => handleReaction(reaction)}
-      >
-        <Icon
-          className={
-            userReactionState === reaction
-              ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-              : ""
-          }
-        />
-        <div
-          className={clsx(
-            "flex gap-2 font-semibold",
-            userReactionState === reaction &&
-              "text-secondary dark:text-secondary-light"
-          )}
-        >
-          <p>{t(reaction)}</p>
-          <p>{filterByReaction(reaction).length}</p>
-        </div>
-      </button>
-    );
-  };
+  // const handleReaction = async (reaction: reactionType) => {
+  //   const prevReactions = reactionsState;
+  //   const prevUserReaction = userReactionState;
 
-  const handleReaction = async (reaction: reactionType) => {
-    const prevReactions = reactionsState;
-    const prevUserReaction = userReactionState;
+  //   // set active reaction
+  //   setUserReactionState(userReactionState === reaction ? undefined : reaction);
 
-    // set active reaction
-    setUserReactionState(userReactionState === reaction ? undefined : reaction);
+  //   const index = reactionsState.findIndex(
+  //     (item) => item.reaction === userReactionState
+  //   );
+  //   //removing reaction from array
+  //   reactionsState.splice(index, index !== -1 ? 1 : 0);
+  //   //changing or adding reaction
+  //   userReactionState !== reaction &&
+  //     setReactionsState((prev) => [
+  //       ...prev,
+  //       { reaction, review_id: reviewData.id, user_id: reviewData.profile.id },
+  //     ]);
 
-    const index = reactionsState.findIndex(
-      (item) => item.reaction === userReactionState
-    );
-    //removing reaction from array
-    reactionsState.splice(index, index !== -1 ? 1 : 0);
-    //changing or adding reaction
-    userReactionState !== reaction &&
-      setReactionsState((prev) => [
-        ...prev,
-        { reaction, review_id: reviewData.id, user_id: reviewData.profile.id },
-      ]);
+  //   const formData = { reviewId: reviewData.id, reaction: reaction };
 
-    const formData = { reviewId: reviewData.id, reaction: reaction };
+  //   try {
+  //     ReviewReactionValidator.parse({
+  //       formData: formData,
+  //     });
+  //     const { data }: { data: string } = await axios.post(
+  //       `/api/book/manage/review/reaction/`,
+  //       { formData: formData }
+  //     );
 
-    try {
-      ReviewReactionValidator.parse({
-        formData: formData,
-      });
-      const { data }: { data: string } = await axios.post(
-        `/api/book/manage/review/reaction/`,
-        { formData: formData }
-      );
-
-      if (data !== GlobalErrors.SUCCESS) {
-        toast.error(te(data));
-        setReactionsState(prevReactions);
-        setUserReactionState(prevUserReaction);
-        return;
-      }
-    } catch (error) {
-      toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
-      setReactionsState(prevReactions);
-      setUserReactionState(prevUserReaction);
-    }
-  };
+  //     if (data !== GlobalErrors.SUCCESS) {
+  //       toast.error(te(data));
+  //       setReactionsState(prevReactions);
+  //       setUserReactionState(prevUserReaction);
+  //       return;
+  //     }
+  //   } catch (error) {
+  //     toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
+  //     setReactionsState(prevReactions);
+  //     setUserReactionState(prevUserReaction);
+  //   }
+  // };
 
   return (
     <div
@@ -190,7 +176,7 @@ export const ReviewCard: FC<ReviewCardProps> = ({
                 {`${reviewData.score}/5`}
               </span>
             </h1>
-            {reviewData.profile._count.liked_book && (
+            {reviewData.profile._count.liked_book > 0 && (
               <div className="flex items-center gap-0.5">
                 {getBookmarkIcon("LIKED", "sm")}
                 <span className="text-xs">{t("likes it")}</span>
@@ -226,10 +212,12 @@ export const ReviewCard: FC<ReviewCardProps> = ({
               <p className="text-right text-xs">
                 {t("was this review helpful?")}
               </p>
-              <div className="flex gap-1 px-1 text-sm text-black-light dark:text-white-dark">
-                {renderReaction("OK", FaFaceLaughBeam)}
-                {renderReaction("MEH", FaFaceMeh)}
-              </div>
+              <ManageReaction
+                myReaction={myReaction}
+                reaction={reviewData.review_reaction}
+                reviewId={reviewData.id}
+                userId={reviewData.profile.id}
+              />
             </div>
           )}
         </div>

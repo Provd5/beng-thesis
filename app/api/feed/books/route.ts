@@ -5,9 +5,9 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const { userId, profileName, variant, orderBy, order, takeLimit, page } =
+    const { sessionId, profileName, variant, orderBy, order, takeLimit, page } =
       BooksValidator.parse({
-        userId: url.searchParams.get("userId"),
+        sessionId: url.searchParams.get("sessionId"),
         profileName: url.searchParams.get("profileName"),
         variant: url.searchParams.get("variant"),
         orderBy: url.searchParams.get("orderBy"),
@@ -58,11 +58,11 @@ export async function GET(req: Request) {
             ...commonSelect,
             _count: { select: { review: true, liked_by: true } },
             review: { select: { score: true } },
-            ...(!!userId
+            ...(!!sessionId
               ? {
-                  bookshelf: { where: { profile: { id: userId } } },
-                  book_owned_as: { where: { profile: { id: userId } } },
-                  liked_by: { where: { profile: { id: userId } } },
+                  bookshelf: { where: { profile: { id: sessionId } } },
+                  book_owned_as: { where: { profile: { id: sessionId } } },
+                  liked_by: { where: { profile: { id: sessionId } } },
                 }
               : {}),
           };
