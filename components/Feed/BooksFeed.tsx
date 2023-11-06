@@ -3,25 +3,19 @@
 import { type FC } from "react";
 
 import {
-  type BookCardInterface,
-  type BookInterface,
-  type BookReviewCardInterface,
-} from "~/types/BookCardDataInterface";
-
-import {
   type FetchBooksProps,
   useFetchBooks,
 } from "~/hooks/feed/useFetchBooks";
 
-import { BookCard, BookCardLoader } from "../Explore/BookCard";
-import {
-  BookReviewCard,
-  BookReviewCardLoader,
-} from "../Explore/BookReviewCard";
+import { BookCard } from "../Explore/BookCard";
+import { BookReviewCard } from "../Explore/BookReviewCard";
+import { BookCardLoader } from "../ui/Loaders/Skeletons/BookCardLoader";
+import { BookReviewCardLoader } from "../ui/Loaders/Skeletons/BookReviewCardLoader";
 import { FetchMoreButton } from "./FetchMoreButton";
 
 export const BooksFeed: FC<FetchBooksProps> = (props) => {
-  const { booksData, fetchBooks, isLoading, pageNumber } = useFetchBooks(props);
+  const { fetchedData, fetchMore, isLoading, pageNumber } =
+    useFetchBooks(props);
 
   return (
     <>
@@ -32,7 +26,7 @@ export const BooksFeed: FC<FetchBooksProps> = (props) => {
             Array.from({ length: props.takeLimit }, (_, i) => (
               <BookReviewCardLoader key={i} />
             ))}
-          {(booksData as BookReviewCardInterface[]).map((data) => (
+          {(fetchedData as BookReviewCardInterface[]).map((data) => (
             <BookReviewCard key={data.book.id} bookData={data} />
           ))}
         </div>
@@ -44,10 +38,10 @@ export const BooksFeed: FC<FetchBooksProps> = (props) => {
               <BookCardLoader key={i} />
             ))}
           {props.variant === undefined
-            ? (booksData as BookInterface[]).map((data) => (
+            ? (fetchedData as BookInterface[]).map((data) => (
                 <BookCard key={data.id} bookData={data} />
               ))
-            : (booksData as BookCardInterface[]).map((data) => (
+            : (fetchedData as BookCardInterface[]).map((data) => (
                 <BookCard key={data.book.id} bookData={data.book} />
               ))}
         </div>
@@ -55,10 +49,10 @@ export const BooksFeed: FC<FetchBooksProps> = (props) => {
       <FetchMoreButton
         className="flex w-full items-center justify-center py-6"
         isLoading={isLoading}
-        fetchMoreFunc={fetchBooks}
+        fetchMoreFunc={fetchMore}
         takeLimit={props.takeLimit}
         pageNumber={pageNumber}
-        dataLength={booksData.length}
+        dataLength={fetchedData.length}
       />
     </>
   );

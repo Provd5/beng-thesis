@@ -9,7 +9,6 @@ import {
 } from "react-icons/bs";
 
 import { type CategoryTypes } from "~/types/CategoryTypes";
-import { type BookmarkSizes } from "~/types/Sizes";
 
 import { BookmarksWrapper } from "~/components/ui/BookmarksWrapper";
 

@@ -3,11 +3,10 @@
 import type { FC } from "react";
 import { type bookshelfType } from "@prisma/client";
 
-import { type BookCardInterface } from "~/types/BookCardDataInterface";
-
 import { useFetchBooks } from "~/hooks/feed/useFetchBooks";
 
-import { SmallBookCard, SmallBookCardLoader } from "../Explore/SmallBookCard";
+import { SmallBookCard } from "../Explore/SmallBookCard";
+import { SmallBookCardLoader } from "../ui/Loaders/Skeletons/SmallBookCardLoader";
 
 interface CategoryContentCardProps {
   variant: bookshelfType | "OWNED" | "LIKED" | "REVIEWS";
@@ -22,7 +21,7 @@ export const CategoryContentCard: FC<CategoryContentCardProps> = ({
   profileName,
   dataLength,
 }) => {
-  const { booksData, isLoading } = useFetchBooks({
+  const { fetchedData, isLoading } = useFetchBooks({
     takeLimit: 10,
     variant,
     userId,
@@ -33,7 +32,7 @@ export const CategoryContentCard: FC<CategoryContentCardProps> = ({
     ? Array.from({ length: dataLength }, (_, i) => (
         <SmallBookCardLoader key={i} />
       ))
-    : (booksData as BookCardInterface[]).map((data) => (
+    : (fetchedData as BookCardInterface[]).map((data) => (
         <SmallBookCard key={data.book.id} book={data.book} />
       ));
 };

@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
+import { booksOrderByArray } from "~/types/feed/OrderVariants";
+
 import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
 
 export default async function ExplorePage() {
@@ -17,7 +19,8 @@ export default async function ExplorePage() {
       <FeedWithSorting
         takeLimit={20}
         userId={session?.user.id}
-        feedVariant={"explore"}
+        feedVariant="books"
+        orderArray={booksOrderByArray}
       />
     </div>
   );

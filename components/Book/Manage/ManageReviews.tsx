@@ -7,8 +7,8 @@ import { BsBookmarkStar } from "react-icons/bs";
 
 import { dateFormater } from "~/utils/dateFormater";
 
-import { BookmarksWrapper } from "../ui/BookmarksWrapper";
-import { getBookmarkIcon } from "../ui/getBookmarkIcon";
+import { BookmarksWrapper } from "../../ui/BookmarksWrapper";
+import { getBookmarkIcon } from "../../ui/getBookmarkIcon";
 
 interface ManageReviewsProps {
   isReviewExists: boolean;

@@ -5,10 +5,10 @@ import { z } from "zod";
 
 import { BookCover } from "~/components/Book/BookCover";
 import { BookDetails } from "~/components/Book/BookDetails";
-import { ManageBookshelf } from "~/components/Book/ManageBookshelf";
-import { ManageLikes } from "~/components/Book/ManageLikes";
-import { ManageOwnedAs } from "~/components/Book/ManageOwnedAs";
-import { ManageReviews } from "~/components/Book/ManageReviews";
+import { ManageBookshelf } from "~/components/Book/Manage/ManageBookshelf";
+import { ManageLikes } from "~/components/Book/Manage/ManageLikes";
+import { ManageOwnedAs } from "~/components/Book/Manage/ManageOwnedAs";
+import { ManageReviews } from "~/components/Book/Manage/ManageReviews";
 import { BackCategoryButton } from "~/components/ui/BackCategoryLink";
 import { db } from "~/lib/db";
 import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
@@ -34,7 +34,7 @@ export default async function BookLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
-  const [book, bookScores, myData] = await Promise.all([
+  const [book, bookScores] = await Promise.all([
     db.book.findUnique({
       where: { id: id },
       include: {
@@ -45,40 +45,42 @@ export default async function BookLayout({
       where: { book_id: id },
       select: { score: true },
     }),
-    session?.user &&
-      db.profile.findUnique({
-        where: { id: session.user.id },
-        select: {
-          bookshelf: {
-            where: { book_id: id },
-            select: {
-              bookshelf: true,
-              updated_at: true,
-              began_reading_at: true,
-              read_quantity: true,
-            },
-          },
-          book_owned_as: {
-            where: { book_id: id },
-            select: {
-              added_audiobook_at: true,
-              added_book_at: true,
-              added_ebook_at: true,
-            },
-          },
-          review: { where: { book_id: id }, select: { created_at: true } },
-          _count: { select: { liked_book: { where: { book_id: id } } } },
-        },
-      }),
   ]);
 
   if (!book) notFound();
 
+  const myData =
+    session?.user &&
+    (await db.profile.findUnique({
+      where: { id: session.user.id },
+      select: {
+        bookshelf: {
+          where: { book_id: id },
+          select: {
+            bookshelf: true,
+            updated_at: true,
+            began_reading_at: true,
+            read_quantity: true,
+          },
+        },
+        book_owned_as: {
+          where: { book_id: id },
+          select: {
+            added_audiobook_at: true,
+            added_book_at: true,
+            added_ebook_at: true,
+          },
+        },
+        review: { where: { book_id: id }, select: { created_at: true } },
+        liked_book: { where: { book_id: id }, select: { updated_at: true } },
+      },
+    }));
+
   const myBookshelfData = myData?.bookshelf?.[0];
   const myOwnedAsData = myData?.book_owned_as?.[0];
   const myReviewData = myData?.review?.[0];
-  const doILikeThisBook = !!myData?._count.liked_book;
-  const isReviewExists = !!myData?.review;
+  const doILikeThisBook = !!myData?.liked_book.length;
+  const isReviewExists = !!myData?.review.length;
 
   return (
     <div className="container py-8 text-sm">

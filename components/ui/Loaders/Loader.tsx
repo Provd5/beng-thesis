@@ -18,9 +18,9 @@ interface TextLoaderProps {
 
 export const TextLoader: FC<TextLoaderProps> = ({ className, height }) => {
   const size = {
-    h1: "h-5",
-    h2: "h-3.5",
-    h3: "h-3",
+    h1: "h-5 opacity-90",
+    h2: "h-3.5 opacity-75",
+    h3: "h-3 opacity-60",
   };
 
   return <div className={clsx("rounded bg-gray", size[height], className)} />;

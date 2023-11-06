@@ -14,10 +14,10 @@ import { ChangeBookshelfValidator } from "~/lib/validations/book/changeBookshelf
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
 
-import { ModalWrapper } from "../Modals/ModalWrapper";
-import { BookmarksWrapper } from "../ui/BookmarksWrapper";
-import { Button, ButtonLink } from "../ui/Buttons";
-import { getBookmarkIcon } from "../ui/getBookmarkIcon";
+import { ModalWrapper } from "../../Modals/ModalWrapper";
+import { BookmarksWrapper } from "../../ui/BookmarksWrapper";
+import { Button, ButtonLink } from "../../ui/Buttons";
+import { getBookmarkIcon } from "../../ui/getBookmarkIcon";
 
 interface ManageBookshelfProps {
   bookId: string;

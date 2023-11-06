@@ -29,9 +29,7 @@ export default async function EditProfilePage() {
       },
     }));
 
-  if (!userData) {
-    notFound();
-  }
+  if (!userData) notFound();
 
   return (
     <>

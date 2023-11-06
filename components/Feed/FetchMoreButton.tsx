@@ -3,7 +3,7 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { Loader } from "../ui/Loader";
+import { Loader } from "../ui/Loaders/Loader";
 
 interface FetchMoreButtonProps {
   isLoading: boolean;
@@ -24,23 +24,20 @@ export const FetchMoreButton: FC<FetchMoreButtonProps> = ({
 }) => {
   const t = useTranslations("Other");
 
-  return (
-    // <div className="flex w-full items-center justify-center py-6">
-    isLoading ? (
+  return isLoading ? (
+    <div className={className}>
+      <Loader className="h-11 w-11" />
+    </div>
+  ) : (
+    takeLimit >= 10 && takeLimit * pageNumber - takeLimit <= dataLength && (
       <div className={className}>
-        <Loader className="h-11 w-11" />
+        <button
+          className="rounded-sm border border-secondary px-6 py-3 text-secondary dark:border-secondary-light dark:text-secondary-light"
+          onClick={() => fetchMoreFunc()}
+        >
+          {t("load more")}
+        </button>
       </div>
-    ) : (
-      takeLimit * pageNumber - takeLimit <= dataLength && (
-        <div className={className}>
-          <button
-            className="rounded-sm border border-secondary px-6 py-3 text-secondary dark:border-secondary-light dark:text-secondary-light"
-            onClick={() => fetchMoreFunc()}
-          >
-            {t("load more")}
-          </button>
-        </div>
-      )
     )
   );
 };

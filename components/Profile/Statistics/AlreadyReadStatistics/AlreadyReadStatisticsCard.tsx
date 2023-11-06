@@ -1,7 +1,6 @@
 import type { FC } from "react";
 
 import { getBookmarkIcon } from "~/components/ui/getBookmarkIcon";
-import { db } from "~/lib/db";
 import { calculateReadingTime } from "~/utils/calculateReadingTime";
 import { convertTimeToDays } from "~/utils/convertTimeToDays";
 
@@ -9,24 +8,20 @@ import { AlreadyReadStatisticsLabels } from "./AlreadyReadStatisticsLabels";
 import { TotalReadPagesStatistics } from "./ReadPagesStatistics";
 
 interface AlreadyReadStatisticsCardProps {
-  userId: string;
+  alreadyReadBooks: {
+    began_reading_at: Date | null;
+    updated_at: Date;
+    book: {
+      title: string;
+      authors: string[];
+      page_count: number;
+    };
+  }[];
 }
 
-export const AlreadyReadStatisticsCard: FC<
-  AlreadyReadStatisticsCardProps
-> = async ({ userId }) => {
-  const alreadyReadBooks = await db.bookshelf.findMany({
-    orderBy: { updated_at: "desc" },
-    where: {
-      AND: [{ user_id: userId }, { bookshelf: "ALREADY_READ" }],
-    },
-    select: {
-      began_reading_at: true,
-      updated_at: true,
-      book: { select: { title: true, authors: true, page_count: true } },
-    },
-  });
-
+export const AlreadyReadStatisticsCard: FC<AlreadyReadStatisticsCardProps> = ({
+  alreadyReadBooks,
+}) => {
   const lastReadBook = alreadyReadBooks.length > 0 && alreadyReadBooks[0];
 
   const lastReadBookReadTimeDiff =
@@ -113,7 +108,7 @@ export const AlreadyReadStatisticsCard: FC<
           readTime={lastReadBookReadIn}
         />
       )}
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-x-6 gap-y-3">
         {readingTimeDifference && (
           <AlreadyReadStatisticsLabels
             variant={"shortest-read:"}

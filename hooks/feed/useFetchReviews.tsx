@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
-import { type bookshelfType } from "@prisma/client";
 import axios from "axios";
+
+import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
 
 import { GlobalErrors } from "../../lib/validations/errorsEnums";
 
@@ -14,60 +15,46 @@ interface CommonProps {
   order?: "desc" | "asc";
 }
 
-export interface FetchBooksProps extends CommonProps {
-  variant?: bookshelfType | "OWNED" | "LIKED" | "REVIEWS";
+export interface FetchReviewsProps extends CommonProps {
+  bookId: string;
   userId?: string;
-  profileName?: string;
 }
 
-export function useFetchBooks({
+export function useFetchReviews({
+  bookId,
   takeLimit,
-  variant,
   userId,
-  profileName,
   orderBy,
   order,
-}: FetchBooksProps) {
+}: FetchReviewsProps) {
   const te = useTranslations("Errors");
 
   const isInitialRender = useRef(true);
   const [isLoading, setIsLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
-  const [fetchedData, setFetchedData] = useState<
-    (BookCardInterface | BookReviewCardInterface | BookInterface)[]
-  >([]);
+  const [fetchedData, setFetchedData] = useState<ReviewCardDataInterface[]>([]);
 
   const fetchMore = async () => {
     setIsLoading(true);
 
     const userIdParam = userId ? `&userId=${userId}` : "";
-    const profileNameParam = profileName ? `&profileName=${profileName}` : "";
-    const variantParam = variant ? `&variant=${variant}` : "";
     const orderByParam = orderBy ? `&orderBy=${orderBy}` : "";
     const orderParam = order ? `&order=${order}` : `&order=desc`;
 
     const query =
-      `/api/feed/books?takeLimit=${takeLimit}&page=${pageNumber}` +
+      `/api/feed/reviews?takeLimit=${takeLimit}&page=${pageNumber}&bookId=${bookId}` +
       userIdParam +
-      profileNameParam +
-      variantParam +
       orderByParam +
       orderParam;
 
     await axios
       .get(query)
-      .then(
-        ({
-          data,
-        }: {
-          data: (BookCardInterface | BookReviewCardInterface | BookInterface)[];
-        }) => {
-          setFetchedData((prevData) => [...prevData, ...data]);
-          setPageNumber((prev) => prev + 1);
-        }
-      )
+      .then(({ data }: { data: ReviewCardDataInterface[] }) => {
+        setFetchedData((prevData) => [...prevData, ...data]);
+        setPageNumber((prev) => prev + 1);
+      })
       .catch(() =>
-        toast.error(te(GlobalErrors.COULD_NOT_FETCH, { item: "books" }))
+        toast.error(te(GlobalErrors.COULD_NOT_FETCH, { item: "reviews" }))
       )
       .finally(() => setIsLoading(false));
   };

@@ -8,7 +8,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { LuLogOut } from "react-icons/lu";
 
-import { Loader } from "./Loader";
+import { Loader } from "./Loaders/Loader";
 
 export const LogoutButton: FC = () => {
   const t = useTranslations("Other");

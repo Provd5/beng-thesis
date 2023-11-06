@@ -79,7 +79,11 @@ export default async function ProfilePage({
                     variant="STATISTICS"
                     href={`${fullname}/statistics`}
                   />
-                  <Statistics userId={userData.id} userFullname={fullname} />
+                  <Statistics
+                    userFullname={fullname}
+                    quantities={quantities}
+                    bookshelfArray={userData.bookshelf}
+                  />
                 </>
               ) : (
                 <>

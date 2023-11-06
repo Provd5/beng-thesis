@@ -18,8 +18,8 @@ import { OwnedAsValidator } from "~/lib/validations/book/ownedAs";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
 
-import { ModalWrapper } from "../Modals/ModalWrapper";
-import { ButtonLink } from "../ui/Buttons";
+import { ModalWrapper } from "../../Modals/ModalWrapper";
+import { ButtonLink } from "../../ui/Buttons";
 import { ManageOwnedAsModalContent } from "./ManageOwnedAsModalContent";
 
 interface ManageOwnedAsProps {

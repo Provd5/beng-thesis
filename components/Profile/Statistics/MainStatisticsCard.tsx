@@ -1,57 +1,34 @@
 import type { FC } from "react";
+import { type bookshelfType } from "@prisma/client";
 
 import { categoryArray } from "~/types/CategoryTypes";
 
 import { getBookmarkIcon } from "~/components/ui/getBookmarkIcon";
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
-import { db } from "~/lib/db";
 import { quantityPerCategoryType } from "~/utils/quantityPerCategoryType";
 
 interface MainStatisticsCardProps {
-  userId: string;
+  quantities: {
+    ownedQuantity: number;
+    likedQuantity: number;
+    reviewsQuantity: number;
+  };
+  bookshelfArray:
+    | {
+        bookshelf: bookshelfType | null;
+      }[];
 }
 
-export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
-  userId,
+export const MainStatisticsCard: FC<MainStatisticsCardProps> = ({
+  quantities,
+  bookshelfArray,
 }) => {
-  const CategoryQuantityData = await db.profile.findUnique({
-    where: {
-      id: userId,
-    },
-    select: {
-      _count: {
-        select: {
-          book_owned_as: {
-            where: {
-              NOT: {
-                AND: [
-                  { added_audiobook_at: null },
-                  { added_book_at: null },
-                  { added_ebook_at: null },
-                ],
-              },
-            },
-          },
-          liked_book: true,
-          review: true,
-        },
-      },
-      bookshelf: { select: { bookshelf: true } },
-    },
-  });
-
-  const quantities = {
-    ownedQuantity: CategoryQuantityData?._count.book_owned_as,
-    likedQuantity: CategoryQuantityData?._count.liked_book,
-    reviewsQuantity: CategoryQuantityData?._count.review,
-  };
-
   return (
     <div className="flex flex-wrap justify-center gap-2">
       {categoryArray.map((categoryVariant) => {
         const variantQuantity = quantityPerCategoryType(
           categoryVariant,
-          CategoryQuantityData?.bookshelf || [],
+          bookshelfArray,
           quantities
         );
         if (categoryVariant === "STATISTICS") return null;

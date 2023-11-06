@@ -2,8 +2,6 @@
 
 import { type FC, useRef, useState } from "react";
 
-import { type ModalSizes } from "~/types/Sizes";
-
 import { ModalWrapper } from "./ModalWrapper";
 
 interface ModalInitiatorProps {

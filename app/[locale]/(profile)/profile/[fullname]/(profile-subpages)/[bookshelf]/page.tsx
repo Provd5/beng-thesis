@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
+import { bookshelvesOrderByArray } from "~/types/feed/OrderVariants";
 
 import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
 import { BookshelfPageTitle } from "~/components/Profile/Bookshelf/BookshelfPageTitle";
@@ -14,6 +15,9 @@ export default async function BookshelfPage({
 }: {
   params: { bookshelf: string; fullname: string };
 }) {
+  const bookshelfAsType = convertPathnameToTypeEnum(bookshelf) as CategoryTypes;
+  if (!categoryArray.includes(bookshelfAsType)) notFound();
+
   const supabase = createServerComponentClient({
     cookies,
   });
@@ -21,12 +25,6 @@ export default async function BookshelfPage({
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
-  const bookshelfAsType = convertPathnameToTypeEnum(bookshelf) as CategoryTypes;
-
-  if (!categoryArray.includes(bookshelfAsType)) {
-    notFound();
-  }
 
   let booksQuantity;
   let variant;
@@ -76,11 +74,14 @@ export default async function BookshelfPage({
       />
       {variant && (
         <FeedWithSorting
-          feedVariant="bookshelf"
-          takeLimit={10}
+          feedVariant="books"
+          takeLimit={
+            booksQuantity ? (booksQuantity < 10 ? booksQuantity : 10) : 0
+          }
           userId={session?.user.id}
           profileName={fullname}
           variant={variant}
+          orderArray={bookshelvesOrderByArray}
         />
       )}
     </div>

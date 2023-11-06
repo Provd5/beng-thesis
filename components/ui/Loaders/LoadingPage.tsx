@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { Loader } from "./ui/Loader";
+import { Loader } from "./Loader";
 
 export const LoadingPage: FC = () => {
   return (

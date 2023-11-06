@@ -4,7 +4,7 @@ import { clsx } from "clsx";
 
 import { MdKeyboardArrowDown } from "react-icons/md";
 
-import { Loader } from "./Loader";
+import { Loader } from "./Loaders/Loader";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;

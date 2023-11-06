@@ -3,8 +3,6 @@ import clsx from "clsx";
 
 import { type IconType } from "react-icons/lib";
 
-import { type BookmarkSizes } from "~/types/Sizes";
-
 interface BookmarksWrapperProps {
   Icon: IconType;
   color: "gradient" | `fill-${string}`;

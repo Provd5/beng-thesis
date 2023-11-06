@@ -11,6 +11,8 @@ import clsx from "clsx";
 import { type IconType } from "react-icons";
 import { FaFaceLaughBeam, FaFaceMeh } from "react-icons/fa6";
 
+import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
+
 import { ReviewReactionValidator } from "~/lib/validations/book/reviewReaction";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 import { dateFormater } from "~/utils/dateFormater";
@@ -19,54 +21,25 @@ import { AvatarImage } from "../Profile/AvatarImage";
 import { ButtonLink } from "../ui/Buttons";
 import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
-interface ReviewProps {
-  id: string;
-  profileData: {
-    avatar_url: string | null;
-    full_name: string | null;
-    created_at: Date;
-    _count: {
-      bookshelf: number;
-      review: number;
-    };
-  };
-  reviewCreatedAt: Date;
-  reviewUpdatedAt: Date | null;
-  score: number;
-  text: string | null;
-  isLiked: boolean;
-  reactions: {
-    reaction: reactionType;
-  }[];
-  userReaction: reactionType | undefined;
+interface ReviewCardProps {
+  reviewData: ReviewCardDataInterface;
+  myReaction: reactionType | undefined;
   isMyReview?: boolean;
 }
 
-export const Review: FC<ReviewProps> = ({
-  id,
-  profileData,
-  reviewCreatedAt,
-  reviewUpdatedAt,
-  isLiked,
-  score,
-  text,
-  reactions,
-  userReaction,
+export const ReviewCard: FC<ReviewCardProps> = ({
+  reviewData,
+  myReaction,
   isMyReview,
 }) => {
   const t = useTranslations("Reviews.Review");
   const to = useTranslations("Other");
   const te = useTranslations("Errors");
 
-  const filterReaction = (reaction: reactionType) => {
-    const filterArrayByReaction = reactionsState.filter(
-      (type) => type.reaction === reaction
-    );
-    return filterArrayByReaction;
-  };
-
-  const [reactionsState, setReactionsState] = useState(reactions);
-  const [userReactionState, setUserReactionState] = useState(userReaction);
+  const [reactionsState, setReactionsState] = useState(
+    reviewData.review_reaction
+  );
+  const [userReactionState, setUserReactionState] = useState(myReaction);
 
   const [renderButton, setRenderButton] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -82,6 +55,10 @@ export const Review: FC<ReviewProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewParagraphRef.current]);
+
+  const filterByReaction = (reaction: reactionType) => {
+    return reactionsState.filter((type) => type.reaction === reaction);
+  };
 
   const renderReaction = (reaction: reactionType, Icon: IconType) => {
     return (
@@ -109,7 +86,7 @@ export const Review: FC<ReviewProps> = ({
           )}
         >
           <p>{t(reaction)}</p>
-          <p>{filterReaction(reaction).length}</p>
+          <p>{filterByReaction(reaction).length}</p>
         </div>
       </button>
     );
@@ -129,9 +106,12 @@ export const Review: FC<ReviewProps> = ({
     reactionsState.splice(index, index !== -1 ? 1 : 0);
     //changing or adding reaction
     userReactionState !== reaction &&
-      setReactionsState((prev) => [...prev, { reaction }]);
+      setReactionsState((prev) => [
+        ...prev,
+        { reaction, review_id: reviewData.id, user_id: reviewData.profile.id },
+      ]);
 
-    const formData = { reviewId: id, reaction: reaction };
+    const formData = { reviewId: reviewData.id, reaction: reaction };
 
     try {
       ReviewReactionValidator.parse({
@@ -164,28 +144,31 @@ export const Review: FC<ReviewProps> = ({
       )}
     >
       <Link
-        href={profileData.full_name ? `/profile/${profileData.full_name}` : "#"}
+        href={`/profile/${
+          reviewData.profile.full_name ? reviewData.profile.full_name : ""
+        }`}
         className="flex h-fit flex-none gap-x-1.5 gap-y-1 sm:w-24 sm:flex-col sm:items-center"
       >
         <AvatarImage
           className="drop-shadow-icon"
-          avatarSrc={profileData.avatar_url}
+          avatarSrc={reviewData.profile.avatar_url}
         />
         <div className="flex flex-col gap-0.5 sm:items-center">
           <h1 className="line-clamp-3 break-all font-bold">
-            {profileData.full_name}
+            {reviewData.profile.full_name}
           </h1>
           <h2 className="flex flex-wrap text-xs text-black-light dark:text-white-dark sm:justify-center">
-            {t("joined:")} <span>{dateFormater(profileData.created_at)}</span>
+            {t("joined:")}{" "}
+            <span>{dateFormater(reviewData.profile.created_at)}</span>
           </h2>
           <div className="my-1 flex gap-2 text-base">
             <div className="flex items-center gap-0.5">
               {getBookmarkIcon("ALREADY_READ", "sm")}
-              <p>{profileData._count.bookshelf}</p>
+              <p>{reviewData.profile._count.bookshelf}</p>
             </div>
             <div className="flex items-center gap-0.5">
               {getBookmarkIcon("REVIEWS", "sm")}
-              <p>{profileData._count.review}</p>
+              <p>{reviewData.profile._count.review}</p>
             </div>
           </div>
         </div>
@@ -193,10 +176,10 @@ export const Review: FC<ReviewProps> = ({
       <div className="flex w-full flex-auto flex-col justify-between">
         <div>
           <h2 className="flex flex-col text-xs text-black-light dark:text-white-dark">
-            {t("posted:")} {dateFormater(reviewCreatedAt, true)}
-            {reviewUpdatedAt && (
+            {t("posted:")} {dateFormater(reviewData.created_at, true)}
+            {reviewData.updated_at && (
               <span>
-                {t("edited:")} {dateFormater(reviewUpdatedAt, true)}
+                {t("edited:")} {dateFormater(reviewData.updated_at, true)}
               </span>
             )}
           </h2>
@@ -204,10 +187,10 @@ export const Review: FC<ReviewProps> = ({
             <h1 className="whitespace-nowrap font-semibold">
               {t("rate:")}{" "}
               <span className="font-bold text-secondary dark:text-secondary-light">
-                {`${score}/5`}
+                {`${reviewData.score}/5`}
               </span>
             </h1>
-            {isLiked && (
+            {reviewData.profile._count.liked_book && (
               <div className="flex items-center gap-0.5">
                 {getBookmarkIcon("LIKED", "sm")}
                 <span className="text-xs">{t("likes it")}</span>
@@ -221,7 +204,7 @@ export const Review: FC<ReviewProps> = ({
               !isExpanded && "line-clamp-[10] max-h-[122px]"
             )}
           >
-            {text}
+            {reviewData.text}
           </p>
         </div>
         <div className="mt-1.5 flex flex-wrap justify-between">
@@ -238,7 +221,7 @@ export const Review: FC<ReviewProps> = ({
           ) : (
             <div />
           )}
-          {text && (
+          {reviewData.text && (
             <div className="flex flex-col items-end gap-1">
               <p className="text-right text-xs">
                 {t("was this review helpful?")}

@@ -11,8 +11,8 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { LikeBookValidator } from "~/lib/validations/book/likeBook";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
-import { BookmarksWrapper } from "../ui/BookmarksWrapper";
-import { getBookmarkIcon } from "../ui/getBookmarkIcon";
+import { BookmarksWrapper } from "../../ui/BookmarksWrapper";
+import { getBookmarkIcon } from "../../ui/getBookmarkIcon";
 
 interface ManageLikesProps {
   bookId: string;

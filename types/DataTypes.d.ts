@@ -1,39 +1,5 @@
 import { type bookshelfType, type reactionType } from "@prisma/client";
 
-interface BookBaseInterface {
-  id: string;
-  title: string;
-  authors: string[];
-  thumbnail_url: string | null;
-}
-
-interface BookInterface extends BookBaseInterface {
-  review: {
-    score: number;
-  }[];
-  _count: {
-    review: number;
-    liked_by: number;
-  };
-  bookshelf?: Bookshelf[] | null;
-  book_owned_as?: BookOwnedAs[] | null;
-  liked_by?: LikedBy[] | null;
-}
-
-interface BookCardInterface {
-  book: BookInterface;
-}
-
-interface BookReviewCardInterface {
-  book: {
-    id: string;
-    title: string;
-    authors: string[];
-    thumbnail_url: string | null;
-    review: ReviewInterface[];
-  };
-}
-
 interface ReviewInterface {
   id: string;
   created_at: Date;
@@ -59,6 +25,8 @@ interface BookOwnedAsInterface {
 
 interface ReactionTypeInterface {
   reaction: reactionType;
+  user_id: string;
+  review_id: string;
 }
 
 interface LikedByInterface {

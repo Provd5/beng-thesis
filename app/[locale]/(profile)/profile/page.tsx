@@ -20,9 +20,7 @@ export default async function CheckUsernamePage() {
       select: { full_name: true },
     }));
 
-  if (!userData) {
-    notFound();
-  }
+  if (!userData) notFound();
 
   userData.full_name
     ? redirect(`/profile/${userData.full_name}`)

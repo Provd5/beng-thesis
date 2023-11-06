@@ -32,9 +32,7 @@ export default async function FollowPage({
     },
   });
 
-  if (!userData || (variant !== "following" && variant !== "followers")) {
-    notFound();
-  }
+  if (!userData) notFound();
 
   const profilesData = await db.profile.findMany({
     where: {

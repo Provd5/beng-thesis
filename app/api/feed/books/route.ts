@@ -1,9 +1,3 @@
-import {
-  type BookCardInterface,
-  type BookInterface,
-  type BookReviewCardInterface,
-} from "~/types/BookCardDataInterface";
-
 import { db } from "~/lib/db";
 import { BooksValidator } from "~/lib/validations/feed/books";
 
@@ -89,7 +83,8 @@ export async function GET(req: Request) {
           },
           orderBy: orderByClause
             ? { book: orderByClause }
-            : [
+            : // sort by newly added
+              [
                 { added_book_at: order },
                 { added_ebook_at: order },
                 { added_audiobook_at: order },
@@ -108,7 +103,8 @@ export async function GET(req: Request) {
           where: { profile: { full_name: profileName } },
           orderBy: orderByClause
             ? { book: orderByClause }
-            : [{ created_at: order }, { updated_at: order }],
+            : // sort by newly added
+              [{ created_at: order }, { updated_at: order }],
           take: parsedTakeLimit,
           skip: parsedSkip,
           select: {
@@ -123,7 +119,8 @@ export async function GET(req: Request) {
           where: { profile: { full_name: profileName } },
           orderBy: orderByClause
             ? { book: orderByClause }
-            : { updated_at: order },
+            : // sort by newly added
+              { updated_at: order },
           take: parsedTakeLimit,
           skip: parsedSkip,
           select: {
@@ -138,7 +135,8 @@ export async function GET(req: Request) {
         books = (await db.book.findMany({
           orderBy: orderByClause
             ? orderByClause
-            : [
+            : // sort by popularity
+              [
                 { liked_by: { _count: order } },
                 { review: { _count: order } },
                 { book_owned_as: { _count: order } },
@@ -154,7 +152,8 @@ export async function GET(req: Request) {
           where: { bookshelf: variant, profile: { full_name: profileName } },
           orderBy: orderByClause
             ? { book: orderByClause }
-            : { updated_at: order },
+            : // sort by newly added
+              { updated_at: order },
           take: parsedTakeLimit,
           skip: parsedSkip,
           select: {

@@ -9,8 +9,6 @@ import {
 } from "react";
 import clsx from "clsx";
 
-import { type ModalSizes } from "~/types/Sizes";
-
 interface ModalWrapperProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children: React.ReactNode;

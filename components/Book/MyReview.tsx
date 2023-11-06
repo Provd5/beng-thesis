@@ -6,41 +6,43 @@ import { useTranslations } from "next-intl";
 import { FaPenToSquare } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
 
+import { useFetchReviews } from "~/hooks/feed/useFetchReviews";
+import { findMyReaction } from "~/utils/findMyReaction";
+
+import { ReviewCardLoader } from "../ui/Loaders/Skeletons/ReviewCardLoader";
 import { CreateReview } from "./CreateReview";
+import { ReviewCard } from "./ReviewCard";
 
 interface MyReviewProps {
-  children: React.ReactNode;
   bookId: string;
-  avatarUrl: string | null | undefined;
-  fullName: string | null | undefined;
-  isReviewExists: boolean;
-  score: number | undefined;
-  text: string | null | undefined;
+  userId: string | undefined;
 }
 
-export const MyReview: FC<MyReviewProps> = ({
-  children,
-  bookId,
-  avatarUrl,
-  fullName,
-  isReviewExists,
-  score,
-  text,
-}) => {
+export const MyReview: FC<MyReviewProps> = ({ bookId, userId }) => {
   const t = useTranslations("Reviews.MyReview");
+  const { fetchedData, isLoading } = useFetchReviews({
+    bookId,
+    userId,
+    takeLimit: 1,
+  });
 
-  const [showEditReview, setShowEditReview] = useState(!isReviewExists);
+  const myReviewData = fetchedData ? fetchedData[0] : undefined;
+  const myReaction = myReviewData
+    ? findMyReaction(myReviewData.review_reaction, userId)
+    : undefined;
+
+  const [showCreateReview, setShowCreateReview] = useState(!!myReviewData);
 
   return (
     <>
       <div className="flex w-full justify-end px-3">
-        {isReviewExists && (
+        {!!myReviewData && (
           <button
             id="review-edit-button"
             className="flex items-center gap-1 py-0.5"
-            onClick={() => setShowEditReview(!showEditReview)}
+            onClick={() => setShowCreateReview(!showCreateReview)}
           >
-            {showEditReview ? (
+            {showCreateReview ? (
               <>
                 <p className="select-none text-base text-black-light/50 dark:text-white-dark/50">
                   {t("cancel")}
@@ -58,18 +60,26 @@ export const MyReview: FC<MyReviewProps> = ({
           </button>
         )}
       </div>
-      {!showEditReview ? (
-        children
-      ) : (
+      {isLoading ? (
+        <ReviewCardLoader isMyReview />
+      ) : showCreateReview ? (
         <CreateReview
-          isReviewExists={isReviewExists}
+          isReviewExists={!!myReviewData}
           bookId={bookId}
-          avatarUrl={avatarUrl}
-          fullName={fullName}
-          score={score}
-          text={text}
-          closeReview={() => setShowEditReview(false)}
+          avatarUrl={myReviewData?.profile.avatar_url}
+          fullName={myReviewData?.profile.full_name}
+          score={myReviewData?.score}
+          text={myReviewData?.text}
+          closeReview={() => setShowCreateReview(false)}
         />
+      ) : (
+        myReviewData && (
+          <ReviewCard
+            isMyReview
+            reviewData={myReviewData}
+            myReaction={myReaction}
+          />
+        )
       )}
     </>
   );

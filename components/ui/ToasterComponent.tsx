@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { BsCheck } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 
-import { Loader } from "./Loader";
+import { Loader } from "./Loaders/Loader";
 
 export const ToasterComponent: FC<ToasterProps> = ({}) => {
   const sharedClass = "!rounded-lg !bg-white-light !font-semibold !text-sm";
