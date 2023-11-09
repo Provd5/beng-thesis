@@ -57,7 +57,7 @@ export async function GET(req: Request) {
         : {
             ...commonSelect,
             _count: { select: { review: true, liked_by: true } },
-            review: { select: { score: true } },
+            review: { select: { rate: true } },
             ...(!!sessionId
               ? {
                   bookshelf: { where: { profile: { id: sessionId } } },

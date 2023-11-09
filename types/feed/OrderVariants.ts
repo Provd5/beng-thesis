@@ -28,7 +28,7 @@ export const bookshelvesOrderByArray: OrderByArrayType = [
 export const reviewsOrderByArray: OrderByArrayType = [
   { isSortingByLetters: false, sortCategory: "profile_traffic" },
   { isSortingByLetters: false, sortCategory: "created_at" },
-  { isSortingByLetters: false, sortCategory: "score" },
+  { isSortingByLetters: false, sortCategory: "rate" },
   { isSortingByLetters: false, sortCategory: "review_reaction" },
   { isSortingByLetters: false, sortCategory: "review" },
 ];

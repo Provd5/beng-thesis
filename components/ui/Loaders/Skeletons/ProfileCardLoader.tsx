@@ -9,11 +9,7 @@ export const ProfileCardLoader: FC = ({}) => {
     <div className="flex h-full w-full max-w-[400px] animate-pulse flex-col gap-2 rounded-md bg-white px-6 py-3 drop-shadow dark:bg-black">
       <div className="flex flex-auto flex-col gap-1">
         <div className="flex gap-1">
-          <AvatarImage
-            size="sm"
-            className="drop-shadow-icon"
-            avatarSrc={null}
-          />
+          <AvatarImage isLoader size="sm" className="drop-shadow-icon" />
           <div className="flex w-full flex-col gap-0.5">
             <TextLoader height="h2" className="w-32" />
             <div className="my-0.5 flex gap-1.5">

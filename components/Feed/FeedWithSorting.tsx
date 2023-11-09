@@ -1,6 +1,8 @@
 "use client";
 
 import React, { type FC, useState } from "react";
+import { useTranslations } from "next-intl";
+import clsx from "clsx";
 
 import { TbSortAscending2, TbSortDescending2 } from "react-icons/tb";
 
@@ -48,6 +50,8 @@ export const FeedWithSorting: FC<
   profileName,
   bookId,
 }) => {
+  const t = useTranslations("Sorting");
+
   const defaultSortCategory = orderArray[0].sortCategory;
 
   const [sortOrderState, setSortOrderState] = useState<"asc" | "desc">("desc");
@@ -69,9 +73,9 @@ export const FeedWithSorting: FC<
         <ModalInitiator
           initiatorStyle={
             <div className="flex items-center gap-1 px-1 py-1">
-              <span>{"order:"}</span>
+              <span>{t("sort by:")}</span>
               <span className="flex items-center gap-0.5 text-secondary dark:text-secondary-light">
-                {orderByState}{" "}
+                {t(orderByState)}{" "}
                 {sortOrderState === "desc" ? (
                   <TbSortDescending2 className="mt-1 text-lg" />
                 ) : (
@@ -81,20 +85,37 @@ export const FeedWithSorting: FC<
             </div>
           }
         >
-          <div className="flex flex-col">
-            {orderArray.map((orderType) => (
-              <button
-                onClick={() =>
-                  selectOrder(
-                    orderType.isSortingByLetters,
-                    orderType.sortCategory
-                  )
-                }
-                key={orderType.sortCategory}
-              >
-                {orderType.sortCategory}
-              </button>
-            ))}
+          <div className="flex flex-col gap-2 whitespace-nowrap text-md">
+            {orderArray.map((orderType) => {
+              const isActive = orderByState === orderType.sortCategory;
+
+              return (
+                <button
+                  className={clsx(
+                    "flex items-center justify-between gap-1 py-0.5 text-left",
+                    isActive && "text-secondary dark:text-secondary-light"
+                  )}
+                  onClick={() =>
+                    selectOrder(
+                      orderType.isSortingByLetters,
+                      orderType.sortCategory
+                    )
+                  }
+                  key={orderType.sortCategory}
+                >
+                  <p>{t(orderType.sortCategory)}</p>
+                  {isActive ? (
+                    sortOrderState === "desc" ? (
+                      <TbSortDescending2 className="h-6 w-6" />
+                    ) : (
+                      <TbSortAscending2 className="h-6 w-6" />
+                    )
+                  ) : (
+                    <div className="h-6 w-6" />
+                  )}
+                </button>
+              );
+            })}
           </div>
         </ModalInitiator>
       </div>

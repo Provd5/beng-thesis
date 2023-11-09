@@ -17,7 +17,7 @@ export const ProfilesFeed: FC<FetchProfilesProps> = (props) => {
 
   return (
     <>
-      <div className="flex grid-cols-1 flex-col items-center gap-2 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {isLoading &&
           pageNumber === 1 &&
           Array.from({ length: props.takeLimit }, (_, i) => (

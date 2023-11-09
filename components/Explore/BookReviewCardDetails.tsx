@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { dateFormater } from "~/utils/dateFormater";
 
 interface BookReviewCardDetailsProps {
-  score: number;
+  rate: number;
   createdAt: Date;
   updatedAt: Date | null;
   text: string | null;
@@ -14,7 +14,7 @@ interface BookReviewCardDetailsProps {
 }
 
 export const BookReviewCardDetails: FC<BookReviewCardDetailsProps> = ({
-  score,
+  rate,
   createdAt,
   updatedAt,
   text,
@@ -27,7 +27,7 @@ export const BookReviewCardDetails: FC<BookReviewCardDetailsProps> = ({
       <div className="mt-1 flex flex-col gap-1">
         <h1>
           {t("your rate:")}{" "}
-          <span className="text-secondary dark:text-secondary-light">{`${score}/5`}</span>
+          <span className="text-secondary dark:text-secondary-light">{`${rate}/5`}</span>
         </h1>
         <h2 className="flex text-xs text-black-light dark:text-white-dark">
           {t("posted:")} {dateFormater(createdAt, true)}

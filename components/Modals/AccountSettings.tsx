@@ -42,7 +42,7 @@ export const AccountSettings: FC<AccountSettingsProps> = ({
                   className="mx-[-14px] flex items-center gap-1.5 py-1 text-sm"
                   href="/profile"
                 >
-                  <AvatarImage avatarSrc={userAvatarUrl} size="xs" />
+                  <AvatarImage avatarSrc={userAvatarUrl || null} size="xs" />
                   <span className="max-w-[150px] truncate">{userFullname}</span>
                 </Link>
               </div>

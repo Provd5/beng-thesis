@@ -5,6 +5,7 @@ interface InputProps extends HTMLProps<HTMLInputElement | HTMLTextAreaElement> {
   id: string;
   loading: boolean;
   isTextarea?: boolean;
+  inverted?: boolean;
   label?: string;
 }
 
@@ -12,7 +13,7 @@ export const Input = forwardRef<
   HTMLInputElement | HTMLTextAreaElement,
   InputProps
 >(function InputComponent(
-  { id, loading, isTextarea, label, className, ...props },
+  { id, loading, isTextarea, inverted, label, className, ...props },
   ref
 ) {
   const commonProps = {
@@ -21,8 +22,9 @@ export const Input = forwardRef<
     ...props,
   };
 
-  const commonClass =
-    "bg-white-light text-black dark:bg-black-dark dark:text-white";
+  const commonClass = inverted
+    ? "dark:bg-white dark:text-black bg-black text-white"
+    : "bg-white-light text-black dark:bg-black-dark dark:text-white";
 
   return (
     <div className="flex w-[inherit] flex-col">

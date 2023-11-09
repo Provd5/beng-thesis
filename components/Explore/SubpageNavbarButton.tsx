@@ -9,10 +9,8 @@ import clsx from "clsx";
 import { BsBookFill } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 
-type ValidUrl = "explore" | "community";
-
 interface SubpageNavbarButtonProps {
-  pageUrl: ValidUrl;
+  pageUrl: "community" | null;
 }
 
 export const SubpageNavbarButton: FC<SubpageNavbarButtonProps> = ({
@@ -24,18 +22,17 @@ export const SubpageNavbarButton: FC<SubpageNavbarButtonProps> = ({
   const pathnameParts = pathname.split("/");
 
   const isActive = () => {
-    if (pathnameParts[2] === pageUrl && pathnameParts[3] !== "community")
+    if (pageUrl === "community" && pathnameParts[2] === "community")
       return true;
 
-    if (pathnameParts[2] === "explore" && pathnameParts[3] === pageUrl)
-      return true;
+    if (!pageUrl && !pathnameParts[2]) return true;
 
     return false;
   };
 
   return (
     <Link
-      href={pageUrl === "community" ? "/explore/community" : "/explore"}
+      href={pageUrl === "community" ? `./${pageUrl}` : "./"}
       className={clsx(
         "flex h-full w-32 items-center justify-center gap-2 xs:w-36",
         isActive() && "border-b border-secondary dark:border-secondary-light"

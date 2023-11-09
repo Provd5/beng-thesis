@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     const body = (await req.json()) as {
       bookId: string;
       text: string;
-      score: number;
+      rate: number;
     };
 
     const { formData } = CreateReviewValidator.parse(body);
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
         where: { id: reviewExists.id },
         data: {
           text: formData.text,
-          score: formData.score,
+          rate: formData.rate,
         },
       });
     } else {
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
           author_id: session.user.id,
           book_id: formData.bookId,
           text: formData.text,
-          score: formData.score,
+          rate: formData.rate,
           updated_at: null,
         },
       });

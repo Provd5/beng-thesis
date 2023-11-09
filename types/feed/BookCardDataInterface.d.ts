@@ -7,7 +7,7 @@ interface BookBaseInterface {
 
 interface BookInterface extends BookBaseInterface {
   review: {
-    score: number;
+    rate: number;
   }[];
   _count: {
     review: number;

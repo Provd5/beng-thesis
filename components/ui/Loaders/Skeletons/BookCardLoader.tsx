@@ -7,7 +7,7 @@ import { TextLoader } from "../Loader";
 export const BookCardLoader: FC = ({}) => {
   return (
     <div className="flex animate-pulse justify-center gap-3 md:justify-start">
-      <BookCover coverUrl={null} />
+      <BookCover isLoader />
       <div className="flex w-full max-w-[300px] flex-col gap-2">
         <div className="flex flex-col gap-0.5">
           <TextLoader height="h1" className="w-32" />

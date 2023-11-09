@@ -20,7 +20,9 @@
     "SAME_DESCRIPTION": "Podany opis jest taki sam jak bieżący",
 
     "REVIEW_TOO_LONG_5000": "Twoja recenzja jest zbyt długa",
-    "WRONG_SCORE": "Najpierw wystaw odpowiednią ocenę",
+    "WRONG_RATE": "Najpierw wystaw odpowiednią ocenę",
+
+    "SEARCH_TEXT_TOO_SHORT_3": "Podaj co najmniej 3 znaki",
 
     "UNAUTHORIZED": "Nie jesteś zalogowany",
     "SOMETHING_WENT_WRONG": "Coś poszło nie tak, spróbuj ponownie za chwilę",
@@ -154,7 +156,7 @@
       "MY_REVIEW": "Moja recenzja"
     },
     "BookCard": {
-      "score": "Ocena",
+      "rate": "Ocena",
       "likes": "Polubień",
       "reviews": "Recenzji"
     },
@@ -163,7 +165,7 @@
       "publisher:": "Wydawca:",
       "release date:": "Data wydania:",
       "genre:": "Gatunek:",
-      "averge score:": "Średnia ocen:",
+      "averge rate:": "Średnia ocen:",
       "description:": "Opis:"
     },
     "ManageLikes": {
@@ -196,7 +198,7 @@
   "Reviews": {
     "CreateReview": {
       "express your opinion": "Wyraź swoją opinię...",
-      "your score": "Twoja ocena",
+      "your rate": "Twoja ocena",
       "add review": "Dodaj recenzję",
       "edit review": "Edytuj recenzję"
     },
@@ -235,5 +237,35 @@
       "followers:": "Obserwujących:",
       "profile description:": "Opis profilu:"
     }
+  },
+
+  "Search": {
+    "books": "książki",
+    "users": "profile",
+    "enter title/isbn": "wpisz tytuł/isbn",
+    "enter username": "wpisz nazwę",
+    "items found:": "Znaleziono:",
+    "nothing found": "Nic nie znaleziono",
+    "what are you searching for?": "Czego poszukujesz?"
+  },
+
+  "Sorting": {
+    "sort by:": "Sortuj po:",
+    "popularity": "popularność",
+    "last_added": "nowo dodane",
+    "profile_traffic": "aktywność",
+    "title": "tytuł",
+    "full_name": "nazwa",
+    "authors": "autor",
+    "publisher": "wydawca",
+    "published_date": "data wydania",
+    "created_at": "data utworzenia",
+    "rate": "najwyższa ocena",
+    "liked_by": "polubień",
+    "review": "recenzji",
+    "review_reaction": "ilość reakcji",
+    "book_owned_as": "posiadane książki",
+    "bookshelf": "książek na półkach",
+    "followed_by": "obserwujących"
   }
 }

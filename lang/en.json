@@ -20,7 +20,9 @@
     "SAME_DESCRIPTION": "Given description is the same as the current",
 
     "REVIEW_TOO_LONG_5000": "Your review is too long",
-    "WRONG_SCORE": "Give an adequate rating first",
+    "WRONG_RATE": "Give an adequate rating first",
+
+    "SEARCH_TEXT_TOO_SHORT_3": "Enter at least 3 characters",
 
     "UNAUTHORIZED": "You are not logged in",
     "SOMETHING_WENT_WRONG": "Something went wrong, try again in a moment",
@@ -154,7 +156,7 @@
       "MY_REVIEW": "My review"
     },
     "BookCard": {
-      "score": "Score",
+      "rate": "Rate",
       "likes": "Likes",
       "reviews": "Reviews"
     },
@@ -163,7 +165,7 @@
       "publisher:": "Publisher:",
       "release date:": "Release date:",
       "genre:": "Genre:",
-      "averge score:": "Averge score:",
+      "averge rate:": "Averge rate:",
       "description:": "Description:"
     },
     "ManageLikes": {
@@ -196,7 +198,7 @@
   "Reviews": {
     "CreateReview": {
       "express your opinion": "Express your opinion...",
-      "your score": "Your score",
+      "your rate": "Your rate",
       "add review": "Add review",
       "edit review": "Edit review"
     },
@@ -235,5 +237,35 @@
       "followers:": "Followers:",
       "profile description:": "Profile description:"
     }
+  },
+
+  "Search": {
+    "books": "books",
+    "users": "users",
+    "enter title/isbn": "enter title/isbn",
+    "enter username": "enter username",
+    "items found:": "Items found:",
+    "nothing found": "Nothing found",
+    "what are you searching for?": "What are you searching for?"
+  },
+
+  "Sorting": {
+    "sort by:": "Sort by:",
+    "popularity": "popularity",
+    "last_added": "last added",
+    "profile_traffic": "user activity",
+    "title": "title",
+    "full_name": "username",
+    "authors": "author",
+    "publisher": "publisher",
+    "published_date": "published date",
+    "created_at": "creation date",
+    "rate": "highest rate",
+    "liked_by": "likes",
+    "review": "reviews",
+    "review_reaction": "reactions",
+    "book_owned_as": "owned books",
+    "bookshelf": "books on shelves",
+    "followed_by": "followers"
   }
 }

@@ -43,83 +43,6 @@ export const ReviewCard: FC<ReviewCardProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reviewParagraphRef.current]);
-  //   return reactionsState.filter((type) => type.reaction === reaction);
-  // };
-
-  // const renderReaction = (reaction: reactionType, Icon: IconType) => {
-  //   return (
-  //     <button
-  //       className={clsx(
-  //         "flex items-center gap-1 rounded-sm border px-2 py-1.5",
-  //         userReactionState === reaction
-  //           ? "border-secondary dark:border-secondary-light"
-  //           : "border-black dark:border-white"
-  //       )}
-  //       onClick={() => handleReaction(reaction)}
-  //     >
-  //       <Icon
-  //         className={
-  //           userReactionState === reaction
-  //             ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-  //             : ""
-  //         }
-  //       />
-  //       <div
-  //         className={clsx(
-  //           "flex gap-2 font-semibold",
-  //           userReactionState === reaction &&
-  //             "text-secondary dark:text-secondary-light"
-  //         )}
-  //       >
-  //         <p>{t(reaction)}</p>
-  //         <p>{filterByReaction(reaction).length}</p>
-  //       </div>
-  //     </button>
-  //   );
-  // };
-
-  // const handleReaction = async (reaction: reactionType) => {
-  //   const prevReactions = reactionsState;
-  //   const prevUserReaction = userReactionState;
-
-  //   // set active reaction
-  //   setUserReactionState(userReactionState === reaction ? undefined : reaction);
-
-  //   const index = reactionsState.findIndex(
-  //     (item) => item.reaction === userReactionState
-  //   );
-  //   //removing reaction from array
-  //   reactionsState.splice(index, index !== -1 ? 1 : 0);
-  //   //changing or adding reaction
-  //   userReactionState !== reaction &&
-  //     setReactionsState((prev) => [
-  //       ...prev,
-  //       { reaction, review_id: reviewData.id, user_id: reviewData.profile.id },
-  //     ]);
-
-  //   const formData = { reviewId: reviewData.id, reaction: reaction };
-
-  //   try {
-  //     ReviewReactionValidator.parse({
-  //       formData: formData,
-  //     });
-  //     const { data }: { data: string } = await axios.post(
-  //       `/api/book/manage/review/reaction/`,
-  //       { formData: formData }
-  //     );
-
-  //     if (data !== GlobalErrors.SUCCESS) {
-  //       toast.error(te(data));
-  //       setReactionsState(prevReactions);
-  //       setUserReactionState(prevUserReaction);
-  //       return;
-  //     }
-  //   } catch (error) {
-  //     toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
-  //     setReactionsState(prevReactions);
-  //     setUserReactionState(prevUserReaction);
-  //   }
-  // };
 
   return (
     <div
@@ -173,7 +96,7 @@ export const ReviewCard: FC<ReviewCardProps> = ({
             <h1 className="whitespace-nowrap font-semibold">
               {t("rate:")}{" "}
               <span className="font-bold text-secondary dark:text-secondary-light">
-                {`${reviewData.score}/5`}
+                {`${reviewData.rate}/5`}
               </span>
             </h1>
             {reviewData.profile._count.liked_book > 0 && (

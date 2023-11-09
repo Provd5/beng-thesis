@@ -31,7 +31,16 @@ export async function GET(req: Request) {
         orderByClause = { [orderBy]: { _count: order } };
         break;
       default:
-        orderByClause = null;
+        // sort by profile traffic
+        orderByClause = [
+          { review: { _count: order } },
+          { review_reaction: { _count: order } },
+          { followed_by: { _count: order } },
+          { following: { _count: order } },
+          { book_owned_as: { _count: order } },
+          { bookshelf: { _count: order } },
+          { liked_book: { _count: order } },
+        ];
         break;
     }
 
@@ -51,18 +60,7 @@ export async function GET(req: Request) {
       take: parsedTakeLimit,
       skip: parsedSkip,
       where: whereClause,
-      orderBy: orderByClause
-        ? orderByClause
-        : // sort by profile traffic
-          [
-            { review: { _count: order } },
-            { review_reaction: { _count: order } },
-            { followed_by: { _count: order } },
-            { following: { _count: order } },
-            { book_owned_as: { _count: order } },
-            { bookshelf: { _count: order } },
-            { liked_book: { _count: order } },
-          ],
+      orderBy: orderByClause,
       select: {
         id: true,
         full_name: true,

@@ -19,7 +19,7 @@ export const ReviewCardLoader: FC<ReviewCardLoaderProps> = ({ isMyReview }) => {
       )}
     >
       <div className="flex h-fit flex-none gap-x-1.5 gap-y-1 sm:w-24 sm:flex-col sm:items-center">
-        <AvatarImage className="drop-shadow-icon" avatarSrc={null} />
+        <AvatarImage isLoader className="drop-shadow-icon" />
         <div className="flex w-full flex-col items-start gap-0.5 sm:items-center">
           <TextLoader height="h1" className="w-36 sm:w-full" />
           <TextLoader height="h2" className="w-40 sm:w-10/12" />

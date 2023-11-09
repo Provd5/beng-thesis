@@ -6,11 +6,19 @@ import { ThumbnailPlaceholder } from "../ui/SvgIcons/ThumbnailPlaceholder";
 
 interface BookCoverProps {
   coverUrl: string | null;
+  isLoader?: false;
+  children?: React.ReactNode;
+  size?: "default" | "lg";
+}
+interface BookCoverLoaderProps {
+  coverUrl?: never;
+  isLoader: true;
   children?: React.ReactNode;
   size?: "default" | "lg";
 }
 
-export const BookCover: FC<BookCoverProps> = ({
+export const BookCover: FC<BookCoverProps | BookCoverLoaderProps> = ({
+  isLoader,
   coverUrl,
   children,
   size = "default",
@@ -31,7 +39,9 @@ export const BookCover: FC<BookCoverProps> = ({
         sizeClass[size]
       )}
     >
-      {coverUrl ? (
+      {isLoader ? (
+        <div className="h-full w-full bg-gray" />
+      ) : coverUrl ? (
         <Image
           alt="Book cover"
           src={coverUrl}

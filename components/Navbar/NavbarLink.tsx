@@ -8,10 +8,8 @@ import clsx from "clsx";
 
 import { ExploreIcon, ProfileIcon, SearchIcon } from "../ui/SvgIcons/NavIcons";
 
-type ValidUrl = "explore" | "login" | "profile" | "search";
-
 interface NavbarLinkProps {
-  pageUrl: ValidUrl;
+  pageUrl: "login" | "profile" | "search" | null;
   fullname?: string | null;
 }
 
@@ -22,6 +20,8 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
   const pathnameParts = pathname.split("/");
 
   const isActive = () => {
+    if (!pathnameParts[2] && !pageUrl) return true;
+
     if (pathnameParts[2] !== "profile" && pathnameParts[2] === pageUrl)
       return true;
 
@@ -40,7 +40,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
       href={
         pageUrl === "profile" && fullname
           ? `/${pageUrl}/${fullname}`
-          : `/${pageUrl}`
+          : `/${pageUrl || ""}`
       }
       className={clsx(
         "flex flex-none items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50",
@@ -59,7 +59,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
           {(pageUrl === "login" || pageUrl === "profile") && (
             <ProfileIcon isActive={isActive()} />
           )}
-          {pageUrl === "explore" && <ExploreIcon isActive={isActive()} />}
+          {pageUrl === null && <ExploreIcon isActive={isActive()} />}
           {pageUrl === "search" && <SearchIcon isActive={isActive()} />}
         </div>
         <p
@@ -68,7 +68,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
             isActive() && "text-secondary dark:text-secondary-light"
           )}
         >
-          {t(pageUrl)}
+          {t(pageUrl || "explore")}
         </p>
       </div>
     </Link>
