@@ -39,7 +39,7 @@ export const BookReviewCard: FC<BookReviewCardProps> = ({ bookData }) => {
         </Link>
         {myReview && (
           <BookReviewCardDetails
-            score={myReview.score}
+            rate={myReview.rate}
             createdAt={myReview.created_at}
             updatedAt={myReview.updated_at}
             text={myReview.text}

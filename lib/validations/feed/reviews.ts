@@ -5,7 +5,7 @@ export const ReviewsValidator = z.object({
   userId: z.string().nullish(),
   sessionId: z.string().nullish(),
   orderBy: z
-    .enum(["created_at", "score", "review_reaction", "review"])
+    .enum(["created_at", "rate", "review_reaction", "review"])
     .nullish(),
   order: z.enum(["desc", "asc"]),
   takeLimit: z.string(),

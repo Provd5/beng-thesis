@@ -108,7 +108,7 @@ export default async function ProfilePage({
                         )}
                       </>
                     ) : (
-                      <CategoryContentCardPlaceholder href="/explore" isEmpty />
+                      <CategoryContentCardPlaceholder href="/" isEmpty />
                     )}
                   </DragContainer>
                 </>

@@ -15,7 +15,7 @@ export default function SubpagesLayout({
   };
 
   return (
-    <main className="grow-1 relative flex h-full flex-col overflow-x-hidden">
+    <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll">
       <div className="flex h-12 flex-none items-center self-end px-3 text-white">
         <div className="h-fit">
           <Settings setLangCookie={setLangCookie} />

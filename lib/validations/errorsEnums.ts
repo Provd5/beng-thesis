@@ -6,6 +6,10 @@ export enum GlobalErrors {
   SUCCESS = "SUCCESS",
 }
 
+export enum SearchErrors {
+  SEARCH_TEXT_TOO_SHORT_3 = "SEARCH_TEXT_TOO_SHORT_3",
+}
+
 export enum AuthErrors {
   EMAIL_EXISTS = "EMAIL_EXISTS",
   USERNAME_EXISTS = "USERNAME_EXISTS",
@@ -45,5 +49,5 @@ export enum DescriptionValidatorErrors {
 export enum CreateReviewValidatorErrors {
   REVIEW_REQUIRED = "REVIEW_REQUIRED",
   REVIEW_TOO_LONG_5000 = "REVIEW_TOO_LONG_5000",
-  WRONG_SCORE = "WRONG_SCORE",
+  WRONG_RATE = "WRONG_RATE",
 }

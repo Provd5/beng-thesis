@@ -5,7 +5,7 @@ interface ReviewInterface {
   created_at: Date;
   updated_at: Date | null;
   text: string | null;
-  score: number;
+  rate: number;
   review_reaction: ReactionTypeInterface[];
 }
 

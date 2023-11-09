@@ -21,7 +21,7 @@ interface CreateReviewProps {
   fullName: string | null | undefined;
   bookId: string;
   isReviewExists: boolean;
-  score: number | undefined;
+  rate: number | undefined;
   text: string | null | undefined;
   closeReview: () => void;
 }
@@ -31,16 +31,16 @@ export const CreateReview: FC<CreateReviewProps> = ({
   fullName,
   bookId,
   isReviewExists,
-  score,
+  rate,
   text,
   closeReview,
 }) => {
   const t = useTranslations("Reviews.CreateReview");
   const te = useTranslations("Errors");
 
-  const scoreValues = [1, 2, 3, 4, 5];
+  const rates = [1, 2, 3, 4, 5];
 
-  const [yourScore, setYourScore] = useState<number | undefined>(score);
+  const [yourRate, setYourRate] = useState<number | undefined>(rate);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,12 +60,12 @@ export const CreateReview: FC<CreateReviewProps> = ({
         textareaInput && textareaInput.value.trim().length > 0
           ? textareaInput.value
           : null,
-      score: yourScore,
+      rate: yourRate,
     };
 
     try {
       CreateReviewValidator.parse({ formData: formData });
-      if (formData.score === score && formData.text === text) {
+      if (formData.rate === rate && formData.text === text) {
         closeReview();
         return;
       }
@@ -101,7 +101,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
         <AvatarImage
           className="drop-shadow-icon"
           size="sm"
-          avatarSrc={avatarUrl}
+          avatarSrc={avatarUrl || null}
         />
         <h1 className="line-clamp-3 break-all font-bold">{fullName}</h1>
       </div>
@@ -129,11 +129,11 @@ export const CreateReview: FC<CreateReviewProps> = ({
               size="lg"
               onClick={() => setIsModalOpen(!isModalOpen)}
             >
-              {t("your score")}
+              {t("your rate")}
             </ButtonLink>
             <div className="relative">
               <div className="min-w-[36px] text-right text-lg font-bold">{`${
-                yourScore ? yourScore : "–"
+                yourRate ? yourRate : "–"
               }/5`}</div>
               {isModalOpen && (
                 <ModalWrapper
@@ -142,19 +142,19 @@ export const CreateReview: FC<CreateReviewProps> = ({
                   openModalButtonRef={openModalButtonRef}
                 >
                   <div className="flex flex-col gap-1.5 py-1.5 text-md">
-                    {scoreValues.map((score) => (
+                    {rates.map((rate) => (
                       <button
-                        key={score}
+                        key={rate}
                         className={clsx(
                           "flex h-8 w-8 cursor-pointer items-center justify-center rounded-full",
-                          score === yourScore &&
+                          rate === yourRate &&
                             "font-bold text-secondary dark:text-secondary-light"
                         )}
                         onClick={() => (
-                          setYourScore(score), setIsModalOpen(false)
+                          setYourRate(rate), setIsModalOpen(false)
                         )}
                       >
-                        {score}
+                        {rate}
                       </button>
                     ))}
                   </div>

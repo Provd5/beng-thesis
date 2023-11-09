@@ -24,7 +24,7 @@ export async function GET(req: Request) {
     let orderByClause = null;
     switch (orderBy) {
       case "created_at":
-      case "score":
+      case "rate":
         orderByClause = { [orderBy]: order };
         break;
       case "review":
@@ -32,7 +32,16 @@ export async function GET(req: Request) {
         orderByClause = { [orderBy]: { _count: order } };
         break;
       default:
-        orderByClause = null;
+        // sort by profile traffic
+        orderByClause = [
+          { profile: { review: { _count: order } } },
+          { profile: { review_reaction: { _count: order } } },
+          { profile: { followed_by: { _count: order } } },
+          { profile: { following: { _count: order } } },
+          { profile: { book_owned_as: { _count: order } } },
+          { profile: { bookshelf: { _count: order } } },
+          { profile: { liked_book: { _count: order } } },
+        ];
         break;
     }
 
@@ -51,21 +60,10 @@ export async function GET(req: Request) {
       take: parsedTakeLimit,
       skip: parsedSkip,
       where: whereClause,
-      orderBy: orderByClause
-        ? orderByClause
-        : // sort by profile traffic
-          [
-            { profile: { review: { _count: order } } },
-            { profile: { review_reaction: { _count: order } } },
-            { profile: { followed_by: { _count: order } } },
-            { profile: { following: { _count: order } } },
-            { profile: { book_owned_as: { _count: order } } },
-            { profile: { bookshelf: { _count: order } } },
-            { profile: { liked_book: { _count: order } } },
-          ],
+      orderBy: orderByClause,
       select: {
         id: true,
-        score: true,
+        rate: true,
         text: true,
         updated_at: true,
         created_at: true,

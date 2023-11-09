@@ -20,6 +20,7 @@ interface MyReviewProps {
 
 export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
   const t = useTranslations("Reviews.MyReview");
+
   const { fetchedData, isLoading } = useFetchReviews({
     bookId,
     sessionId,
@@ -37,7 +38,7 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
   return (
     <>
       <div className="flex w-full justify-end px-3">
-        {!!myReviewData && (
+        {!!myReviewData ? (
           <button
             id="review-edit-button"
             className="flex items-center gap-1 py-0.5"
@@ -59,6 +60,8 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
               </>
             )}
           </button>
+        ) : (
+          <div className="h-5" />
         )}
       </div>
       {isLoading ? (
@@ -75,7 +78,7 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
           bookId={bookId}
           avatarUrl={myReviewData?.profile.avatar_url}
           fullName={myReviewData?.profile.full_name}
-          score={myReviewData?.score}
+          rate={myReviewData?.rate}
           text={myReviewData?.text}
           closeReview={() => setShowCreateReview(false)}
         />

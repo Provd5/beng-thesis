@@ -6,7 +6,7 @@ import {
   type BookshelfInterface,
 } from "~/types/DataTypes";
 
-import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
+import { averageRating } from "~/utils/averageRating";
 
 import { BookCover } from "../Book/BookCover";
 import { ManageBookshelf } from "../Book/Manage/ManageBookshelf";
@@ -47,7 +47,7 @@ export const BookCard: FC<BookCardProps> = ({ bookData }) => {
         </Link>
         <div className="flex flex-wrap justify-between gap-3 text-sm">
           <BookCardDetails
-            scoresQuantity={arithmeticMeanOfScores(bookData.review)}
+            ratesQuantity={averageRating(bookData.review)}
             reviewsQuantity={bookData._count.review}
           />
           <ManageOwnedAs

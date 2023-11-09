@@ -10,26 +10,22 @@ datasource db {
   schemas   = ["auth", "public"]
 }
 
-// ------
-// models
-// ------
 model profile {
-  id          String    @id @default(uuid()) @db.Uuid
-  full_name   String?   @unique
-  avatar_url  String?
-  description String?
-  users       users     @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  created_at  DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at  DateTime? @updatedAt @db.Timestamptz(6)
-  private     Boolean   @default(false)
-
-  followed_by     follows[]         @relation("following")
+  id              String            @id @default(uuid()) @db.Uuid
+  full_name       String?           @unique
+  avatar_url      String?
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime?         @updatedAt @db.Timestamptz(6)
+  private         Boolean           @default(false)
+  description     String?
+  book_owned_as   book_owned_as[]
+  bookshelf       bookshelf[]
   following       follows[]         @relation("follower")
+  followed_by     follows[]         @relation("following")
+  liked_book      liked_books[]
+  users           users             @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   review          review[]
   review_reaction review_reaction[]
-  liked_book      liked_books[]
-  bookshelf       bookshelf[]
-  book_owned_as   book_owned_as[]
 
   @@schema("public")
 }
@@ -45,15 +41,14 @@ model follows {
 }
 
 model review {
-  id         String    @id @default(uuid()) @db.Uuid
-  created_at DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at DateTime? @updatedAt @db.Timestamptz(6)
-  text       String?
-  score      Int
-
+  id              String            @id @default(uuid()) @db.Uuid
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at      DateTime?         @updatedAt @db.Timestamptz(6)
+  text            String?
   author_id       String            @db.Uuid
-  profile         profile           @relation(fields: [author_id], references: [id])
   book_id         String            @db.Uuid
+  rate            Int
+  profile         profile           @relation(fields: [author_id], references: [id])
   book            book              @relation(fields: [book_id], references: [id])
   review_reaction review_reaction[]
 
@@ -61,19 +56,18 @@ model review {
 }
 
 model review_reaction {
-  reaction reactionType
-
-  user_id   String  @db.Uuid
-  review_id String  @db.Uuid
-  review    review  @relation(fields: [review_id], references: [id])
-  profile   profile @relation(fields: [user_id], references: [id])
+  user_id   String       @db.Uuid
+  review_id String       @db.Uuid
+  reaction  reactionType
+  review    review       @relation(fields: [review_id], references: [id])
+  profile   profile      @relation(fields: [user_id], references: [id])
 
   @@id([user_id, review_id])
   @@schema("public")
 }
 
 model book {
-  id             String   @id @default(uuid()) @db.Uuid
+  id             String          @id @default(uuid()) @db.Uuid
   title          String
   subtitle       String?
   authors        String[]
@@ -82,29 +76,27 @@ model book {
   description    String?
   isbn_10        String
   isbn_13        String
-  page_count     Int      @default(0)
+  page_count     Int             @default(0)
   thumbnail_url  String?
   categories     String[]
-
-  review        review[]
-  liked_by      liked_books[]
-  bookshelf     bookshelf[]
-  book_owned_as book_owned_as[]
+  book_owned_as  book_owned_as[]
+  bookshelf      bookshelf[]
+  liked_by       liked_books[]
+  review         review[]
 
   @@schema("public")
 }
 
 model bookshelf {
   updated_at       DateTime       @default(now()) @db.Timestamptz(6)
+  bookshelf        bookshelfType?
+  user_id          String         @db.Uuid
+  book_id          String         @db.Uuid
+  title            String?
   began_reading_at DateTime?      @db.Timestamptz(6)
   read_quantity    Int            @default(0)
-  bookshelf        bookshelfType?
-  title            String?
-
-  user_id String  @db.Uuid
-  book_id String  @db.Uuid
-  book    book    @relation(fields: [book_id], references: [id])
-  profile profile @relation(fields: [user_id], references: [id])
+  book             book           @relation(fields: [book_id], references: [id])
+  profile          profile        @relation(fields: [user_id], references: [id])
 
   @@id([user_id, book_id])
   @@schema("public")
@@ -114,51 +106,27 @@ model book_owned_as {
   added_book_at      DateTime? @db.Timestamptz(6)
   added_ebook_at     DateTime? @db.Timestamptz(6)
   added_audiobook_at DateTime? @db.Timestamptz(6)
-
-  user_id String  @db.Uuid
-  book_id String  @db.Uuid
-  book    book    @relation(fields: [book_id], references: [id])
-  profile profile @relation(fields: [user_id], references: [id])
+  user_id            String    @db.Uuid
+  book_id            String    @db.Uuid
+  book               book      @relation(fields: [book_id], references: [id])
+  profile            profile   @relation(fields: [user_id], references: [id])
 
   @@id([user_id, book_id])
   @@schema("public")
 }
 
 model liked_books {
+  book_id    String   @db.Uuid
+  user_id    String   @db.Uuid
   updated_at DateTime @default(now()) @updatedAt @db.Timestamptz(6)
-
-  book_id String  @db.Uuid
-  user_id String  @db.Uuid
-  book    book    @relation(fields: [book_id], references: [id])
-  profile profile @relation(fields: [user_id], references: [id])
+  book       book     @relation(fields: [book_id], references: [id])
+  profile    profile  @relation(fields: [user_id], references: [id])
 
   @@id([user_id, book_id])
   @@schema("public")
 }
 
-// -----
-// enums
-// -----
-enum reactionType {
-  OK
-  MEH
-
-  @@schema("public")
-}
-
-enum bookshelfType {
-  ALREADY_READ
-  TO_READ
-  ABANDONED
-  READING
-  OTHER
-
-  @@schema("public")
-}
-
-// ---------------
-// supabase models
-// ---------------
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model users {
   instance_id                 String?       @db.Uuid
   id                          String        @id @db.Uuid
@@ -226,6 +194,7 @@ model flow_state {
   created_at             DateTime?             @db.Timestamptz(6)
   updated_at             DateTime?             @db.Timestamptz(6)
   authentication_method  String
+  saml_relay_states      saml_relay_states[]
 
   @@index([created_at(sort: Desc)])
   @@index([auth_code], map: "idx_auth_code")
@@ -297,6 +266,7 @@ model mfa_factors {
   users          users            @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([user_id, created_at], map: "factor_id_created_at_idx")
+  @@index([user_id])
   @@schema("auth")
 }
 
@@ -344,6 +314,8 @@ model saml_relay_states {
   from_ip_address String?       @db.Inet
   created_at      DateTime?     @db.Timestamptz(6)
   updated_at      DateTime?     @db.Timestamptz(6)
+  flow_state_id   String?       @db.Uuid
+  flow_state      flow_state?   @relation(fields: [flow_state_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   sso_providers   sso_providers @relation(fields: [sso_provider_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([created_at(sort: Desc)])
@@ -376,6 +348,7 @@ model sessions {
   @@schema("auth")
 }
 
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model sso_domains {
   id              String        @id @db.Uuid
   sso_provider_id String        @db.Uuid
@@ -388,6 +361,7 @@ model sso_domains {
   @@schema("auth")
 }
 
+/// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model sso_providers {
   id                String              @id @db.Uuid
   resource_id       String?
@@ -400,9 +374,23 @@ model sso_providers {
   @@schema("auth")
 }
 
-// --------------
-// supabase enums
-// --------------
+enum reactionType {
+  OK
+  MEH
+
+  @@schema("public")
+}
+
+enum bookshelfType {
+  ALREADY_READ
+  TO_READ
+  ABANDONED
+  READING
+  OTHER
+
+  @@schema("public")
+}
+
 enum aal_level {
   aal1
   aal2

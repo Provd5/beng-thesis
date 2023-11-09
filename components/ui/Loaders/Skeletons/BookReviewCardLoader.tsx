@@ -8,7 +8,7 @@ export const BookReviewCardLoader: FC = ({}) => {
   return (
     <div className="animate-pulse">
       <div className="flex w-full gap-3">
-        <BookCover coverUrl={null} />
+        <BookCover isLoader />
         <div className="flex w-full flex-col gap-1">
           <div className="flex flex-col gap-0.5">
             <TextLoader height="h1" className="w-32" />

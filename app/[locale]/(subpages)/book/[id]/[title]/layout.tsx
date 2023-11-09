@@ -11,7 +11,7 @@ import { ManageOwnedAs } from "~/components/Book/Manage/ManageOwnedAs";
 import { ManageReviews } from "~/components/Book/Manage/ManageReviews";
 import { BackCategoryButton } from "~/components/ui/BackCategoryLink";
 import { db } from "~/lib/db";
-import { arithmeticMeanOfScores } from "~/utils/arithmeticMean";
+import { averageRating } from "~/utils/averageRating";
 
 export default async function BookLayout({
   children,
@@ -34,7 +34,7 @@ export default async function BookLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
-  const [book, bookScores] = await Promise.all([
+  const [book, bookRates] = await Promise.all([
     db.book.findUnique({
       where: { id: id },
       include: {
@@ -43,7 +43,7 @@ export default async function BookLayout({
     }),
     db.review.findMany({
       where: { book_id: id },
-      select: { score: true },
+      select: { rate: true },
     }),
   ]);
 
@@ -126,8 +126,8 @@ export default async function BookLayout({
                 ))}
 
               <BookDetails
-                variant="averge score:"
-                text={`${arithmeticMeanOfScores(bookScores)}/5`}
+                variant="averge rate:"
+                text={`${averageRating(bookRates)}/5`}
               />
             </div>
           </div>
@@ -162,7 +162,7 @@ export default async function BookLayout({
               <div className="w-36">
                 <ManageReviews
                   isReviewExists={isReviewExists}
-                  reviewsQuantity={bookScores.length}
+                  reviewsQuantity={bookRates.length}
                   createdAt={myReviewData?.created_at}
                 />
               </div>

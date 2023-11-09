@@ -5,12 +5,21 @@ import clsx from "clsx";
 import { AvatarPlaceholder } from "../ui/SvgIcons/AvatarPlaceholder";
 
 interface AvatarImageProps {
-  avatarSrc?: string | null;
+  avatarSrc: string | null;
+  isLoader?: false;
   className?: string;
   size?: "default" | "sm" | "xs" | "lg";
 }
 
-export const AvatarImage: FC<AvatarImageProps> = ({
+interface AvatarImageLoaderProps {
+  avatarSrc?: never;
+  isLoader?: true;
+  className?: string;
+  size?: "default" | "sm" | "xs" | "lg";
+}
+
+export const AvatarImage: FC<AvatarImageProps | AvatarImageLoaderProps> = ({
+  isLoader,
   avatarSrc,
   size = "default",
   className,
@@ -30,7 +39,9 @@ export const AvatarImage: FC<AvatarImageProps> = ({
 
   return (
     <div className={clsx("relative flex-none", sizeClass[size], className)}>
-      {avatarSrc ? (
+      {isLoader ? (
+        <div className="h-full w-full rounded-full bg-gray" />
+      ) : avatarSrc ? (
         <Image
           sizes={sizes[size]}
           fill
