@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 
 import { MdNavigateNext } from "react-icons/md";
 
+import { isFollowed } from "~/utils/isFollowed";
+
 import { AvatarImage } from "../Profile/AvatarImage";
 import { ManageFollow } from "../Profile/ManageFollow";
 import { getBookmarkIcon } from "../ui/getBookmarkIcon";
@@ -20,11 +22,10 @@ export const ProfileCard: FC<ProfileCardProps> = ({
   sessionId,
 }) => {
   const t = useTranslations("Explore.ProfileCard");
-  const isFollowed = profileData.followed_by.some(
-    (follower) => follower.follower_id === sessionId
-  );
 
-  const [isFollowedState, setIsFollowedState] = useState(isFollowed);
+  const [isFollowedState, setIsFollowedState] = useState(
+    isFollowed(profileData.followed_by, sessionId)
+  );
   const [followedByQuantityState, setFollowedByQuantityState] = useState(
     profileData._count.followed_by
   );

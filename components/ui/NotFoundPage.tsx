@@ -9,7 +9,7 @@ interface NotFoundPageProps {
 }
 
 export const NotFoundPage: FC<NotFoundPageProps> = ({ variant }) => {
-  const t = useTranslations("NotFoundPage");
+  const t = useTranslations("NotFound.NotFoundPage");
 
   const router = useRouter();
 

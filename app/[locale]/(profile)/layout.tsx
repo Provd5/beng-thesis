@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
+import { Logo } from "~/components/Logo";
 import { AccountSettings } from "~/components/Modals/AccountSettings";
 import { Settings } from "~/components/Modals/Settings";
 import { type localeTypes } from "~/i18n";
@@ -37,6 +38,7 @@ export default async function ProfileLayout({
 
   return (
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll">
+      <Logo />
       <div className="flex h-[68px] flex-none self-end p-3 text-white">
         <div className="flex h-fit gap-3">
           <AccountSettings

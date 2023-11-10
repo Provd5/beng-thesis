@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -12,6 +13,16 @@ import { ManageReviews } from "~/components/Book/Manage/ManageReviews";
 import { BackCategoryButton } from "~/components/ui/BackCategoryLink";
 import { db } from "~/lib/db";
 import { averageRating } from "~/utils/averageRating";
+
+export function generateMetadata({
+  params,
+}: {
+  params: { title: string };
+}): Metadata {
+  return {
+    title: decodeURIComponent(params.title),
+  };
+}
 
 export default async function BookLayout({
   children,

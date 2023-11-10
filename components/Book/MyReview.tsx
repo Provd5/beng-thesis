@@ -6,7 +6,9 @@ import { useTranslations } from "next-intl";
 import { FaPenToSquare } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
 
-import { useFetchReviews } from "~/hooks/feed/useFetchReviews";
+import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
+
+import { useFetchData } from "~/hooks/useFetchData";
 import { findMyReaction } from "~/utils/findMyReaction";
 
 import { ReviewCardLoader } from "../ui/Loaders/Skeletons/ReviewCardLoader";
@@ -21,14 +23,16 @@ interface MyReviewProps {
 export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
   const t = useTranslations("Reviews.MyReview");
 
-  const { fetchedData, isLoading } = useFetchReviews({
+  const { fetchedData, isLoading } = useFetchData({
+    fetchType: "reviews",
     bookId,
     sessionId,
-    userId: sessionId,
+    isMyReview: true,
     takeLimit: 1,
   });
+  const reviewsData = fetchedData as ReviewCardDataInterface[];
 
-  const myReviewData = fetchedData ? fetchedData[0] : undefined;
+  const myReviewData = reviewsData ? reviewsData[0] : undefined;
   const myReaction = myReviewData
     ? findMyReaction(myReviewData.review_reaction, sessionId)
     : undefined;

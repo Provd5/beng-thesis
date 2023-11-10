@@ -2,20 +2,22 @@
 
 import { type FC } from "react";
 
-import {
-  type FetchBooksProps,
-  useFetchBooks,
-} from "~/hooks/feed/useFetchBooks";
+import { type FetchBooksProps } from "~/types/feed/FetchProps";
+
+import { useFetchData } from "~/hooks/useFetchData";
 
 import { BookCard } from "../Explore/BookCard";
 import { BookReviewCard } from "../Explore/BookReviewCard";
 import { BookCardLoader } from "../ui/Loaders/Skeletons/BookCardLoader";
 import { BookReviewCardLoader } from "../ui/Loaders/Skeletons/BookReviewCardLoader";
+import { NotFoundItems } from "../ui/NotFoundItems";
 import { FetchMoreButton } from "./FetchMoreButton";
 
 export const BooksFeed: FC<FetchBooksProps> = (props) => {
-  const { fetchedData, fetchMore, isLoading, pageNumber } =
-    useFetchBooks(props);
+  const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchData({
+    fetchType: "books",
+    ...props,
+  });
 
   return (
     <>
@@ -46,6 +48,7 @@ export const BooksFeed: FC<FetchBooksProps> = (props) => {
               ))}
         </div>
       )}
+      {!isLoading && !fetchedData.length && <NotFoundItems />}
       <FetchMoreButton
         className="flex w-full items-center justify-center py-6"
         isLoading={isLoading}

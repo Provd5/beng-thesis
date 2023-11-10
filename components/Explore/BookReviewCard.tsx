@@ -23,14 +23,14 @@ export const BookReviewCard: FC<BookReviewCardProps> = ({ bookData }) => {
     <div key={bookData.book.id}>
       <Link
         href={`/book/${bookData.book.id}/${bookData.book.title}`}
-        className="float-left h-fit w-fit pr-3"
+        className="float-left mr-3 h-fit w-fit"
       >
         <BookCover coverUrl={bookData.book.thumbnail_url} />
       </Link>
       <div>
         <Link
           href={`/book/${bookData.book.id}/${bookData.book.title}`}
-          className="self-start"
+          className="inline-block w-fit"
         >
           <h1 className="line-clamp-2">{bookData.book.title}</h1>
           <p className="text-sm text-black-light dark:text-white-dark">

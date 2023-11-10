@@ -7,10 +7,10 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const { bookId, userId, sessionId, orderBy, order, takeLimit, page } =
+    const { bookId, isMyReview, sessionId, orderBy, order, takeLimit, page } =
       ReviewsValidator.parse({
         bookId: url.searchParams.get("bookId"),
-        userId: url.searchParams.get("userId"),
+        isMyReview: url.searchParams.get("isMyReview"),
         sessionId: url.searchParams.get("sessionId"),
         orderBy: url.searchParams.get("orderBy"),
         order: url.searchParams.get("order"),
@@ -27,9 +27,11 @@ export async function GET(req: Request) {
       case "rate":
         orderByClause = { [orderBy]: order };
         break;
-      case "review":
       case "review_reaction":
         orderByClause = { [orderBy]: { _count: order } };
+        break;
+      case "review":
+        orderByClause = { profile: { [orderBy]: { _count: order } } };
         break;
       default:
         // sort by profile traffic
@@ -45,16 +47,18 @@ export async function GET(req: Request) {
         break;
     }
 
-    const whereClause =
-      userId && sessionId
-        ? { AND: [{ book_id: bookId }, { author_id: sessionId }] }
-        : {
-            book_id: bookId,
-            text: { not: null },
-            profile: {
-              full_name: { not: null },
-            },
-          };
+    if (isMyReview === "true" && !sessionId)
+      return new Response(JSON.stringify([]));
+
+    const whereClause = isMyReview
+      ? { AND: [{ book_id: bookId }, { author_id: sessionId || undefined }] }
+      : {
+          book_id: bookId,
+          text: { not: null },
+          profile: {
+            full_name: { not: null },
+          },
+        };
 
     const reviews = (await db.review.findMany({
       take: parsedTakeLimit,
@@ -91,6 +95,6 @@ export async function GET(req: Request) {
     // on success
     return new Response(JSON.stringify(reviews));
   } catch (error) {
-    return new Error();
+    return;
   }
 }

@@ -109,6 +109,6 @@ export async function GET(req: Request) {
     // on success
     return new Response(JSON.stringify(data));
   } catch (error) {
-    return new Error();
+    return;
   }
 }

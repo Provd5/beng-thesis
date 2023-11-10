@@ -18,6 +18,7 @@ import { Input } from "../ui/Input";
 import { Loader } from "../ui/Loaders/Loader";
 import { BookCardLoader } from "../ui/Loaders/Skeletons/BookCardLoader";
 import { ProfileCardLoader } from "../ui/Loaders/Skeletons/ProfileCardLoader";
+import { NotFoundItems } from "../ui/NotFoundItems";
 
 interface SearchComponentProps {
   sessionId: string | undefined;
@@ -55,10 +56,10 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
 
     try {
       const form = event.currentTarget as HTMLFormElement;
-      const search = form.elements.namedItem("search") as HTMLInputElement;
+      const search = form.elements.namedItem("q") as HTMLInputElement;
 
       const sessionIdParam = sessionId ? `&sessionId=${sessionId}` : "";
-      const searchText = search.value.trim();
+      const searchText = search.value;
 
       if (searchText.length < 3) {
         toast.error(te(SearchErrors.SEARCH_TEXT_TOO_SHORT_3));
@@ -77,6 +78,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
           }: {
             data: SearchBooksInterface | SearchProfilesInterface;
           }) => {
+            if (!data) throw new Error();
             const narrowedData = "profile" in data ? data.profile : data.book;
 
             setFetchedData((prevData) => [...prevData, ...narrowedData]);
@@ -103,11 +105,12 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
                 </div>
               }
             >
-              <div className="flex flex-col items-start gap-1 whitespace-nowrap text-md">
+              <div className="flex flex-col gap-1 whitespace-nowrap text-md">
+                <h1 className="mb-1 text-sm">{t("search categories:")}</h1>
                 {searchCategories.map((category) => (
                   <button
                     className={clsx(
-                      "p-1",
+                      "py-1 text-left",
                       searchCategory === category &&
                         "text-secondary dark:text-secondary-light"
                     )}
@@ -119,12 +122,17 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
                 ))}
               </div>
             </ModalInitiator>
-            <form className="flex w-full sm:w-auto" onSubmit={handleSearch}>
+            <form
+              role="search"
+              className="flex w-full sm:w-auto"
+              onSubmit={handleSearch}
+            >
               <Input
                 id="search-input"
-                name="search"
-                type="text"
-                min={3}
+                name="q"
+                type="search"
+                required
+                minLength={3}
                 loading={isLoading}
                 className="h-full w-full rounded-none rounded-tl-lg xs:rounded-tl-none sm:w-80"
                 inverted
@@ -194,9 +202,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
               )}
             </>
           ) : (
-            <div className="flex flex-col justify-center gap-3 p-6 text-center text-md text-gray">
-              {t("nothing found")} <span className="text-xl">🕸️</span>
-            </div>
+            <NotFoundItems />
           )
         ) : (
           <div className="flex flex-col justify-center gap-3 p-6 text-center text-md text-gray">

@@ -96,7 +96,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
   };
 
   return (
-    <div className="relative flex min-h-[346px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[256px] sm:flex-row">
+    <div className="relative flex min-h-[350px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[260px] sm:flex-row">
       <div className="flex flex-none items-start gap-1 px-2 sm:w-24 sm:flex-col sm:items-center">
         <AvatarImage
           className="drop-shadow-icon"

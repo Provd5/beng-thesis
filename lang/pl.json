@@ -31,13 +31,19 @@
     "SUCCESS": "Sukces"
   },
 
-  "NotFoundPage": {
-    "not found": "Nie znaleziono",
-    "page": "Ta strona",
-    "profile": "Taki profil",
-    "book": "Taka książka",
-    "doesn't exist": "nie istnieje",
-    "return": "wróć"
+  "NotFound": {
+    "NotFoundPage": {
+      "not found": "Nie znaleziono",
+      "page": "Ta strona",
+      "profile": "Taki profil",
+      "book": "Taka książka",
+      "doesn't exist": "nie istnieje",
+      "return": "wróć"
+    },
+    "NotFoundItems": {
+      "this book has no written reviews yet": "Ta książka nie ma jeszcze napisanych recenzji",
+      "nothing found": "Nic nie znaleziono"
+    }
   },
 
   "Other": {
@@ -215,10 +221,6 @@
       "rate:": "Ocena:",
       "likes it": "lubi to"
     },
-    "ReviewsNotFound": {
-      "this book has no written reviews yet": "Ta książka nie ma jeszcze napisanych recenzji",
-      "back": "wróć"
-    },
     "BookReviewCard": {
       "your rate:": "Twoja ocena:",
       "posted:": "Zamieszczono:",
@@ -240,12 +242,12 @@
   },
 
   "Search": {
+    "search categories:": "kategorie wyszukiwania:",
     "books": "książki",
     "users": "profile",
     "enter title/isbn": "wpisz tytuł/isbn",
     "enter username": "wpisz nazwę",
     "items found:": "Znaleziono:",
-    "nothing found": "Nic nie znaleziono",
     "what are you searching for?": "Czego poszukujesz?"
   },
 
@@ -255,17 +257,17 @@
     "last_added": "nowo dodane",
     "profile_traffic": "aktywność",
     "title": "tytuł",
-    "full_name": "nazwa",
-    "authors": "autor",
+    "full_name": "nazwa użytkownika",
+    "authors": "autorzy",
     "publisher": "wydawca",
     "published_date": "data wydania",
     "created_at": "data utworzenia",
     "rate": "najwyższa ocena",
-    "liked_by": "polubień",
-    "review": "recenzji",
+    "liked_by": "ilość polubień",
+    "review": "ilość recenzji",
     "review_reaction": "ilość reakcji",
-    "book_owned_as": "posiadane książki",
-    "bookshelf": "książek na półkach",
-    "followed_by": "obserwujących"
+    "book_owned_as": "ilość posiadanych książek",
+    "bookshelf": "ilość książek na półkach",
+    "followed_by": "ilość obserwujących"
   }
 }

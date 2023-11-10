@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -9,6 +10,16 @@ import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
 import { BookshelfPageTitle } from "~/components/Profile/Bookshelf/BookshelfPageTitle";
 import { db } from "~/lib/db";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
+
+export function generateMetadata({
+  params,
+}: {
+  params: { bookshelf: string };
+}): Metadata {
+  return {
+    title: params.bookshelf,
+  };
+}
 
 export default async function BookshelfPage({
   params: { bookshelf, fullname },

@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -7,7 +8,20 @@ import { FollowLinks } from "~/components/Profile/FollowLinks";
 import { PrivateProfilePage } from "~/components/Profile/PrivateProfilePage";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
 import { db } from "~/lib/db";
-import { doIAlreadyFollowThisProfile } from "~/utils/doIAlreadyFollowThisProfile";
+import { isFollowed } from "~/utils/isFollowed";
+
+export function generateMetadata({
+  params,
+}: {
+  params: { fullname: string };
+}): Metadata {
+  return {
+    title: {
+      default: `@${params.fullname}`,
+      template: `@${params.fullname}/%s | Booksphere`,
+    },
+  };
+}
 
 export default async function ProfileFullnameLayout({
   children,
@@ -43,7 +57,7 @@ export default async function ProfileFullnameLayout({
       <div className="mb-2 flex flex-col">
         <div className="flex gap-3">
           <div className="ml-0 mt-[-30px] xs:ml-6">
-            <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
+            <div className="bodyGradientForAvatar relative flex h-[112px] w-[112px] items-center justify-center rounded-full">
               <AvatarImage size="lg" avatarSrc={publicUserData.avatar_url} />
               <ProfileStatus isPrivate={publicUserData.private} />
             </div>
@@ -53,7 +67,7 @@ export default async function ProfileFullnameLayout({
               userId={publicUserData.id}
               fullname={fullname}
               isMyProfile={session?.user.id === publicUserData.id}
-              isFollowed={doIAlreadyFollowThisProfile(
+              isFollowed={isFollowed(
                 publicUserData.followed_by,
                 session?.user.id
               )}
