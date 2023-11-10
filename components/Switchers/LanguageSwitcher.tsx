@@ -60,6 +60,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
             width={28}
             height={21}
             sizes="28px"
+            priority
           />
           <p
             className={clsx(

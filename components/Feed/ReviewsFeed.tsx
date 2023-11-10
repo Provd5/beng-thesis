@@ -2,19 +2,23 @@
 
 import { type FC } from "react";
 
-import {
-  type FetchReviewsProps,
-  useFetchReviews,
-} from "~/hooks/feed/useFetchReviews";
+import { type FetchReviewsProps } from "~/types/feed/FetchProps";
+import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
+
+import { useFetchData } from "~/hooks/useFetchData";
 import { findMyReaction } from "~/utils/findMyReaction";
 
 import { ReviewCard } from "../Book/ReviewCard";
 import { ReviewCardLoader } from "../ui/Loaders/Skeletons/ReviewCardLoader";
+import { NotFoundItems } from "../ui/NotFoundItems";
 import { FetchMoreButton } from "./FetchMoreButton";
 
 export const ReviewsFeed: FC<FetchReviewsProps> = (props) => {
-  const { fetchedData, fetchMore, isLoading, pageNumber } =
-    useFetchReviews(props);
+  const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchData({
+    fetchType: "reviews",
+    ...props,
+  });
+  const reviewsData = fetchedData as ReviewCardDataInterface[];
 
   return (
     <>
@@ -27,7 +31,7 @@ export const ReviewsFeed: FC<FetchReviewsProps> = (props) => {
               <hr className="h-px border-0 bg-gray" />
             </div>
           ))}
-        {fetchedData.map((data) => {
+        {reviewsData.map((data) => {
           const isMyReview = data.profile.id === props.sessionId;
 
           return (
@@ -45,6 +49,9 @@ export const ReviewsFeed: FC<FetchReviewsProps> = (props) => {
           );
         })}
       </div>
+      {!isLoading && !reviewsData.length && (
+        <NotFoundItems itemType="reviews" />
+      )}
       <FetchMoreButton
         className="flex w-full items-center justify-center py-6"
         isLoading={isLoading}

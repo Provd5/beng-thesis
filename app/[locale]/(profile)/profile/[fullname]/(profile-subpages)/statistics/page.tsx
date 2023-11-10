@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { AlreadyReadStatisticsCard } from "~/components/Profile/Statistics/AlreadyReadStatistics/AlreadyReadStatisticsCard";
@@ -5,6 +6,12 @@ import { MainStatisticsCard } from "~/components/Profile/Statistics/MainStatisti
 import { OwnedAsStatisticsCard } from "~/components/Profile/Statistics/OwnedAsStatistics/OwnedAsStatisticsCard";
 import { StatisticsCategoryWrapper } from "~/components/Profile/Statistics/StatisticsCategoryWrapper";
 import { db } from "~/lib/db";
+
+export function generateMetadata(): Metadata {
+  return {
+    title: "statistics",
+  };
+}
 
 export default async function StatisticsPage({
   params: { fullname },

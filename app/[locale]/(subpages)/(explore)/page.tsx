@@ -1,9 +1,16 @@
+import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { booksOrderByArray } from "~/types/feed/OrderVariants";
 
 import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
+
+export function generateMetadata(): Metadata {
+  return {
+    title: "Explore",
+  };
+}
 
 export default async function ExplorePage() {
   const supabase = createServerComponentClient({

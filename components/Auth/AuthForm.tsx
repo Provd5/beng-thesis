@@ -164,8 +164,8 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
     </h1>
   ) : (
     <>
-      <button className="absolute left-0 top-1/2" onClick={demoLogin}>
-        demo login
+      <button className="absolute left-0 top-0 text-xs" onClick={demoLogin}>
+        demo
       </button>
       {/* ^^^^^^^^^^^^^^^^ temp ^^^^^^^^^^^^^^^^ */}
       <h1 className="mb-[32px] text-3xl font-semibold">{t(view)}</h1>

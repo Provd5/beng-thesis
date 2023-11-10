@@ -2,18 +2,21 @@
 
 import { type FC } from "react";
 
-import {
-  type FetchProfilesProps,
-  useFetchProfiles,
-} from "~/hooks/feed/useFetchProfiles";
+import { type FetchProfilesProps } from "~/types/feed/FetchProps";
+
+import { useFetchData } from "~/hooks/useFetchData";
 
 import { ProfileCard } from "../Explore/ProfileCard";
 import { ProfileCardLoader } from "../ui/Loaders/Skeletons/ProfileCardLoader";
+import { NotFoundItems } from "../ui/NotFoundItems";
 import { FetchMoreButton } from "./FetchMoreButton";
 
 export const ProfilesFeed: FC<FetchProfilesProps> = (props) => {
-  const { fetchedData, fetchMore, isLoading, pageNumber } =
-    useFetchProfiles(props);
+  const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchData({
+    fetchType: "profiles",
+    ...props,
+  });
+  const profilesData = fetchedData as ProfileCardDataInterface[];
 
   return (
     <>
@@ -23,7 +26,7 @@ export const ProfilesFeed: FC<FetchProfilesProps> = (props) => {
           Array.from({ length: props.takeLimit }, (_, i) => (
             <ProfileCardLoader key={i} />
           ))}
-        {fetchedData.map((data) => (
+        {profilesData.map((data) => (
           <ProfileCard
             key={data.id}
             profileData={data}
@@ -31,6 +34,7 @@ export const ProfilesFeed: FC<FetchProfilesProps> = (props) => {
           />
         ))}
       </div>
+      {!isLoading && !profilesData.length && <NotFoundItems />}
       <FetchMoreButton
         className="flex w-full items-center justify-center py-6"
         isLoading={isLoading}

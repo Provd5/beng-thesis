@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 
+import { Logo } from "~/components/Logo";
 import { Settings } from "~/components/Modals/Settings";
 import { type localeTypes } from "~/i18n";
 
@@ -16,6 +17,7 @@ export default function SubpagesLayout({
 
   return (
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll">
+      <Logo />
       <div className="flex h-12 flex-none items-center self-end px-3 text-white">
         <div className="h-fit">
           <Settings setLangCookie={setLangCookie} />

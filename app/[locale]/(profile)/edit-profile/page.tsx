@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -7,6 +8,12 @@ import { ManageProfileDescription } from "~/components/Profile/EditProfile/Manag
 import { ManageProfileStatus } from "~/components/Profile/EditProfile/ManageProfileStatus";
 import { ManageProfileUsername } from "~/components/Profile/EditProfile/ManageProfileUsername";
 import { db } from "~/lib/db";
+
+export function generateMetadata(): Metadata {
+  return {
+    title: "Edit profile",
+  };
+}
 
 export default async function EditProfilePage() {
   const supabase = createServerComponentClient({
@@ -35,7 +42,7 @@ export default async function EditProfilePage() {
     <>
       <div className="flex gap-3">
         <div className="ml-0 mt-[-30px] xs:ml-6">
-          <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full bg-gradient-light dark:bg-gradient-dark">
+          <div className="bodyGradientForAvatar relative flex h-[112px] w-[112px] items-center justify-center rounded-full">
             <AvatarImage size="lg" avatarSrc={userData.avatar_url} />
           </div>
         </div>

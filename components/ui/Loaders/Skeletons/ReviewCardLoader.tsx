@@ -15,7 +15,7 @@ export const ReviewCardLoader: FC<ReviewCardLoaderProps> = ({ isMyReview }) => {
       className={clsx(
         "relative flex w-full animate-pulse flex-col gap-1 py-3 sm:flex-row",
         isMyReview &&
-          "min-h-[346px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[256px] before:sm:rounded-md"
+          "min-h-[350px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[260px] before:sm:rounded-md"
       )}
     >
       <div className="flex h-fit flex-none gap-x-1.5 gap-y-1 sm:w-24 sm:flex-col sm:items-center">

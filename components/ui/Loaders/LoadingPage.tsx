@@ -1,12 +1,21 @@
 import type { FC } from "react";
+import Image from "next/image";
 
-import { Loader } from "./Loader";
+import LogoBook from "~/assets/booksphere-book.svg";
+import LogoSphere from "~/assets/booksphere-sphere.svg";
 
 export const LoadingPage: FC = () => {
   return (
-    <div className="absolute inset-0 z-40 flex items-center justify-center bg-gradient-light text-white-light dark:bg-gradient-dark dark:text-white">
-      <div className="max-w-24 h-1/3 max-h-24 w-1/3">
-        <Loader className="h-full w-full" />
+    <div className="bodyGradient absolute inset-0 z-40 flex items-center justify-center text-white-light">
+      <div className="flex flex-col items-center">
+        <Image
+          src={LogoSphere as string}
+          alt="Loading Shpere"
+          className="animate-bounce"
+          width={130}
+          priority
+        />
+        <Image src={LogoBook as string} alt="Logo Book" width={190} priority />
       </div>
     </div>
   );

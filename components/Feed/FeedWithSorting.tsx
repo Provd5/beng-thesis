@@ -6,11 +6,12 @@ import clsx from "clsx";
 
 import { TbSortAscending2, TbSortDescending2 } from "react-icons/tb";
 
+import {
+  type FetchBooksProps,
+  type FetchProfilesProps,
+  type FetchReviewsProps,
+} from "~/types/feed/FetchProps";
 import { type OrderByArrayType } from "~/types/feed/OrderVariants";
-
-import { type FetchBooksProps } from "~/hooks/feed/useFetchBooks";
-import { type FetchProfilesProps } from "~/hooks/feed/useFetchProfiles";
-import { type FetchReviewsProps } from "~/hooks/feed/useFetchReviews";
 
 import { ModalInitiator } from "../Modals/ModalInitiator";
 import { BooksFeed } from "./BooksFeed";
@@ -134,7 +135,7 @@ export const FeedWithSorting: FC<
       {feedVariant === "reviews" && (
         <ReviewsFeed
           takeLimit={takeLimit}
-          userId={undefined}
+          isMyReview={false}
           bookId={bookId}
           sessionId={sessionId}
           order={sortOrderState}

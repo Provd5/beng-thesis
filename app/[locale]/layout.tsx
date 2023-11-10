@@ -30,11 +30,11 @@ export async function getMessages(locale: localeTypes) {
 
 export const metadata = {
   title: {
-    default: "Being Thesis",
-    template: "%s | Being Thesis",
-    absolute: "Welcome to Being Thesis!",
+    default: "Booksphere",
+    template: "%s | Booksphere",
   },
-  description: "This is main description",
+  description:
+    "Booksphere to dynamiczna aplikacja, stworzona z myślą o miłośnikach książek. Użytkownicy mają możliwość dzielenia się recenzjami, ocenami i inspiracjami związanymi z ich ulubionymi lekturami. W ramach tej platformy, czytelnicy mogą tworzyć wirtualne półki, na których gromadzą zarówno przeczytane, jak i planowane książki, co ułatwia śledzenie ich literackich podbojów. Booksphere nie tylko ułatwia zarządzanie książkową kolekcją, ale także integruje społeczność miłośników literatury, tworząc wspólne miejsce dla pasjonatów czytania.",
 };
 
 export default async function RootLayout({
@@ -56,7 +56,7 @@ export default async function RootLayout({
         quicksandFont.className + (preferTheme === "dark" ? " dark" : "")
       }
     >
-      <body className="relative flex h-full flex-col bg-gradient-light bg-fixed text-base font-medium text-black antialiased dark:bg-gradient-dark dark:text-white">
+      <body className="bodyGradient relative flex h-full flex-col bg-fixed text-base font-medium text-black antialiased dark:text-white">
         <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
         <SvgPainter />
 
