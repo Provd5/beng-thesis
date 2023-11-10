@@ -67,7 +67,8 @@ export async function GET(req: Request) {
               : {}),
           };
 
-    let books: (BookCardInterface | BookReviewCardInterface | BookInterface)[];
+    let books: (BookCardInterface | BookReviewCardInterface | BookInterface)[] =
+      [];
     switch (variant) {
       case "OWNED":
         books = (await db.book_owned_as.findMany({
@@ -168,6 +169,6 @@ export async function GET(req: Request) {
     // on success
     return new Response(JSON.stringify(books));
   } catch (error) {
-    return new Error();
+    return;
   }
 }

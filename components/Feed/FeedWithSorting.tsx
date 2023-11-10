@@ -21,22 +21,16 @@ import { ReviewsFeed } from "./ReviewsFeed";
 interface BooksFeedProps extends FetchBooksProps {
   feedVariant: "books";
   orderArray: OrderByArrayType;
-  bookId?: never;
-  userId?: never;
 }
 
 interface ReviewsFeedProps extends FetchReviewsProps {
   feedVariant: "reviews";
   orderArray: OrderByArrayType;
-  variant?: never;
-  profileName?: never;
 }
 
 interface ProfilesFeedProps extends FetchProfilesProps {
   feedVariant: "profiles";
   orderArray: OrderByArrayType;
-  bookId?: never;
-  profileName?: never;
 }
 
 export const FeedWithSorting: FC<

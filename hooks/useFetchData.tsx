@@ -74,6 +74,8 @@ export function useFetchData({
     await axios
       .get(query)
       .then(({ data }: { data: FetchedDataTypes<typeof fetchType> }) => {
+        if (!data) throw new Error();
+
         setFetchedData(
           (prevData) =>
             [...prevData, ...data] as FetchedDataTypes<typeof fetchType>

@@ -23,6 +23,6 @@ interface FetchProfilesProps extends FetchCommonProps {
 }
 
 interface FetchReviewsProps extends FetchCommonProps {
-  isMyReview: boolean;
+  isMyReview?: boolean;
   bookId: string;
 }

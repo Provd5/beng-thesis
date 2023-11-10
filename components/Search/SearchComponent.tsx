@@ -78,6 +78,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
           }: {
             data: SearchBooksInterface | SearchProfilesInterface;
           }) => {
+            if (!data) throw new Error();
             const narrowedData = "profile" in data ? data.profile : data.book;
 
             setFetchedData((prevData) => [...prevData, ...narrowedData]);
