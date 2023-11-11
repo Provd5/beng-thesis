@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import axios from "axios";
@@ -47,7 +47,6 @@ export function useFetchData({
 }: UseFetchProps) {
   const te = useTranslations("Errors");
 
-  const isInitialRender = useRef(true);
   const [isLoading, setIsLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const [fetchedData, setFetchedData] = useState<
@@ -55,11 +54,6 @@ export function useFetchData({
   >([]);
 
   const fetchMore = async () => {
-    // Skip the first render
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-      return;
-    }
     setIsLoading(true);
 
     const orderByParam = orderBy ? `&orderBy=${orderBy}` : "";
