@@ -49,13 +49,17 @@ export function useFetchData({
 
   const isInitialRender = useRef(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
   const [fetchedData, setFetchedData] = useState<
     FetchedDataTypes<typeof fetchType>
   >([]);
 
   const fetchMore = async () => {
-    if (pageNumber < 1) return;
+    // Skip the first render
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
     setIsLoading(true);
 
     const orderByParam = orderBy ? `&orderBy=${orderBy}` : "";
@@ -90,21 +94,13 @@ export function useFetchData({
   };
 
   useEffect(() => {
-    // Skip the first render
-    if (isInitialRender.current) {
-      void fetchMore();
-      isInitialRender.current = false;
-      return;
-    }
     setIsLoading(true);
     setFetchedData([]);
     setPageNumber(1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order, orderBy]);
 
   useEffect(() => {
     if (pageNumber === 1) void fetchMore();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber, order, orderBy]);
 
