@@ -55,6 +55,7 @@ export function useFetchData({
   >([]);
 
   const fetchMore = async () => {
+    if (pageNumber < 1) return;
     setIsLoading(true);
 
     const orderByParam = orderBy ? `&orderBy=${orderBy}` : "";
@@ -91,12 +92,14 @@ export function useFetchData({
   useEffect(() => {
     // Skip the first render
     if (isInitialRender.current) {
+      void fetchMore();
       isInitialRender.current = false;
       return;
     }
     setIsLoading(true);
     setFetchedData([]);
     setPageNumber(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order, orderBy]);
 
   useEffect(() => {

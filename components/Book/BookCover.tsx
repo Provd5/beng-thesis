@@ -46,7 +46,6 @@ export const BookCover: FC<BookCoverProps | BookCoverLoaderProps> = ({
           alt="Book cover"
           src={coverUrl}
           fill
-          priority
           sizes={sizes[size]}
           className="pointer-events-none object-cover"
         />
