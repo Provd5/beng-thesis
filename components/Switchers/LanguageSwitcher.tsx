@@ -2,7 +2,8 @@
 
 import { type FC } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
 import FlagOfTheUnitedKingdom from "~/assets/flags/flag-icons-gb.png";
@@ -17,8 +18,6 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ setCookie }) => {
   const pathname = usePathname();
   const pathnameArray = pathname.split("/");
   const localeFromUrl = pathnameArray[1];
-
-  const router = useRouter();
 
   const getFlagFromLocale = (locale: localeTypes) => {
     switch (locale) {
@@ -35,14 +34,11 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ setCookie }) => {
   return (
     <div className="flex flex-none gap-3">
       {locales.map((locale) => (
-        <button
+        <Link
           key={locale}
-          disabled={localeFromUrl === locale}
           className="flex flex-col items-center text-sm"
-          onClick={() => {
-            setCookie(locale), (pathnameArray[1] = locale);
-            router.push(pathnameArray.join("/"));
-          }}
+          onClick={() => setCookie(locale)}
+          href={pathname.replace(`/${localeFromUrl}`, `/${locale}`)}
         >
           <Image
             className={
@@ -66,7 +62,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ setCookie }) => {
           >
             {locale.toUpperCase()}
           </p>
-        </button>
+        </Link>
       ))}
     </div>
   );
