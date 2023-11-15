@@ -12,7 +12,7 @@ export const ProfileCardLoader: FC<ProfileCardLoaderProps> = ({ index }) => {
   return (
     <div
       className="flex h-full w-full max-w-[400px] animate-pulse flex-col gap-2 rounded-md bg-white px-6 py-3 drop-shadow dark:bg-black"
-      style={{ animationDelay: `${index * 0.05}s` }}
+      style={{ animationDelay: `${index * 0.1}s` }}
     >
       <div className="flex flex-auto flex-col gap-1">
         <div className="flex gap-1">

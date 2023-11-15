@@ -53,7 +53,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ setCookie }) => {
               className={
                 localeFromUrl === locale
                   ? "border border-transparent bg-gradient-dark dark:bg-gradient-light"
-                  : ""
+                  : "drop-shadow"
               }
               src={getFlagFromLocale(locale).src}
               alt={getFlagFromLocale(locale).alt}

@@ -29,7 +29,7 @@ export const CategoryLinksContainer: FC = () => {
       <Link
         key={categoryVariant}
         replace
-        href={`${categoryVariantPathname}/`}
+        href={categoryVariantPathname}
         className={clsx(
           "whitespace-nowrap rounded-xl border border-secondary px-5 py-2.5 text-sm dark:border-secondary-light",
           isActive()

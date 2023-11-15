@@ -8,7 +8,7 @@ export const hrefToBook = (
   const lang = Cookies.get("lang");
 
   return {
-    pathname: `${lang ? `/${lang}` : ""}/book/${bookId}/${bookTitle}/`,
+    pathname: `${lang ? `/${lang}` : ""}/book/${bookId}/${bookTitle}`,
     query: { from: currentPathname },
   };
 };

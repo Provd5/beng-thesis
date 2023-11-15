@@ -14,7 +14,7 @@ export const SmallBookCardLoader: FC<SmallBookCardLoaderProps> = ({
   return (
     <div
       className="flex w-32 flex-none animate-pulse snap-center flex-col items-center gap-1 py-0.5 md:snap-start"
-      style={{ animationDelay: `${index * 0.05}s` }}
+      style={{ animationDelay: `${index * 0.1}s` }}
     >
       <BookCover isLoader />
       <div className="flex w-full flex-col gap-0.5">

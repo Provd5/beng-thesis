@@ -39,18 +39,18 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
     <Link
       href={
         pageUrl === "profile" && fullname
-          ? `/${pageUrl}/${fullname}/`
+          ? `/${pageUrl}/${fullname}`
           : `/${pageUrl || ""}`
       }
       className={clsx(
-        "flex flex-none items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50",
+        "flex flex-none items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50 md:rounded-sm md:px-2 md:py-3",
         pageUrl === "login" || pageUrl === "profile"
-          ? "h-[52px] w-[52px]"
-          : "h-[48px] w-[48px]",
+          ? "max-md:h-[52px] max-md:w-[52px]"
+          : "max-md:h-[48px] max-md:w-[48px]",
         isActive() && "pointer-events-none cursor-default"
       )}
     >
-      <div className="mt-[-4px] flex flex-col items-center justify-center gap-0.5">
+      <div className="flex flex-col items-center justify-center gap-0.5 max-md:mt-[-4px] md:flex-row-reverse md:gap-1.5">
         <div
           className={
             pageUrl === "login" || pageUrl === "profile" ? "h-7 w-7" : "h-6 w-6"
@@ -64,7 +64,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
         </div>
         <p
           className={clsx(
-            "text-2xs",
+            "text-2xs md:text-base",
             isActive() && "text-secondary dark:text-secondary-light"
           )}
         >

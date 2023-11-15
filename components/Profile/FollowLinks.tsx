@@ -38,14 +38,14 @@ export const FollowLinks: FC<FollowLinksProps> = ({
         {pathname.endsWith(`${fullname}/followers`) ? (
           <InnerLink text={t("followers:")} quantity={followers} isActive />
         ) : (
-          <Link href={`/profile/${fullname}/followers/`}>
+          <Link href={`/profile/${fullname}/followers`}>
             <InnerLink text={t("followers:")} quantity={followers} />
           </Link>
         )}
         {pathname.endsWith(`${fullname}/following`) ? (
           <InnerLink text={t("following:")} quantity={following} isActive />
         ) : (
-          <Link href={`/profile/${fullname}/following/`}>
+          <Link href={`/profile/${fullname}/following`}>
             <InnerLink text={t("following:")} quantity={following} />
           </Link>
         )}

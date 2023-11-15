@@ -24,7 +24,7 @@ export const ManageProfileUsername: FC<ManageProfileUsernameProps> = ({
   return (
     <>
       <div className="flex flex-col items-start">
-        <h1 className="mb-1 text-md">{t("your profile name:")}</h1>
+        <h1 className="mb-2 text-md">{t("your profile name:")}</h1>
         {!isEditingUsername ? (
           <div className="flex h-full w-full flex-col items-start gap-1.5">
             <ButtonWhite size="xs" onClick={() => setIsEditingUsername(true)}>

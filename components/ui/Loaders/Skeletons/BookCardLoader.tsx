@@ -12,7 +12,7 @@ export const BookCardLoader: FC<BookCardLoaderProps> = ({ index }) => {
   return (
     <div
       className="flex animate-pulse justify-center gap-3 md:justify-start"
-      style={{ animationDelay: `${index * 0.05}s` }}
+      style={{ animationDelay: `${index * 0.1}s` }}
     >
       <BookCover isLoader />
       <div className="flex w-full max-w-[300px] flex-col gap-2">

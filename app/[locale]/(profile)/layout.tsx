@@ -30,7 +30,7 @@ export default async function ProfileLayout({
   });
 
   return (
-    <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll">
+    <main className="grow-1 relative flex h-full flex-col overflow-y-scroll">
       <Logo />
       <div className="flex h-[68px] flex-none self-end p-3 text-white">
         <div className="flex h-fit gap-3">

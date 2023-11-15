@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { Quicksand } from "next/font/google";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 
@@ -45,18 +44,12 @@ export default async function RootLayout({
   params: { locale: localeTypes };
 }) {
   const messages = await getMessages(locale);
-  const preferTheme = headers().get("sec-ch-prefers-color-scheme");
 
   const themeInitializerScript = `function initializeDarkMode() { localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");} initializeDarkMode();`;
 
   return (
-    <html
-      lang={locale}
-      className={
-        quicksandFont.className + (preferTheme === "dark" ? " dark" : "")
-      }
-    >
-      <body className="bodyGradient relative flex h-full flex-col bg-fixed text-base font-medium text-black antialiased dark:text-white">
+    <html lang={locale} className={quicksandFont.className}>
+      <body className="bodyGradient relative flex h-screen flex-col bg-fixed text-base font-medium text-black antialiased dark:text-white">
         <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
         <SvgPainter />
 

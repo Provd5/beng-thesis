@@ -23,7 +23,7 @@ export const ManageProfileDescription: FC<ManageProfileDescriptionProps> = ({
   return (
     <>
       <div className="flex flex-col items-start">
-        <h1 className="mb-1 text-md">{t("your profile description:")}</h1>
+        <h1 className="mb-2 text-md">{t("your profile description:")}</h1>
         {!isEditingDescription ? (
           <div className="flex h-full w-full flex-col items-start gap-1.5">
             <ButtonWhite

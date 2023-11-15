@@ -23,5 +23,10 @@ export const TextLoader: FC<TextLoaderProps> = ({ className, height }) => {
     h3: "h-3 opacity-60",
   };
 
-  return <div className={clsx("rounded bg-gray", size[height], className)} />;
+  return (
+    <div
+      className={clsx("rounded bg-gray", size[height], className)}
+      style={{ animationDelay: "0.5s" }}
+    />
+  );
 };

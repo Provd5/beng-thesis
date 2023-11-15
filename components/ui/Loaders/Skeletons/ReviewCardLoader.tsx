@@ -21,7 +21,7 @@ export const ReviewCardLoader: FC<ReviewCardLoaderProps> = ({
         isMyReview &&
           "min-h-[350px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/10 before:dark:bg-yellow/5 sm:min-h-[260px] before:sm:rounded-md"
       )}
-      style={{ animationDelay: `${index * 0.05}s` }}
+      style={{ animationDelay: `${index * 0.1}s` }}
     >
       <div className="flex h-fit flex-none gap-x-1.5 gap-y-1 sm:w-24 sm:flex-col sm:items-center">
         <AvatarImage isLoader className="drop-shadow-icon" />

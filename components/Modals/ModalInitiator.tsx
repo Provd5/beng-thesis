@@ -8,7 +8,6 @@ interface ModalInitiatorProps {
   children: React.ReactNode;
   initiatorStyle: React.ReactNode;
   size?: ModalSizes;
-  customModalStateHandler?: () => void;
 }
 
 export const ModalInitiator: FC<ModalInitiatorProps> = ({

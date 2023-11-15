@@ -39,7 +39,9 @@ export default async function BookPage({
         />
         <MyReview bookId={id} sessionId={session?.user.id} />
       </div>
-      <AllReviewsButton href={`${title}/reviews`} />
+      <AllReviewsButton
+        href={{ pathname: `${title}/reviews`, query: searchParams }}
+      />
     </>
   );
 }

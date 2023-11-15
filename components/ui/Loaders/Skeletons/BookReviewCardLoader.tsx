@@ -14,7 +14,7 @@ export const BookReviewCardLoader: FC<BookReviewCardLoaderProps> = ({
   return (
     <div
       className="animate-pulse"
-      style={{ animationDelay: `${index * 0.05}s` }}
+      style={{ animationDelay: `${index * 0.1}s` }}
     >
       <div className="flex w-full gap-3">
         <BookCover isLoader />

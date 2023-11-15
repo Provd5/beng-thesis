@@ -33,10 +33,7 @@ export const ProfileCard: FC<ProfileCardProps> = ({
   return (
     <div className="flex h-full w-full max-w-[400px] flex-col gap-2 rounded-md bg-white px-6 py-3 drop-shadow dark:bg-black">
       <div className="flex flex-auto flex-col gap-1">
-        <Link
-          href={`/profile/${profileData.full_name}/`}
-          className="flex gap-1"
-        >
+        <Link href={`/profile/${profileData.full_name}`} className="flex gap-1">
           <AvatarImage
             size="sm"
             className="drop-shadow-icon"
