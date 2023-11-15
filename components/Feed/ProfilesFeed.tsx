@@ -24,7 +24,7 @@ export const ProfilesFeed: FC<FetchProfilesProps> = (props) => {
         {isLoading &&
           pageNumber === 1 &&
           Array.from({ length: props.takeLimit }, (_, i) => (
-            <ProfileCardLoader key={i} />
+            <ProfileCardLoader key={i} index={i} />
           ))}
         {profilesData.map((data) => (
           <ProfileCard

@@ -43,7 +43,6 @@ export enum UsernameValidatorErrors {
 
 export enum DescriptionValidatorErrors {
   DESCRIPTION_TOO_LONG_5000 = "DESCRIPTION_TOO_LONG_5000",
-  SAME_DESCRIPTION = "SAME_DESCRIPTION",
 }
 
 export enum CreateReviewValidatorErrors {

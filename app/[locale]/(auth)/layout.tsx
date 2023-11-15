@@ -4,7 +4,6 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { Logo } from "~/components/Logo";
 import { Settings } from "~/components/Modals/Settings";
-import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 
 export default async function AuthLayout({
@@ -31,17 +30,11 @@ export default async function AuthLayout({
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
-  const setLangCookie = async (data: localeTypes) => {
-    "use server";
-    cookies().set("lang", data);
-  };
-
   return (
     <main className="nav-padding relative flex h-full flex-col overflow-x-hidden text-xl text-white-light">
       {children}
       <div className="absolute right-4 top-3 md:right-6 md:top-5">
-        <Settings setLangCookie={setLangCookie} />
+        <Settings />
       </div>
       <Logo />
     </main>

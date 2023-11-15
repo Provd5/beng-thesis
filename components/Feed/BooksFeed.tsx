@@ -26,7 +26,7 @@ export const BooksFeed: FC<FetchBooksProps> = (props) => {
           {isLoading &&
             pageNumber === 1 &&
             Array.from({ length: props.takeLimit }, (_, i) => (
-              <BookReviewCardLoader key={i} />
+              <BookReviewCardLoader key={i} index={i} />
             ))}
           {(fetchedData as BookReviewCardInterface[]).map((data) => (
             <BookReviewCard key={data.book.id} bookData={data} />
@@ -37,7 +37,7 @@ export const BooksFeed: FC<FetchBooksProps> = (props) => {
           {isLoading &&
             pageNumber === 1 &&
             Array.from({ length: props.takeLimit }, (_, i) => (
-              <BookCardLoader key={i} />
+              <BookCardLoader key={i} index={i} />
             ))}
           {props.variant === undefined
             ? (fetchedData as BookInterface[]).map((data) => (

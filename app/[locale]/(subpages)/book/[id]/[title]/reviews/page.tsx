@@ -11,8 +11,10 @@ import { db } from "~/lib/db";
 
 export default async function BookReviewsPage({
   params: { id, title },
+  searchParams,
 }: {
   params: { id: string; title: string };
+  searchParams?: string;
 }) {
   try {
     z.string().uuid().parse(id);
@@ -40,7 +42,11 @@ export default async function BookReviewsPage({
 
   return (
     <div className="flex flex-col">
-      <BackCategoryLink href={`../${title}`} variant="MY_REVIEW" hrefReplace />
+      <BackCategoryLink
+        href={{ pathname: `../${title}`, query: searchParams }}
+        variant="MY_REVIEW"
+        hrefReplace
+      />
       <FeedWithSorting
         feedVariant="reviews"
         sessionId={session?.user.id}

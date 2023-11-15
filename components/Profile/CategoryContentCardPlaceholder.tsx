@@ -1,6 +1,7 @@
 "use client";
 
 import type { FC } from "react";
+import { type Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -8,7 +9,7 @@ import { AddBookPlaceholder } from "../ui/SvgIcons/AddBookPlaceholder";
 import { ShowMorePlaceholder } from "../ui/SvgIcons/ShowMorePlaceholder";
 
 interface CategoryContentCardPlaceholderProps {
-  href: string;
+  href: Url;
   isEmpty?: boolean;
 }
 

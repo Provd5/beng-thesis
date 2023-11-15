@@ -167,14 +167,14 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
         {isLoading ? (
           searchCategory === "books" ? (
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              {Array.from({ length: 4 }, (_, i) => (
-                <BookCardLoader key={i} />
+              {Array.from({ length: 20 }, (_, i) => (
+                <BookCardLoader key={i} index={i} />
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }, (_, i) => (
-                <ProfileCardLoader key={i} />
+              {Array.from({ length: 30 }, (_, i) => (
+                <ProfileCardLoader key={i} index={i} />
               ))}
             </div>
           )

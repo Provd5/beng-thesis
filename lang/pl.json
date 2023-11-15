@@ -17,7 +17,6 @@
     "SAME_USERNAME": "Podana nazwa użytkownika jest taka sama jak bieżąca",
 
     "DESCRIPTION_TOO_LONG_5000": "Opis nie może zawierać więcej niż 5000 znaków",
-    "SAME_DESCRIPTION": "Podany opis jest taki sam jak bieżący",
 
     "REVIEW_TOO_LONG_5000": "Twoja recenzja jest zbyt długa",
     "WRONG_RATE": "Najpierw wystaw odpowiednią ocenę",

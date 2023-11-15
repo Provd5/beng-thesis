@@ -2,7 +2,6 @@
 
 import { type FC, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import axios from "axios";
 import clsx from "clsx";
@@ -47,8 +46,6 @@ export const CreateReview: FC<CreateReviewProps> = ({
   const reviewTextarea = useRef<HTMLTextAreaElement>(null);
   const openModalButtonRef = useRef<HTMLButtonElement>(null);
 
-  const router = useRouter();
-
   const handleAddReview = async () => {
     setIsLoading(true);
     const loadingToast = toast.loading(te(GlobalErrors.PENDING));
@@ -82,7 +79,6 @@ export const CreateReview: FC<CreateReviewProps> = ({
 
       // on success
       closeReview();
-      router.refresh();
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(te(error.issues[0].message));

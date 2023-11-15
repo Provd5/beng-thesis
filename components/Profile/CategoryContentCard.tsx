@@ -30,7 +30,7 @@ export const CategoryContentCard: FC<CategoryContentCardProps> = ({
 
   return isLoading
     ? Array.from({ length: dataLength }, (_, i) => (
-        <SmallBookCardLoader key={i} />
+        <SmallBookCardLoader key={i} index={i} />
       ))
     : booksData.map((data) => (
         <SmallBookCard key={data.book.id} book={data.book} />

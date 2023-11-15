@@ -2,7 +2,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 
-import { ThumbnailPlaceholder } from "../ui/SvgIcons/ThumbnailPlaceholder";
+import ThumbnailPlaceholder from "../../assets/ThumbnailPlaceholder.png";
 
 interface BookCoverProps {
   coverUrl: string | null;
@@ -41,16 +41,16 @@ export const BookCover: FC<BookCoverProps | BookCoverLoaderProps> = ({
     >
       {isLoader ? (
         <div className="h-full w-full bg-gray" />
-      ) : coverUrl ? (
+      ) : (
         <Image
           alt="Book cover"
-          src={coverUrl}
+          src={coverUrl ? coverUrl : ThumbnailPlaceholder}
           fill
           sizes={sizes[size]}
           className="pointer-events-none object-cover"
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNsqAcAAYUBAdpOiIkAAAAASUVORK5CYII="
         />
-      ) : (
-        <ThumbnailPlaceholder />
       )}
       {children}
     </div>

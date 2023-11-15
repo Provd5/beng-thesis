@@ -1,7 +1,12 @@
+"use client";
+
 import type { FC } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import { type ReviewInterface } from "~/types/DataTypes";
+
+import { hrefToBook } from "~/utils/hrefToBook";
 
 import { BookCover } from "../Book/BookCover";
 import { BookReviewCardDetails } from "./BookReviewCardDetails";
@@ -11,6 +16,8 @@ interface BookReviewCardProps {
 }
 
 export const BookReviewCard: FC<BookReviewCardProps> = ({ bookData }) => {
+  const pathname = usePathname();
+
   const myReview = bookData.book.review
     ? (bookData.book.review[0] as ReviewInterface)
     : undefined;
@@ -22,14 +29,14 @@ export const BookReviewCard: FC<BookReviewCardProps> = ({ bookData }) => {
   return (
     <div key={bookData.book.id}>
       <Link
-        href={`/book/${bookData.book.id}/${bookData.book.title}`}
+        href={hrefToBook(bookData.book.id, bookData.book.title, pathname)}
         className="float-left mr-3 h-fit w-fit"
       >
         <BookCover coverUrl={bookData.book.thumbnail_url} />
       </Link>
       <div>
         <Link
-          href={`/book/${bookData.book.id}/${bookData.book.title}`}
+          href={hrefToBook(bookData.book.id, bookData.book.title, pathname)}
           className="inline-block w-fit"
         >
           <h1 className="line-clamp-2">{bookData.book.title}</h1>

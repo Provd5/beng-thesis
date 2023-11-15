@@ -23,12 +23,15 @@ interface MyReviewProps {
 export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
   const t = useTranslations("Reviews.MyReview");
 
+  const [refreshData, setRefreshData] = useState<"asc" | "desc">("desc");
+
   const { fetchedData, isLoading } = useFetchData({
     fetchType: "reviews",
     bookId,
     sessionId,
     isMyReview: true,
     takeLimit: 1,
+    order: refreshData,
   });
   const reviewsData = fetchedData as ReviewCardDataInterface[];
 
@@ -69,7 +72,7 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
         )}
       </div>
       {isLoading ? (
-        <ReviewCardLoader isMyReview />
+        <ReviewCardLoader isMyReview index={0} />
       ) : myReviewData && !showCreateReview ? (
         <ReviewCard
           isMyReview
@@ -84,7 +87,10 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
           fullName={myReviewData?.profile.full_name}
           rate={myReviewData?.rate}
           text={myReviewData?.text}
-          closeReview={() => setShowCreateReview(false)}
+          closeReview={() => {
+            setShowCreateReview(false),
+              setRefreshData(refreshData === "desc" ? "asc" : "desc");
+          }}
         />
       )}
     </>

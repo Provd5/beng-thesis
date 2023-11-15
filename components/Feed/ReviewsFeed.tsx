@@ -27,7 +27,7 @@ export const ReviewsFeed: FC<FetchReviewsProps> = (props) => {
           pageNumber === 1 &&
           Array.from({ length: props.takeLimit }, (_, i) => (
             <div key={i} className="contents">
-              <ReviewCardLoader />
+              <ReviewCardLoader index={i} />
               <hr className="h-px border-0 bg-gray" />
             </div>
           ))}
