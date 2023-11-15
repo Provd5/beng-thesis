@@ -39,7 +39,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({ fullname, pageUrl }) => {
     <Link
       href={
         pageUrl === "profile" && fullname
-          ? `/${pageUrl}/${fullname}`
+          ? `/${pageUrl}/${fullname}/`
           : `/${pageUrl || ""}`
       }
       className={clsx(

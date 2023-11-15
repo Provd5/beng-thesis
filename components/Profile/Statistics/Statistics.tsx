@@ -25,7 +25,7 @@ export const Statistics: FC<StatisticsProps> = ({
 }) => {
   return (
     <div className="flex justify-center md:justify-start">
-      <Link href={`${userFullname}/statistics`}>
+      <Link href={`${userFullname}/statistics/`}>
         <StatisticsCategoryWrapper variant="profile statistics">
           <MainStatisticsCard
             quantities={quantities}

@@ -77,7 +77,7 @@ export default async function ProfilePage({
                 <>
                   <CategoryLink
                     variant="STATISTICS"
-                    href={`${fullname}/statistics`}
+                    href={`${fullname}/statistics/`}
                   />
                   <Statistics
                     userFullname={fullname}
@@ -89,7 +89,7 @@ export default async function ProfilePage({
                 <>
                   <CategoryLink
                     variant={categoryVariant}
-                    href={variantUrl}
+                    href={`${variantUrl}/`}
                     quantity={variantQuantity}
                   />
                   <DragContainer
@@ -104,7 +104,9 @@ export default async function ProfilePage({
                           dataLength={variantQuantity}
                         />
                         {variantQuantity > 10 && (
-                          <CategoryContentCardPlaceholder href={variantUrl} />
+                          <CategoryContentCardPlaceholder
+                            href={`${variantUrl}/`}
+                          />
                         )}
                       </>
                     ) : (

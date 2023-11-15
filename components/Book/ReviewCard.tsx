@@ -55,7 +55,7 @@ export const ReviewCard: FC<ReviewCardProps> = ({
       <Link
         href={`/profile/${
           reviewData.profile.full_name ? reviewData.profile.full_name : ""
-        }`}
+        }/`}
         className="flex h-fit flex-none gap-x-1.5 gap-y-1 sm:w-24 sm:flex-col sm:items-center"
       >
         <AvatarImage
