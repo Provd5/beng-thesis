@@ -2,7 +2,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 
-import { AvatarPlaceholder } from "../ui/SvgIcons/AvatarPlaceholder";
+import AvatarPlaceholder from "../../assets/AvatarPlaceholder.png";
 
 interface AvatarImageProps {
   avatarSrc: string | null;
@@ -41,17 +41,16 @@ export const AvatarImage: FC<AvatarImageProps | AvatarImageLoaderProps> = ({
     <div className={clsx("relative flex-none", sizeClass[size], className)}>
       {isLoader ? (
         <div className="h-full w-full rounded-full bg-gray" />
-      ) : avatarSrc ? (
+      ) : (
         <Image
           sizes={sizes[size]}
           fill
-          priority
-          src={avatarSrc}
+          src={avatarSrc ? avatarSrc : AvatarPlaceholder}
           alt="Profile Avatar"
           className="pointer-events-none rounded-full"
+          placeholder="blur"
+          blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNsqAcAAYUBAdpOiIkAAAAASUVORK5CYII="
         />
-      ) : (
-        <AvatarPlaceholder />
       )}
     </div>
   );

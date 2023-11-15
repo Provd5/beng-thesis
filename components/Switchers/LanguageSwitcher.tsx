@@ -1,42 +1,34 @@
 "use client";
 
-import { type FC, useState } from "react";
+import { type FC } from "react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 
-import FlagOfTheUnitedKingdom from "~/assets/flags/gb.svg";
-import FlagOfPoland from "~/assets/flags/pl.svg";
+import FlagOfTheUnitedKingdom from "~/assets/flags/flag-icons-gb.png";
+import FlagOfPoland from "~/assets/flags/flag-icons-pl.png";
 import { locales, type localeTypes } from "~/i18n";
 
 interface LanguageSwitcherProps {
-  setLangCookie: (data: localeTypes) => Promise<void>;
+  setCookie: (language: localeTypes) => void;
 }
 
-export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
-  setLangCookie,
-}) => {
-  const pathnameArr = usePathname().split("/");
-  const router = useRouter();
-  const [language, setLanguage] = useState(pathnameArr[1]);
+export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ setCookie }) => {
+  const pathname = usePathname();
+  const pathnameArray = pathname.split("/");
+  const localeFromUrl = pathnameArray[1];
 
-  const handleSetLanguage = (language: localeTypes) => {
-    setLanguage(language);
-    pathnameArr[1] = language;
-    void setLangCookie(language).then(() =>
-      router.replace(pathnameArr.join("/"))
-    );
-  };
+  const router = useRouter();
 
   const getFlagFromLocale = (locale: localeTypes) => {
     switch (locale) {
       case "en":
         return {
-          src: FlagOfTheUnitedKingdom as string,
+          src: FlagOfTheUnitedKingdom,
           alt: "Flag Of The United Kingdom",
         };
       case "pl":
-        return { src: FlagOfPoland as string, alt: "Flag of Poland" };
+        return { src: FlagOfPoland, alt: "Flag of Poland" };
     }
   };
 
@@ -45,13 +37,16 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
       {locales.map((locale) => (
         <button
           key={locale}
-          disabled={language === locale}
+          disabled={localeFromUrl === locale}
           className="flex flex-col items-center text-sm"
-          onClick={() => handleSetLanguage(locale)}
+          onClick={() => {
+            setCookie(locale), (pathnameArray[1] = locale);
+            router.push(pathnameArray.join("/"));
+          }}
         >
           <Image
             className={
-              language === locale
+              localeFromUrl === locale
                 ? "border border-transparent bg-gradient-dark dark:bg-gradient-light"
                 : ""
             }
@@ -64,7 +59,8 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({
           />
           <p
             className={clsx(
-              language === locale && "text-secondary dark:text-secondary-light",
+              localeFromUrl === locale &&
+                "text-secondary dark:text-secondary-light",
               "font-semibold"
             )}
           >

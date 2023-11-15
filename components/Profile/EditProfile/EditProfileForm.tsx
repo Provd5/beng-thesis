@@ -22,11 +22,7 @@ import {
   DescriptionValidator,
   UsernameValidator,
 } from "~/lib/validations/auth";
-import {
-  DescriptionValidatorErrors,
-  GlobalErrors,
-  UsernameValidatorErrors,
-} from "~/lib/validations/errorsEnums";
+import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
 interface EditProfileFormProps {
   data: string | null;
@@ -60,11 +56,7 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({
         inputElement.value.trim().length > 0 ? inputElement.value : null;
 
       if (data === inputElementValue) {
-        toast.error(
-          formType === "description"
-            ? te(DescriptionValidatorErrors.SAME_DESCRIPTION)
-            : te(UsernameValidatorErrors.SAME_USERNAME)
-        );
+        cancelForm();
         return;
       }
 
@@ -111,30 +103,9 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({
 
   return (
     <form
-      className="mt-1.5 flex h-full w-full flex-col items-start gap-1.5"
+      className="flex h-full w-full flex-col items-start gap-1.5"
       onSubmit={handleUpdate}
     >
-      <Input
-        isTextarea={formType === "description"}
-        className={clsx(
-          "w-full",
-          formType === "description" ? "min-h-[250px]" : "max-w-xs"
-        )}
-        loading={isLoading}
-        type="text"
-        id={`${formType}-input`}
-        name={`${formType}-input`}
-        placeholder={
-          formType === "description"
-            ? t("add profile description")
-            : t("enter username")
-        }
-        required={formType === "username"}
-        autoComplete="off"
-        minLength={formType === "description" ? 0 : 3}
-        maxLength={formType === "description" ? 5000 : 32}
-        defaultValue={data || ""}
-      />
       <div className="flex gap-2">
         <ButtonWhite size="xs" loading={isLoading} type="submit">
           {t("save")}
@@ -148,6 +119,29 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({
             <RxCross2 />
           </button>
         )}
+      </div>
+      <div className="min-h-[40px] w-full">
+        <Input
+          isTextarea={formType === "description"}
+          className={clsx(
+            "w-full",
+            formType === "username" ? "max-w-xs" : "h-full min-h-[250px]"
+          )}
+          loading={isLoading}
+          type="text"
+          id={`${formType}-input`}
+          name={`${formType}-input`}
+          placeholder={
+            formType === "description"
+              ? t("add profile description")
+              : t("enter username")
+          }
+          required={formType === "username"}
+          autoComplete="off"
+          minLength={formType === "description" ? 0 : 3}
+          maxLength={formType === "description" ? 5000 : 32}
+          defaultValue={data || ""}
+        />
       </div>
     </form>
   );

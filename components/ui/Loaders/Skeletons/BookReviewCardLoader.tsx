@@ -4,9 +4,18 @@ import { BookCover } from "~/components/Book/BookCover";
 
 import { TextLoader } from "../Loader";
 
-export const BookReviewCardLoader: FC = ({}) => {
+interface BookReviewCardLoaderProps {
+  index: number;
+}
+
+export const BookReviewCardLoader: FC<BookReviewCardLoaderProps> = ({
+  index,
+}) => {
   return (
-    <div className="animate-pulse">
+    <div
+      className="animate-pulse"
+      style={{ animationDelay: `${index * 0.05}s` }}
+    >
       <div className="flex w-full gap-3">
         <BookCover isLoader />
         <div className="flex w-full flex-col gap-1">

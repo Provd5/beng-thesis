@@ -1,6 +1,7 @@
 "use client";
 
 import type { FC } from "react";
+import { type Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
@@ -12,7 +13,7 @@ import { getBookmarkIcon } from "./getBookmarkIcon";
 
 interface CategoryLinkProps {
   variant: CategoryTypes;
-  href: string;
+  href: Url;
   hrefReplace?: boolean;
   withoutIcon?: boolean;
   quantity?: number;

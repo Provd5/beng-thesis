@@ -3,6 +3,7 @@
 import type { FC } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import clsx from "clsx";
 
 import { ButtonLink } from "../ui/Buttons";
 
@@ -25,7 +26,7 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
 
   const [renderButton, setRenderButton] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const descriptionParagraphRef = useRef<HTMLDivElement>(null);
+  const descriptionParagraphRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     if (
@@ -54,7 +55,10 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
             <h3 className="font-semibold">{t(variant)}</h3>
             <p
               ref={descriptionParagraphRef}
-              className={isExpanded ? "" : "line-clamp-4 max-h-[58px]"}
+              className={clsx(
+                "whitespace-break-spaces",
+                !isExpanded && "line-clamp-4 max-h-[58px]"
+              )}
             >
               {text}
             </p>

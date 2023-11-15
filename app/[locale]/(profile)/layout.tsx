@@ -5,7 +5,6 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Logo } from "~/components/Logo";
 import { AccountSettings } from "~/components/Modals/AccountSettings";
 import { Settings } from "~/components/Modals/Settings";
-import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 
 export default async function ProfileLayout({
@@ -30,12 +29,6 @@ export default async function ProfileLayout({
     select: { full_name: true, avatar_url: true },
   });
 
-  // eslint-disable-next-line @typescript-eslint/require-await
-  const setLangCookie = async (data: localeTypes) => {
-    "use server";
-    cookies().set("lang", data);
-  };
-
   return (
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll">
       <Logo />
@@ -45,7 +38,7 @@ export default async function ProfileLayout({
             userFullname={userData?.full_name}
             userAvatarUrl={userData?.avatar_url}
           />
-          <Settings setLangCookie={setLangCookie} />
+          <Settings />
         </div>
       </div>
       <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/90 dark:bg-black/90 md:rounded-none">

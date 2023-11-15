@@ -17,7 +17,6 @@
     "SAME_USERNAME": "Given username is the same as the current",
 
     "DESCRIPTION_TOO_LONG_5000": "Description must be less than 5000 characters",
-    "SAME_DESCRIPTION": "Given description is the same as the current",
 
     "REVIEW_TOO_LONG_5000": "Your review is too long",
     "WRONG_RATE": "Give an adequate rating first",

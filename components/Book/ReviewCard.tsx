@@ -49,7 +49,7 @@ export const ReviewCard: FC<ReviewCardProps> = ({
       className={clsx(
         "relative flex w-full flex-col gap-1 py-3 sm:flex-row",
         isMyReview &&
-          "min-h-[350px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[260px] before:sm:rounded-md"
+          "min-h-[350px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/10 before:dark:bg-yellow/5 sm:min-h-[260px] before:sm:rounded-md"
       )}
     >
       <Link
@@ -109,7 +109,7 @@ export const ReviewCard: FC<ReviewCardProps> = ({
           <p
             ref={reviewParagraphRef}
             className={clsx(
-              "pl-1 pr-1 text-sm sm:pr-3",
+              "whitespace-break-spaces pl-1 pr-1 text-sm sm:pr-3",
               !isExpanded && "line-clamp-[10] max-h-[122px]"
             )}
           >

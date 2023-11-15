@@ -9,8 +9,10 @@ import { CategoryLink } from "~/components/ui/CategoryLink";
 
 export default async function BookPage({
   params: { id, title },
+  searchParams,
 }: {
   params: { id: string; title: string };
+  searchParams?: string;
 }) {
   try {
     z.string().uuid().parse(id);
@@ -30,7 +32,7 @@ export default async function BookPage({
     <>
       <div className="flex flex-col">
         <CategoryLink
-          href={`${title}/reviews`}
+          href={{ pathname: `${title}/reviews`, query: searchParams }}
           variant="REVIEWS"
           hrefReplace
           withoutIcon

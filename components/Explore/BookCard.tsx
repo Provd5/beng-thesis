@@ -1,5 +1,8 @@
+"use client";
+
 import type { FC } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   type BookOwnedAsInterface,
@@ -7,6 +10,7 @@ import {
 } from "~/types/DataTypes";
 
 import { averageRating } from "~/utils/averageRating";
+import { hrefToBook } from "~/utils/hrefToBook";
 
 import { BookCover } from "../Book/BookCover";
 import { ManageBookshelf } from "../Book/Manage/ManageBookshelf";
@@ -19,6 +23,8 @@ interface BookCardProps {
 }
 
 export const BookCard: FC<BookCardProps> = ({ bookData }) => {
+  const pathname = usePathname();
+
   const myOwnedAsData = bookData.book_owned_as
     ? (bookData.book_owned_as[0] as BookOwnedAsInterface)
     : undefined;
@@ -30,14 +36,14 @@ export const BookCard: FC<BookCardProps> = ({ bookData }) => {
   return (
     <div className="flex justify-center gap-3 md:justify-start">
       <Link
-        href={`/book/${bookData.id}/${bookData.title}`}
+        href={hrefToBook(bookData.id, bookData.title, pathname)}
         className="h-fit w-fit"
       >
         <BookCover coverUrl={bookData.thumbnail_url} />
       </Link>
       <div className="flex w-full max-w-[300px] flex-col gap-1">
         <Link
-          href={`/book/${bookData.id}/${bookData.title}`}
+          href={hrefToBook(bookData.id, bookData.title, pathname)}
           className="h-fit w-fit py-0.5 leading-tight"
         >
           <h1 className="line-clamp-2">{bookData.title}</h1>

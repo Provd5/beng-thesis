@@ -36,7 +36,7 @@ export const ProfileDescription: FC<ProfileDescriptionProps> = ({
         <p
           ref={descriptionRef}
           className={clsx(
-            "mx-0.5 text-xs",
+            "mx-0.5 whitespace-break-spaces text-xs",
             !isExpanded && "line-clamp-6 max-h-[78px]"
           )}
         >

@@ -2,7 +2,6 @@
 
 import { type FC, type FormEvent, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { type bookshelfType } from "@prisma/client";
 import axios from "axios";
@@ -37,8 +36,6 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   const t = useTranslations("Book.ManageBookshelf");
   const tb = useTranslations("Book.BookshelfTypes");
   const te = useTranslations("Errors");
-
-  const router = useRouter();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSelectDate, setIsSelectDate] = useState(false);
@@ -122,8 +119,7 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
         return;
       }
 
-      // on success
-      router.refresh();
+      // success
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       setCurrentBookshelf(prevBookshelf);

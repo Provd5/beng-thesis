@@ -7,16 +7,21 @@ import { TextLoader } from "../Loader";
 
 interface ReviewCardLoaderProps {
   isMyReview?: boolean;
+  index: number;
 }
 
-export const ReviewCardLoader: FC<ReviewCardLoaderProps> = ({ isMyReview }) => {
+export const ReviewCardLoader: FC<ReviewCardLoaderProps> = ({
+  isMyReview,
+  index,
+}) => {
   return (
     <div
       className={clsx(
         "relative flex w-full animate-pulse flex-col gap-1 py-3 sm:flex-row",
         isMyReview &&
-          "min-h-[350px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/5 sm:min-h-[260px] before:sm:rounded-md"
+          "min-h-[350px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/10 before:dark:bg-yellow/5 sm:min-h-[260px] before:sm:rounded-md"
       )}
+      style={{ animationDelay: `${index * 0.05}s` }}
     >
       <div className="flex h-fit flex-none gap-x-1.5 gap-y-1 sm:w-24 sm:flex-col sm:items-center">
         <AvatarImage isLoader className="drop-shadow-icon" />

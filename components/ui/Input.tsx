@@ -37,7 +37,7 @@ export const Input = forwardRef<
         <textarea
           {...commonProps}
           className={clsx(
-            "rounded-l-md rounded-tr-md p-3 text-sm",
+            "rounded-l-md rounded-tr-md p-3 text-base",
             commonClass,
             className
           )}
