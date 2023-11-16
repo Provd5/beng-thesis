@@ -64,6 +64,17 @@ export async function middleware(req: NextRequest) {
     res.cookies.set("lang", localeFromPathname);
   }
 
+  // color theme initialization
+  if (req.headers.get("Accept")?.includes("text/html")) {
+    res.headers.set(
+      "Accept-CH",
+      `Sec-CH-Prefers-Color-Scheme, Sec-CH-Prefers-Contrast`
+    );
+    res.headers.set("Vary", "Sec-CH-Prefers-Color-Scheme");
+    res.headers.set("Critical-CH", "Sec-CH-Prefers-Color-Scheme");
+    return res;
+  }
+
   return res;
 }
 

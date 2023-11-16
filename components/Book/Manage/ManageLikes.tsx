@@ -65,7 +65,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
   };
 
   return (
-    <div className="flex gap-1">
+    <div className="flex w-fit cursor-pointer gap-1" onClick={handleLike}>
       <button className="flex h-fit" disabled={isLoading} onClick={handleLike}>
         {isLiked ? (
           getBookmarkIcon("LIKED", "lg")
@@ -84,12 +84,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
           {isLiked ? (
             t("liked")
           ) : (
-            <span
-              onClick={handleLike}
-              className={
-                isLoading ? "" : "cursor-pointer select-none underline"
-              }
-            >
+            <span className={isLoading ? "" : "select-none underline"}>
               {t("like")}
             </span>
           )}

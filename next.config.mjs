@@ -13,6 +13,10 @@ const config = {
         hostname: "lh3.googleusercontent.com",
       },
       {
+        //github avatar images
+        hostname: "avatars.githubusercontent.com",
+      },
+      {
         //google books covers
         hostname: "books.google.com",
       },

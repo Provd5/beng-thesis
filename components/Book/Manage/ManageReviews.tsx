@@ -37,7 +37,10 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
   };
 
   return (
-    <div className="flex gap-1">
+    <div
+      className="flex w-fit cursor-pointer gap-1"
+      onClick={handleFocusReview}
+    >
       <button className="flex h-fit" onClick={handleFocusReview}>
         {isReviewExists ? (
           getBookmarkIcon("REVIEWS", "lg")
@@ -56,12 +59,7 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
           {createdAt ? (
             dateFormater(createdAt)
           ) : (
-            <span
-              onClick={handleFocusReview}
-              className="cursor-pointer select-none underline"
-            >
-              {t("write yours")}
-            </span>
+            <span className="select-none underline">{t("write yours")}</span>
           )}
         </p>
       </div>

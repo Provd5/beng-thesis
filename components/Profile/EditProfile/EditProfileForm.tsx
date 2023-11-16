@@ -53,7 +53,7 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({
         | HTMLInputElement
         | HTMLTextAreaElement;
       const inputElementValue =
-        inputElement.value.trim().length > 0 ? inputElement.value : null;
+        inputElement.value.trim().length > 0 ? inputElement.value : "";
 
       if (data === inputElementValue) {
         cancelForm();

@@ -48,6 +48,7 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ setCookie }) => {
               setCookie(locale), setIsLoading(true);
             }}
             href={pathname.replace(`/${localeFromUrl}`, `/${locale}`)}
+            replace
           >
             <Image
               className={
