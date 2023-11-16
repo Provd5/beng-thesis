@@ -65,14 +65,18 @@ export const ManageLikes: FC<ManageLikesProps> = ({
   };
 
   return (
-    <div className="flex w-fit cursor-pointer gap-1" onClick={handleLike}>
-      <button className="flex h-fit" disabled={isLoading} onClick={handleLike}>
+    <button
+      className="flex w-fit cursor-pointer gap-1 text-left"
+      disabled={isLoading}
+      onClick={handleLike}
+    >
+      <div className="flex h-fit">
         {isLiked ? (
           getBookmarkIcon("LIKED", "lg")
         ) : (
           <BookmarksWrapper Icon={BsBookmarkHeart} color="gradient" size="lg" />
         )}
-      </button>
+      </div>
       <div className="flex flex-col">
         <div className="flex h-[24px] items-center">
           <h3 className="text-base font-semibold text-secondary dark:text-secondary-light">
@@ -90,6 +94,6 @@ export const ManageLikes: FC<ManageLikesProps> = ({
           )}
         </p>
       </div>
-    </div>
+    </button>
   );
 };

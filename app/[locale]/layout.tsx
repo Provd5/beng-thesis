@@ -56,7 +56,7 @@ export default async function RootLayout({
         quicksandFont.className + (preferTheme === "dark" ? " dark" : "")
       }
     >
-      <body className="bodyGradient relative flex h-screen flex-col bg-fixed text-base font-medium text-black antialiased dark:text-white">
+      <body className="bodyGradient relative flex h-full flex-col bg-fixed text-base font-medium text-black antialiased dark:text-white">
         <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
         <SvgPainter />
 

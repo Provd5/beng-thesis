@@ -144,13 +144,11 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
         ) : (
           <BookmarksWrapper Icon={BsBookmarkPlus} color="gradient" size="lg" />
         )}
-        {currentBookshelf === "ALREADY_READ" &&
-          readQuantity &&
-          readQuantity > 1 && (
-            <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red text-xs">
-              <p className="text-white-light">×{readQuantity}</p>
-            </div>
-          )}
+        {currentBookshelf === "ALREADY_READ" && readQuantityState > 1 && (
+          <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red text-xs">
+            <p className="text-white-light">×{readQuantityState}</p>
+          </div>
+        )}
       </div>
 
       <div className="relative flex flex-auto flex-col">

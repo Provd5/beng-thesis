@@ -8,4 +8,3 @@
 - [x] change favicon
 - [ ] change errors and responses
 - [x] fix get queries
-- [ ] change long texts to markdown format

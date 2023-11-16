@@ -37,17 +37,17 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
   };
 
   return (
-    <div
-      className="flex w-fit cursor-pointer gap-1"
+    <button
+      className="flex w-fit cursor-pointer gap-1 text-left"
       onClick={handleFocusReview}
     >
-      <button className="flex h-fit" onClick={handleFocusReview}>
+      <div className="flex h-fit">
         {isReviewExists ? (
           getBookmarkIcon("REVIEWS", "lg")
         ) : (
           <BookmarksWrapper Icon={BsBookmarkStar} color="gradient" size="lg" />
         )}
-      </button>
+      </div>
       <div className="flex flex-col">
         <div className="flex h-[24px] items-center">
           <h3 className="text-base font-semibold text-secondary dark:text-secondary-light">
@@ -63,6 +63,6 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
           )}
         </p>
       </div>
-    </div>
+    </button>
   );
 };
