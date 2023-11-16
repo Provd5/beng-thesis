@@ -16,7 +16,7 @@ export const Settings: FC = ({}) => {
   const setCookie = async (language: localeTypes) => {
     "use server";
     cookies().set("lang", language);
-    revalidatePath("/");
+    revalidatePath("/", "layout");
   };
 
   return (

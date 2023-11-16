@@ -89,7 +89,13 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
   };
 
   return (
-    <div className="relative flex flex-col">
+    <div
+      className="relative flex w-fit cursor-pointer flex-col"
+      onClick={(e) =>
+        !openModalButtonRef.current?.contains(e?.target as Node) &&
+        setIsModalOpen(true)
+      }
+    >
       <ButtonLink
         ref={openModalButtonRef}
         aria-label="open-modal-button"

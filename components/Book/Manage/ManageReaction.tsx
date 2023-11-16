@@ -50,13 +50,17 @@ export const ManageReaction: FC<ManageReactionProps> = ({
         className={clsx(
           "flex items-center gap-1.5 rounded-sm border px-2 py-1.5 text-md",
           userReactionState === reaction
-            ? "border-secondary dark:border-secondary-light"
+            ? reaction === "OK"
+              ? "border-green"
+              : "border-red"
             : "border-black dark:border-white"
         )}
         onClick={() => handleReaction(reaction)}
       >
         {userReactionState === reaction ? (
-          <ActiveIcon className="fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]" />
+          <ActiveIcon
+            className={reaction === "OK" ? "fill-green" : "fill-red"}
+          />
         ) : (
           <Icon />
         )}
@@ -64,7 +68,7 @@ export const ManageReaction: FC<ManageReactionProps> = ({
           className={clsx(
             "min-w-[12px] text-base",
             userReactionState === reaction &&
-              "text-secondary dark:text-secondary-light"
+              (reaction === "OK" ? "text-green" : "text-red")
           )}
         >
           {filterByReaction(reaction).length}

@@ -10,9 +10,7 @@ import {
 export const LoginValidator = z.object({
   formData: z.object({
     email: z.string().email({ message: LoginValidatorErrors.WRONG_EMAIL }),
-    password: z
-      .string()
-      .nonempty({ message: LoginValidatorErrors.PASSWORD_REQUIRED_ERROR }),
+    password: z.string().min(1, LoginValidatorErrors.PASSWORD_REQUIRED_ERROR),
   }),
 });
 
@@ -41,7 +39,6 @@ export const UsernameValidator = z.object({
 export const DescriptionValidator = z.object({
   description: z
     .string()
-    .nonempty()
     .max(5000, {
       message: DescriptionValidatorErrors.DESCRIPTION_TOO_LONG_5000,
     })

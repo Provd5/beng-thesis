@@ -7,7 +7,7 @@ export default function SubpagesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="grow-1 relative flex h-full flex-col overflow-y-scroll">
+    <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll">
       <Logo />
       <div className="flex h-12 flex-none items-center self-end px-3 text-white">
         <div className="h-fit">

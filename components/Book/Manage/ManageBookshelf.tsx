@@ -131,11 +131,14 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   };
 
   return (
-    <div className="flex gap-1">
-      <div
-        className="relative flex h-fit cursor-pointer"
-        onClick={() => setIsModalOpen(!isModalOpen)}
-      >
+    <div
+      className="flex w-fit cursor-pointer gap-1"
+      onClick={(e) =>
+        !openModalButtonRef.current?.contains(e?.target as Node) &&
+        setIsModalOpen(true)
+      }
+    >
+      <div className="relative flex h-fit">
         {currentBookshelf ? (
           getBookmarkIcon(currentBookshelf, "lg")
         ) : (
@@ -214,9 +217,9 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
                           >
                             {t("read times:")}
                           </label>
-                          <div className="flex">
+                          <div className="flex h-9">
                             <button
-                              className="h-full w-10 rounded-l bg-white-light text-lg font-semibold dark:bg-black-dark"
+                              className="h-full w-10 rounded-l-sm bg-white text-lg font-semibold dark:bg-black-dark"
                               type="button"
                               onClick={() =>
                                 setReadQuantityState((prev) =>
@@ -230,13 +233,13 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
                               disabled
                               min={0}
                               type="number"
-                              className="w-10 bg-white-light px-1 py-2 text-center text-md text-black-dark dark:bg-black dark:text-white"
+                              className="w-10 appearance-none bg-white-light px-1 py-2 text-center text-md text-black-dark dark:bg-black dark:text-white"
                               name="read-quantity-number-input"
                               id="read-quantity-number-input"
                               value={readQuantityState}
                             />
                             <button
-                              className="h-full w-10 rounded-r bg-white-light text-lg font-semibold dark:bg-black-dark"
+                              className="h-full w-10 rounded-r-sm bg-white text-lg font-semibold dark:bg-black-dark"
                               type="button"
                               onClick={() =>
                                 setReadQuantityState((prev) => prev + 1)
@@ -263,12 +266,17 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
                     id="began-reading-at-date-input"
                     name="began-reading-at-date-input"
                     type="date"
+                    max={
+                      updatedAtState
+                        ? dateFormater(updatedAtState)
+                        : new Date().toISOString().split("T")[0]
+                    }
                     defaultValue={
                       beganReadingAtState
                         ? dateFormater(beganReadingAtState)
                         : ""
                     }
-                    className="py-0.5 text-md text-black-dark dark:text-white-light"
+                    className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -282,12 +290,14 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
                     id="updated-at-date-input"
                     name="updated-at-date-input"
                     type="date"
+                    max={new Date().toISOString().split("T")[0]}
+                    onChange={(e) => setUpdatedAtState(e.target.valueAsDate)}
                     defaultValue={
                       currentBookshelf === selectedBookshelf
                         ? dateFormater(updatedAtState || new Date())
                         : dateFormater(new Date())
                     }
-                    className="py-0.5 text-md text-black-dark dark:text-white-light"
+                    className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
                     required
                   />
                 </div>

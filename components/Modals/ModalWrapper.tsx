@@ -49,17 +49,18 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
     const modalWidth = modal.clientWidth;
 
     const distanceToBottom =
-      windowHeight - modal.getBoundingClientRect().bottom;
+      windowHeight - modalHeight - modal.getBoundingClientRect().top;
 
-    const distanceToLeft = windowWidth - modal.getBoundingClientRect().left;
+    const distanceToLeft =
+      windowWidth - modalWidth - modal.getBoundingClientRect().left;
 
-    if (modalHeight > distanceToBottom) {
+    if (distanceToBottom < 100) {
       setTopPosition("bottom-full");
     } else {
       setTopPosition("top-full");
     }
 
-    if (modalWidth > distanceToLeft) {
+    if (distanceToLeft < 0) {
       setRightPosiotion("right-0");
     } else {
       setRightPosiotion("left-0");

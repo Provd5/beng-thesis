@@ -31,7 +31,7 @@ export default async function AuthLayout({
   }
 
   return (
-    <main className="nav-padding relative flex h-full flex-col text-xl text-white-light">
+    <main className="nav-padding relative flex h-full flex-col overflow-x-hidden text-xl text-white-light">
       {children}
       <div className="absolute right-4 top-3 md:right-6 md:top-5">
         <Settings />
