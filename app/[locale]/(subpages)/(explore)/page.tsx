@@ -1,6 +1,4 @@
 import { type Metadata } from "next";
-import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { booksOrderByArray } from "~/types/feed/OrderVariants";
 
@@ -12,21 +10,12 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default async function ExplorePage() {
-  const supabase = createServerComponentClient({
-    cookies,
-  });
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
+export default function ExplorePage() {
   return (
     <div className="container pb-6">
       <FeedWithSorting
         feedVariant="books"
         orderArray={booksOrderByArray}
-        sessionId={session?.user.id}
         takeLimit={20}
         profileName={undefined}
         variant={undefined}

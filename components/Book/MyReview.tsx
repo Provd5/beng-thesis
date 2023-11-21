@@ -21,14 +21,13 @@ interface MyReviewProps {
 }
 
 export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
-  const t = useTranslations("Reviews.MyReview");
+  const t = useTranslations("Reviews.CreateReview");
 
   const [refreshData, setRefreshData] = useState<"asc" | "desc">("desc");
 
   const { fetchedData, isLoading } = useFetchData({
     fetchType: "reviews",
     bookId,
-    sessionId,
     isMyReview: true,
     takeLimit: 1,
     order: refreshData,
@@ -44,11 +43,11 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
 
   return (
     <>
-      <div className="flex w-full justify-end px-3">
+      <div className="flex w-full justify-end">
         {!!myReviewData ? (
           <button
             id="review-edit-button"
-            className="flex items-center gap-1 py-0.5"
+            className="flex items-center gap-1 px-3 py-1"
             onClick={() => setShowCreateReview(!showCreateReview)}
           >
             {showCreateReview ? (
@@ -61,14 +60,14 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
             ) : (
               <>
                 <p className="select-none text-base text-black-light/50 dark:text-white-dark/50">
-                  {t("your review")}
+                  {t("edit")}
                 </p>
                 <FaPenToSquare className="text-md text-black-light dark:text-white-dark" />
               </>
             )}
           </button>
         ) : (
-          <div className="h-5" />
+          <div className="my-0.5 h-6" />
         )}
       </div>
       {isLoading ? (

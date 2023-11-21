@@ -3,7 +3,6 @@ import { z } from "zod";
 export const ReviewsValidator = z.object({
   bookId: z.string(),
   isMyReview: z.string().nullish(),
-  sessionId: z.string().nullish(),
   orderBy: z
     .enum(["created_at", "rate", "review_reaction", "review"])
     .nullish(),

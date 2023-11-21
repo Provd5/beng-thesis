@@ -182,6 +182,7 @@
       "on a shelf": "On a shelf",
       "add to shelf": "add to shelf",
       "remove from shelf": "Remove from shelf",
+      "are you sure?": "Are you sure you want to remove this book from the shelf?",
       "read times:": "Read times:",
       "began reading:": "Began reading:",
       "on this shelf since:": "On this shelf since:",
@@ -204,13 +205,12 @@
     "CreateReview": {
       "express your opinion": "Express your opinion...",
       "your rate": "Your rate",
-      "add review": "Add review",
-      "edit review": "Edit review"
-    },
-    "MyReview": {
-      "your review": "Your review",
-      "all reviews": "all reviews",
-      "cancel": "Cancel"
+      "all reviews": "All reviews",
+      "add": "Add",
+      "edit": "Edit",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "are you sure?": "Are you sure you want to delete this review?"
     },
     "Review": {
       "was this review helpful?": "Was this review helpful?",

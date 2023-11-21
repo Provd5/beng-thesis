@@ -34,16 +34,18 @@ interface ProfilesFeedProps extends FetchProfilesProps {
 }
 
 export const FeedWithSorting: FC<
-  BooksFeedProps | ReviewsFeedProps | ProfilesFeedProps
+  (BooksFeedProps | ReviewsFeedProps | ProfilesFeedProps) & {
+    sessionId?: string;
+  }
 > = ({
   feedVariant,
   orderArray,
   takeLimit,
   variant,
   userId,
-  sessionId,
   profileName,
   bookId,
+  sessionId,
 }) => {
   const t = useTranslations("Sorting");
 
@@ -117,7 +119,6 @@ export const FeedWithSorting: FC<
       {feedVariant === "books" && (
         <BooksFeed
           takeLimit={takeLimit}
-          sessionId={sessionId}
           profileName={profileName}
           variant={variant}
           order={sortOrderState}

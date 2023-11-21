@@ -1,3 +1,6 @@
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
 
 import { db } from "~/lib/db";
@@ -7,11 +10,18 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const { bookId, isMyReview, sessionId, orderBy, order, takeLimit, page } =
+    const supabase = createServerComponentClient({
+      cookies,
+    });
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const { bookId, isMyReview, orderBy, order, takeLimit, page } =
       ReviewsValidator.parse({
         bookId: url.searchParams.get("bookId"),
         isMyReview: url.searchParams.get("isMyReview"),
-        sessionId: url.searchParams.get("sessionId"),
         orderBy: url.searchParams.get("orderBy"),
         order: url.searchParams.get("order"),
         takeLimit: url.searchParams.get("takeLimit"),
@@ -47,11 +57,11 @@ export async function GET(req: Request) {
         break;
     }
 
-    if (isMyReview === "true" && !sessionId)
+    if (isMyReview === "true" && !session?.user)
       return new Response(JSON.stringify([]));
 
     const whereClause = isMyReview
-      ? { AND: [{ book_id: bookId }, { author_id: sessionId || undefined }] }
+      ? { AND: [{ book_id: bookId }, { author_id: session?.user.id }] }
       : {
           book_id: bookId,
           text: { not: null },

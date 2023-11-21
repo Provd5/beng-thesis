@@ -182,6 +182,7 @@
       "on a shelf": "Na półce",
       "add to shelf": "dodaj na półkę",
       "remove from shelf": "Usuń z półki",
+      "are you sure?": "Czy na pewno chcesz usunąć tę książkę z półki?",
       "read times:": "Przeczytano razy:",
       "began reading:": "Rozpoczęto czytanie:",
       "on this shelf since:": "Na tej półce od:",
@@ -204,13 +205,12 @@
     "CreateReview": {
       "express your opinion": "Wyraź swoją opinię...",
       "your rate": "Twoja ocena",
-      "add review": "Dodaj recenzję",
-      "edit review": "Edytuj recenzję"
-    },
-    "MyReview": {
-      "your review": "Twoja recenzja",
-      "all reviews": "wszystkie recenzje",
-      "cancel": "Anuluj"
+      "all reviews": "Wszystkie recenzje",
+      "add": "Dodaj",
+      "edit": "Edytuj",
+      "delete": "Usuń",
+      "cancel": "Anuluj",
+      "are you sure?": "Czy na pewno chcesz usunąć tę recenzję?"
     },
     "Review": {
       "was this review helpful?": "Czy recenzja była pomocna?",

@@ -1,3 +1,6 @@
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import { db } from "~/lib/db";
 import { ProfilesValidator } from "~/lib/validations/feed/profiles";
 
@@ -5,10 +8,17 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const { userId, sessionId, variant, orderBy, order, takeLimit, page } =
+    const supabase = createServerComponentClient({
+      cookies,
+    });
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const { userId, variant, orderBy, order, takeLimit, page } =
       ProfilesValidator.parse({
         userId: url.searchParams.get("userId"),
-        sessionId: url.searchParams.get("sessionId"),
         variant: url.searchParams.get("variant"),
         orderBy: url.searchParams.get("orderBy"),
         order: url.searchParams.get("order"),
@@ -45,7 +55,7 @@ export async function GET(req: Request) {
     }
 
     const whereClause = {
-      id: !variant && sessionId ? { not: sessionId } : {},
+      id: !variant && session?.user ? { not: session.user.id } : {},
       full_name: { not: null },
       ...(variant && userId
         ? variant === "followers"

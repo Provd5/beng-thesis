@@ -13,7 +13,9 @@ import { ReviewCardLoader } from "../ui/Loaders/Skeletons/ReviewCardLoader";
 import { NotFoundItems } from "../ui/NotFoundItems";
 import { FetchMoreButton } from "./FetchMoreButton";
 
-export const ReviewsFeed: FC<FetchReviewsProps> = (props) => {
+export const ReviewsFeed: FC<
+  FetchReviewsProps & { sessionId: string | undefined }
+> = (props) => {
   const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchData({
     fetchType: "reviews",
     ...props,

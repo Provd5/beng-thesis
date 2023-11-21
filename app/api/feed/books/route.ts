@@ -1,3 +1,6 @@
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import { db } from "~/lib/db";
 import { BooksValidator } from "~/lib/validations/feed/books";
 
@@ -5,9 +8,16 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const { sessionId, profileName, variant, orderBy, order, takeLimit, page } =
+    const supabase = createServerComponentClient({
+      cookies,
+    });
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const { profileName, variant, orderBy, order, takeLimit, page } =
       BooksValidator.parse({
-        sessionId: url.searchParams.get("sessionId"),
         profileName: url.searchParams.get("profileName"),
         variant: url.searchParams.get("variant"),
         orderBy: url.searchParams.get("orderBy"),
@@ -58,11 +68,13 @@ export async function GET(req: Request) {
             ...commonSelect,
             _count: { select: { review: true, liked_by: true } },
             review: { select: { rate: true } },
-            ...(!!sessionId
+            ...(!!session?.user
               ? {
-                  bookshelf: { where: { profile: { id: sessionId } } },
-                  book_owned_as: { where: { profile: { id: sessionId } } },
-                  liked_by: { where: { profile: { id: sessionId } } },
+                  bookshelf: { where: { profile: { id: session.user.id } } },
+                  book_owned_as: {
+                    where: { profile: { id: session.user.id } },
+                  },
+                  liked_by: { where: { profile: { id: session.user.id } } },
                 }
               : {}),
           };

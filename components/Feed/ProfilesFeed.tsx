@@ -11,7 +11,9 @@ import { ProfileCardLoader } from "../ui/Loaders/Skeletons/ProfileCardLoader";
 import { NotFoundItems } from "../ui/NotFoundItems";
 import { FetchMoreButton } from "./FetchMoreButton";
 
-export const ProfilesFeed: FC<FetchProfilesProps> = (props) => {
+export const ProfilesFeed: FC<
+  FetchProfilesProps & { sessionId: string | undefined }
+> = (props) => {
   const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchData({
     fetchType: "profiles",
     ...props,

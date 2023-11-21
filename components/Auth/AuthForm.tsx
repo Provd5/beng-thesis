@@ -54,8 +54,9 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
   };
 
   const handleLogIn = async (event: FormEvent<HTMLFormElement>) => {
-    setIsLoading(true);
     event.preventDefault();
+    setIsLoading(true);
+
     try {
       const form = event.currentTarget as HTMLFormElement;
       const email = form.elements.namedItem("email") as HTMLInputElement;
@@ -92,8 +93,8 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
   };
 
   const handleSignUp = async (event: FormEvent<HTMLFormElement>) => {
-    setIsLoading(true);
     event.preventDefault();
+    setIsLoading(true);
 
     try {
       const form = event.currentTarget as HTMLFormElement;
