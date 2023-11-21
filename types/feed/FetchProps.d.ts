@@ -4,7 +4,6 @@ interface FetchCommonProps {
   takeLimit: number;
   orderBy?: string;
   order?: "desc" | "asc";
-  sessionId: string | undefined;
   variant?: never;
   profileName?: never;
   userId?: never;

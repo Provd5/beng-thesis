@@ -5,7 +5,6 @@ import { toast } from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { type bookshelfType } from "@prisma/client";
 import axios from "axios";
-import clsx from "clsx";
 
 import { BsBookmarkPlus } from "react-icons/bs";
 
@@ -17,6 +16,8 @@ import { ModalWrapper } from "../../Modals/ModalWrapper";
 import { BookmarksWrapper } from "../../ui/BookmarksWrapper";
 import { Button, ButtonLink } from "../../ui/Buttons";
 import { getBookmarkIcon } from "../../ui/getBookmarkIcon";
+import { ReadQuantity } from "../ReadQuantity";
+import { ManageBookshelfModalContent } from "./ManageBookshelfModalContent";
 
 interface ManageBookshelfProps {
   bookId: string;
@@ -54,35 +55,29 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
 
   const openModalButtonRef = useRef<HTMLButtonElement>(null);
 
-  const bookshelfArray: bookshelfType[] = [
-    "ALREADY_READ",
-    "TO_READ",
-    "ABANDONED",
-    "READING",
-    "OTHER",
-  ];
-
   const handleChangeBookshelfState = (bookshelf: bookshelfType | null) => {
     setSelectedBookshelf(bookshelf);
     setIsSelectDate(true);
   };
 
   const handleSubmitChangeBookshelf = async (
-    event: FormEvent<HTMLFormElement>
+    thisBookshelf: bookshelfType | null,
+    event?: FormEvent<HTMLFormElement>
   ) => {
+    event && event.preventDefault();
     setIsModalOpen(false);
     setIsSelectDate(false);
 
-    const form = event.currentTarget as HTMLFormElement;
-    const beganReadingAtElement = form.elements.namedItem(
+    const form = event && (event.currentTarget as HTMLFormElement);
+    const beganReadingAtElement = form?.elements.namedItem(
       "began-reading-at-date-input"
-    ) as HTMLInputElement;
-    const updatedAtElement = form.elements.namedItem(
+    ) as HTMLInputElement | undefined;
+    const updatedAtElement = form?.elements.namedItem(
       "updated-at-date-input"
-    ) as HTMLInputElement;
-    const readQuantityElement = form.elements.namedItem(
+    ) as HTMLInputElement | undefined;
+    const readQuantityElement = form?.elements.namedItem(
       "read-quantity-number-input"
-    ) as HTMLInputElement;
+    ) as HTMLInputElement | undefined;
 
     const loadingToast = toast.loading(te(GlobalErrors.PENDING));
 
@@ -90,17 +85,18 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
     const prevBeganReadingAt = beganReadingAtState;
     const prevUpdatedAt = updatedAtState;
 
-    setCurrentBookshelf(selectedBookshelf);
-    setBeganReadingAtState(beganReadingAtElement.valueAsDate);
-    setUpdatedAtState(updatedAtElement.valueAsDate);
+    setCurrentBookshelf(thisBookshelf);
+    updatedAtElement && setUpdatedAtState(updatedAtElement.valueAsDate);
+    beganReadingAtElement &&
+      setBeganReadingAtState(beganReadingAtElement.valueAsDate);
 
     const formData = {
       bookId: bookId,
-      bookshelf: selectedBookshelf,
-      beganReadingAt: beganReadingAtElement.valueAsDate?.toISOString() || null,
-      updatedAt: updatedAtElement.valueAsDate?.toISOString() || null,
+      bookshelf: thisBookshelf,
+      beganReadingAt: beganReadingAtElement?.valueAsDate?.toISOString() || null,
+      updatedAt: updatedAtElement?.valueAsDate?.toISOString() || null,
       readQuantity:
-        selectedBookshelf === "ALREADY_READ"
+        thisBookshelf === "ALREADY_READ" && readQuantityElement
           ? readQuantityElement.valueAsNumber
           : null,
     };
@@ -167,38 +163,17 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
             openModalButtonRef={openModalButtonRef}
           >
             {!isSelectDate ? (
-              <div className="flex grow flex-col gap-2">
-                {bookshelfArray.map((bookshelf) => (
-                  <button
-                    key={bookshelf}
-                    className="flex items-center gap-1 py-1.5"
-                    onClick={() => handleChangeBookshelfState(bookshelf)}
-                  >
-                    {getBookmarkIcon(bookshelf, "sm")}
-                    <span
-                      className={clsx(
-                        "whitespace-nowrap text-base",
-                        currentBookshelf === bookshelf &&
-                          "font-semibold text-secondary dark:text-secondary-light"
-                      )}
-                    >
-                      {tb(bookshelf)}
-                    </span>
-                  </button>
-                ))}
-                <button
-                  className="flex items-center py-1"
-                  onClick={() => handleChangeBookshelfState(null)}
-                >
-                  <span className="whitespace-nowrap text-base">
-                    {t("remove from shelf")}
-                  </span>
-                </button>
-              </div>
+              <ManageBookshelfModalContent
+                currentBookshelf={currentBookshelf}
+                handleChangeBookshelfState={handleChangeBookshelfState}
+                label={t("remove from shelf")}
+              />
             ) : (
               <form
                 className="flex flex-col gap-2"
-                onSubmit={handleSubmitChangeBookshelf}
+                onSubmit={(e) =>
+                  handleSubmitChangeBookshelf(selectedBookshelf, e)
+                }
               >
                 <div className="mb-2 flex flex-col items-center">
                   {selectedBookshelf ? (
@@ -208,97 +183,70 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
                         <span>{tb(selectedBookshelf)}</span>
                       </h1>
                       {selectedBookshelf === "ALREADY_READ" && (
-                        <div className="flex flex-col">
-                          <label
-                            htmlFor="read-quantity-number-input"
-                            className="mb-0.5 whitespace-nowrap text-sm"
-                          >
-                            {t("read times:")}
-                          </label>
-                          <div className="flex h-9">
-                            <button
-                              className="h-full w-10 rounded-l-sm bg-white text-lg font-semibold dark:bg-black-dark"
-                              type="button"
-                              onClick={() =>
-                                setReadQuantityState((prev) =>
-                                  readQuantityState <= 1 ? 1 : prev - 1
-                                )
-                              }
-                            >
-                              –
-                            </button>
-                            <input
-                              disabled
-                              min={0}
-                              type="number"
-                              className="w-10 appearance-none bg-white-light px-1 py-2 text-center text-md text-black-dark dark:bg-black dark:text-white"
-                              name="read-quantity-number-input"
-                              id="read-quantity-number-input"
-                              value={readQuantityState}
-                            />
-                            <button
-                              className="h-full w-10 rounded-r-sm bg-white text-lg font-semibold dark:bg-black-dark"
-                              type="button"
-                              onClick={() =>
-                                setReadQuantityState((prev) => prev + 1)
-                              }
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
+                        <ReadQuantity
+                          label={t("read times:")}
+                          setReadQuantityState={setReadQuantityState}
+                          readQuantityState={readQuantityState}
+                        />
                       )}
                     </div>
                   ) : (
-                    <h1>{t("remove from shelf")}</h1>
+                    <h1 className="min-w-[150px]">{t("are you sure?")}</h1>
                   )}
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label
-                    htmlFor="began-reading-at-date-input"
-                    className="whitespace-nowrap"
-                  >
-                    {t("began reading:")}
-                  </label>
-                  <input
-                    id="began-reading-at-date-input"
-                    name="began-reading-at-date-input"
-                    type="date"
-                    max={
-                      updatedAtState
-                        ? dateFormater(updatedAtState)
-                        : new Date().toISOString().split("T")[0]
-                    }
-                    defaultValue={
-                      beganReadingAtState
-                        ? dateFormater(beganReadingAtState)
-                        : ""
-                    }
-                    className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label
-                    htmlFor="updated-at-date-input"
-                    className="whitespace-nowrap"
-                  >
-                    {t("on this shelf since:")}
-                  </label>
-                  <input
-                    id="updated-at-date-input"
-                    name="updated-at-date-input"
-                    type="date"
-                    max={new Date().toISOString().split("T")[0]}
-                    onChange={(e) => setUpdatedAtState(e.target.valueAsDate)}
-                    defaultValue={
-                      currentBookshelf === selectedBookshelf
-                        ? dateFormater(updatedAtState || new Date())
-                        : dateFormater(new Date())
-                    }
-                    className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
-                    required
-                  />
-                </div>
+                {selectedBookshelf && (
+                  <>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="began-reading-at-date-input"
+                        className="whitespace-nowrap"
+                      >
+                        {t("began reading:")}
+                      </label>
+                      <input
+                        id="began-reading-at-date-input"
+                        name="began-reading-at-date-input"
+                        type="date"
+                        max={
+                          updatedAtState
+                            ? dateFormater(updatedAtState)
+                            : new Date().toISOString().split("T")[0]
+                        }
+                        defaultValue={
+                          beganReadingAtState
+                            ? dateFormater(beganReadingAtState)
+                            : ""
+                        }
+                        className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <label
+                        htmlFor="updated-at-date-input"
+                        className="whitespace-nowrap"
+                      >
+                        {t("on this shelf since:")}
+                      </label>
+                      <input
+                        id="updated-at-date-input"
+                        name="updated-at-date-input"
+                        type="date"
+                        max={new Date().toISOString().split("T")[0]}
+                        onChange={(e) =>
+                          setUpdatedAtState(e.target.valueAsDate)
+                        }
+                        defaultValue={
+                          currentBookshelf === selectedBookshelf &&
+                          updatedAtState
+                            ? dateFormater(updatedAtState)
+                            : dateFormater(new Date())
+                        }
+                        className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
+                        required
+                      />
+                    </div>
+                  </>
+                )}
                 <div className="mt-3 flex justify-between">
                   <button
                     type="reset"
@@ -317,7 +265,7 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
         )}
         <p>{currentBookshelf ? tb(currentBookshelf) : "–"}</p>
 
-        {updatedAtState && (
+        {currentBookshelf && updatedAtState && (
           <p className="text-xs text-black-light dark:text-white-dark">
             {dateFormater(updatedAtState)}
           </p>

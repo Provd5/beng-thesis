@@ -10,7 +10,7 @@ interface AllReviewsButtonProps {
 }
 
 export const AllReviewsButton: FC<AllReviewsButtonProps> = ({ href }) => {
-  const t = useTranslations("Reviews.MyReview");
+  const t = useTranslations("Reviews.CreateReview");
 
   return (
     <div className="flex justify-center text-md">

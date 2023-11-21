@@ -7,7 +7,10 @@ import axios from "axios";
 import clsx from "clsx";
 import { z } from "zod";
 
-import { CreateReviewValidator } from "~/lib/validations/book/createReview";
+import {
+  CreateReviewValidator,
+  DeleteReviewValidator,
+} from "~/lib/validations/book/createReview";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
 import { ModalWrapper } from "../Modals/ModalWrapper";
@@ -41,6 +44,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
 
   const [yourRate, setYourRate] = useState<number | undefined>(rate);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const reviewTextarea = useRef<HTMLTextAreaElement>(null);
@@ -91,6 +95,34 @@ export const CreateReview: FC<CreateReviewProps> = ({
     }
   };
 
+  const handleDeleteReview = async () => {
+    setIsLoading(true);
+    const loadingToast = toast.loading(te(GlobalErrors.PENDING));
+
+    try {
+      DeleteReviewValidator.parse({ bookId: bookId });
+      const { data }: { data: string } = await axios.post(
+        `/api/book/manage/review/delete`,
+        {
+          bookId,
+        }
+      );
+
+      if (data !== GlobalErrors.SUCCESS) {
+        toast.error(te(data));
+        return;
+      }
+
+      // on success
+      closeReview();
+    } catch (error) {
+      toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
+    } finally {
+      toast.dismiss(loadingToast);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="relative flex min-h-[350px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[260px] sm:flex-row">
       <div className="flex flex-none items-start gap-1 px-2 sm:w-24 sm:flex-col sm:items-center">
@@ -115,7 +147,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
           placeholder={t("express your opinion")}
           defaultValue={text || ""}
         />
-        <div className="flex flex-wrap justify-between gap-2 px-2">
+        <div className="flex flex-wrap justify-between gap-x-3 gap-y-2 px-2">
           <div className="flex h-fit items-center gap-1">
             <ButtonLink
               ref={openModalButtonRef}
@@ -159,14 +191,54 @@ export const CreateReview: FC<CreateReviewProps> = ({
             </div>
           </div>
 
-          <Button
-            type="submit"
-            size="sm"
-            loading={isLoading}
-            onClick={handleAddReview}
-          >
-            {isReviewExists ? t("edit review") : t("add review")}
-          </Button>
+          <div className="relative flex gap-1">
+            {isReviewExists && !isLoading && (
+              <>
+                <Button
+                  ref={openModalButtonRef}
+                  type="button"
+                  size="sm"
+                  onClick={() => setIsDeleteModalOpen(!isDeleteModalOpen)}
+                  defaultColor={false}
+                  className={clsx(
+                    "text-white-light",
+                    isDeleteModalOpen ? "bg-gray" : "bg-red"
+                  )}
+                >
+                  {isDeleteModalOpen ? t("cancel") : t("delete")}
+                </Button>
+                {isDeleteModalOpen && (
+                  <ModalWrapper
+                    closeModalHandler={() => setIsDeleteModalOpen(false)}
+                    openModalButtonRef={openModalButtonRef}
+                  >
+                    <div className="flex min-w-[200px] flex-col items-center gap-3">
+                      <h1 className="text-center text-md">
+                        {t("are you sure?")}
+                      </h1>
+                      <Button
+                        type="submit"
+                        size="sm"
+                        onClick={handleDeleteReview}
+                        defaultColor={false}
+                        className="bg-red text-white-light"
+                      >
+                        {t("delete")}
+                      </Button>
+                    </div>
+                  </ModalWrapper>
+                )}
+              </>
+            )}
+            <Button
+              type="submit"
+              size="sm"
+              loading={isLoading}
+              onClick={handleAddReview}
+            >
+              {isReviewExists ? t("edit") : t("add")}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

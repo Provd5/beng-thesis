@@ -44,8 +44,8 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleUpdate = async (event: FormEvent<HTMLFormElement>) => {
-    setIsLoading(true);
     event.preventDefault();
+    setIsLoading(true);
 
     try {
       const form = event.currentTarget as HTMLFormElement;

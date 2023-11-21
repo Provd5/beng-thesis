@@ -59,7 +59,7 @@ model review_reaction {
   user_id   String       @db.Uuid
   review_id String       @db.Uuid
   reaction  reactionType
-  review    review       @relation(fields: [review_id], references: [id])
+  review    review       @relation(fields: [review_id], references: [id], onDelete: Cascade)
   profile   profile      @relation(fields: [user_id], references: [id])
 
   @@id([user_id, review_id])

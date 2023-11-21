@@ -42,7 +42,6 @@ export function useFetchData({
   variant,
   isMyReview,
   userId,
-  sessionId,
   bookId,
 }: UseFetchProps) {
   const te = useTranslations("Errors");
@@ -64,7 +63,6 @@ export function useFetchData({
       orderByParam +
       orderParam +
       (variant ? `&variant=${variant}` : "") +
-      (sessionId ? `&sessionId=${sessionId}` : "") +
       (profileName ? `&profileName=${profileName}` : "") +
       (userId ? `&userId=${userId}` : "") +
       (isMyReview ? `&isMyReview=true` : "") +

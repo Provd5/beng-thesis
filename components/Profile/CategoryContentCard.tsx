@@ -23,7 +23,6 @@ export const CategoryContentCard: FC<CategoryContentCardProps> = ({
     fetchType: "books",
     takeLimit: 10,
     variant,
-    sessionId: undefined,
     profileName,
   });
   const booksData = fetchedData as BookCardInterface[];

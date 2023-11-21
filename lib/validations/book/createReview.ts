@@ -7,7 +7,7 @@ export const CreateReviewValidator = z.object({
     bookId: z.string(),
     text: z
       .string()
-      .nonempty()
+      .min(1)
       .max(5000, { message: CreateReviewValidatorErrors.REVIEW_TOO_LONG_5000 })
       .nullable(),
     rate: z
@@ -15,4 +15,8 @@ export const CreateReviewValidator = z.object({
       .min(1, { message: CreateReviewValidatorErrors.WRONG_RATE })
       .max(5, { message: CreateReviewValidatorErrors.WRONG_RATE }),
   }),
+});
+
+export const DeleteReviewValidator = z.object({
+  bookId: z.string(),
 });
