@@ -1,10 +1,17 @@
 "use client";
 
-import { type FC, type FormEvent, useState } from "react";
+import {
+  type Dispatch,
+  type FC,
+  type FormEvent,
+  type SetStateAction,
+  useRef,
+  useState,
+} from "react";
 import { toast } from "react-hot-toast";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { type Provider } from "@supabase/supabase-js";
 import { z } from "zod";
@@ -18,23 +25,25 @@ import {
 
 import { ButtonWhite } from "../ui/Buttons";
 import { Input } from "../ui/Input";
+import { Providers } from "./Providers";
 
 interface AuthFormProps {
   view: "logIn" | "signUp";
+  setCheckMail: Dispatch<SetStateAction<string | undefined>>;
 }
 
-export const AuthForm: FC<AuthFormProps> = ({ view }) => {
+export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
   const t = useTranslations("Profile.Auth");
   const te = useTranslations("Errors");
   const supabase = createClientComponentClient();
 
   const router = useRouter();
 
-  const [checkMail, setCheckMail] = useState<string>();
   const [loginByEmail, setLoginByEmail] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const Providers: Provider[] = ["discord", "google", "github"];
+  const captcha = useRef<HCaptcha>(null);
+  const [captchaToken, setCaptchaToken] = useState<string>();
 
   const handleProviderLogin = async (providerType: Provider) => {
     setIsLoading(true);
@@ -120,6 +129,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
         email: email.value,
         password: password.value,
         options: {
+          captchaToken: captchaToken,
           emailRedirectTo: `${location.origin}/api/auth/callback`,
         },
       });
@@ -145,6 +155,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
         toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       }
     } finally {
+      captcha.current?.resetCaptcha();
       setIsLoading(false);
     }
   };
@@ -158,37 +169,18 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
     data.user && router.refresh();
   };
 
-  return checkMail ? (
-    <h1 className="flex flex-col gap-1 text-center text-xl">
-      <span className="text-3xl">✉️</span>
-      {t("check your email to continue login", { email: checkMail })}
-    </h1>
-  ) : (
+  return (
     <>
       <button className="absolute bottom-3 right-3 text-xs" onClick={demoLogin}>
         demo
       </button>
       {/* ^^^^^^^^^^^^^^^^ temp ^^^^^^^^^^^^^^^^ */}
-      <h1 className="mb-[32px] text-3xl font-semibold">{t(view)}</h1>
       {!loginByEmail ? (
-        <div className="flex flex-col items-center gap-1">
-          {Providers.map((provider) => (
-            <ButtonWhite
-              key={provider}
-              onClick={() => handleProviderLogin(provider)}
-              className="w-[220px]"
-            >
-              {t("with")}{" "}
-              <span className="first-letter:uppercase">{provider}</span>
-            </ButtonWhite>
-          ))}
-          <button
-            className="mt-5 font-semibold underline"
-            onClick={() => setLoginByEmail(true)}
-          >
-            {t("logIn/signUp with email and password", { view: view })}
-          </button>
-        </div>
+        <Providers
+          handleProviderLogin={handleProviderLogin}
+          setLoginByEmail={setLoginByEmail}
+          view={view}
+        />
       ) : (
         <>
           <form
@@ -228,9 +220,18 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
                 required
               />
             )}
-            <Link className="underline" href={"/"}>
+            <div className="mt-1 overflow-hidden rounded-sm">
+              <HCaptcha
+                ref={captcha}
+                sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string}
+                onVerify={(token) => {
+                  setCaptchaToken(token);
+                }}
+              />
+            </div>
+            {/* <Link className="underline" href={"/"}>
               {t("forgot your password?")}
-            </Link>
+            </Link> */}
             <ButtonWhite
               loading={isLoading}
               type="submit"
@@ -247,30 +248,6 @@ export const AuthForm: FC<AuthFormProps> = ({ view }) => {
           </button>
         </>
       )}
-      <div className="my-10">
-        {view === "logIn" && (
-          <p>
-            {t.rich("no account yet? sign up", {
-              Link: (chunks) => (
-                <Link href="/signup" className="font-semibold underline">
-                  {chunks}
-                </Link>
-              ),
-            })}
-          </p>
-        )}
-        {view === "signUp" && (
-          <p>
-            {t.rich("already have an account? log in", {
-              Link: (chunks) => (
-                <Link href="/login" className="font-semibold underline">
-                  {chunks}
-                </Link>
-              ),
-            })}
-          </p>
-        )}
-      </div>
     </>
   );
 };
