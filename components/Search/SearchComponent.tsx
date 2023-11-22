@@ -184,7 +184,11 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
               {searchCategory === "books" ? (
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                   {(fetchedData as BookInterface[]).map((data) => (
-                    <BookCard key={data.id} bookData={data} />
+                    <BookCard
+                      key={data.id}
+                      bookData={data}
+                      sessionId={sessionId}
+                    />
                   ))}
                 </div>
               ) : (

@@ -81,14 +81,16 @@ export const ProfileCard: FC<ProfileCardProps> = ({
           )}
         </div>
       </div>
-      <ManageFollow
-        userId={profileData.id}
-        isFollowedState={isFollowedState}
-        setIsFollowedState={setIsFollowedState}
-        followedByQuantityState={followedByQuantityState}
-        setFollowedByQuantityState={setFollowedByQuantityState}
-        className="w-2/3 max-w-[200px] self-end"
-      />
+      {!!sessionId && (
+        <ManageFollow
+          userId={profileData.id}
+          isFollowedState={isFollowedState}
+          setIsFollowedState={setIsFollowedState}
+          followedByQuantityState={followedByQuantityState}
+          setFollowedByQuantityState={setFollowedByQuantityState}
+          className="w-2/3 max-w-[200px] self-end"
+        />
+      )}
     </div>
   );
 };

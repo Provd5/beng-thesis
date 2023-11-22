@@ -17,12 +17,14 @@ interface ManageLikesProps {
   bookId: string;
   doILikeThisBook: boolean;
   likesQuantity: number;
+  sessionId: string | undefined;
 }
 
 export const ManageLikes: FC<ManageLikesProps> = ({
   doILikeThisBook,
   likesQuantity,
   bookId,
+  sessionId,
 }) => {
   const t = useTranslations("Book.ManageLikes");
   const te = useTranslations("Errors");
@@ -66,8 +68,8 @@ export const ManageLikes: FC<ManageLikesProps> = ({
 
   return (
     <button
-      className="flex w-fit cursor-pointer gap-1 text-left"
-      disabled={isLoading}
+      className="flex w-fit gap-1 text-left"
+      disabled={!sessionId || isLoading}
       onClick={handleLike}
     >
       <div className="flex h-fit">
@@ -84,15 +86,17 @@ export const ManageLikes: FC<ManageLikesProps> = ({
           </h3>
         </div>
         <p>{likesQuantityState}</p>
-        <p className="text-xs text-black-light dark:text-white-dark">
-          {isLiked ? (
-            t("liked")
-          ) : (
-            <span className={isLoading ? "" : "select-none underline"}>
-              {t("like")}
-            </span>
-          )}
-        </p>
+        {!!sessionId && (
+          <p className="text-xs text-black-light dark:text-white-dark">
+            {isLiked ? (
+              t("liked")
+            ) : (
+              <span className={isLoading ? "" : "select-none underline"}>
+                {t("like")}
+              </span>
+            )}
+          </p>
+        )}
       </div>
     </button>
   );

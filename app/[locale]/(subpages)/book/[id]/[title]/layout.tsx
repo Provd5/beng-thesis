@@ -145,21 +145,25 @@ export default async function BookLayout({
           <div className="flex flex-wrap content-start justify-center gap-5 px-2 md:max-w-[400px] md:justify-end md:gap-8">
             <div className="flex h-fit flex-wrap items-start justify-center gap-x-4 gap-y-5 sm:justify-between">
               <div className="w-36">
-                <ManageBookshelf
-                  bookId={book.id}
-                  bookshelf={myBookshelfData?.bookshelf}
-                  updatedAt={myBookshelfData?.updated_at}
-                  beganReadingAt={myBookshelfData?.began_reading_at}
-                  readQuantity={myBookshelfData?.read_quantity}
-                />
+                {session?.user.id && (
+                  <ManageBookshelf
+                    bookId={book.id}
+                    bookshelf={myBookshelfData?.bookshelf}
+                    updatedAt={myBookshelfData?.updated_at}
+                    beganReadingAt={myBookshelfData?.began_reading_at}
+                    readQuantity={myBookshelfData?.read_quantity}
+                  />
+                )}
               </div>
               <div className="w-36">
-                <ManageOwnedAs
-                  bookId={book.id}
-                  addedEbookAt={myOwnedAsData?.added_ebook_at}
-                  addedAudiobookAt={myOwnedAsData?.added_audiobook_at}
-                  addedBookAt={myOwnedAsData?.added_book_at}
-                />
+                {session?.user.id && (
+                  <ManageOwnedAs
+                    bookId={book.id}
+                    addedEbookAt={myOwnedAsData?.added_ebook_at}
+                    addedAudiobookAt={myOwnedAsData?.added_audiobook_at}
+                    addedBookAt={myOwnedAsData?.added_book_at}
+                  />
+                )}
               </div>
             </div>
             <div className="flex h-fit flex-wrap items-start justify-center gap-x-4 gap-y-5 sm:justify-between">
@@ -168,6 +172,7 @@ export default async function BookLayout({
                   bookId={book.id}
                   doILikeThisBook={doILikeThisBook}
                   likesQuantity={book._count.liked_by}
+                  sessionId={session?.user.id}
                 />
               </div>
               <div className="w-36">
@@ -175,6 +180,7 @@ export default async function BookLayout({
                   isReviewExists={isReviewExists}
                   reviewsQuantity={bookRates.length}
                   createdAt={myReviewData?.created_at}
+                  sessionId={session?.user.id}
                 />
               </div>
             </div>

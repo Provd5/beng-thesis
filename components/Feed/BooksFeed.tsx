@@ -13,7 +13,9 @@ import { BookReviewCardLoader } from "../ui/Loaders/Skeletons/BookReviewCardLoad
 import { NotFoundItems } from "../ui/NotFoundItems";
 import { FetchMoreButton } from "./FetchMoreButton";
 
-export const BooksFeed: FC<FetchBooksProps> = (props) => {
+export const BooksFeed: FC<
+  FetchBooksProps & { sessionId: string | undefined }
+> = (props) => {
   const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchData({
     fetchType: "books",
     ...props,
@@ -41,10 +43,18 @@ export const BooksFeed: FC<FetchBooksProps> = (props) => {
             ))}
           {props.variant === undefined
             ? (fetchedData as BookInterface[]).map((data) => (
-                <BookCard key={data.id} bookData={data} />
+                <BookCard
+                  key={data.id}
+                  bookData={data}
+                  sessionId={props.sessionId}
+                />
               ))
             : (fetchedData as BookCardInterface[]).map((data) => (
-                <BookCard key={data.book.id} bookData={data.book} />
+                <BookCard
+                  key={data.book.id}
+                  bookData={data.book}
+                  sessionId={props.sessionId}
+                />
               ))}
         </div>
       )}

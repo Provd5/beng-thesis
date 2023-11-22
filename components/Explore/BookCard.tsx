@@ -20,9 +20,10 @@ import { BookCardDetails } from "./BookCardDetails";
 
 interface BookCardProps {
   bookData: BookInterface;
+  sessionId: string | undefined;
 }
 
-export const BookCard: FC<BookCardProps> = ({ bookData }) => {
+export const BookCard: FC<BookCardProps> = ({ bookData, sessionId }) => {
   const pathname = usePathname();
 
   const myOwnedAsData = bookData.book_owned_as
@@ -56,27 +57,32 @@ export const BookCard: FC<BookCardProps> = ({ bookData }) => {
             ratesQuantity={averageRating(bookData.review)}
             reviewsQuantity={bookData._count.review}
           />
-          <ManageOwnedAs
-            bookId={bookData.id}
-            addedEbookAt={myOwnedAsData?.added_ebook_at}
-            addedAudiobookAt={myOwnedAsData?.added_audiobook_at}
-            addedBookAt={myOwnedAsData?.added_book_at}
-            size="sm"
-          />
+          {!!sessionId && (
+            <ManageOwnedAs
+              bookId={bookData.id}
+              addedEbookAt={myOwnedAsData?.added_ebook_at}
+              addedAudiobookAt={myOwnedAsData?.added_audiobook_at}
+              addedBookAt={myOwnedAsData?.added_book_at}
+              size="sm"
+            />
+          )}
         </div>
         <div className="flex flex-wrap justify-between gap-3">
           <ManageLikes
             bookId={bookData.id}
             doILikeThisBook={doILikeThisBook}
             likesQuantity={bookData._count.liked_by}
+            sessionId={sessionId}
           />
-          <ManageBookshelf
-            bookId={bookData.id}
-            bookshelf={myBookshelfData?.bookshelf}
-            updatedAt={myBookshelfData?.updated_at}
-            beganReadingAt={myBookshelfData?.began_reading_at}
-            readQuantity={myBookshelfData?.read_quantity}
-          />
+          {!!sessionId && (
+            <ManageBookshelf
+              bookId={bookData.id}
+              bookshelf={myBookshelfData?.bookshelf}
+              updatedAt={myBookshelfData?.updated_at}
+              beganReadingAt={myBookshelfData?.began_reading_at}
+              readQuantity={myBookshelfData?.read_quantity}
+            />
+          )}
         </div>
       </div>
     </div>
