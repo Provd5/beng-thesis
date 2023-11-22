@@ -20,7 +20,7 @@ export const AuthPage: FC<AuthPageProps> = ({ view }) => {
       {/* <div /> */}
       <div className="flex flex-col items-center">
         {checkMail ? (
-          <h1 className="flex flex-col gap-1 text-center text-xl">
+          <h1 className="flex flex-col gap-1 px-6 text-center text-xl">
             <span className="text-3xl">✉️</span>
             {t("check your email to continue login", { email: checkMail })}
           </h1>

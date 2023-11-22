@@ -43,7 +43,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const captcha = useRef<HCaptcha>(null);
-  const [captchaToken, setCaptchaToken] = useState<string>();
+  const [captchaToken, setCaptchaToken] = useState("");
 
   const handleProviderLogin = async (providerType: Provider) => {
     setIsLoading(true);
