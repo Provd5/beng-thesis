@@ -203,6 +203,7 @@
 
   "Reviews": {
     "CreateReview": {
+      "log in to add your review": "Log in to add your review",
       "express your opinion": "Express your opinion...",
       "your rate": "Your rate",
       "all reviews": "All reviews",

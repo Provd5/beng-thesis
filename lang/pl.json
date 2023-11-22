@@ -203,6 +203,7 @@
 
   "Reviews": {
     "CreateReview": {
+      "log in to add your review": "Zaloguj się, aby dodać swoją recenzję",
       "express your opinion": "Wyraź swoją opinię...",
       "your rate": "Twoja ocena",
       "all reviews": "Wszystkie recenzje",

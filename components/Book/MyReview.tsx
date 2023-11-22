@@ -41,7 +41,11 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
 
   const [showCreateReview, setShowCreateReview] = useState(!!myReviewData);
 
-  return (
+  return !sessionId ? (
+    <div className="flex flex-col justify-center gap-3 p-6 text-center text-md text-gray">
+      <h1>{t("log in to add your review")}</h1>
+    </div>
+  ) : (
     <>
       <div className="flex w-full justify-end">
         {!!myReviewData ? (
