@@ -81,6 +81,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.value,
         password: password.value,
+        options: { captchaToken: captchaToken },
       });
 
       error?.message.includes(SupabaseValidatorErrors.LOGIN_ERROR) &&
@@ -89,7 +90,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
         toast.error(te("EMAIL_NOT_CONFIRMED"));
 
       //on success
-      data.user && router.refresh();
+      !!data.user && router.refresh();
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(te(error.issues[0].message));
@@ -147,7 +148,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
       }
 
       //on success
-      !error && data.user && setCheckMail(data.user.email);
+      !error && !!data.user && setCheckMail(data.user.email);
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(te(error.issues[0].message), { duration: 7000 });
@@ -166,7 +167,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
       password: "1234567890",
     });
 
-    data.user && router.refresh();
+    !!data.user && router.refresh();
   };
 
   return (
