@@ -1,3 +1,6 @@
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+
 import { db } from "~/lib/db";
 import { SearchValidator } from "~/lib/validations/feed/search";
 
@@ -5,10 +8,17 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const { searchCategory, searchText, sessionId } = SearchValidator.parse({
+    const supabase = createServerComponentClient({
+      cookies,
+    });
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const { searchCategory, searchText } = SearchValidator.parse({
       searchCategory: url.searchParams.get("searchCategory"),
       searchText: url.searchParams.get("searchText"),
-      sessionId: url.searchParams.get("sessionId"),
     });
 
     const data =
@@ -60,15 +70,12 @@ export async function GET(req: Request) {
                 OR: [
                   { title: { contains: searchText, mode: "insensitive" } },
                   {
-                    OR: [
-                      {
-                        isbn_10: { equals: searchText },
-                      },
-                      {
-                        isbn_13: { equals: searchText },
-                      },
-                    ],
+                    description: { contains: searchText, mode: "insensitive" },
                   },
+                  { subtitle: { contains: searchText, mode: "insensitive" } },
+                  { authors: { has: searchText } },
+                  { isbn_10: { equals: searchText } },
+                  { isbn_13: { equals: searchText } },
                 ],
               },
             }),
@@ -77,15 +84,12 @@ export async function GET(req: Request) {
                 OR: [
                   { title: { contains: searchText, mode: "insensitive" } },
                   {
-                    OR: [
-                      {
-                        isbn_10: { equals: searchText },
-                      },
-                      {
-                        isbn_13: { equals: searchText },
-                      },
-                    ],
+                    description: { contains: searchText, mode: "insensitive" },
                   },
+                  { subtitle: { contains: searchText, mode: "insensitive" } },
+                  { authors: { has: searchText } },
+                  { isbn_10: { equals: searchText } },
+                  { isbn_13: { equals: searchText } },
                 ],
               },
               select: {
@@ -95,11 +99,15 @@ export async function GET(req: Request) {
                 thumbnail_url: true,
                 _count: { select: { review: true, liked_by: true } },
                 review: { select: { rate: true } },
-                ...(!!sessionId
+                ...(!!session?.user
                   ? {
-                      bookshelf: { where: { profile: { id: sessionId } } },
-                      book_owned_as: { where: { profile: { id: sessionId } } },
-                      liked_by: { where: { profile: { id: sessionId } } },
+                      bookshelf: {
+                        where: { profile: { id: session.user.id } },
+                      },
+                      book_owned_as: {
+                        where: { profile: { id: session.user.id } },
+                      },
+                      liked_by: { where: { profile: { id: session.user.id } } },
                     }
                   : {}),
               },

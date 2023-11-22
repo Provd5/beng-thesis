@@ -21,7 +21,7 @@
     "REVIEW_TOO_LONG_5000": "Your review is too long",
     "WRONG_RATE": "Give an adequate rating first",
 
-    "SEARCH_TEXT_TOO_SHORT_3": "Enter at least 3 characters",
+    "SEARCH_TEXT_TOO_SHORT_2": "Enter at least 2 characters",
 
     "UNAUTHORIZED": "You are not logged in",
     "SOMETHING_WENT_WRONG": "Something went wrong, try again in a moment",

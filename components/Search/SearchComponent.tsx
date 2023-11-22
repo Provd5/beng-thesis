@@ -58,17 +58,14 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
       const form = event.currentTarget as HTMLFormElement;
       const search = form.elements.namedItem("q") as HTMLInputElement;
 
-      const sessionIdParam = sessionId ? `&sessionId=${sessionId}` : "";
-      const searchText = search.value;
+      const searchText = search.value.trim();
 
-      if (searchText.length < 3) {
-        toast.error(te(SearchErrors.SEARCH_TEXT_TOO_SHORT_3));
+      if (searchText.length < 2) {
+        toast.error(te(SearchErrors.SEARCH_TEXT_TOO_SHORT_2));
         return;
       }
 
-      const query =
-        `/api/feed/search?searchCategory=${searchCategory}&searchText=${searchText}` +
-        sessionIdParam;
+      const query = `/api/feed/search?searchCategory=${searchCategory}&searchText=${searchText}`;
 
       await axios
         .get(query)
@@ -132,7 +129,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
                 name="q"
                 type="search"
                 required
-                minLength={3}
+                minLength={2}
                 loading={isLoading}
                 className="h-full w-full rounded-none rounded-tl-lg xs:rounded-tl-none sm:w-80"
                 inverted

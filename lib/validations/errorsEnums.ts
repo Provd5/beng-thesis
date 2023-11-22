@@ -7,7 +7,7 @@ export enum GlobalErrors {
 }
 
 export enum SearchErrors {
-  SEARCH_TEXT_TOO_SHORT_3 = "SEARCH_TEXT_TOO_SHORT_3",
+  SEARCH_TEXT_TOO_SHORT_2 = "SEARCH_TEXT_TOO_SHORT_2",
 }
 
 export enum AuthErrors {

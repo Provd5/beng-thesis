@@ -121,20 +121,22 @@ export default async function BookLayout({
                 />
               </div>
 
-              {book.page_count !== 0 ||
-                (book.categories.length > 0 && (
-                  <div className="flex flex-col gap-1">
-                    {book.page_count !== 0 && (
-                      <BookDetails variant="pages:" text={book.page_count} />
-                    )}
-                    {book.categories.length > 0 && (
-                      <BookDetails
-                        variant="genre:"
-                        text={book.categories.join(", ")}
-                      />
-                    )}
-                  </div>
-                ))}
+              {(book.page_count !== 0 || book.categories.length > 0) && (
+                <div className="flex flex-col gap-1">
+                  {book.page_count !== 0 && (
+                    <BookDetails
+                      variant="pages:"
+                      text={book.page_count.toString()}
+                    />
+                  )}
+                  {book.categories.length > 0 && (
+                    <BookDetails
+                      variant="genre:"
+                      text={book.categories.join(", ")}
+                    />
+                  )}
+                </div>
+              )}
 
               <BookDetails
                 variant="averge rate:"

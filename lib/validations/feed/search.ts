@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const SearchValidator = z.object({
-  searchText: z.string().min(3),
+  searchText: z.string().min(2),
   searchCategory: z.enum(["books", "users"]).nullish(),
-  sessionId: z.string().nullish(),
 });
