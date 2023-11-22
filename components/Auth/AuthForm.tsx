@@ -83,6 +83,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
         password: password.value,
         options: { captchaToken: captchaToken },
       });
+      captcha.current?.resetCaptcha();
 
       error?.message.includes(SupabaseValidatorErrors.LOGIN_ERROR) &&
         toast.error(te("LOGIN_ERROR"));
@@ -90,7 +91,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
         toast.error(te("EMAIL_NOT_CONFIRMED"));
 
       //on success
-      !!data.user && router.refresh();
+      !!data.user && router.push("/profile");
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(te(error.issues[0].message));
@@ -134,6 +135,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
           emailRedirectTo: `${location.origin}/api/auth/callback`,
         },
       });
+      captcha.current?.resetCaptcha();
 
       error?.message.includes(SupabaseValidatorErrors.DISABLED_SIGNUPS_ERROR) &&
         toast.error(te("DISABLED_SIGNUPS_ERROR"));
@@ -156,7 +158,6 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
         toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       }
     } finally {
-      captcha.current?.resetCaptcha();
       setIsLoading(false);
     }
   };
@@ -167,7 +168,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
       password: "1234567890",
     });
 
-    !!data.user && router.refresh();
+    !!data.user && router.push("/profile");
   };
 
   return (
