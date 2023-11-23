@@ -10,6 +10,7 @@ import { MdNavigateNext } from "react-icons/md";
 import { type CategoryTypes } from "~/types/CategoryTypes";
 
 import { getBookmarkIcon } from "./getBookmarkIcon";
+import { getOwnedAsIcon } from "./getOwnedAsIcon";
 
 interface CategoryLinkProps {
   variant: CategoryTypes;
@@ -37,7 +38,9 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
       >
         <div className="text-lg font-semibold text-secondary dark:text-secondary-light">
           <div className="flex items-center gap-1">
-            {!withoutIcon && getBookmarkIcon(variant)}
+            {!withoutIcon && variant === "OWNED"
+              ? getOwnedAsIcon("BOOK", "sm")
+              : getBookmarkIcon(variant)}
             <h1>
               {t(variant)}
               {quantity !== undefined && ` – ${quantity}`}
