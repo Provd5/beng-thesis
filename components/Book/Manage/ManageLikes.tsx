@@ -2,6 +2,7 @@
 
 import { type FC, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import axios from "axios";
 
@@ -28,6 +29,8 @@ export const ManageLikes: FC<ManageLikesProps> = ({
 }) => {
   const t = useTranslations("Book.ManageLikes");
   const te = useTranslations("Errors");
+
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLiked, setIsLiked] = useState(doILikeThisBook);
@@ -56,6 +59,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
       }
 
       // success
+      router.refresh();
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       setIsLiked(wasLiked);

@@ -2,6 +2,7 @@
 
 import { type Dispatch, type FC, type SetStateAction, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import axios from "axios";
 import clsx from "clsx";
@@ -33,6 +34,8 @@ export const ManageFollow: FC<ManageFollowProps> = ({
   const t = useTranslations("Profile.FollowProfile");
   const te = useTranslations("Errors");
 
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const handleFollow = async () => {
@@ -59,6 +62,9 @@ export const ManageFollow: FC<ManageFollowProps> = ({
           setFollowedByQuantityState(prevFollowedByQuantity);
         return;
       }
+
+      // on success
+      router.refresh();
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       setIsFollowedState(wasFollowed);

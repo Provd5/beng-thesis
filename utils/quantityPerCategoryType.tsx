@@ -19,6 +19,10 @@ export const quantityPerCategoryType = (
     reviewsQuantity = 0,
   } = quantities;
 
+  const bookshelfQuantity = bookshelfArray.filter(
+    (variant) => variant.bookshelf === categoryVariant
+  ).length;
+
   switch (categoryVariant) {
     case "OWNED":
       return ownedQuantity;
@@ -27,8 +31,6 @@ export const quantityPerCategoryType = (
     case "REVIEWS":
       return reviewsQuantity;
     default:
-      return bookshelfArray.filter(
-        (variant) => variant.bookshelf === categoryVariant
-      ).length;
+      return bookshelfQuantity;
   }
 };
