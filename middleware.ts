@@ -30,7 +30,7 @@ export async function middleware(req: NextRequest) {
   await supabase.auth.getSession();
 
   // localization
-  const { pathname } = req.nextUrl;
+  const { pathname, search } = req.nextUrl;
   const localeFromPathname = pathname.split("/")[1] as localeTypes;
   const langCookie = req.cookies.get("lang")?.value as localeTypes | undefined;
 
@@ -42,7 +42,7 @@ export async function middleware(req: NextRequest) {
   if (pathnameIsMissingValidLocale) {
     if (langCookie && locales.includes(langCookie)) {
       const res = NextResponse.redirect(
-        new URL(`/${langCookie}${pathname}`, req.url)
+        new URL(`/${langCookie}${pathname}${search}`, req.url)
       );
       return res;
     } else {
@@ -52,7 +52,7 @@ export async function middleware(req: NextRequest) {
 
       const matchedLocalePart = matchedLocale.toLowerCase();
       const res = NextResponse.redirect(
-        new URL(`/${matchedLocalePart}${pathname}`, req.url)
+        new URL(`/${matchedLocalePart}${pathname}${search}`, req.url)
       );
       res.cookies.set("lang", matchedLocalePart);
       return res;

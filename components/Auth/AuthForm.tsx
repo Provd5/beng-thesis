@@ -91,7 +91,10 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
         toast.error(te("EMAIL_NOT_CONFIRMED"));
 
       //on success
-      !!data.user && router.push("/profile");
+      !error &&
+        !!data.user &&
+        (toast.success(t("we will redirect you to your profile in a moment")),
+        router.refresh());
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(te(error.issues[0].message));
@@ -168,7 +171,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
       password: "1234567890",
     });
 
-    !!data.user && router.push("/profile");
+    !!data.user && router.refresh();
   };
 
   return (

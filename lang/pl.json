@@ -96,7 +96,8 @@
       "forgot your password?": "Nie pamiętasz hasła?",
       "no account yet? sign up": "Nie masz jeszcze konta? <Link>Stwórz je</Link>",
       "already have an account? log in": "Masz już konto? <Link>Zaloguj się</Link>",
-      "check your email to continue login": "Sprawdź swój adres email ({email}), aby kontynuować logowanie"
+      "check your email to continue login": "Sprawdź swój adres email ({email}), aby kontynuować logowanie",
+      "we will redirect you to your profile in a moment": "Za chwilę przekierujemy Cię do twojego profilu"
     },
     "EditProfile": {
       "account created using:": "konto utworzone za pomocą:",

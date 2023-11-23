@@ -34,7 +34,7 @@ export const metadata = {
     template: "%s | Booksphere",
   },
   description:
-    "Booksphere to dynamiczna aplikacja, stworzona z myślą o miłośnikach książek. Użytkownicy mają możliwość dzielenia się recenzjami, ocenami i inspiracjami związanymi z ich ulubionymi lekturami. W ramach tej platformy, czytelnicy mogą tworzyć wirtualne półki, na których gromadzą zarówno przeczytane, jak i planowane książki, co ułatwia śledzenie ich literackich podbojów. Booksphere nie tylko ułatwia zarządzanie książkową kolekcją, ale także integruje społeczność miłośników literatury, tworząc wspólne miejsce dla pasjonatów czytania.",
+    "Booksphere is a dynamic application designed for book enthusiasts. Users have the ability to share reviews, ratings, and inspirations related to their favorite reads. Within this platform, readers can create virtual shelves where they can gather both read and planned books, making it easier to track their literary conquests. Booksphere not only facilitates the management of a book collection but also integrates a community of literature lovers, creating a shared space for reading enthusiasts.",
 };
 
 export default async function RootLayout({

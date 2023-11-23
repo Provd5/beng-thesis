@@ -1,14 +1,16 @@
-import Cookies from "js-cookie";
-
 export const hrefToBook = (
   bookId: string,
   bookTitle: string,
   currentPathname: string
 ) => {
-  const lang = Cookies.get("lang");
+  const pathnameParts = currentPathname?.split("/");
+  const localeFromUrl = pathnameParts?.[1];
+  const prevLocationWithoutLocale = localeFromUrl
+    ? currentPathname?.replace(`/${localeFromUrl}`, "") || ""
+    : "";
 
   return {
-    pathname: `${lang ? `/${lang}` : ""}/book/${bookId}/${bookTitle}`,
-    query: { from: currentPathname },
+    pathname: `/book/${bookId}/${bookTitle}`,
+    query: { from: prevLocationWithoutLocale },
   };
 };

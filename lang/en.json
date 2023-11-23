@@ -96,7 +96,8 @@
       "forgot your password?": "Forgot your password?",
       "no account yet? sign up": "No account yet? <Link>Sign up</Link>",
       "already have an account? log in": "Already have an account? <Link>Log in</Link>",
-      "check your email to continue login": "Check your email ({email}), to continue login"
+      "check your email to continue login": "Check your email ({email}), to continue login",
+      "we will redirect you to your profile in a moment": "We will redirect you to your profile in a moment"
     },
     "EditProfile": {
       "account created using:": "Account created using:",

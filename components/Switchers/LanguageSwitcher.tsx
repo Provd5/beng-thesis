@@ -18,8 +18,8 @@ interface LanguageSwitcherProps {
 
 export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ setCookie }) => {
   const pathname = usePathname();
-  const pathnameArray = pathname.split("/");
-  const localeFromUrl = pathnameArray[1];
+  const pathnameParts = pathname.split("/");
+  const localeFromUrl = pathnameParts[1];
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -45,7 +45,8 @@ export const LanguageSwitcher: FC<LanguageSwitcherProps> = ({ setCookie }) => {
             key={locale}
             className="flex flex-col items-center text-sm"
             onClick={() => {
-              setCookie(locale), setIsLoading(true);
+              localeFromUrl !== locale &&
+                (setCookie(locale), setIsLoading(true));
             }}
             href={pathname.replace(`/${localeFromUrl}`, `/${locale}`)}
             replace

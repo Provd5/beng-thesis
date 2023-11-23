@@ -38,6 +38,7 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({
   cancelForm,
 }) => {
   const t = useTranslations("Profile.EditProfile");
+  const ta = useTranslations("Profile.Auth");
   const te = useTranslations("Errors");
 
   const router = useRouter();
@@ -85,7 +86,7 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({
       cancelForm();
 
       if (!data && inputElementValue && formType === "username") {
-        toast("Za chwilę przekierujemy cię do twojego profilu");
+        toast(ta("we will redirect you to your profile in a moment"));
         router.push(`/profile/${inputElementValue}`);
       }
 
