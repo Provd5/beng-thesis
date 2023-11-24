@@ -3,7 +3,7 @@ import { TextLoader } from "~/components/ui/Loaders/Loader";
 
 export default function Loading() {
   return (
-    <div className="container pb-12">
+    <>
       <div className="mb-2 flex flex-col gap-3">
         <div className="flex gap-3">
           <div className="ml-0 mt-[-30px] xs:ml-6">
@@ -11,7 +11,7 @@ export default function Loading() {
               <AvatarImage size="lg" className="animate-pulse" isLoader />
             </div>
           </div>
-          <div className="mx-0.5 mt-3">
+          <div className="mx-0.5 mt-4">
             <div
               className="flex animate-pulse flex-col gap-2"
               style={{ animationDelay: "0.2s" }}
@@ -37,6 +37,6 @@ export default function Loading() {
           <TextLoader height="h3" className="w-9/12" />
         </div>
       </div>
-    </div>
+    </>
   );
 }

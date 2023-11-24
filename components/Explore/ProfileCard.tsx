@@ -3,6 +3,7 @@
 import { type FC, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import clsx from "clsx";
 
 import { MdNavigateNext } from "react-icons/md";
 
@@ -31,8 +32,18 @@ export const ProfileCard: FC<ProfileCardProps> = ({
   );
 
   return (
-    <div className="flex h-full w-full max-w-[400px] flex-col gap-2 rounded-md bg-white px-6 py-3 drop-shadow dark:bg-black">
-      <div className="flex flex-auto flex-col gap-1">
+    <div
+      className={clsx(
+        "flex h-full w-full max-w-[400px] flex-col rounded-md bg-white px-6 py-3 drop-shadow dark:bg-black",
+        sessionId ? "gap-2" : "gap-0"
+      )}
+    >
+      <div
+        className={clsx(
+          "flex flex-col gap-1",
+          sessionId ? "flex-auto" : "flex-none"
+        )}
+      >
         <Link href={`/profile/${profileData.full_name}`} className="flex gap-1">
           <AvatarImage
             size="sm"
@@ -81,7 +92,7 @@ export const ProfileCard: FC<ProfileCardProps> = ({
           )}
         </div>
       </div>
-      {!!sessionId && (
+      {!!sessionId ? (
         <ManageFollow
           userId={profileData.id}
           isFollowedState={isFollowedState}
@@ -90,6 +101,8 @@ export const ProfileCard: FC<ProfileCardProps> = ({
           setFollowedByQuantityState={setFollowedByQuantityState}
           className="w-2/3 max-w-[200px] self-end"
         />
+      ) : (
+        <div className="h-8" />
       )}
     </div>
   );

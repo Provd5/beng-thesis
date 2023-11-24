@@ -39,7 +39,7 @@ export const BooksFeed: FC<
           {isLoading &&
             pageNumber === 1 &&
             Array.from({ length: props.takeLimit }, (_, i) => (
-              <BookCardLoader key={i} index={i} sessionId={props.sessionId} />
+              <BookCardLoader key={i} index={i} />
             ))}
           {props.variant === undefined
             ? (fetchedData as BookInterface[]).map((data) => (

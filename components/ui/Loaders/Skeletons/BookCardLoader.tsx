@@ -9,10 +9,7 @@ interface BookCardLoaderProps {
   sessionId?: string;
 }
 
-export const BookCardLoader: FC<BookCardLoaderProps> = ({
-  index,
-  sessionId,
-}) => {
+export const BookCardLoader: FC<BookCardLoaderProps> = ({ index }) => {
   return (
     <div
       className="flex animate-pulse justify-start gap-3 sm:justify-center lg:justify-start"
@@ -24,18 +21,16 @@ export const BookCardLoader: FC<BookCardLoaderProps> = ({
           <TextLoader height="h1" className="w-32" />
           <TextLoader height="h2" className="w-24" />
         </div>
-        {sessionId && (
-          <div className="flex w-11/12 flex-wrap justify-between gap-0 gap-y-3">
-            <div className="flex flex-col justify-between gap-2">
-              <div className="h-12 w-36 rounded-md bg-gray" />
-              <div className="h-12 w-36 rounded-md bg-gray" />
-            </div>
-            <div className="flex flex-col justify-between gap-2">
-              <div className="h-12 w-36 rounded-md bg-gray" />
-              <div className="h-12 w-36 rounded-md bg-gray" />
-            </div>
+        <div className="flex w-11/12 flex-wrap justify-between gap-0 gap-y-3">
+          <div className="flex flex-col justify-between gap-2">
+            <div className="h-12 w-36 rounded-md bg-gray" />
+            <div className="h-12 w-36 rounded-md bg-gray" />
           </div>
-        )}
+          <div className="flex flex-col justify-between gap-2">
+            <div className="h-12 w-36 rounded-md bg-gray" />
+            <div className="h-12 w-36 rounded-md bg-gray" />
+          </div>
+        </div>
       </div>
     </div>
   );

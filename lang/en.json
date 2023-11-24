@@ -47,6 +47,7 @@
 
   "Other": {
     "logout": "Logout",
+    "logged out": "Logged out",
     "loading": "Loading",
     "load more": "load more",
     "my account": "My account",

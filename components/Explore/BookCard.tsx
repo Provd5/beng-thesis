@@ -69,9 +69,10 @@ export const BookCard: FC<BookCardProps> = ({ bookData, sessionId }) => {
               />
             </div>
           </div>
-          <div className="flex flex-col justify-between">
-            <div className="h-14 w-36">
-              {!!sessionId && (
+
+          {!!sessionId && (
+            <div className="flex flex-col justify-between">
+              <div className="h-14 w-36">
                 <ManageOwnedAs
                   bookId={bookData.id}
                   addedEbookAt={myOwnedAsData?.added_ebook_at}
@@ -79,10 +80,8 @@ export const BookCard: FC<BookCardProps> = ({ bookData, sessionId }) => {
                   addedBookAt={myOwnedAsData?.added_book_at}
                   size="sm"
                 />
-              )}
-            </div>
-            <div className="h-14 w-36">
-              {!!sessionId && (
+              </div>
+              <div className="h-14 w-36">
                 <ManageBookshelf
                   bookId={bookData.id}
                   bookshelf={myBookshelfData?.bookshelf}
@@ -90,9 +89,9 @@ export const BookCard: FC<BookCardProps> = ({ bookData, sessionId }) => {
                   beganReadingAt={myBookshelfData?.began_reading_at}
                   readQuantity={myBookshelfData?.read_quantity}
                 />
-              )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

@@ -165,7 +165,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
           searchCategory === "books" ? (
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               {Array.from({ length: 20 }, (_, i) => (
-                <BookCardLoader key={i} index={i} sessionId={sessionId} />
+                <BookCardLoader key={i} index={i} />
               ))}
             </div>
           ) : (
