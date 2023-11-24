@@ -16,7 +16,6 @@ interface CategoryLinkProps {
   variant: CategoryTypes;
   href: Url;
   hrefReplace?: boolean;
-  withoutIcon?: boolean;
   quantity?: number;
 }
 
@@ -24,7 +23,6 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
   variant,
   href,
   hrefReplace = false,
-  withoutIcon,
   quantity,
 }) => {
   const t = useTranslations("Book.BookshelfTypes");
@@ -38,7 +36,7 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
       >
         <div className="text-lg font-semibold text-secondary dark:text-secondary-light">
           <div className="flex items-center gap-1">
-            {!withoutIcon && variant === "OWNED"
+            {variant === "OWNED"
               ? getOwnedAsIcon("BOOK", "sm")
               : getBookmarkIcon(variant)}
             <h1>

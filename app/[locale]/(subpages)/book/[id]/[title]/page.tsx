@@ -35,7 +35,6 @@ export default async function BookPage({
           href={{ pathname: `${title}/reviews`, query: searchParams }}
           variant="REVIEWS"
           hrefReplace
-          withoutIcon
         />
         <MyReview bookId={id} sessionId={session?.user.id} />
       </div>
