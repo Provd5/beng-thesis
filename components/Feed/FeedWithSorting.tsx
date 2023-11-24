@@ -88,6 +88,7 @@ export const FeedWithSorting: FC<
 
               return (
                 <button
+                  key={orderType.sortCategory}
                   className={clsx(
                     "flex items-center justify-between gap-1 py-0.5 text-left",
                     isActive && "text-secondary dark:text-secondary-light"
@@ -98,7 +99,6 @@ export const FeedWithSorting: FC<
                       orderType.sortCategory
                     )
                   }
-                  key={orderType.sortCategory}
                 >
                   <p>{t(orderType.sortCategory)}</p>
                   {isActive ? (
@@ -123,9 +123,7 @@ export const FeedWithSorting: FC<
           variant={variant}
           sessionId={sessionId}
           order={sortOrderState}
-          orderBy={
-            orderByState === defaultSortCategory ? undefined : orderByState
-          }
+          orderBy={orderByState}
         />
       )}
       {feedVariant === "reviews" && (
@@ -135,9 +133,7 @@ export const FeedWithSorting: FC<
           bookId={bookId}
           sessionId={sessionId}
           order={sortOrderState}
-          orderBy={
-            orderByState === defaultSortCategory ? undefined : orderByState
-          }
+          orderBy={orderByState}
         />
       )}
       {feedVariant === "profiles" &&
@@ -148,9 +144,7 @@ export const FeedWithSorting: FC<
             userId={userId}
             sessionId={sessionId}
             order={sortOrderState}
-            orderBy={
-              orderByState === defaultSortCategory ? undefined : orderByState
-            }
+            orderBy={orderByState}
           />
         ) : (
           <ProfilesFeed
@@ -159,9 +153,7 @@ export const FeedWithSorting: FC<
             userId={undefined}
             sessionId={sessionId}
             order={sortOrderState}
-            orderBy={
-              orderByState === defaultSortCategory ? undefined : orderByState
-            }
+            orderBy={orderByState}
           />
         ))}
     </>

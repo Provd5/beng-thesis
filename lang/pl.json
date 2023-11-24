@@ -256,19 +256,18 @@
     "sort by:": "Sortuj po:",
     "popularity": "popularność",
     "last_added": "nowo dodane",
-    "profile_traffic": "aktywność",
+    "profile_traffic": "aktywność profilu",
     "title": "tytuł",
-    "full_name": "nazwa użytkownika",
+    "full_name": "nazwa profilu",
     "authors": "autorzy",
-    "publisher": "wydawca",
     "published_date": "data wydania",
     "created_at": "data utworzenia",
     "rate": "najwyższa ocena",
-    "liked_by": "ilość polubień",
-    "review": "ilość recenzji",
-    "review_reaction": "ilość reakcji",
-    "book_owned_as": "ilość posiadanych książek",
-    "bookshelf": "ilość książek na półkach",
-    "followed_by": "ilość obserwujących"
+    "liked_by": "polubień",
+    "review": "recenzji",
+    "review_reaction": "reakcji",
+    "book_owned_as": "posiadanych książek",
+    "bookshelf": "książek na półkach",
+    "followed_by": "obserwujących"
   }
 }

@@ -260,15 +260,14 @@
     "title": "title",
     "full_name": "username",
     "authors": "authors",
-    "publisher": "publisher",
     "published_date": "published date",
     "created_at": "creation date",
     "rate": "highest rate",
-    "liked_by": "number of likes",
-    "review": "number of reviews",
-    "review_reaction": "number of reactions",
-    "book_owned_as": "number of owned books",
-    "bookshelf": "number of books on shelves",
-    "followed_by": "number of followers"
+    "liked_by": "likes",
+    "review": "reviews",
+    "review_reaction": "reactions",
+    "book_owned_as": "owned books",
+    "bookshelf": "books on shelves",
+    "followed_by": "followers"
   }
 }

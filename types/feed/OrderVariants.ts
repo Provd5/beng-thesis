@@ -5,24 +5,20 @@ export type OrderByArrayType = {
 
 // the first element is the default sort
 
-export const booksOrderByArray: OrderByArrayType = [
+const commonBooksOrderArray: OrderByArrayType = [
   { isSortingByLetters: false, sortCategory: "popularity" },
   { isSortingByLetters: false, sortCategory: "liked_by" },
   { isSortingByLetters: false, sortCategory: "review" },
   { isSortingByLetters: false, sortCategory: "published_date" },
   { isSortingByLetters: true, sortCategory: "title" },
   { isSortingByLetters: true, sortCategory: "authors" },
-  { isSortingByLetters: true, sortCategory: "publisher" },
 ];
+
+export const booksOrderByArray: OrderByArrayType = [...commonBooksOrderArray];
 
 export const bookshelvesOrderByArray: OrderByArrayType = [
   { isSortingByLetters: false, sortCategory: "last_added" },
-  { isSortingByLetters: false, sortCategory: "liked_by" },
-  { isSortingByLetters: false, sortCategory: "review" },
-  { isSortingByLetters: false, sortCategory: "published_date" },
-  { isSortingByLetters: true, sortCategory: "title" },
-  { isSortingByLetters: true, sortCategory: "authors" },
-  { isSortingByLetters: true, sortCategory: "publisher" },
+  ...commonBooksOrderArray,
 ];
 
 export const reviewsOrderByArray: OrderByArrayType = [
@@ -30,7 +26,6 @@ export const reviewsOrderByArray: OrderByArrayType = [
   { isSortingByLetters: false, sortCategory: "created_at" },
   { isSortingByLetters: false, sortCategory: "rate" },
   { isSortingByLetters: false, sortCategory: "review_reaction" },
-  { isSortingByLetters: false, sortCategory: "review" },
 ];
 
 export const profilesOrderByArray: OrderByArrayType = [

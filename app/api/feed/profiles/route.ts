@@ -40,8 +40,8 @@ export async function GET(req: Request) {
       case "review":
         orderByClause = { [orderBy]: { _count: order } };
         break;
+      case "profile_traffic":
       default:
-        // sort by profile traffic
         orderByClause = [
           { review: { _count: order } },
           { review_reaction: { _count: order } },

@@ -32,17 +32,48 @@ export async function GET(req: Request) {
     let orderByClause = null;
     switch (orderBy) {
       case "authors":
-      case "publisher":
       case "title":
       case "published_date":
-        orderByClause = { [orderBy]: order };
+        orderByClause = { book: { [orderBy]: order } };
         break;
       case "liked_by":
       case "review":
-        orderByClause = { [orderBy]: { _count: order } };
+        orderByClause = { book: { [orderBy]: { _count: order } } };
         break;
-      default:
+      case "last_added":
         orderByClause = null;
+        break;
+      case "popularity":
+      default:
+        orderByClause = [
+          { book: { liked_by: { _count: order } } },
+          { book: { review: { _count: order } } },
+          { book: { book_owned_as: { _count: order } } },
+          { book: { bookshelf: { _count: order } } },
+        ];
+        break;
+    }
+
+    let bookOrderByClause = null;
+    switch (orderBy) {
+      case "authors":
+      case "title":
+      case "published_date":
+        bookOrderByClause = { [orderBy]: order };
+        break;
+      case "liked_by":
+      case "review":
+        bookOrderByClause = { [orderBy]: { _count: order } };
+        break;
+      case "last_added":
+      case "popularity":
+      default:
+        bookOrderByClause = [
+          { liked_by: { _count: order } },
+          { review: { _count: order } },
+          { book_owned_as: { _count: order } },
+          { bookshelf: { _count: order } },
+        ];
         break;
     }
 
@@ -95,7 +126,7 @@ export async function GET(req: Request) {
             },
           },
           orderBy: orderByClause
-            ? { book: orderByClause }
+            ? orderByClause
             : // sort by newly added
               [
                 { added_book_at: order },
@@ -115,7 +146,7 @@ export async function GET(req: Request) {
         books = (await db.review.findMany({
           where: { profile: { full_name: profileName } },
           orderBy: orderByClause
-            ? { book: orderByClause }
+            ? orderByClause
             : // sort by newly added
               [{ created_at: order }, { updated_at: order }],
           take: parsedTakeLimit,
@@ -131,7 +162,7 @@ export async function GET(req: Request) {
         books = (await db.liked_books.findMany({
           where: { profile: { full_name: profileName } },
           orderBy: orderByClause
-            ? { book: orderByClause }
+            ? orderByClause
             : // sort by newly added
               { updated_at: order },
           take: parsedTakeLimit,
@@ -146,15 +177,7 @@ export async function GET(req: Request) {
       case null:
       case undefined:
         books = (await db.book.findMany({
-          orderBy: orderByClause
-            ? orderByClause
-            : // sort by popularity
-              [
-                { liked_by: { _count: order } },
-                { review: { _count: order } },
-                { book_owned_as: { _count: order } },
-                { bookshelf: { _count: order } },
-              ],
+          orderBy: bookOrderByClause,
           take: parsedTakeLimit,
           skip: parsedSkip,
           select: selectClause,
@@ -164,7 +187,7 @@ export async function GET(req: Request) {
         books = (await db.bookshelf.findMany({
           where: { bookshelf: variant, profile: { full_name: profileName } },
           orderBy: orderByClause
-            ? { book: orderByClause }
+            ? orderByClause
             : // sort by newly added
               { updated_at: order },
           take: parsedTakeLimit,

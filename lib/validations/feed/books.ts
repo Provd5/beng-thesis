@@ -16,12 +16,13 @@ export const BooksValidator = z.object({
     .nullish(),
   orderBy: z
     .enum([
-      "title",
-      "authors",
+      "last_added",
+      "popularity",
       "liked_by",
       "review",
       "published_date",
-      "publisher",
+      "title",
+      "authors",
     ])
     .nullish(),
   order: z.enum(["desc", "asc"]),
