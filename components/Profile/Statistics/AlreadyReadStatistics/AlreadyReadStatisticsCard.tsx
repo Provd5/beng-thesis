@@ -106,6 +106,7 @@ export const AlreadyReadStatisticsCard: FC<AlreadyReadStatisticsCardProps> = ({
           bookAuthors={lastReadBook.book.authors}
           pages={lastReadBook.book.page_count}
           readTime={lastReadBookReadIn}
+          updateDate={lastReadBook.updated_at}
         />
       )}
       <div className="flex flex-wrap gap-x-6 gap-y-3">

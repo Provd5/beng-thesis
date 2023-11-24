@@ -3,6 +3,8 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
+import { dateFormater } from "~/utils/dateFormater";
+
 interface AlreadyReadStatisticsLabelsProps {
   variant:
     | "shortest-read:"
@@ -13,11 +15,12 @@ interface AlreadyReadStatisticsLabelsProps {
   bookAuthors: string[];
   pages: number;
   readTime: number | null;
+  updateDate?: Date;
 }
 
 export const AlreadyReadStatisticsLabels: FC<
   AlreadyReadStatisticsLabelsProps
-> = ({ variant, bookTitle, bookAuthors, pages, readTime }) => {
+> = ({ variant, bookTitle, bookAuthors, pages, readTime, updateDate }) => {
   const t = useTranslations("Statistics.ReadBooks");
 
   return (
@@ -28,7 +31,16 @@ export const AlreadyReadStatisticsLabels: FC<
         <p>{bookAuthors.join(", ")}</p>
         {pages > 0 && (
           <p>
-            {t("pages:")} {pages}
+            {t("pages:")}{" "}
+            <span
+              className={
+                variant === "book with most pages:"
+                  ? "text-secondary dark:text-secondary-light"
+                  : ""
+              }
+            >
+              {pages}
+            </span>
           </p>
         )}
         {!!readTime && (
@@ -41,6 +53,11 @@ export const AlreadyReadStatisticsLabels: FC<
                 </span>
               ),
             })}
+          </p>
+        )}
+        {updateDate && (
+          <p className="text-secondary dark:text-secondary-light">
+            {dateFormater(updateDate)}
           </p>
         )}
       </div>
