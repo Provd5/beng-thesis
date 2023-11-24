@@ -35,54 +35,64 @@ export const BookCard: FC<BookCardProps> = ({ bookData, sessionId }) => {
   const doILikeThisBook = !!bookData.liked_by?.length;
 
   return (
-    <div className="flex justify-center gap-3 md:justify-start">
+    <div className="flex justify-start gap-3 sm:justify-center lg:justify-start">
       <Link
         href={hrefToBook(bookData.id, bookData.title, pathname)}
         className="h-fit w-fit"
       >
         <BookCover coverUrl={bookData.thumbnail_url} />
       </Link>
-      <div className="flex w-full max-w-[300px] flex-col gap-1">
+      <div className="flex flex-col gap-1 xs:grow">
         <Link
           href={hrefToBook(bookData.id, bookData.title, pathname)}
-          className="h-fit w-fit py-0.5 leading-tight"
+          className="h-fit w-fit max-w-[300px] py-0.5 leading-tight"
         >
           <h1 className="line-clamp-2">{bookData.title}</h1>
           <h2 className="text-sm text-black-light dark:text-white-dark">
             {bookData.authors.join(", ")}
           </h2>
         </Link>
-        <div className="flex flex-wrap justify-between gap-3 text-sm">
-          <BookCardDetails
-            ratesQuantity={averageRating(bookData.review)}
-            reviewsQuantity={bookData._count.review}
-          />
-          {!!sessionId && (
-            <ManageOwnedAs
-              bookId={bookData.id}
-              addedEbookAt={myOwnedAsData?.added_ebook_at}
-              addedAudiobookAt={myOwnedAsData?.added_audiobook_at}
-              addedBookAt={myOwnedAsData?.added_book_at}
-              size="sm"
-            />
-          )}
-        </div>
-        <div className="flex flex-wrap justify-between gap-3">
-          <ManageLikes
-            bookId={bookData.id}
-            doILikeThisBook={doILikeThisBook}
-            likesQuantity={bookData._count.liked_by}
-            sessionId={sessionId}
-          />
-          {!!sessionId && (
-            <ManageBookshelf
-              bookId={bookData.id}
-              bookshelf={myBookshelfData?.bookshelf}
-              updatedAt={myBookshelfData?.updated_at}
-              beganReadingAt={myBookshelfData?.began_reading_at}
-              readQuantity={myBookshelfData?.read_quantity}
-            />
-          )}
+        <div className="flex w-11/12 flex-wrap justify-between gap-0 gap-y-3">
+          <div className="flex flex-col justify-between text-sm">
+            <div className="h-14 w-36">
+              <BookCardDetails
+                ratesQuantity={averageRating(bookData.review)}
+                reviewsQuantity={bookData._count.review}
+              />
+            </div>
+            <div className="h-14 w-36">
+              <ManageLikes
+                bookId={bookData.id}
+                doILikeThisBook={doILikeThisBook}
+                likesQuantity={bookData._count.liked_by}
+                sessionId={sessionId}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col justify-between">
+            <div className="h-14 w-36">
+              {!!sessionId && (
+                <ManageOwnedAs
+                  bookId={bookData.id}
+                  addedEbookAt={myOwnedAsData?.added_ebook_at}
+                  addedAudiobookAt={myOwnedAsData?.added_audiobook_at}
+                  addedBookAt={myOwnedAsData?.added_book_at}
+                  size="sm"
+                />
+              )}
+            </div>
+            <div className="h-14 w-36">
+              {!!sessionId && (
+                <ManageBookshelf
+                  bookId={bookData.id}
+                  bookshelf={myBookshelfData?.bookshelf}
+                  updatedAt={myBookshelfData?.updated_at}
+                  beganReadingAt={myBookshelfData?.began_reading_at}
+                  readQuantity={myBookshelfData?.read_quantity}
+                />
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

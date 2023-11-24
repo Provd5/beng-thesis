@@ -150,7 +150,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
           </div>
         </div>
       </div>
-      <div className="container py-6">
+      <div className="container pb-12 pt-6">
         {itemsFound !== null ? (
           <h1 className="mb-3 flex items-center gap-1">
             <span className="py-0.5">{t("items found:")}</span>
@@ -165,7 +165,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
           searchCategory === "books" ? (
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               {Array.from({ length: 20 }, (_, i) => (
-                <BookCardLoader key={i} index={i} />
+                <BookCardLoader key={i} index={i} sessionId={sessionId} />
               ))}
             </div>
           ) : (

@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { Quicksand } from "next/font/google";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
@@ -11,7 +10,6 @@ import { ToasterComponent } from "~/components/ui/ToasterComponent";
 import { type localeTypes } from "~/i18n";
 
 import "~/styles/globals.css";
-import Loading from "./loading";
 
 const quicksandFont = Quicksand({
   weight: ["400", "500", "600", "700"],
@@ -56,10 +54,8 @@ export default async function RootLayout({
 
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar />
-          <Suspense fallback={<Loading />}>
-            {children}
-            <ToasterComponent />
-          </Suspense>
+          {children}
+          <ToasterComponent />
         </NextIntlClientProvider>
       </body>
     </html>
