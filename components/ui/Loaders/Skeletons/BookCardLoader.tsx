@@ -27,12 +27,12 @@ export const BookCardLoader: FC<BookCardLoaderProps> = ({
         {sessionId && (
           <div className="flex w-11/12 flex-wrap justify-between gap-0 gap-y-3">
             <div className="flex flex-col justify-between gap-2">
-              <div className="h-12 w-36 rounded-sm bg-gray" />
-              <div className="h-12 w-36 rounded-sm bg-gray" />
+              <div className="h-12 w-36 rounded-md bg-gray" />
+              <div className="h-12 w-36 rounded-md bg-gray" />
             </div>
             <div className="flex flex-col justify-between gap-2">
-              <div className="h-12 w-36 rounded-sm bg-gray" />
-              <div className="h-12 w-36 rounded-sm bg-gray" />
+              <div className="h-12 w-36 rounded-md bg-gray" />
+              <div className="h-12 w-36 rounded-md bg-gray" />
             </div>
           </div>
         )}

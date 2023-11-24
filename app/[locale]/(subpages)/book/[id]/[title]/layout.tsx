@@ -144,7 +144,7 @@ export default async function BookLayout({
               />
             </div>
           </div>
-          <div className="flex justify-center xs:gap-8 xs:px-2 md:justify-end">
+          <div className="flex justify-center gap-x-1 gap-y-4 max-xs:flex-wrap xs:gap-8 xs:px-2 md:justify-end">
             <div className="flex h-fit flex-col items-start justify-center gap-4 xs:gap-8">
               <div className="w-36">
                 {session?.user.id && (

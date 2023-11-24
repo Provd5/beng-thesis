@@ -3,6 +3,8 @@
 import type { FC } from "react";
 import { type bookshelfType } from "@prisma/client";
 
+import { bookshelvesOrderByArray } from "~/types/feed/OrderVariants";
+
 import { useFetchData } from "~/hooks/useFetchData";
 
 import { SmallBookCard } from "../Explore/SmallBookCard";
@@ -24,6 +26,7 @@ export const CategoryContentCard: FC<CategoryContentCardProps> = ({
     takeLimit: 10,
     variant,
     profileName,
+    orderBy: bookshelvesOrderByArray[0].sortCategory,
   });
   const booksData = fetchedData as BookCardInterface[];
 
