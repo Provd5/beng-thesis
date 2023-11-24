@@ -35,11 +35,11 @@ export const BooksFeed: FC<
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-5 gap-y-8 lg:grid-cols-2">
           {isLoading &&
             pageNumber === 1 &&
             Array.from({ length: props.takeLimit }, (_, i) => (
-              <BookCardLoader key={i} index={i} />
+              <BookCardLoader key={i} index={i} sessionId={props.sessionId} />
             ))}
           {props.variant === undefined
             ? (fetchedData as BookInterface[]).map((data) => (

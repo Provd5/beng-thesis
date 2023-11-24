@@ -10,7 +10,7 @@ export default function ProfileSubpagesLayout({
   params: { fullname: string };
 }) {
   return (
-    <div className="mt-6 flex flex-col gap-3">
+    <>
       <BackCategoryLink variant="RETURN" href={`../${fullname}`} />
       <DragContainer
         arrowSize="sm"
@@ -19,6 +19,6 @@ export default function ProfileSubpagesLayout({
         <CategoryLinksContainer />
       </DragContainer>
       {children}
-    </div>
+    </>
   );
 }

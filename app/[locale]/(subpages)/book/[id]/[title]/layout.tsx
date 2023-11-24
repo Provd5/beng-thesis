@@ -94,7 +94,7 @@ export default async function BookLayout({
   const isReviewExists = !!myData?.review.length;
 
   return (
-    <div className="container py-8 text-sm">
+    <div className="container pb-12 pt-8 text-sm">
       <BackCategoryButton />
       <div className="mt-3 flex flex-col gap-8">
         <div className="flex flex-col gap-x-10 gap-y-8 px-1 xs:px-3 md:flex-row md:justify-between md:px-6">
@@ -144,8 +144,8 @@ export default async function BookLayout({
               />
             </div>
           </div>
-          <div className="flex flex-wrap content-start justify-center gap-5 px-2 md:max-w-[400px] md:justify-end md:gap-8">
-            <div className="flex h-fit flex-wrap items-start justify-center gap-x-4 gap-y-5 sm:justify-between">
+          <div className="flex justify-center xs:gap-8 xs:px-2 md:justify-end">
+            <div className="flex h-fit flex-col items-start justify-center gap-4 xs:gap-8">
               <div className="w-36">
                 {session?.user.id && (
                   <ManageBookshelf
@@ -158,6 +158,16 @@ export default async function BookLayout({
                 )}
               </div>
               <div className="w-36">
+                <ManageLikes
+                  bookId={book.id}
+                  doILikeThisBook={doILikeThisBook}
+                  likesQuantity={book._count.liked_by}
+                  sessionId={session?.user.id}
+                />
+              </div>
+            </div>
+            <div className="flex h-fit flex-col items-start justify-center gap-4 xs:gap-8">
+              <div className="w-36">
                 {session?.user.id && (
                   <ManageOwnedAs
                     bookId={book.id}
@@ -166,16 +176,6 @@ export default async function BookLayout({
                     addedBookAt={myOwnedAsData?.added_book_at}
                   />
                 )}
-              </div>
-            </div>
-            <div className="flex h-fit flex-wrap items-start justify-center gap-x-4 gap-y-5 sm:justify-between">
-              <div className="w-36">
-                <ManageLikes
-                  bookId={book.id}
-                  doILikeThisBook={doILikeThisBook}
-                  likesQuantity={book._count.liked_by}
-                  sessionId={session?.user.id}
-                />
               </div>
               <div className="w-36">
                 <ManageReviews

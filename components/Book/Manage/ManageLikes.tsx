@@ -84,7 +84,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
         )}
       </div>
       <div className="flex flex-col">
-        <div className="flex h-[24px] items-center">
+        <div className="flex h-6 items-center">
           <h3 className="text-base font-semibold text-secondary dark:text-secondary-light">
             {t("likes")}
           </h3>

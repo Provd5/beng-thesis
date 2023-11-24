@@ -45,7 +45,7 @@ export const FollowPage: FC<FollowPageProps> = async ({
       : userData._count.following;
 
   return (
-    <div className="mt-6">
+    <>
       <BackCategoryLink href={`../${fullname}`} variant="RETURN" />
       <FeedWithSorting
         feedVariant="profiles"
@@ -55,6 +55,6 @@ export const FollowPage: FC<FollowPageProps> = async ({
         orderArray={profilesOrderByArray}
         takeLimit={takeLimit < 30 ? takeLimit : 30}
       />
-    </div>
+    </>
   );
 };

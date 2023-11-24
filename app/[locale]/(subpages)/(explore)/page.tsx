@@ -22,7 +22,7 @@ export default async function ExplorePage() {
   } = await supabase.auth.getSession();
 
   return (
-    <div className="container pb-6">
+    <div className="container pb-12">
       <FeedWithSorting
         feedVariant="books"
         orderArray={booksOrderByArray}

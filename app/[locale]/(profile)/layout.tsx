@@ -42,7 +42,7 @@ export default async function ProfileLayout({
         </div>
       </div>
       <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/90 dark:bg-black/90 md:rounded-none">
-        <div className="container pb-6">{children}</div>
+        <div className="container pb-12">{children}</div>
       </div>
     </main>
   );

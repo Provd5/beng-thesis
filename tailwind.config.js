@@ -17,7 +17,7 @@ module.exports = {
     },
     extend: {
       screens: {
-        xs: "375px",
+        xs: "420px",
       },
       fontSize: {
         "2xs": ["10px", "12px"],

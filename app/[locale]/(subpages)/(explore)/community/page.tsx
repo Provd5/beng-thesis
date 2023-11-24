@@ -22,7 +22,7 @@ export default async function CommunityPage() {
   } = await supabase.auth.getSession();
 
   return (
-    <div className="container pb-6">
+    <div className="container pb-12">
       <FeedWithSorting
         feedVariant="profiles"
         orderArray={profilesOrderByArray}

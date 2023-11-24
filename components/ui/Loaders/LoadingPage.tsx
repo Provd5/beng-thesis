@@ -6,8 +6,8 @@ import LogoSphere from "~/assets/booksphere-sphere.svg";
 
 export const LoadingPage: FC = () => {
   return (
-    <div className="bodyGradient absolute inset-0 z-40 flex items-center justify-center text-white-light">
-      <div className="pointer-events-none flex flex-col items-center">
+    <div className="bodyGradient pointer-events-none absolute inset-0 z-40 flex items-center justify-center">
+      <div className="relative flex flex-col items-center">
         <Image
           src={LogoSphere as string}
           alt="Loading Shpere"
