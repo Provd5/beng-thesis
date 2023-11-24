@@ -6,6 +6,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { AvatarImage } from "~/components/Profile/AvatarImage";
 import { FollowLinks } from "~/components/Profile/FollowLinks";
 import { PrivateProfilePage } from "~/components/Profile/PrivateProfilePage";
+import { ProfileDescription } from "~/components/Profile/ProfileDescription";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
 import { db } from "~/lib/db";
 import { isFollowed } from "~/utils/isFollowed";
@@ -35,6 +36,7 @@ export default async function ProfileFullnameLayout({
     select: {
       id: true,
       avatar_url: true,
+      description: true,
       private: true,
       full_name: true,
       followed_by: true,
@@ -80,9 +82,12 @@ export default async function ProfileFullnameLayout({
           {publicUserData.full_name}
         </h1>
       </div>
+      {publicUserData.description && (
+        <ProfileDescription description={publicUserData.description} />
+      )}
       {(session?.user && session.user.id === publicUserData.id) ||
       !publicUserData.private ? (
-        children
+        <div className="mt-6 flex flex-col gap-3">{children}</div>
       ) : (
         <PrivateProfilePage />
       )}

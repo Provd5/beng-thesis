@@ -7,7 +7,7 @@ export const PrivateProfilePage: FC = ({}) => {
   const t = useTranslations("Profile.Page");
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="mt-3 flex flex-col gap-3">
       <h1 className="px-6 text-center text-lg">
         {t("this profile is private")} 😥
       </h1>
