@@ -1,23 +1,31 @@
-import { type Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { AlreadyReadStatisticsCard } from "~/components/Profile/Statistics/AlreadyReadStatistics/AlreadyReadStatisticsCard";
 import { MainStatisticsCard } from "~/components/Profile/Statistics/MainStatisticsCard";
 import { OwnedAsStatisticsCard } from "~/components/Profile/Statistics/OwnedAsStatistics/OwnedAsStatisticsCard";
 import { StatisticsCategoryWrapper } from "~/components/Profile/Statistics/StatisticsCategoryWrapper";
+import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: localeTypes };
+}) {
+  const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
-    title: "statistics",
+    title: t("statistics"),
   };
 }
 
 export default async function StatisticsPage({
-  params: { fullname },
+  params: { fullname, locale },
 }: {
-  params: { fullname: string };
+  params: { fullname: string; locale: localeTypes };
 }) {
+  unstable_setRequestLocale(locale);
+
   const [userDataCount, alreadyReadBooks] = await Promise.all([
     db.profile.findUnique({
       where: {

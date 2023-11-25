@@ -1,6 +1,6 @@
-import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
@@ -8,24 +8,28 @@ import { bookshelvesOrderByArray } from "~/types/feed/OrderVariants";
 
 import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
 import { BookshelfPageTitle } from "~/components/Profile/Bookshelf/BookshelfPageTitle";
+import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
 
-export function generateMetadata({
-  params,
+export async function generateMetadata({
+  params: { bookshelf, locale },
 }: {
-  params: { bookshelf: string };
-}): Metadata {
+  params: { bookshelf: string; locale: localeTypes };
+}) {
+  const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
-    title: params.bookshelf,
+    title: t(bookshelf),
   };
 }
 
 export default async function BookshelfPage({
-  params: { bookshelf, fullname },
+  params: { bookshelf, fullname, locale },
 }: {
-  params: { bookshelf: string; fullname: string };
+  params: { bookshelf: string; fullname: string; locale: localeTypes };
 }) {
+  unstable_setRequestLocale(locale);
+
   const bookshelfAsType = convertPathnameToTypeEnum(bookshelf) as CategoryTypes;
   if (!categoryArray.includes(bookshelfAsType)) notFound();
 

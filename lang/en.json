@@ -71,7 +71,20 @@
       "login": "Log in",
       "explore": "Explore",
       "profile": "Profile",
-      "search": "Search"
+      "search": "Search",
+      "community": "Community",
+      "edit profile": "Edit profile",
+      "followers": "followers",
+      "following": "following",
+      "statistics": "statistics",
+      "owned": "owned",
+      "liked": "liked",
+      "to-read": "to-read",
+      "already-read": "already-read",
+      "abandoned": "abandoned",
+      "reading": "reading",
+      "reviews": "reviews",
+      "other": "other"
     }
   },
 

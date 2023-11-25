@@ -1,6 +1,6 @@
-import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { unstable_setRequestLocale } from "next-intl/server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { z } from "zod";
 
@@ -11,14 +11,11 @@ import { ManageLikes } from "~/components/Book/Manage/ManageLikes";
 import { ManageOwnedAs } from "~/components/Book/Manage/ManageOwnedAs";
 import { ManageReviews } from "~/components/Book/Manage/ManageReviews";
 import { BackCategoryButton } from "~/components/ui/BackCategoryLink";
+import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 import { averageRating } from "~/utils/averageRating";
 
-export function generateMetadata({
-  params,
-}: {
-  params: { title: string };
-}): Metadata {
+export function generateMetadata({ params }: { params: { title: string } }) {
   return {
     title: decodeURIComponent(params.title),
   };
@@ -26,11 +23,13 @@ export function generateMetadata({
 
 export default async function BookLayout({
   children,
-  params: { id },
+  params: { id, locale },
 }: {
   children: React.ReactNode;
-  params: { id: string };
+  params: { id: string; locale: localeTypes };
 }) {
+  unstable_setRequestLocale(locale);
+
   try {
     z.string().uuid().parse(id);
   } catch (error) {

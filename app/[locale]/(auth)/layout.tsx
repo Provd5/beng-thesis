@@ -1,16 +1,22 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { unstable_setRequestLocale } from "next-intl/server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { Logo } from "~/components/Logo";
 import { Settings } from "~/components/Modals/Settings";
+import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 
 export default async function AuthLayout({
   children,
+  params: { locale },
 }: {
   children: React.ReactNode;
+  params: { locale: localeTypes };
 }) {
+  unstable_setRequestLocale(locale);
+
   const supabase = createServerComponentClient({
     cookies,
   });

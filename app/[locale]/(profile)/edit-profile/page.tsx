@@ -1,21 +1,33 @@
-import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
 import { ManageProfileDescription } from "~/components/Profile/EditProfile/ManageProfileDescription";
 import { ManageProfileStatus } from "~/components/Profile/EditProfile/ManageProfileStatus";
 import { ManageProfileUsername } from "~/components/Profile/EditProfile/ManageProfileUsername";
+import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: localeTypes };
+}) {
+  const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
-    title: "Edit profile",
+    title: t("edit profile"),
   };
 }
 
-export default async function EditProfilePage() {
+export default async function EditProfilePage({
+  params: { locale },
+}: {
+  params: { locale: localeTypes };
+}) {
+  unstable_setRequestLocale(locale);
+
   const supabase = createServerComponentClient({
     cookies,
   });

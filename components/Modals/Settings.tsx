@@ -1,10 +1,6 @@
 import type { FC } from "react";
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
 
 import { FaCog } from "react-icons/fa";
-
-import { type localeTypes } from "~/i18n";
 
 import { LanguageSwitcher } from "../Switchers/LanguageSwitcher";
 import { ThemeSwitcher } from "../Switchers/ThemeSwitcher";
@@ -12,13 +8,6 @@ import { ModalInitiator } from "./ModalInitiator";
 import { SettingsLabel } from "./SettingsLabel";
 
 export const Settings: FC = ({}) => {
-  // eslint-disable-next-line @typescript-eslint/require-await
-  const setCookie = async (language: localeTypes) => {
-    "use server";
-    cookies().set("lang", language);
-    revalidatePath("/", "layout");
-  };
-
   return (
     <>
       <ModalInitiator
@@ -32,7 +21,7 @@ export const Settings: FC = ({}) => {
           <SettingsLabel label="app style" />
           <ThemeSwitcher />
           <SettingsLabel label="app language" />
-          <LanguageSwitcher setCookie={setCookie} />
+          <LanguageSwitcher />
         </div>
       </ModalInitiator>
     </>

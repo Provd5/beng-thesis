@@ -1,83 +1,30 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import createMiddleware from "next-intl/middleware";
 import { createMiddlewareClient } from "@supabase/auth-helpers-nextjs";
-import langParser from "accept-language-parser";
 
-import { defaultLocale, locales, type localeTypes } from "./i18n";
-
-const findBestMatchingLocale = (acceptLangHeader: string) => {
-  const parsedLangs = langParser.parse(acceptLangHeader);
-
-  for (let i = 0; i < parsedLangs.length; i++) {
-    const parsedLang = parsedLangs[i];
-    const matchedLocale = locales.find((locale) => {
-      const localePart = locale.toLowerCase();
-      return parsedLang.code === localePart;
-    });
-    if (matchedLocale) {
-      return matchedLocale;
-    }
-  }
-  return defaultLocale;
-};
+import { defaultLocale, locales } from "./i18n";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
+  let res = NextResponse.next();
 
   //supabase auth middleware
   const supabase = createMiddlewareClient({ req, res });
   await supabase.auth.getSession();
 
-  // localization
-  const { pathname, search } = req.nextUrl;
-  const localeFromPathname = pathname.split("/")[1] as localeTypes;
-  const langCookie = req.cookies.get("lang")?.value as localeTypes | undefined;
-
-  const pathnameIsMissingValidLocale = locales.every((locale) => {
-    const localePart = locale.toLowerCase();
-    return !pathname.startsWith(`/${localePart}`);
+  // next-intl localization
+  const handleI18nRouting = createMiddleware({
+    locales: locales,
+    defaultLocale: defaultLocale,
+    localeDetection: true,
   });
-
-  if (pathnameIsMissingValidLocale) {
-    if (langCookie && locales.includes(langCookie)) {
-      const res = NextResponse.redirect(
-        new URL(`/${langCookie}${pathname}${search}`, req.url)
-      );
-      return res;
-    } else {
-      const matchedLocale = findBestMatchingLocale(
-        req.headers.get("Accept-Language") || defaultLocale
-      );
-
-      const matchedLocalePart = matchedLocale.toLowerCase();
-      const res = NextResponse.redirect(
-        new URL(`/${matchedLocalePart}${pathname}${search}`, req.url)
-      );
-      res.cookies.set("lang", matchedLocalePart);
-      return res;
-    }
-  } else if (
-    ((langCookie && !pathname.startsWith(`/${langCookie}`)) || !langCookie) &&
-    locales.includes(localeFromPathname)
-  ) {
-    res.cookies.set("lang", localeFromPathname);
-  }
-
-  // color theme initialization
-  if (req.headers.get("Accept")?.includes("text/html")) {
-    res.headers.set(
-      "Accept-CH",
-      `Sec-CH-Prefers-Color-Scheme, Sec-CH-Prefers-Contrast`
-    );
-    res.headers.set("Vary", "Sec-CH-Prefers-Color-Scheme");
-    res.headers.set("Critical-CH", "Sec-CH-Prefers-Color-Scheme");
-    return res;
-  }
+  res = handleI18nRouting(req);
 
   return res;
 }
 
 export const config = {
+  // all supported languages from locales
   matcher: ["/((?!_next|api|favicon.ico).*)"],
 };
