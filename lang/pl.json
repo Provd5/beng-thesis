@@ -68,10 +68,23 @@
     },
     "CategoryTitles": {
       "signup": "Stwórz konto",
-      "login": "Zaloguj",
+      "login": "Zaloguj się",
       "explore": "Odkryj",
       "profile": "Profil",
-      "search": "Szukaj"
+      "search": "Szukaj",
+      "community": "Społeczność",
+      "edit profile": "Edytuj profil",
+      "followers": "obserwujących",
+      "following": "obserwowani",
+      "statistics": "statystyki",
+      "owned": "posiadane",
+      "liked": "polubione",
+      "to-read": "do przeczytania",
+      "already-read": "przeczytane",
+      "abandoned": "porzucone",
+      "reading": "w trakcie",
+      "reviews": "recenzje",
+      "other": "inne"
     }
   },
 

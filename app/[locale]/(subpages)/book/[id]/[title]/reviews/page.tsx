@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { unstable_setRequestLocale } from "next-intl/server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { z } from "zod";
 
@@ -7,15 +8,18 @@ import { reviewsOrderByArray } from "~/types/feed/OrderVariants";
 
 import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
 import { BackCategoryLink } from "~/components/ui/BackCategoryLink";
+import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 
 export default async function BookReviewsPage({
-  params: { id, title },
+  params: { id, title, locale },
   searchParams,
 }: {
-  params: { id: string; title: string };
+  params: { id: string; title: string; locale: localeTypes };
   searchParams?: string;
 }) {
+  unstable_setRequestLocale(locale);
+
   try {
     z.string().uuid().parse(id);
   } catch (error) {

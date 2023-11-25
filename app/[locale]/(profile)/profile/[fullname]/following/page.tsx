@@ -1,17 +1,25 @@
-import { type Metadata } from "next";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { FollowPage } from "~/components/Profile/FollowPage";
+import { type localeTypes } from "~/i18n";
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: localeTypes };
+}) {
+  const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
-    title: "following",
+    title: t("following"),
   };
 }
 
 export default function FollowingPage({
-  params: { fullname },
+  params: { fullname, locale },
 }: {
-  params: { fullname: string };
+  params: { fullname: string; locale: localeTypes };
 }) {
+  unstable_setRequestLocale(locale);
+
   return <FollowPage fullname={fullname} variant="following" />;
 }

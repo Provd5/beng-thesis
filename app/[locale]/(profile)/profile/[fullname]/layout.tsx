@@ -1,6 +1,6 @@
-import { type Metadata } from "next";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
+import { unstable_setRequestLocale } from "next-intl/server";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
@@ -8,14 +8,11 @@ import { FollowLinks } from "~/components/Profile/FollowLinks";
 import { PrivateProfilePage } from "~/components/Profile/PrivateProfilePage";
 import { ProfileDescription } from "~/components/Profile/ProfileDescription";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
+import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 import { isFollowed } from "~/utils/isFollowed";
 
-export function generateMetadata({
-  params,
-}: {
-  params: { fullname: string };
-}): Metadata {
+export function generateMetadata({ params }: { params: { fullname: string } }) {
   return {
     title: {
       default: `@${params.fullname}`,
@@ -26,11 +23,13 @@ export function generateMetadata({
 
 export default async function ProfileFullnameLayout({
   children,
-  params: { fullname },
+  params: { fullname, locale },
 }: {
   children: React.ReactNode;
-  params: { fullname: string };
+  params: { fullname: string; locale: localeTypes };
 }) {
+  unstable_setRequestLocale(locale);
+
   const publicUserData = await db.profile.findUnique({
     where: { full_name: fullname },
     select: {

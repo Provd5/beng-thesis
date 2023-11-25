@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { unstable_setRequestLocale } from "next-intl/server";
 
 import { categoryArray } from "~/types/CategoryTypes";
 
@@ -7,15 +8,18 @@ import { CategoryContentCardPlaceholder } from "~/components/Profile/CategoryCon
 import { Statistics } from "~/components/Profile/Statistics/Statistics";
 import { CategoryLink } from "~/components/ui/CategoryLink";
 import { DragContainer } from "~/components/ui/DragContainer";
+import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
 import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 import { quantityPerCategoryType } from "~/utils/quantityPerCategoryType";
 
 export default async function ProfilePage({
-  params: { fullname },
+  params: { fullname, locale },
 }: {
-  params: { fullname: string };
+  params: { fullname: string; locale: localeTypes };
 }) {
+  unstable_setRequestLocale(locale);
+
   const userData = await db.profile.findUnique({
     where: {
       full_name: fullname,
