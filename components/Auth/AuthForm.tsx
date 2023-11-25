@@ -138,7 +138,6 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
         password: password.value,
         options: {
           captchaToken: captchaToken,
-          emailRedirectTo: `${location.origin}/api/auth/callback`,
         },
       });
       captcha.current?.resetCaptcha();
