@@ -1,38 +1,14 @@
-import { cookies } from "next/headers";
-import { type CookieOptions, createServerClient } from "@supabase/ssr";
-
 import { db } from "~/lib/db";
+import readUserSession from "~/lib/supabase/readUserSession";
 import { SearchValidator } from "~/lib/validations/feed/search";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
 
   try {
-    const cookieStore = cookies();
-
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value;
-          },
-          set(name: string, value: string, options: CookieOptions) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            cookieStore.set({ name, value, ...options });
-          },
-          remove(name: string, options: CookieOptions) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            cookieStore.set({ name, value: "", ...options });
-          },
-        },
-      }
-    );
-
     const {
       data: { session },
-    } = await supabase.auth.getSession();
+    } = await readUserSession();
 
     const { searchCategory, searchText } = SearchValidator.parse({
       searchCategory: url.searchParams.get("searchCategory"),
