@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { type CookieOptions, createServerClient } from "@supabase/ssr";
 import { z } from "zod";
 
 import { db } from "~/lib/db";
@@ -8,9 +8,27 @@ import { ProfileVisibilityValidator } from "~/lib/validations/profileVisibility"
 
 export async function PATCH(req: Request) {
   try {
-    const supabase = createServerComponentClient({
-      cookies,
-    });
+    const cookieStore = cookies();
+
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return cookieStore.get(name)?.value;
+          },
+          set(name: string, value: string, options: CookieOptions) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            cookieStore.set({ name, value, ...options });
+          },
+          remove(name: string, options: CookieOptions) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            cookieStore.set({ name, value: "", ...options });
+          },
+        },
+      }
+    );
 
     const {
       data: { session },

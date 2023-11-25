@@ -15,7 +15,7 @@
     "@formatjs/intl-localematcher": "^0.4.2",
     "@hcaptcha/react-hcaptcha": "^1.9.2",
     "@prisma/client": "^5.5.2",
-    "@supabase/auth-helpers-nextjs": "latest",
+    "@supabase/ssr": "^0.0.10",
     "@supabase/supabase-js": "latest",
     "@t3-oss/env-nextjs": "^0.6.1",
     "@types/js-cookie": "^3.0.6",

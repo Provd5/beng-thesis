@@ -5,7 +5,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 
 import { LuLogOut } from "react-icons/lu";
 
@@ -17,7 +17,10 @@ export const LogoutButton: FC = () => {
   const t = useTranslations("Other");
   const te = useTranslations("Errors");
 
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const router = useRouter();
 

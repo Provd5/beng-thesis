@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from "@supabase/ssr";
 
 import { Logo } from "~/components/Logo";
 import { AccountSettings } from "~/components/Modals/AccountSettings";
@@ -18,9 +18,19 @@ export default async function ProfileLayout({
 }) {
   unstable_setRequestLocale(locale);
 
-  const supabase = createServerComponentClient({
-    cookies,
-  });
+  const cookieStore = cookies();
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
+  );
 
   const {
     data: { session },

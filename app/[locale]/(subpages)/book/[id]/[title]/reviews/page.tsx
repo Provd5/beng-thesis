@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from "@supabase/ssr";
 import { z } from "zod";
 
 import { reviewsOrderByArray } from "~/types/feed/OrderVariants";
@@ -26,9 +26,19 @@ export default async function BookReviewsPage({
     notFound();
   }
 
-  const supabase = createServerComponentClient({
-    cookies,
-  });
+  const cookieStore = cookies();
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
+  );
 
   const {
     data: { session },

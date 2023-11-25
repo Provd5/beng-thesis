@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from "@supabase/ssr";
 
 import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
 import { bookshelvesOrderByArray } from "~/types/feed/OrderVariants";
@@ -33,9 +33,19 @@ export default async function BookshelfPage({
   const bookshelfAsType = convertPathnameToTypeEnum(bookshelf) as CategoryTypes;
   if (!categoryArray.includes(bookshelfAsType)) notFound();
 
-  const supabase = createServerComponentClient({
-    cookies,
-  });
+  const cookieStore = cookies();
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+      },
+    }
+  );
 
   const {
     data: { session },

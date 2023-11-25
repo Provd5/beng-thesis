@@ -12,7 +12,7 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 import { type Provider } from "@supabase/supabase-js";
 import { z } from "zod";
 
@@ -35,7 +35,10 @@ interface AuthFormProps {
 export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
   const t = useTranslations("Profile.Auth");
   const te = useTranslations("Errors");
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   const router = useRouter();
 
