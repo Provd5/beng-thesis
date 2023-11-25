@@ -1,13 +1,13 @@
 import { Quicksand } from "next/font/google";
 import { notFound } from "next/navigation";
 import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
-import { unstable_setRequestLocale } from "next-intl/server";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { Navbar } from "~/components/Navbar/Navbar";
 import { DarkModeInitializer } from "~/components/ui/DarkModeInitializer";
 import { SvgPainter } from "~/components/ui/SvgIcons/SvgPainter";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
-import { locales, type localeTypes } from "~/i18n";
+import { defaultLocale, locales, type localeTypes } from "~/i18n";
 
 import "~/styles/globals.css";
 
@@ -16,6 +16,10 @@ const quicksandFont = Quicksand({
   subsets: ["latin", "latin-ext"],
   display: "swap",
 });
+
+export function generateStaticParams() {
+  return [{ locale: "pl" }, { locale: "en" }];
+}
 
 export async function getMessages(locale: localeTypes) {
   try {
@@ -27,17 +31,24 @@ export async function getMessages(locale: localeTypes) {
   }
 }
 
-export const metadata = {
-  title: {
-    default: "Booksphere",
-    template: "%s | Booksphere",
-  },
-  description:
-    "Booksphere is a dynamic application designed for book enthusiasts. Users have the ability to share reviews, ratings, and inspirations related to their favorite reads. Within this platform, readers can create virtual shelves where they can gather both read and planned books, making it easier to track their literary conquests. Booksphere not only facilitates the management of a book collection but also integrates a community of literature lovers, creating a shared space for reading enthusiasts.",
-};
+export async function generateMetadata({
+  params: { locale },
+}: {
+  params: { locale: localeTypes };
+}) {
+  const validLocale = locales.includes(locale) ? locale : defaultLocale;
+  const t = await getTranslations({
+    validLocale,
+    namespace: "Nav.CategoryTitles",
+  });
 
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return {
+    title: {
+      default: "Booksphere",
+      template: "%s | Booksphere",
+    },
+    description: t("page description"),
+  };
 }
 
 export default async function RootLayout({
@@ -47,19 +58,20 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: localeTypes };
 }) {
-  unstable_setRequestLocale(locale);
-  const messages = await getMessages(locale);
+  const validLocale = locales.includes(locale) ? locale : defaultLocale;
+  unstable_setRequestLocale(validLocale);
+  const messages = await getMessages(validLocale);
 
   const themeInitializerScript = `function initializeDarkMode() { localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");} initializeDarkMode();`;
 
   return (
-    <html lang={locale} className={quicksandFont.className}>
+    <html lang={validLocale} className={quicksandFont.className}>
       <body className="bodyGradient relative flex h-full flex-col bg-fixed text-base font-medium text-black antialiased dark:text-white">
         <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
         <DarkModeInitializer />
         <SvgPainter />
 
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={validLocale} messages={messages}>
           <Navbar />
           {children}
           <ToasterComponent />

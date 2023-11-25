@@ -84,7 +84,8 @@
       "abandoned": "abandoned",
       "reading": "reading",
       "reviews": "reviews",
-      "other": "other"
+      "other": "other",
+      "page description": "Booksphere is a dynamic application designed for book enthusiasts. Users have the ability to share reviews, ratings, and inspirations related to their favorite reads. Within this platform, readers can create virtual shelves where they can gather both read and planned books, making it easier to track their literary conquests. Booksphere not only facilitates the management of a book collection but also integrates a community of literature lovers, creating a shared space for reading enthusiasts."
     }
   },
 
