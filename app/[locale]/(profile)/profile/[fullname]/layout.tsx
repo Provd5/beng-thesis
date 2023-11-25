@@ -1,7 +1,5 @@
-import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
-import { createServerClient } from "@supabase/ssr";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
 import { FollowLinks } from "~/components/Profile/FollowLinks";
@@ -10,6 +8,7 @@ import { ProfileDescription } from "~/components/Profile/ProfileDescription";
 import { ProfileStatus } from "~/components/Profile/ProfileStatus";
 import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
+import readUserSession from "~/lib/supabase/readUserSession";
 import { isFollowed } from "~/utils/isFollowed";
 
 export function generateMetadata({ params }: { params: { fullname: string } }) {
@@ -45,23 +44,9 @@ export default async function ProfileFullnameLayout({
 
   if (!publicUserData) notFound();
 
-  const cookieStore = cookies();
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await readUserSession();
 
   return (
     <>

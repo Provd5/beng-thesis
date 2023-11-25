@@ -1,7 +1,5 @@
-import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
-import { createServerClient } from "@supabase/ssr";
 
 import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
 import { bookshelvesOrderByArray } from "~/types/feed/OrderVariants";
@@ -10,6 +8,7 @@ import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
 import { BookshelfPageTitle } from "~/components/Profile/Bookshelf/BookshelfPageTitle";
 import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
+import readUserSession from "~/lib/supabase/readUserSession";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
 
 export async function generateMetadata({
@@ -33,23 +32,9 @@ export default async function BookshelfPage({
   const bookshelfAsType = convertPathnameToTypeEnum(bookshelf) as CategoryTypes;
   if (!categoryArray.includes(bookshelfAsType)) notFound();
 
-  const cookieStore = cookies();
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await readUserSession();
 
   let booksQuantity;
   let variant;

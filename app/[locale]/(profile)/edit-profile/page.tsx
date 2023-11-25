@@ -1,7 +1,5 @@
-import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
-import { createServerClient } from "@supabase/ssr";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
 import { ManageProfileDescription } from "~/components/Profile/EditProfile/ManageProfileDescription";
@@ -9,6 +7,7 @@ import { ManageProfileStatus } from "~/components/Profile/EditProfile/ManageProf
 import { ManageProfileUsername } from "~/components/Profile/EditProfile/ManageProfileUsername";
 import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
+import readUserSession from "~/lib/supabase/readUserSession";
 
 export async function generateMetadata({
   params: { locale },
@@ -28,23 +27,9 @@ export default async function EditProfilePage({
 }) {
   unstable_setRequestLocale(locale);
 
-  const cookieStore = cookies();
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await readUserSession();
 
   const userData =
     session?.user &&

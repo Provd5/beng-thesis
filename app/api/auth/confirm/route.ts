@@ -41,10 +41,5 @@ export async function GET(request: Request) {
   }
 
   // return the user to an error page with some instructions
-  return NextResponse.redirect("/auth/auth-code-error");
+  return NextResponse.redirect("/login");
 }
-
-// <h2>Confirm your signup</h2>
-
-// <p>Follow this link to confirm your user:</p>
-// <p><a href="{{ .ConfirmationURL }}">Confirm your mail</a></p>

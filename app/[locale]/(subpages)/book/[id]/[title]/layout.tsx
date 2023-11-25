@@ -1,7 +1,5 @@
-import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
-import { createServerClient } from "@supabase/ssr";
 import { z } from "zod";
 
 import { BookCover } from "~/components/Book/BookCover";
@@ -13,6 +11,7 @@ import { ManageReviews } from "~/components/Book/Manage/ManageReviews";
 import { BackCategoryButton } from "~/components/ui/BackCategoryLink";
 import { type localeTypes } from "~/i18n";
 import { db } from "~/lib/db";
+import readUserSession from "~/lib/supabase/readUserSession";
 import { averageRating } from "~/utils/averageRating";
 
 export function generateMetadata({ params }: { params: { title: string } }) {
@@ -36,23 +35,9 @@ export default async function BookLayout({
     notFound();
   }
 
-  const cookieStore = cookies();
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-
   const {
     data: { session },
-  } = await supabase.auth.getSession();
+  } = await readUserSession();
 
   const [book, bookRates] = await Promise.all([
     db.book.findUnique({
