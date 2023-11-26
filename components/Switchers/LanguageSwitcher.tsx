@@ -2,7 +2,7 @@
 
 import { type FC } from "react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
 import FlagOfTheUnitedKingdom from "~/assets/flags/flag-icons-gb.png";
@@ -13,8 +13,6 @@ export const LanguageSwitcher: FC = () => {
   const pathname = usePathname();
   const pathnameParts = pathname.split("/");
   const localeFromUrl = pathnameParts[1];
-
-  const router = useRouter();
 
   const getFlagFromLocale = (locale: localeTypes) => {
     switch (locale) {
@@ -31,12 +29,10 @@ export const LanguageSwitcher: FC = () => {
   return (
     <div className="flex flex-none gap-3">
       {locales.map((locale) => (
-        <button
+        <a
           key={locale}
+          href={pathname.replace(`/${localeFromUrl}`, `/${locale}`)}
           className="flex flex-col items-center text-sm"
-          onClick={() =>
-            router.push(pathname.replace(`/${localeFromUrl}`, `/${locale}`))
-          }
         >
           <Image
             className={
@@ -61,7 +57,7 @@ export const LanguageSwitcher: FC = () => {
           >
             {locale.toUpperCase()}
           </p>
-        </button>
+        </a>
       ))}
     </div>
   );
