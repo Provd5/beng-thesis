@@ -63,8 +63,6 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getSession();
-
   // next-intl localization
   const handleI18nRouting = createMiddleware({
     locales: locales,
@@ -72,6 +70,23 @@ export async function middleware(request: NextRequest) {
     localeDetection: true,
   });
   response = handleI18nRouting(request);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const nextUrl = request.nextUrl;
+  const protectedRoute = nextUrl.pathname.split("/")[2];
+
+  if (
+    !session?.user &&
+    (protectedRoute === "profile" || protectedRoute === "edit-profile")
+  )
+    return Response.redirect(new URL("/login", nextUrl));
+  if (
+    !!session?.user &&
+    (protectedRoute === "login" || protectedRoute === "signup")
+  )
+    return Response.redirect(new URL("/profile", nextUrl));
 
   return response;
 }

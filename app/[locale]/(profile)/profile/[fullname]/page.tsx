@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
 
 import { categoryArray } from "~/types/CategoryTypes";
@@ -9,63 +8,21 @@ import { Statistics } from "~/components/Profile/Statistics/Statistics";
 import { CategoryLink } from "~/components/ui/CategoryLink";
 import { DragContainer } from "~/components/ui/DragContainer";
 import { type localeTypes } from "~/i18n";
-import { db } from "~/lib/db";
+import { fetchCategoryCount } from "~/lib/actions/profile/fetch";
 import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
-import { quantityPerCategoryType } from "~/utils/quantityPerCategoryType";
 
-export default async function ProfilePage({
+export default function ProfilePage({
   params: { fullname, locale },
 }: {
   params: { fullname: string; locale: localeTypes };
 }) {
   unstable_setRequestLocale(locale);
 
-  const userData = await db.profile.findUnique({
-    where: {
-      full_name: fullname,
-    },
-    select: {
-      id: true,
-      _count: {
-        select: {
-          followed_by: true,
-          following: true,
-          book_owned_as: {
-            where: {
-              NOT: {
-                AND: [
-                  { added_audiobook_at: null },
-                  { added_book_at: null },
-                  { added_ebook_at: null },
-                ],
-              },
-            },
-          },
-          liked_book: true,
-          review: true,
-        },
-      },
-      bookshelf: { select: { bookshelf: true } },
-    },
-  });
-
-  if (!userData) notFound();
-
-  const quantities = {
-    ownedQuantity: userData._count.book_owned_as,
-    likedQuantity: userData._count.liked_book,
-    reviewsQuantity: userData._count.review,
-  };
-
-  return categoryArray.map((categoryVariant) => {
+  return categoryArray.map(async (categoryVariant) => {
     const variantUrl = `${fullname}/${convertTypeEnumToPathname(
       categoryVariant
     )}`;
-    const variantQuantity = quantityPerCategoryType(
-      categoryVariant,
-      userData.bookshelf,
-      quantities
-    );
+    const variantQuantity = await fetchCategoryCount(fullname, categoryVariant);
 
     return (
       <div key={categoryVariant} className="flex flex-col gap-1">
@@ -75,11 +32,7 @@ export default async function ProfilePage({
               variant="STATISTICS"
               href={`${fullname}/statistics`}
             />
-            <Statistics
-              userFullname={fullname}
-              quantities={quantities}
-              bookshelfArray={userData.bookshelf}
-            />
+            <Statistics fullname={fullname} />
           </>
         ) : (
           <>

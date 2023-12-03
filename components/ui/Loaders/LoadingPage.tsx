@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import Image from "next/image";
 
-import LogoBook from "~/assets/booksphere-book.svg";
-import LogoSphere from "~/assets/booksphere-sphere.svg";
+import LogoBook from "~/public/booksphere-book.svg";
+import LogoSphere from "~/public/booksphere-sphere.svg";
 
 export const LoadingPage: FC = () => {
   return (

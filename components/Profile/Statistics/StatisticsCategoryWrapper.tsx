@@ -1,7 +1,9 @@
 "use client";
 
-import type { FC } from "react";
+import { type FC, Suspense } from "react";
 import { useTranslations } from "next-intl";
+
+import { Loader } from "~/components/ui/Loaders/Loader";
 
 interface StatisticsCategoryWrapperProps {
   children: React.ReactNode;
@@ -21,7 +23,7 @@ export const StatisticsCategoryWrapper: FC<StatisticsCategoryWrapperProps> = ({
           {t(variant)}
         </h1>
       )}
-      {children}
+      <Suspense fallback={<Loader />}>{children}</Suspense>
     </div>
   );
 };

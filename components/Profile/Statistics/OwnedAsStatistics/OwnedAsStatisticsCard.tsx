@@ -1,46 +1,44 @@
 import type { FC } from "react";
 
-import { ownedAsArray } from "~/types/CategoryTypes";
+import { type OwnedAsType } from "~/types/CategoryTypes";
 
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
-import { quantityPerOwnedType } from "~/utils/quantityPerOwnedType";
+import { fetchOwnedAsStatistics } from "~/lib/actions/profile/statistics";
 
 import { OwnedAsStatisticsLabels } from "./OwnedAsStatisticsLabels";
 
 interface OwnedAsStatisticsCardProps {
-  booksOwnedArray: {
-    added_audiobook_at: Date | null;
-    added_book_at: Date | null;
-    added_ebook_at: Date | null;
-  }[];
+  fullname: string;
 }
 
-export const OwnedAsStatisticsCard: FC<OwnedAsStatisticsCardProps> = ({
-  booksOwnedArray,
+export const OwnedAsStatisticsCard: FC<OwnedAsStatisticsCardProps> = async ({
+  fullname,
 }) => {
-  const totalBooksQuantity =
-    quantityPerOwnedType("BOOK", booksOwnedArray) +
-    quantityPerOwnedType("EBOOK", booksOwnedArray) +
-    quantityPerOwnedType("AUDIOBOOK", booksOwnedArray);
+  const { counts, uniqueCounts, totalCounts } = await fetchOwnedAsStatistics(
+    fullname
+  );
 
   return (
     <div className="flex flex-col items-center gap-3">
       <div className="flex gap-3">
-        {ownedAsArray.map((ownedAs) => (
-          <div
-            key={ownedAs}
-            className="flex flex-col items-center justify-center gap-0.5"
-          >
-            {getOwnedAsIcon(ownedAs)}
-            <p className="text-md">
-              {quantityPerOwnedType(ownedAs, booksOwnedArray)}
-            </p>
-          </div>
-        ))}
+        {counts.map((ownedAs) => {
+          const label = Object.keys(ownedAs)[0] as OwnedAsType;
+          const value = ownedAs[label];
+
+          return (
+            <div
+              key={label}
+              className="flex flex-col items-center justify-center gap-0.5"
+            >
+              {getOwnedAsIcon(label)}
+              <p className="text-md">{value}</p>
+            </div>
+          );
+        })}
       </div>
       <OwnedAsStatisticsLabels
-        uniqueBooksQuantity={booksOwnedArray.length || 0}
-        totalBooksQuantity={totalBooksQuantity}
+        uniqueBooksQuantity={uniqueCounts}
+        totalBooksQuantity={totalCounts}
       />
     </div>
   );

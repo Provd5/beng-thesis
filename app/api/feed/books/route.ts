@@ -198,6 +198,8 @@ export async function GET(req: Request) {
     // on success
     return new Response(JSON.stringify(books));
   } catch (error) {
-    return;
+    console.log(error);
+
+    return [];
   }
 }

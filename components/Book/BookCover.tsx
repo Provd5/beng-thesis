@@ -2,7 +2,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 
-import ThumbnailPlaceholder from "../../assets/ThumbnailPlaceholder.png";
+import ThumbnailPlaceholder from "../../public/ThumbnailPlaceholder.png";
 
 interface BookCoverProps {
   coverUrl: string | null;

@@ -65,7 +65,7 @@ export const BookCard: FC<BookCardProps> = ({ bookData, sessionId }) => {
                 bookId={bookData.id}
                 doILikeThisBook={doILikeThisBook}
                 likesQuantity={bookData._count.liked_by}
-                sessionId={sessionId}
+                isSession={!!sessionId}
               />
             </div>
           </div>
@@ -82,13 +82,12 @@ export const BookCard: FC<BookCardProps> = ({ bookData, sessionId }) => {
                 />
               </div>
               <div className="h-14 w-36">
-                <ManageBookshelf
-                  bookId={bookData.id}
-                  bookshelf={myBookshelfData?.bookshelf}
-                  updatedAt={myBookshelfData?.updated_at}
-                  beganReadingAt={myBookshelfData?.began_reading_at}
-                  readQuantity={myBookshelfData?.read_quantity}
-                />
+                {myBookshelfData?.bookshelfData && (
+                  <ManageBookshelf
+                    bookId={bookData.id}
+                    bookshelfData={myBookshelfData.bookshelfData}
+                  />
+                )}
               </div>
             </div>
           )}

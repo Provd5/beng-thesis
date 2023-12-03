@@ -10,11 +10,12 @@ interface ReviewInterface {
 }
 
 interface BookshelfInterface {
-  updated_at: Date;
-  began_reading_at: Date | null;
-  read_quantity: number;
-  bookshelf: bookshelfType | null;
-  title: string | null;
+  bookshelfData: {
+    bookshelf: bookshelfType | null;
+    updated_at: Date;
+    began_reading_at: Date | null;
+    read_quantity: number;
+  };
 }
 
 interface BookOwnedAsInterface {

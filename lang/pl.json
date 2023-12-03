@@ -150,6 +150,8 @@
       "longest-read:": "Najdłużej czytane:",
       "last:": "Ostatnio:",
       "book with most pages:": "Książka z największą liczbą stron:",
+      "most read book:": "Najczęściej czytana książka:",
+      "read quantity": "przeczytano <span>{numRead}</span> razy",
       "read in": "przeczytano w <span>{numDays, plural, =0 {mniej niż dzień} =1 {# dzień} other {# dni}}</span>",
       "pages:": "stron:",
       "total pages read:": "Suma przeczytanych stron:"

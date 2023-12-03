@@ -2,7 +2,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import clsx from "clsx";
 
-import AvatarPlaceholder from "../../assets/AvatarPlaceholder.png";
+import AvatarPlaceholder from "../../public/AvatarPlaceholder.png";
 
 interface AvatarImageProps {
   avatarSrc: string | null;
