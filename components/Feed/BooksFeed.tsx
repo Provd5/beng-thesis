@@ -1,72 +1,40 @@
-"use client";
-
 import { type FC } from "react";
 
-import { type FetchBooksProps } from "~/types/feed/FetchProps";
+import { type CategoryTypes } from "~/types/CategoryTypes";
 
-import { useFetchData } from "~/hooks/useFetchData";
+import { fetchBooks } from "~/lib/actions/feed/books";
 
 import { BookCard } from "../Explore/BookCard";
 import { BookReviewCard } from "../Explore/BookReviewCard";
-import { BookCardLoader } from "../ui/Loaders/Skeletons/BookCardLoader";
-import { BookReviewCardLoader } from "../ui/Loaders/Skeletons/BookReviewCardLoader";
-import { NotFoundItems } from "../ui/NotFoundItems";
-import { FetchMoreButton } from "./FetchMoreButton";
 
-export const BooksFeed: FC<
-  FetchBooksProps & { sessionId: string | undefined }
-> = (props) => {
-  const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchData({
-    fetchType: "books",
-    ...props,
-  });
+interface BooksFeedProps {
+  variant: CategoryTypes | null;
+  fullname: string | null;
+  searchParams:
+    | {
+        orderBy?: string;
+        order?: "asc" | "desc";
+        page?: string;
+      }
+    | undefined;
+}
 
-  return (
-    <>
-      {props.variant === "REVIEWS" ? (
-        <div className="grid grid-cols-1 gap-5">
-          {isLoading &&
-            pageNumber === 1 &&
-            Array.from({ length: props.takeLimit }, (_, i) => (
-              <BookReviewCardLoader key={i} index={i} />
-            ))}
-          {(fetchedData as BookReviewCardInterface[]).map((data) => (
-            <BookReviewCard key={data.book.id} bookData={data} />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-x-5 gap-y-8 lg:grid-cols-2">
-          {isLoading &&
-            pageNumber === 1 &&
-            Array.from({ length: props.takeLimit }, (_, i) => (
-              <BookCardLoader key={i} index={i} />
-            ))}
-          {props.variant === undefined
-            ? (fetchedData as BookInterface[]).map((data) => (
-                <BookCard
-                  key={data.id}
-                  bookData={data}
-                  sessionId={props.sessionId}
-                />
-              ))
-            : (fetchedData as BookCardInterface[]).map((data) => (
-                <BookCard
-                  key={data.book.id}
-                  bookData={data.book}
-                  sessionId={props.sessionId}
-                />
-              ))}
-        </div>
-      )}
-      {!isLoading && !fetchedData.length && <NotFoundItems />}
-      <FetchMoreButton
-        className="flex w-full items-center justify-center py-6"
-        isLoading={isLoading}
-        fetchMoreFunc={fetchMore}
-        takeLimit={props.takeLimit}
-        pageNumber={pageNumber}
-        dataLength={fetchedData.length}
-      />
-    </>
-  );
+export const BooksFeed: FC<BooksFeedProps> = async ({
+  variant,
+  fullname,
+  searchParams,
+}) => {
+  const books = await fetchBooks(variant, fullname, searchParams);
+
+  return !variant
+    ? (books as BookInterface[]).map((book) => (
+        <BookCard key={book.id} bookData={book} />
+      ))
+    : variant === "REVIEWS"
+    ? (books as BookReviewCardInterface[]).map((book) => (
+        <BookReviewCard key={book.book.id} bookData={book} />
+      ))
+    : (books as BookCardInterface[]).map(({ book }) => (
+        <BookCard key={book.id} bookData={book} />
+      ));
 };

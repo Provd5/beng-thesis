@@ -1,11 +1,15 @@
 "use server";
 
+import { unstable_noStore } from "next/cache";
+
 import { ownedAsArray, type OwnedAsType } from "~/types/CategoryTypes";
 
 import { db } from "~/lib/db";
 import { convertTimeToDays } from "~/utils/convertTimeToDays";
 
 export async function fetchOwnedAsStatistics(fullname: string) {
+  unstable_noStore();
+
   const getCount = async (ownedAs: OwnedAsType) => {
     switch (ownedAs) {
       case "AUDIOBOOK":
@@ -63,6 +67,8 @@ export async function fetchOwnedAsStatistics(fullname: string) {
 }
 
 export async function fetchAlreadyReadStatistics(fullname: string) {
+  unstable_noStore();
+
   const commonSelect = {
     began_reading_at: true,
     updated_at: true,

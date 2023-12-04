@@ -19,7 +19,7 @@ export default function ProfileSubpagesLayout({
       <BackCategoryLink variant="RETURN" href={`../${fullname}`} />
       <DragContainer
         arrowSize="sm"
-        containerClassName="flex-start py-1 px-0.5 hidden-scrollbar flex gap-1"
+        containerClassName="flex-start py-1 px-0.5 hidden-scrollbar gap-1"
       >
         <CategoryLinksContainer />
       </DragContainer>

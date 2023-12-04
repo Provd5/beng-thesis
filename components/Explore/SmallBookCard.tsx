@@ -1,23 +1,17 @@
-"use client";
-
 import type { FC } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-import { hrefToBook } from "~/utils/hrefToBook";
 
 import { BookCover } from "../Book/BookCover";
+import { LinkToBook } from "../Book/LinkToBook";
 
 interface SmallBookCardProps {
   book: BookBaseInterface;
 }
 
 export const SmallBookCard: FC<SmallBookCardProps> = ({ book }) => {
-  const pathname = usePathname();
-
   return (
-    <Link
-      href={hrefToBook(book.id, book.title, pathname)}
+    <LinkToBook
+      bookId={book.id}
+      bookTitle={book.title}
       className="flex w-32 flex-none snap-center flex-col items-center gap-1 py-0.5 md:snap-start"
     >
       <BookCover coverUrl={book.thumbnail_url} />
@@ -27,6 +21,6 @@ export const SmallBookCard: FC<SmallBookCardProps> = ({ book }) => {
           {book.authors.join(", ")}
         </p>
       </div>
-    </Link>
+    </LinkToBook>
   );
 };

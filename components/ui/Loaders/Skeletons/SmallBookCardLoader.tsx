@@ -24,3 +24,9 @@ export const SmallBookCardLoader: FC<SmallBookCardLoaderProps> = ({
     </div>
   );
 };
+
+export const SmallBookCardsLoader: FC<{ items: number }> = ({ items }) => {
+  return Array.from({ length: items }, (_, i) => (
+    <SmallBookCardLoader key={i} index={i} />
+  ));
+};

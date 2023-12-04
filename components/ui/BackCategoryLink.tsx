@@ -37,7 +37,7 @@ export const BackCategoryLink: FC<BackCategoryLinkProps> = ({
   );
 };
 
-export const BackCategoryButton: FC = () => {
+export const BackFrom: FC = () => {
   const t = useTranslations("Book.BackCategoryLink");
   const prevLocation = useSearchParams().get("from");
 

@@ -1,18 +1,10 @@
-"use client";
-
 import type { FC } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-import {
-  type BookOwnedAsInterface,
-  type BookshelfInterface,
-} from "~/types/DataTypes";
-
+import { fetchMyBookData } from "~/lib/actions/book/fetch";
 import { averageRating } from "~/utils/averageRating";
-import { hrefToBook } from "~/utils/hrefToBook";
 
 import { BookCover } from "../Book/BookCover";
+import { LinkToBook } from "../Book/LinkToBook";
 import { ManageBookshelf } from "../Book/Manage/ManageBookshelf";
 import { ManageLikes } from "../Book/Manage/ManageLikes";
 import { ManageOwnedAs } from "../Book/Manage/ManageOwnedAs";
@@ -20,38 +12,31 @@ import { BookCardDetails } from "./BookCardDetails";
 
 interface BookCardProps {
   bookData: BookInterface;
-  sessionId: string | undefined;
 }
 
-export const BookCard: FC<BookCardProps> = ({ bookData, sessionId }) => {
-  const pathname = usePathname();
-
-  const myOwnedAsData = bookData.book_owned_as
-    ? (bookData.book_owned_as[0] as BookOwnedAsInterface)
-    : undefined;
-  const myBookshelfData = bookData.bookshelf
-    ? (bookData.bookshelf[0] as BookshelfInterface)
-    : undefined;
-  const doILikeThisBook = !!bookData.liked_by?.length;
+export const BookCard: FC<BookCardProps> = async ({ bookData }) => {
+  const myData = await fetchMyBookData(bookData.id);
 
   return (
     <div className="flex justify-start gap-3 sm:justify-center lg:justify-start">
-      <Link
-        href={hrefToBook(bookData.id, bookData.title, pathname)}
+      <LinkToBook
         className="h-fit w-fit"
+        bookId={bookData.id}
+        bookTitle={bookData.title}
       >
         <BookCover coverUrl={bookData.thumbnail_url} />
-      </Link>
+      </LinkToBook>
       <div className="flex flex-col gap-1 xs:grow">
-        <Link
-          href={hrefToBook(bookData.id, bookData.title, pathname)}
+        <LinkToBook
           className="h-fit w-fit max-w-[300px] py-0.5 leading-tight"
+          bookId={bookData.id}
+          bookTitle={bookData.title}
         >
           <h1 className="line-clamp-2">{bookData.title}</h1>
           <h2 className="text-sm text-black-light dark:text-white-dark">
             {bookData.authors.join(", ")}
           </h2>
-        </Link>
+        </LinkToBook>
         <div className="flex w-11/12 flex-wrap justify-between gap-0 gap-y-3">
           <div className="flex flex-col justify-between text-sm">
             <div className="h-14 w-36">
@@ -63,31 +48,29 @@ export const BookCard: FC<BookCardProps> = ({ bookData, sessionId }) => {
             <div className="h-14 w-36">
               <ManageLikes
                 bookId={bookData.id}
-                doILikeThisBook={doILikeThisBook}
+                doILikeThisBook={!!myData?.doILikeThisBook}
                 likesQuantity={bookData._count.liked_by}
-                isSession={!!sessionId}
+                isSession={!!myData}
               />
             </div>
           </div>
 
-          {!!sessionId && (
+          {!!myData && (
             <div className="flex flex-col justify-between">
               <div className="h-14 w-36">
                 <ManageOwnedAs
                   bookId={bookData.id}
-                  addedEbookAt={myOwnedAsData?.added_ebook_at}
-                  addedAudiobookAt={myOwnedAsData?.added_audiobook_at}
-                  addedBookAt={myOwnedAsData?.added_book_at}
+                  addedEbookAt={myData.myOwnedAsData?.added_ebook_at}
+                  addedAudiobookAt={myData.myOwnedAsData?.added_audiobook_at}
+                  addedBookAt={myData.myOwnedAsData?.added_book_at}
                   size="sm"
                 />
               </div>
               <div className="h-14 w-36">
-                {myBookshelfData?.bookshelfData && (
-                  <ManageBookshelf
-                    bookId={bookData.id}
-                    bookshelfData={myBookshelfData.bookshelfData}
-                  />
-                )}
+                <ManageBookshelf
+                  bookId={bookData.id}
+                  bookshelfData={myData.myBookshelfData}
+                />
               </div>
             </div>
           )}

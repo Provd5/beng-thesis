@@ -1,6 +1,6 @@
 "use client";
 
-import type { FC } from "react";
+import { type FC, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -13,8 +13,18 @@ import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 export const CategoryLinksContainer: FC = () => {
   const t = useTranslations("Book.BookshelfTypes");
 
+  const currentCategoryRef = useRef<HTMLAnchorElement>(null);
   const pathname = usePathname();
   const pathnameParts = pathname.split("/");
+
+  useEffect(() => {
+    if (currentCategoryRef.current) {
+      currentCategoryRef.current.scrollIntoView({
+        inline: "center",
+        behavior: "instant",
+      });
+    }
+  }, [pathname]);
 
   return categoryArray.map((categoryVariant) => {
     const categoryVariantPathname = convertTypeEnumToPathname(categoryVariant);
@@ -27,6 +37,8 @@ export const CategoryLinksContainer: FC = () => {
 
     return (
       <Link
+        scroll={false}
+        ref={isActive() ? currentCategoryRef : null}
         key={categoryVariant}
         replace
         href={categoryVariantPathname}

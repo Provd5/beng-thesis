@@ -8,7 +8,7 @@ import { ManageBookshelf } from "~/components/Book/Manage/ManageBookshelf";
 import { ManageLikes } from "~/components/Book/Manage/ManageLikes";
 import { ManageOwnedAs } from "~/components/Book/Manage/ManageOwnedAs";
 import { ManageReviews } from "~/components/Book/Manage/ManageReviews";
-import { BackCategoryButton } from "~/components/ui/BackCategoryLink";
+import { BackFrom } from "~/components/ui/BackCategoryLink";
 import { type localeTypes } from "~/i18n";
 import { fetchBookData, fetchMyBookData } from "~/lib/actions/book/fetch";
 
@@ -42,7 +42,7 @@ export default async function BookLayout({
 
   return (
     <div className="container pb-12 pt-8 text-sm">
-      <BackCategoryButton />
+      <BackFrom />
       <div className="mt-3 flex flex-col gap-8">
         <div className="flex flex-col gap-x-10 gap-y-8 px-1 xs:px-3 md:flex-row md:justify-between md:px-6">
           <div className="flex gap-3">

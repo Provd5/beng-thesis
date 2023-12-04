@@ -6,49 +6,37 @@ import { useTranslations } from "next-intl";
 import { FaPenToSquare } from "react-icons/fa6";
 import { RxCross2 } from "react-icons/rx";
 
-import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
+import {
+  type ReviewCardDataInterface,
+  type ReviewReactionsInterface,
+} from "~/types/feed/ReviewCardDataInterface";
 
-import { useFetchData } from "~/hooks/useFetchData";
-import { findMyReaction } from "~/utils/findMyReaction";
-
-import { ReviewCardLoader } from "../ui/Loaders/Skeletons/ReviewCardLoader";
 import { CreateReview } from "./CreateReview";
 import { ReviewCard } from "./ReviewCard";
 
 interface MyReviewProps {
+  reviewData: ReviewCardDataInterface | null | undefined;
+  reviewReactions: ReviewReactionsInterface;
   bookId: string;
-  sessionId: string | undefined;
 }
 
-export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
+export const MyReview: FC<MyReviewProps> = ({
+  reviewData,
+  reviewReactions,
+  bookId,
+}) => {
   const t = useTranslations("Reviews.CreateReview");
 
-  const [refreshData, setRefreshData] = useState<"asc" | "desc">("desc");
+  const [showCreateReview, setShowCreateReview] = useState(!reviewData);
 
-  const { fetchedData, isLoading } = useFetchData({
-    fetchType: "reviews",
-    bookId,
-    isMyReview: true,
-    takeLimit: 1,
-    order: refreshData,
-  });
-  const reviewsData = fetchedData as ReviewCardDataInterface[];
-
-  const myReviewData = reviewsData ? reviewsData[0] : undefined;
-  const myReaction = myReviewData
-    ? findMyReaction(myReviewData.review_reaction, sessionId)
-    : undefined;
-
-  const [showCreateReview, setShowCreateReview] = useState(!!myReviewData);
-
-  return !sessionId ? (
+  return reviewData === undefined ? (
     <div className="flex flex-col justify-center gap-3 p-6 text-center text-md text-gray">
       <h1>{t("log in to add your review")}</h1>
     </div>
   ) : (
     <>
       <div className="flex w-full justify-end">
-        {!!myReviewData ? (
+        {!!reviewData ? (
           <button
             id="review-edit-button"
             className="flex items-center gap-1 px-3 py-1"
@@ -74,26 +62,21 @@ export const MyReview: FC<MyReviewProps> = ({ bookId, sessionId }) => {
           <div className="my-0.5 h-6" />
         )}
       </div>
-      {isLoading ? (
-        <ReviewCardLoader isMyReview index={0} />
-      ) : myReviewData && !showCreateReview ? (
+      {!!reviewData && !showCreateReview ? (
         <ReviewCard
           isMyReview
-          reviewData={myReviewData}
-          myReaction={myReaction}
+          reviewData={reviewData}
+          reviewReactions={reviewReactions}
         />
       ) : (
         <CreateReview
-          isReviewExists={!!myReviewData}
+          isReviewExists={!!reviewData}
           bookId={bookId}
-          avatarUrl={myReviewData?.profile.avatar_url}
-          fullName={myReviewData?.profile.full_name}
-          rate={myReviewData?.rate}
-          text={myReviewData?.text}
-          closeReview={() => {
-            setShowCreateReview(false),
-              setRefreshData(refreshData === "desc" ? "asc" : "desc");
-          }}
+          avatarUrl={reviewData?.profile.avatar_url}
+          fullName={reviewData?.profile.full_name}
+          rate={reviewData?.rate}
+          text={reviewData?.text}
+          closeReview={() => setShowCreateReview(false)}
         />
       )}
     </>

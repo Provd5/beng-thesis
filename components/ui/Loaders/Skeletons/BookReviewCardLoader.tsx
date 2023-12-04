@@ -38,3 +38,9 @@ export const BookReviewCardLoader: FC<BookReviewCardLoaderProps> = ({
     </div>
   );
 };
+
+export const BookReviewCardsLoader: FC<{ items: number }> = ({ items }) => {
+  return Array.from({ length: items }, (_, i) => (
+    <BookReviewCardLoader key={i} index={i} />
+  ));
+};

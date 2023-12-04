@@ -1,11 +1,15 @@
 "use server";
 
+import { unstable_noStore } from "next/cache";
+
 import { type CategoryTypes } from "~/types/CategoryTypes";
 
 import { db } from "~/lib/db";
 import readUserSession from "~/lib/supabase/readUserSession";
 
 export async function fetchPublicUserData(fullname?: string) {
+  unstable_noStore();
+
   let userData = null;
 
   const {
@@ -42,13 +46,17 @@ export async function fetchPublicUserData(fullname?: string) {
 }
 
 export async function fetchCategoryCount(
-  fullname: string,
-  type: CategoryTypes
+  type: CategoryTypes | null,
+  fullname: string | null
 ) {
-  const getCount = async (category: CategoryTypes) => {
+  unstable_noStore();
+
+  const getCount = async (category: CategoryTypes | null) => {
     switch (category) {
       case "STATISTICS":
         return 0;
+      case null:
+        return db.book.count();
       case "LIKED":
         return db.liked_books.count({
           where: {
@@ -64,21 +72,17 @@ export async function fetchCategoryCount(
       case "OWNED":
         return db.book_owned_as.count({
           where: {
-            NOT: {
-              AND: [
-                { profile: { full_name: fullname } },
-                { added_audiobook_at: null },
-                { added_book_at: null },
-                { added_ebook_at: null },
-              ],
-            },
+            profile: { full_name: fullname },
+            added_audiobook_at: { not: null },
+            added_book_at: { not: null },
+            added_ebook_at: { not: null },
           },
         });
       default:
         return db.bookshelf.count({
           where: {
             profile: { full_name: fullname },
-            bookshelf: { equals: category },
+            bookshelf: category,
           },
         });
     }

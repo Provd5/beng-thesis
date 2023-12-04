@@ -13,9 +13,14 @@ interface MainStatisticsCardProps {
 export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
   fullname,
 }) => {
+  // const quantities =
+  //   categoryArray.map((categoryVariant) => ({
+  //     [categoryVariant]: await fetchCategoryCount(categoryVariant, fullname),
+  //   }))
+
   const quantities = await Promise.all(
-    categoryArray.map((categoryVariant) => ({
-      [categoryVariant]: fetchCategoryCount(fullname, categoryVariant),
+    categoryArray.map(async (categoryVariant) => ({
+      [categoryVariant]: await fetchCategoryCount(categoryVariant, fullname),
     }))
   );
 

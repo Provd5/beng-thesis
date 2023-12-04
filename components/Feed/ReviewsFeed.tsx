@@ -1,67 +1,58 @@
-"use client";
-
 import { type FC } from "react";
 
-import { type FetchReviewsProps } from "~/types/feed/FetchProps";
-import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
-
-import { useFetchData } from "~/hooks/useFetchData";
-import { findMyReaction } from "~/utils/findMyReaction";
+import { fetchReviewReactions } from "~/lib/actions/book/fetch";
+import { fetchReviews } from "~/lib/actions/feed/reviews";
+import readUserSession from "~/lib/supabase/readUserSession";
 
 import { ReviewCard } from "../Book/ReviewCard";
-import { ReviewCardLoader } from "../ui/Loaders/Skeletons/ReviewCardLoader";
-import { NotFoundItems } from "../ui/NotFoundItems";
-import { FetchMoreButton } from "./FetchMoreButton";
 
-export const ReviewsFeed: FC<
-  FetchReviewsProps & { sessionId: string | undefined }
-> = (props) => {
-  const { fetchedData, fetchMore, isLoading, pageNumber } = useFetchData({
-    fetchType: "reviews",
-    ...props,
-  });
-  const reviewsData = fetchedData as ReviewCardDataInterface[];
+interface ReviewsFeedProps {
+  bookId: string;
+  searchParams:
+    | {
+        orderBy?: string;
+        order?: "asc" | "desc";
+        page?: string;
+      }
+    | undefined;
+}
 
-  return (
-    <>
-      <div className="grid grid-cols-1 gap-3">
-        {isLoading &&
-          pageNumber === 1 &&
-          Array.from({ length: props.takeLimit }, (_, i) => (
-            <div key={i} className="contents">
-              <ReviewCardLoader index={i} />
-              <hr className="h-px border-0 bg-gray" />
-            </div>
-          ))}
-        {reviewsData.map((data) => {
-          const isMyReview = data.profile.id === props.sessionId;
+export const ReviewsFeed: FC<ReviewsFeedProps> = async ({
+  bookId,
+  searchParams,
+}) => {
+  const {
+    data: { session },
+  } = await readUserSession();
 
-          return (
-            <div key={data.id} className="contents">
-              <ReviewCard
-                isMyReview={isMyReview}
-                reviewData={data}
-                myReaction={findMyReaction(
-                  data.review_reaction,
-                  props.sessionId
-                )}
-              />
-              <hr className="h-px border-0 bg-gray" />
-            </div>
-          );
-        })}
-      </div>
-      {!isLoading && !reviewsData.length && (
-        <NotFoundItems itemType="reviews" />
-      )}
-      <FetchMoreButton
-        className="flex w-full items-center justify-center py-6"
-        isLoading={isLoading}
-        fetchMoreFunc={fetchMore}
-        takeLimit={props.takeLimit}
-        pageNumber={pageNumber}
-        dataLength={fetchedData.length}
-      />
-    </>
+  const reviews = await fetchReviews(bookId, searchParams);
+  const allReviewsReactions = await Promise.all(
+    reviews.map(async (review) => ({
+      [review.id]: await fetchReviewReactions(review.id),
+    }))
   );
+
+  return reviews.map((review) => {
+    const isMyReview = review.profile.id === session?.user.id;
+    const findThisReviewReactions = allReviewsReactions.find(
+      (id) => Object.keys(id)[0] === review.id
+    )?.[review.id];
+
+    const reviewReactions = findThisReviewReactions
+      ? findThisReviewReactions
+      : {
+          OK: 0,
+          MEH: 0,
+          myReaction: undefined,
+        };
+
+    return (
+      <ReviewCard
+        key={review.id}
+        reviewData={review}
+        isMyReview={isMyReview}
+        reviewReactions={reviewReactions}
+      />
+    );
+  });
 };

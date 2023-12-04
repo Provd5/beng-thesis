@@ -13,9 +13,6 @@ interface BookInterface extends BookBaseInterface {
     review: number;
     liked_by: number;
   };
-  bookshelf?: BookshelfInterface[] | null;
-  book_owned_as?: BookOwnedAsInterface[] | null;
-  liked_by?: LikedByInterface[] | null;
 }
 
 interface BookCardInterface {

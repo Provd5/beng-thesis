@@ -1,5 +1,6 @@
 "use server";
 
+import { unstable_noStore } from "next/cache";
 import { z } from "zod";
 
 import { type CategoryTypes } from "~/types/CategoryTypes";
@@ -9,7 +10,6 @@ import {
 } from "~/types/feed/TakeLimits";
 
 import { db } from "~/lib/db";
-import readUserSession from "~/lib/supabase/readUserSession";
 
 const ParamsValidator = z.object({
   orderBy: z
@@ -38,11 +38,9 @@ export async function fetchBooks(
       }
     | undefined
 ): Promise<BookCardInterface[] | BookInterface[] | BookReviewCardInterface[]> {
-  try {
-    const {
-      data: { session },
-    } = await readUserSession();
+  unstable_noStore();
 
+  try {
     const { orderBy, order, page } = ParamsValidator.parse(searchParams);
 
     const takeLimit = variant
@@ -122,15 +120,6 @@ export async function fetchBooks(
             ...commonSelect,
             _count: { select: { review: true, liked_by: true } },
             review: { select: { rate: true } },
-            ...(!!session?.user
-              ? {
-                  bookshelf: { where: { profile: { id: session.user.id } } },
-                  book_owned_as: {
-                    where: { profile: { id: session.user.id } },
-                  },
-                  liked_by: { where: { profile: { id: session.user.id } } },
-                }
-              : {}),
           };
 
     if (!variant || variant === "STATISTICS") {

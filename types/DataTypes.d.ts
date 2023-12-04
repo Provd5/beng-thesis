@@ -6,7 +6,6 @@ interface ReviewInterface {
   updated_at: Date | null;
   text: string | null;
   rate: number;
-  review_reaction: ReactionTypeInterface[];
 }
 
 interface BookshelfInterface {

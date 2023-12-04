@@ -13,32 +13,23 @@ import {
   RiThumbUpLine,
 } from "react-icons/ri";
 
-import { type ReactionTypeInterface } from "~/types/DataTypes";
+import { type ReviewReactionsInterface } from "~/types/feed/ReviewCardDataInterface";
 
 import { ReviewReactionValidator } from "~/lib/validations/book/reviewReaction";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
 
 interface ManageReactionProps {
-  reaction: ReactionTypeInterface[];
-  myReaction: reactionType | undefined;
+  reviewReactions: ReviewReactionsInterface;
   reviewId: string;
-  userId: string;
 }
 
 export const ManageReaction: FC<ManageReactionProps> = ({
-  reaction,
-  myReaction,
+  reviewReactions,
   reviewId,
-  userId,
 }) => {
   const te = useTranslations("Errors");
 
-  const [reactionsState, setReactionsState] = useState(reaction);
-  const [userReactionState, setUserReactionState] = useState(myReaction);
-
-  const filterByReaction = (reaction: reactionType) => {
-    return reactionsState.filter((type) => type.reaction === reaction);
-  };
+  const [reactionsState, setReactionsState] = useState(reviewReactions);
 
   const renderReaction = (
     reaction: reactionType,
@@ -49,7 +40,7 @@ export const ManageReaction: FC<ManageReactionProps> = ({
       <button
         className={clsx(
           "flex items-center gap-1.5 rounded-sm border px-2 py-1.5 text-md",
-          userReactionState === reaction
+          reactionsState.myReaction === reaction
             ? reaction === "OK"
               ? "border-green"
               : "border-red"
@@ -57,7 +48,7 @@ export const ManageReaction: FC<ManageReactionProps> = ({
         )}
         onClick={() => handleReaction(reaction)}
       >
-        {userReactionState === reaction ? (
+        {reactionsState.myReaction === reaction ? (
           <ActiveIcon
             className={reaction === "OK" ? "fill-green" : "fill-red"}
           />
@@ -67,11 +58,11 @@ export const ManageReaction: FC<ManageReactionProps> = ({
         <p
           className={clsx(
             "min-w-[12px] text-base",
-            userReactionState === reaction &&
+            reactionsState.myReaction === reaction &&
               (reaction === "OK" ? "text-green" : "text-red")
           )}
         >
-          {filterByReaction(reaction).length}
+          {reactionsState[reaction]}
         </p>
       </button>
     );
@@ -79,22 +70,38 @@ export const ManageReaction: FC<ManageReactionProps> = ({
 
   const handleReaction = async (reaction: reactionType) => {
     const prevReactions = reactionsState;
-    const prevUserReaction = userReactionState;
 
-    // set active reaction
-    setUserReactionState(userReactionState === reaction ? undefined : reaction);
-
-    const index = reactionsState.findIndex(
-      (item) => item.reaction === userReactionState
+    setReactionsState((prev) =>
+      // set new reaction
+      prev.myReaction === undefined
+        ? {
+            ...prev,
+            myReaction: reaction,
+            [reaction]: prev[reaction] + 1,
+          }
+        : // unset reaction
+        prev.myReaction === reaction
+        ? {
+            ...prev,
+            myReaction: undefined,
+            [reaction]: prev[reaction] === 0 ? 0 : prev[reaction] - 1,
+          }
+        : // change reaction
+        reaction === "OK"
+        ? {
+            ...prev,
+            myReaction: reaction,
+            MEH: prev.MEH === 0 ? 0 : prev.MEH - 1,
+            OK: prev.OK + 1,
+          }
+        : {
+            ...prev,
+            myReaction: reaction,
+            OK: prev.OK === 0 ? 0 : prev.OK - 1,
+            MEH: prev.MEH + 1,
+          }
     );
-    //removing reaction from array
-    reactionsState.splice(index, index !== -1 ? 1 : 0);
-    //changing or adding reaction
-    userReactionState !== reaction &&
-      setReactionsState((prev) => [
-        ...prev,
-        { reaction, review_id: reviewId, user_id: userId },
-      ]);
+
     const formData = { reviewId: reviewId, reaction: reaction };
 
     try {
@@ -109,13 +116,11 @@ export const ManageReaction: FC<ManageReactionProps> = ({
       if (data !== GlobalErrors.SUCCESS) {
         toast.error(te(data));
         setReactionsState(prevReactions);
-        setUserReactionState(prevUserReaction);
         return;
       }
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       setReactionsState(prevReactions);
-      setUserReactionState(prevUserReaction);
     }
   };
 

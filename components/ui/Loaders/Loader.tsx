@@ -33,7 +33,7 @@ export const TextLoader: FC<TextLoaderProps> = ({ className, height }) => {
 
 export const LargeComponentLoader: FC = () => {
   return (
-    <div className="pointer-events-none relative my-6 flex h-full w-full items-center justify-center">
+    <div className="pointer-events-none absolute inset-0 my-6 flex items-center justify-center">
       <Loader className="h-12 w-12" />
     </div>
   );

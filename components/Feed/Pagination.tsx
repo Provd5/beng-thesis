@@ -26,7 +26,6 @@ export const Pagination: FC<PaginationProps> = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const containerRef = useRef<HTMLDivElement>(null);
   const currentPageRef = useRef<HTMLButtonElement>(null);
 
   const allPages = Math.ceil(totalItems / takeLimit);
@@ -48,7 +47,9 @@ export const Pagination: FC<PaginationProps> = ({
 
     params.set("page", pageNumber.toString());
 
-    return router.replace(`${pathname}?${params.toString()}`);
+    return router.replace(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
   };
 
   if (!(allPages > 1)) return;
@@ -70,10 +71,7 @@ export const Pagination: FC<PaginationProps> = ({
             )}
           </div>
         )}
-        <div
-          ref={containerRef}
-          className="custom-scrollbar my-3 flex w-fit max-w-full snap-x gap-0.5 overflow-x-auto overflow-y-hidden pb-2 pt-0.5"
-        >
+        <div className="custom-scrollbar my-3 flex w-fit max-w-full snap-x gap-0.5 overflow-x-auto overflow-y-hidden pb-2 pt-0.5">
           {Array.from({ length: allPages }, (_, i) => (
             <button
               ref={currentPage === i + 1 ? currentPageRef : null}

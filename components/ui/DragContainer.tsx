@@ -56,11 +56,11 @@ export const DragContainer: FC<DragContainerProps> = ({
     containerRef.current && containerRef.current?.scrollWidth > 0;
 
   return (
-    <div className="relative">
+    <div className="relative flex">
       <div
         ref={containerRef}
         className={clsx(
-          "overflow-x-auto overflow-y-hidden",
+          "flex w-fit max-w-full overflow-x-auto overflow-y-hidden",
           containerClassName
         )}
       >

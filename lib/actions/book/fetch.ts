@@ -1,9 +1,15 @@
 "use server";
 
+import { unstable_noStore } from "next/cache";
+
+import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
+
 import { db } from "~/lib/db";
 import readUserSession from "~/lib/supabase/readUserSession";
 
 export async function fetchBookData(bookId: string) {
+  unstable_noStore();
+
   const [bookData, bookAvgRate] = await Promise.all([
     db.book.findUnique({
       where: { id: bookId },
@@ -23,6 +29,8 @@ export async function fetchBookData(bookId: string) {
 }
 
 export async function fetchMyBookData(bookId: string) {
+  unstable_noStore();
+
   const {
     data: { session },
   } = await readUserSession();
@@ -65,4 +73,81 @@ export async function fetchMyBookData(bookId: string) {
     myReviewData,
     doILikeThisBook,
   };
+}
+
+export async function fetchMyReview(bookId: string) {
+  unstable_noStore();
+
+  const {
+    data: { session },
+  } = await readUserSession();
+
+  const myReview: ReviewCardDataInterface | null | undefined =
+    session?.user &&
+    (await db.review.findFirst({
+      where: {
+        book_id: bookId,
+        author_id: session.user.id,
+      },
+      select: {
+        id: true,
+        rate: true,
+        text: true,
+        updated_at: true,
+        created_at: true,
+        review_reaction: true,
+        profile: {
+          select: {
+            id: true,
+            avatar_url: true,
+            full_name: true,
+            created_at: true,
+            _count: {
+              select: {
+                bookshelf: {
+                  where: { bookshelf: { equals: "ALREADY_READ" } },
+                },
+                review: true,
+                liked_book: { where: { book_id: bookId } },
+              },
+            },
+          },
+        },
+      },
+    }));
+
+  return myReview;
+}
+
+export async function fetchReviewReactions(reviewId: string | undefined) {
+  unstable_noStore();
+
+  const {
+    data: { session },
+  } = await readUserSession();
+
+  const [OK, MEH, myReaction] = await Promise.all([
+    db.review_reaction.count({
+      where: {
+        review_id: reviewId,
+        reaction: "OK",
+      },
+    }),
+    db.review_reaction.count({
+      where: {
+        review_id: reviewId,
+        reaction: "MEH",
+      },
+    }),
+    session?.user &&
+      (await db.review_reaction.findFirst({
+        where: {
+          review_id: reviewId,
+          user_id: session.user.id,
+        },
+        select: { reaction: true },
+      })),
+  ]);
+
+  return { OK, MEH, myReaction: myReaction?.reaction };
 }
