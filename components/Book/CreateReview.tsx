@@ -2,6 +2,7 @@
 
 import { type FC, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import axios from "axios";
 import clsx from "clsx";
@@ -41,6 +42,8 @@ export const CreateReview: FC<CreateReviewProps> = ({
   const te = useTranslations("Errors");
 
   const rates = [1, 2, 3, 4, 5];
+
+  const router = useRouter();
 
   const [yourRate, setYourRate] = useState<number | undefined>(rate);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,6 +86,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
 
       // on success
       closeReview();
+      router.refresh();
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(te(error.issues[0].message));
@@ -115,6 +119,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
 
       // on success
       closeReview();
+      router.refresh();
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
     } finally {

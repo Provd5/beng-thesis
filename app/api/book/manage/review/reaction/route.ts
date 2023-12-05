@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { type reactionType } from "@prisma/client";
 
 import { db } from "~/lib/db";
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
     }
 
     // on success
+    revalidatePath("/", "layout");
     return new Response(GlobalErrors.SUCCESS);
   } catch (error) {
     return new Response(GlobalErrors.SOMETHING_WENT_WRONG);

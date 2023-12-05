@@ -2,6 +2,7 @@
 
 import { type FC, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import axios from "axios";
 import { z } from "zod";
@@ -19,6 +20,8 @@ export const ManageProfileStatus: FC<ManageProfileStatusProps> = ({
 }) => {
   const t = useTranslations("Profile.EditProfile");
   const te = useTranslations("Errors");
+
+  const router = useRouter();
 
   const [isPrivateState, setIsPrivateState] = useState(isPrivate);
   const [renderSaveButton, setRenderSaveButton] = useState(isPrivate);
@@ -45,6 +48,7 @@ export const ManageProfileStatus: FC<ManageProfileStatusProps> = ({
       // on success
       toast.success(te(GlobalErrors.SUCCESS));
       setRenderSaveButton(isPrivateState);
+      router.refresh();
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(te(error.issues[0].message));

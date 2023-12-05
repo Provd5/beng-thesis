@@ -1,5 +1,6 @@
 import { type FC, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { type reactionType } from "@prisma/client";
 import axios from "axios";
@@ -28,6 +29,8 @@ export const ManageReaction: FC<ManageReactionProps> = ({
   reviewId,
 }) => {
   const te = useTranslations("Errors");
+
+  const router = useRouter();
 
   const [reactionsState, setReactionsState] = useState(reviewReactions);
 
@@ -118,6 +121,9 @@ export const ManageReaction: FC<ManageReactionProps> = ({
         setReactionsState(prevReactions);
         return;
       }
+
+      // on success
+      router.refresh();
     } catch (error) {
       toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
       setReactionsState(prevReactions);

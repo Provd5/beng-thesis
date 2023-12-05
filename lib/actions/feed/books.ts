@@ -190,9 +190,13 @@ export async function fetchBooks(
       const books = await db.book_owned_as.findMany({
         where: {
           profile: { full_name: fullname },
-          added_audiobook_at: { not: null },
-          added_book_at: { not: null },
-          added_ebook_at: { not: null },
+          NOT: {
+            AND: [
+              { added_audiobook_at: null },
+              { added_book_at: null },
+              { added_ebook_at: null },
+            ],
+          },
           ...(q
             ? {
                 book: {
@@ -369,9 +373,13 @@ export async function fetchBooksInCategoryCount(
           return db.book_owned_as.count({
             where: {
               profile: { full_name: fullname },
-              added_audiobook_at: { not: null },
-              added_book_at: { not: null },
-              added_ebook_at: { not: null },
+              NOT: {
+                AND: [
+                  { added_audiobook_at: null },
+                  { added_book_at: null },
+                  { added_ebook_at: null },
+                ],
+              },
               ...(q
                 ? {
                     book: {

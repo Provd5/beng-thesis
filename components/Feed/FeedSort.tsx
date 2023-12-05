@@ -58,7 +58,7 @@ export const FeedSort: FC<FeedSortProps> = ({ orderArray, searchParams }) => {
       <div className="mb-3 flex w-full justify-end">
         <ModalInitiator
           initiatorStyle={
-            <div className="flex items-center gap-1 px-1 py-1 text-sm">
+            <div className="flex items-center gap-1 whitespace-nowrap px-1 py-1 text-sm">
               <span>{t("sort by:")}</span>
               <span className="flex items-center gap-0.5 text-secondary dark:text-secondary-light">
                 {t(defaultSortCategory)}{" "}

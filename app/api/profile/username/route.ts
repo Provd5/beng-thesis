@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 import { db } from "~/lib/db";
@@ -40,6 +41,8 @@ export async function PATCH(req: Request) {
       },
     });
 
+    // on success
+    revalidatePath("/", "layout");
     return new Response(GlobalErrors.SUCCESS);
   } catch (error) {
     if (error instanceof z.ZodError) {

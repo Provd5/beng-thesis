@@ -128,9 +128,13 @@ export async function fetchProfiles(
             followed_by: true,
             book_owned_as: {
               where: {
-                added_audiobook_at: { not: null },
-                added_book_at: { not: null },
-                added_ebook_at: { not: null },
+                NOT: {
+                  AND: [
+                    { added_audiobook_at: null },
+                    { added_book_at: null },
+                    { added_ebook_at: null },
+                  ],
+                },
               },
             },
           },
