@@ -4,7 +4,7 @@ import { BookCover } from "../Book/BookCover";
 import { LinkToBook } from "../Book/LinkToBook";
 
 interface SmallBookCardProps {
-  book: BookBaseInterface;
+  book: BookInterface;
 }
 
 export const SmallBookCard: FC<SmallBookCardProps> = ({ book }) => {
