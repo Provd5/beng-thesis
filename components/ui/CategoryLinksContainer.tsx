@@ -20,8 +20,9 @@ export const CategoryLinksContainer: FC = () => {
   useEffect(() => {
     if (currentCategoryRef.current) {
       currentCategoryRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
         inline: "center",
-        behavior: "instant",
       });
     }
   }, [pathname]);
@@ -37,7 +38,6 @@ export const CategoryLinksContainer: FC = () => {
 
     return (
       <Link
-        scroll={false}
         ref={isActive() ? currentCategoryRef : null}
         key={categoryVariant}
         replace

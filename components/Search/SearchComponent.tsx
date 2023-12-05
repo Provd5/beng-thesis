@@ -1,92 +1,73 @@
 "use client";
 
-import { type FC, type FormEvent, useState } from "react";
+import { type FC, useRef } from "react";
 import toast from "react-hot-toast";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import axios from "axios";
 import clsx from "clsx";
+import { useDebouncedCallback } from "use-debounce";
 
 import { BiSearchAlt } from "react-icons/bi";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
-import { GlobalErrors, SearchErrors } from "~/lib/validations/errorsEnums";
+import { SearchErrors } from "~/lib/validations/errorsEnums";
 
-import { BookCard } from "../Explore/BookCard";
-import { ProfileCard } from "../Explore/ProfileCard";
 import { ModalInitiator } from "../Modals/ModalInitiator";
 import { Input } from "../ui/Input";
-import { Loader } from "../ui/Loaders/Loader";
-import { BookCardLoader } from "../ui/Loaders/Skeletons/BookCardLoader";
-import { ProfileCardLoader } from "../ui/Loaders/Skeletons/ProfileCardLoader";
-import { NotFoundItems } from "../ui/NotFoundItems";
+
+type searchCategories = "books" | "profiles";
 
 interface SearchComponentProps {
-  sessionId: string | undefined;
+  searchParams:
+    | {
+        q?: string;
+        category?: searchCategories;
+      }
+    | undefined;
 }
 
-type searchCategoryType = "books" | "users";
-
-export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
+export const SearchComponent: FC<SearchComponentProps> = ({ searchParams }) => {
   const t = useTranslations("Search");
   const te = useTranslations("Errors");
 
-  const searchCategories: searchCategoryType[] = ["books", "users"];
-  const [searchCategory, setSearchCategory] = useState<searchCategoryType>(
-    searchCategories[0]
-  );
+  const searchCategoriesArray: searchCategories[] = ["books", "profiles"];
+  const defaultCategory = searchParams?.category
+    ? searchParams.category
+    : "books";
 
-  const [isLoading, setIsLoading] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const [itemsFound, setItemsFound] = useState<number | null>(null);
-  const [fetchedData, setFetchedData] = useState<
-    (ProfileCardDataInterface | BookInterface)[]
-  >([]);
+  const handleSearch = useDebouncedCallback(() => {
+    const inputValue = inputRef.current?.value;
+    const params = new URLSearchParams(searchParams);
+    params.set("page", "1");
 
-  const changeCategory = (category: searchCategoryType) => {
-    setSearchCategory(category);
-    setItemsFound(null);
-    setFetchedData([]);
-  };
-
-  const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsLoading(true);
-    setItemsFound(null);
-    setFetchedData([]);
-
-    try {
-      const form = event.currentTarget as HTMLFormElement;
-      const search = form.elements.namedItem("q") as HTMLInputElement;
-
-      const searchText = search.value.trim();
-
-      if (searchText.length < 2) {
+    if (inputValue) {
+      if (inputValue.length < 2) {
         toast.error(te(SearchErrors.SEARCH_TEXT_TOO_SHORT_2));
         return;
       }
-
-      const query = `/api/feed/search?searchCategory=${searchCategory}&searchText=${searchText}`;
-
-      await axios
-        .get(query)
-        .then(
-          ({
-            data,
-          }: {
-            data: SearchBooksInterface | SearchProfilesInterface;
-          }) => {
-            if (!data) throw new Error();
-            const narrowedData = "profile" in data ? data.profile : data.book;
-
-            setFetchedData((prevData) => [...prevData, ...narrowedData]);
-            setItemsFound(data.itemsFound);
-          }
-        );
-    } catch (error) {
-      toast.error(te(GlobalErrors.COULD_NOT_FETCH, { item: "other" }));
-    } finally {
-      setIsLoading(false);
+      params.set("q", inputValue);
+    } else {
+      params.delete("q");
     }
+
+    router.replace(`${pathname}?${params.toString()}`);
+  }, 300);
+
+  const changeCategory = (category: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+
+    params.delete("q");
+    params.set("page", "1");
+    params.set("category", category);
+
+    router.replace(`${pathname}?${params.toString()}`);
   };
 
   return (
@@ -97,18 +78,19 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
             <ModalInitiator
               initiatorStyle={
                 <div className="flex h-full items-center justify-center gap-0.5 rounded-b-lg bg-gray py-1.5 pl-3 pr-2 text-white xs:rounded-l-lg xs:rounded-r-none">
-                  <p>{t(searchCategory)}</p>
+                  <p>{t(defaultCategory)}</p>
                   <MdKeyboardArrowDown className="mt-0.5 text-xl" />
                 </div>
               }
             >
               <div className="flex flex-col gap-1 whitespace-nowrap text-md">
                 <h1 className="mb-1 text-sm">{t("search categories:")}</h1>
-                {searchCategories.map((category) => (
+                {searchCategoriesArray.map((category) => (
                   <button
+                    disabled={defaultCategory === category}
                     className={clsx(
                       "py-1 text-left",
-                      searchCategory === category &&
+                      defaultCategory === category &&
                         "text-secondary dark:text-secondary-light"
                     )}
                     key={category}
@@ -122,22 +104,28 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
             <form
               role="search"
               className="flex w-full sm:w-auto"
-              onSubmit={handleSearch}
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSearch();
+              }}
             >
               <Input
+                className="h-full w-full rounded-none rounded-tl-lg xs:rounded-tl-none sm:w-80"
+                ref={inputRef}
                 id="search-input"
                 name="q"
                 type="search"
-                required
-                minLength={2}
-                loading={isLoading}
-                className="h-full w-full rounded-none rounded-tl-lg xs:rounded-tl-none sm:w-80"
                 inverted
+                required
+                min={2}
+                defaultValue={searchParams?.q ? searchParams.q : ""}
                 placeholder={
-                  searchCategory === "books"
-                    ? t("enter title/isbn")
-                    : t("enter username")
+                  defaultCategory === "profiles"
+                    ? t("enter username")
+                    : t("enter title/isbn")
                 }
+                onChange={handleSearch}
+                loading={false}
               />
 
               <button
@@ -149,68 +137,6 @@ export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
             </form>
           </div>
         </div>
-      </div>
-      <div className="container pb-12 pt-6">
-        {itemsFound !== null ? (
-          <h1 className="mb-3 flex items-center gap-1">
-            <span className="py-0.5">{t("items found:")}</span>
-            <span className="text-secondary dark:text-secondary-light">
-              {isLoading ? <Loader /> : itemsFound}
-            </span>
-          </h1>
-        ) : (
-          <div className="mb-3 h-5 py-0.5" />
-        )}
-        {isLoading ? (
-          searchCategory === "books" ? (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              {Array.from({ length: 20 }, (_, i) => (
-                <BookCardLoader key={i} index={i} />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 30 }, (_, i) => (
-                <ProfileCardLoader key={i} index={i} />
-              ))}
-            </div>
-          )
-        ) : itemsFound !== null ? (
-          itemsFound > 0 ? (
-            <>
-              {searchCategory === "books" ? (
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                  {(fetchedData as BookInterface[]).map((data) => (
-                    <BookCard
-                      key={data.id}
-                      bookData={data}
-                      sessionId={sessionId}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                  {(
-                    (fetchedData && fetchedData) as ProfileCardDataInterface[]
-                  ).map((data) => (
-                    <ProfileCard
-                      key={data.id}
-                      profileData={data}
-                      sessionId={sessionId}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <NotFoundItems />
-          )
-        ) : (
-          <div className="flex flex-col justify-center gap-3 p-6 text-center text-md text-gray">
-            {t("what are you searching for?")}{" "}
-            <span className="text-xl">👀</span>
-          </div>
-        )}
       </div>
     </>
   );

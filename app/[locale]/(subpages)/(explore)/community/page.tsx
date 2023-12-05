@@ -8,6 +8,7 @@ import { FeedSort } from "~/components/Feed/FeedSort";
 import { Pagination } from "~/components/Feed/Pagination";
 import { ProfilesFeed } from "~/components/Feed/ProfilesFeed";
 import { ProfileCardsLoader } from "~/components/ui/Loaders/Skeletons/ProfileCardLoader";
+import { NotFoundItems } from "~/components/ui/NotFoundItems";
 import { type localeTypes } from "~/i18n";
 import { fetchProfilesCount } from "~/lib/actions/feed/profiles";
 
@@ -43,21 +44,30 @@ export default async function CommunityPage({
 
   return (
     <div className="container pb-12">
-      <FeedSort orderArray={profilesOrderByArray} searchParams={searchParams} />
-      <div className="grid grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 lg:grid-cols-3">
-        <Suspense fallback={<ProfileCardsLoader items={maxTakeLimit} />}>
-          <ProfilesFeed
-            variant={null}
-            fullname={null}
+      {profilesCount === 0 ? (
+        <NotFoundItems />
+      ) : (
+        <>
+          <FeedSort
+            orderArray={profilesOrderByArray}
             searchParams={searchParams}
           />
-        </Suspense>
-      </div>
-      <Pagination
-        searchParams={searchParams}
-        totalItems={profilesCount}
-        takeLimit={maxTakeLimit}
-      />
+          <div className="grid grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            <Suspense fallback={<ProfileCardsLoader items={maxTakeLimit} />}>
+              <ProfilesFeed
+                variant={null}
+                fullname={null}
+                searchParams={searchParams}
+              />
+            </Suspense>
+          </div>
+          <Pagination
+            searchParams={searchParams}
+            totalItems={profilesCount}
+            takeLimit={maxTakeLimit}
+          />
+        </>
+      )}
     </div>
   );
 }

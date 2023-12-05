@@ -31,7 +31,7 @@ export const BookReviewCard: FC<BookReviewCardProps> = async ({ bookData }) => {
         <LinkToBook
           bookId={bookData.book.id}
           bookTitle={bookData.book.title}
-          className="inline-block w-fit"
+          className="block w-auto"
         >
           <h1 className="line-clamp-2">{bookData.book.title}</h1>
           <p className="text-sm text-black-light dark:text-white-dark">

@@ -2,8 +2,10 @@ import { type FC, Suspense } from "react";
 
 import { type CategoryTypes } from "~/types/CategoryTypes";
 
-import { fetchBooks } from "~/lib/actions/feed/books";
-import { fetchCategoryCount } from "~/lib/actions/profile/fetch";
+import {
+  fetchBooks,
+  fetchBooksInCategoryCount,
+} from "~/lib/actions/feed/books";
 import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 
 import { SmallBookCard } from "../Explore/SmallBookCard";
@@ -24,7 +26,7 @@ export const CategorySection: FC<CategorySectionProps> = async ({
 }) => {
   const [books, variantCount] = await Promise.all([
     fetchBooks(categoryVariant, fullname, {}),
-    fetchCategoryCount(categoryVariant, fullname),
+    fetchBooksInCategoryCount(categoryVariant, fullname),
   ]);
 
   const variantUrl = `${fullname}/${convertTypeEnumToPathname(

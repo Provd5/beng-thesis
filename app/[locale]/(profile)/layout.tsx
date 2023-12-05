@@ -17,7 +17,7 @@ export default async function ProfileLayout({
   const userData = await fetchPublicUserData();
 
   return (
-    <main className="grow-1 relative flex h-full min-h-screen flex-col overflow-x-hidden overflow-y-hidden">
+    <main className="grow-1 relative flex h-full flex-col overflow-x-hidden scroll-smooth">
       <Logo />
       <div className="flex h-[68px] flex-none self-end p-3 text-white">
         <div className="flex h-fit gap-3">

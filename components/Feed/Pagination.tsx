@@ -1,5 +1,6 @@
 "use client";
-import { type FC, useEffect, useRef } from "react";
+
+import { type FC } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import clsx from "clsx";
 
@@ -26,19 +27,9 @@ export const Pagination: FC<PaginationProps> = ({
 }) => {
   const pathname = usePathname();
   const router = useRouter();
-  const currentPageRef = useRef<HTMLButtonElement>(null);
 
   const allPages = Math.ceil(totalItems / takeLimit);
   const currentPage = searchParams?.page ? parseInt(searchParams.page) : 1;
-
-  useEffect(() => {
-    if (currentPageRef.current) {
-      currentPageRef.current.scrollIntoView({
-        inline: "center",
-        behavior: "instant",
-      });
-    }
-  }, [currentPage]);
 
   const changePage = (pageNumber: number) => {
     if (pageNumber > allPages || pageNumber < 1) return;
@@ -47,9 +38,7 @@ export const Pagination: FC<PaginationProps> = ({
 
     params.set("page", pageNumber.toString());
 
-    return router.replace(`${pathname}?${params.toString()}`, {
-      scroll: false,
-    });
+    return router.replace(`${pathname}?${params.toString()}`);
   };
 
   if (!(allPages > 1)) return;
@@ -71,10 +60,9 @@ export const Pagination: FC<PaginationProps> = ({
             )}
           </div>
         )}
-        <div className="custom-scrollbar my-3 flex w-fit max-w-full snap-x gap-0.5 overflow-x-auto overflow-y-hidden pb-2 pt-0.5">
+        <div className="custom-scrollbar my-3 flex w-full max-w-md snap-x gap-0.5 overflow-x-auto overflow-y-hidden pb-2 pt-0.5">
           {Array.from({ length: allPages }, (_, i) => (
             <button
-              ref={currentPage === i + 1 ? currentPageRef : null}
               key={i + 1}
               disabled={currentPage === i + 1}
               className={clsx(

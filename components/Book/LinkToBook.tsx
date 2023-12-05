@@ -35,7 +35,7 @@ export const LinkToBook: FC<LinkToBookProps> = ({
   };
 
   return (
-    <Link href={href} className={className} scroll={false}>
+    <Link href={href} className={className}>
       {children}
     </Link>
   );

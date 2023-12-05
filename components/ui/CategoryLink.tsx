@@ -30,7 +30,6 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
   return (
     <div className="flex w-full">
       <Link
-        scroll={false}
         replace={hrefReplace}
         href={href}
         className="flex grow items-center justify-between gap-3 md:grow-0 md:justify-start"

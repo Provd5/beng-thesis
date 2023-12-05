@@ -14,7 +14,7 @@ import { BookCardsLoader } from "~/components/ui/Loaders/Skeletons/BookCardLoade
 import { BookReviewCardsLoader } from "~/components/ui/Loaders/Skeletons/BookReviewCardLoader";
 import { NotFoundItems } from "~/components/ui/NotFoundItems";
 import { type localeTypes } from "~/i18n";
-import { fetchCategoryCount } from "~/lib/actions/profile/fetch";
+import { fetchBooksInCategoryCount } from "~/lib/actions/feed/books";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
 
 export async function generateMetadata({
@@ -37,6 +37,7 @@ export default async function BookshelfPage({
     orderBy?: string;
     order?: "asc" | "desc";
     page?: string;
+    q?: string;
   };
 }) {
   unstable_setRequestLocale(locale);
@@ -45,7 +46,7 @@ export default async function BookshelfPage({
 
   if (!categoryArray.includes(bookshelfAsType)) notFound();
 
-  const booksCount = await fetchCategoryCount(bookshelfAsType, fullname);
+  const booksCount = await fetchBooksInCategoryCount(bookshelfAsType, fullname);
   const maxTakeLimit =
     booksCount < BOOKS_FEED_TAKE_LIMIT ? booksCount : BOOKS_FEED_TAKE_LIMIT;
 

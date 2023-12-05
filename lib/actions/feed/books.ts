@@ -25,6 +25,7 @@ const ParamsValidator = z.object({
     .nullish(),
   order: z.enum(["asc", "desc"]).nullish(),
   page: z.string().nullish(),
+  q: z.string().min(2).nullish(),
 });
 
 export async function fetchBooks(
@@ -35,13 +36,14 @@ export async function fetchBooks(
         orderBy?: string;
         order?: "asc" | "desc";
         page?: string;
+        q?: string;
       }
     | undefined
 ): Promise<BookCardInterface[] | BookInterface[] | BookReviewCardInterface[]> {
   unstable_noStore();
 
   try {
-    const { orderBy, order, page } = ParamsValidator.parse(searchParams);
+    const { orderBy, order, page, q } = ParamsValidator.parse(searchParams);
 
     const takeLimit = variant
       ? PROFILE_PAGE_BOOKS_TAKE_LIMIT
@@ -124,6 +126,20 @@ export async function fetchBooks(
 
     if (!variant || variant === "STATISTICS") {
       const books = await db.book.findMany({
+        where: q
+          ? {
+              OR: [
+                { title: { contains: q, mode: "insensitive" } },
+                {
+                  description: { contains: q, mode: "insensitive" },
+                },
+                { subtitle: { contains: q, mode: "insensitive" } },
+                { authors: { has: q } },
+                { isbn_10: { equals: q } },
+                { isbn_13: { equals: q } },
+              ],
+            }
+          : {},
         orderBy: allBooksOrderByClause,
         take: takeLimit,
         skip: skipItems,
@@ -135,7 +151,25 @@ export async function fetchBooks(
 
     if (variant === "LIKED") {
       const books = await db.liked_books.findMany({
-        where: { profile: { full_name: fullname } },
+        where: {
+          profile: { full_name: fullname },
+          ...(q
+            ? {
+                book: {
+                  OR: [
+                    { title: { contains: q, mode: "insensitive" } },
+                    {
+                      description: { contains: q, mode: "insensitive" },
+                    },
+                    { subtitle: { contains: q, mode: "insensitive" } },
+                    { authors: { has: q } },
+                    { isbn_10: { equals: q } },
+                    { isbn_13: { equals: q } },
+                  ],
+                },
+              }
+            : {}),
+        },
         orderBy: orderByClause
           ? orderByClause
           : // sort by newly added
@@ -159,6 +193,22 @@ export async function fetchBooks(
           added_audiobook_at: { not: null },
           added_book_at: { not: null },
           added_ebook_at: { not: null },
+          ...(q
+            ? {
+                book: {
+                  OR: [
+                    { title: { contains: q, mode: "insensitive" } },
+                    {
+                      description: { contains: q, mode: "insensitive" },
+                    },
+                    { subtitle: { contains: q, mode: "insensitive" } },
+                    { authors: { has: q } },
+                    { isbn_10: { equals: q } },
+                    { isbn_13: { equals: q } },
+                  ],
+                },
+              }
+            : {}),
         },
         orderBy: orderByClause
           ? orderByClause
@@ -182,7 +232,25 @@ export async function fetchBooks(
 
     if (variant === "REVIEWS") {
       const books = await db.review.findMany({
-        where: { profile: { full_name: fullname } },
+        where: {
+          profile: { full_name: fullname },
+          ...(q
+            ? {
+                book: {
+                  OR: [
+                    { title: { contains: q, mode: "insensitive" } },
+                    {
+                      description: { contains: q, mode: "insensitive" },
+                    },
+                    { subtitle: { contains: q, mode: "insensitive" } },
+                    { authors: { has: q } },
+                    { isbn_10: { equals: q } },
+                    { isbn_13: { equals: q } },
+                  ],
+                },
+              }
+            : {}),
+        },
         orderBy: orderByClause
           ? orderByClause
           : // sort by newly added
@@ -217,5 +285,140 @@ export async function fetchBooks(
     return books as BookCardInterface[];
   } catch (error) {
     return [];
+  }
+}
+
+export async function fetchBooksInCategoryCount(
+  type: CategoryTypes | null,
+  fullname: string | null,
+  searchParams?: {
+    q?: string;
+  }
+): Promise<number> {
+  unstable_noStore();
+
+  try {
+    const q = searchParams ? ParamsValidator.parse(searchParams).q : undefined;
+
+    const getCount = async (category: CategoryTypes | null) => {
+      switch (category) {
+        case "STATISTICS":
+          return 0;
+        case null:
+          return db.book.count({
+            where: q
+              ? {
+                  OR: [
+                    { title: { contains: q, mode: "insensitive" } },
+                    {
+                      description: { contains: q, mode: "insensitive" },
+                    },
+                    { subtitle: { contains: q, mode: "insensitive" } },
+                    { authors: { has: q } },
+                    { isbn_10: { equals: q } },
+                    { isbn_13: { equals: q } },
+                  ],
+                }
+              : {},
+          });
+        case "LIKED":
+          return db.liked_books.count({
+            where: {
+              profile: { full_name: fullname },
+              ...(q
+                ? {
+                    book: {
+                      OR: [
+                        { title: { contains: q, mode: "insensitive" } },
+                        {
+                          description: { contains: q, mode: "insensitive" },
+                        },
+                        { subtitle: { contains: q, mode: "insensitive" } },
+                        { authors: { has: q } },
+                        { isbn_10: { equals: q } },
+                        { isbn_13: { equals: q } },
+                      ],
+                    },
+                  }
+                : {}),
+            },
+          });
+        case "REVIEWS":
+          return db.review.count({
+            where: {
+              profile: { full_name: fullname },
+              ...(q
+                ? {
+                    book: {
+                      OR: [
+                        { title: { contains: q, mode: "insensitive" } },
+                        {
+                          description: { contains: q, mode: "insensitive" },
+                        },
+                        { subtitle: { contains: q, mode: "insensitive" } },
+                        { authors: { has: q } },
+                        { isbn_10: { equals: q } },
+                        { isbn_13: { equals: q } },
+                      ],
+                    },
+                  }
+                : {}),
+            },
+          });
+        case "OWNED":
+          return db.book_owned_as.count({
+            where: {
+              profile: { full_name: fullname },
+              added_audiobook_at: { not: null },
+              added_book_at: { not: null },
+              added_ebook_at: { not: null },
+              ...(q
+                ? {
+                    book: {
+                      OR: [
+                        { title: { contains: q, mode: "insensitive" } },
+                        {
+                          description: { contains: q, mode: "insensitive" },
+                        },
+                        { subtitle: { contains: q, mode: "insensitive" } },
+                        { authors: { has: q } },
+                        { isbn_10: { equals: q } },
+                        { isbn_13: { equals: q } },
+                      ],
+                    },
+                  }
+                : {}),
+            },
+          });
+        default:
+          return db.bookshelf.count({
+            where: {
+              profile: { full_name: fullname },
+              bookshelf: category,
+              ...(q
+                ? {
+                    book: {
+                      OR: [
+                        { title: { contains: q, mode: "insensitive" } },
+                        {
+                          description: { contains: q, mode: "insensitive" },
+                        },
+                        { subtitle: { contains: q, mode: "insensitive" } },
+                        { authors: { has: q } },
+                        { isbn_10: { equals: q } },
+                        { isbn_13: { equals: q } },
+                      ],
+                    },
+                  }
+                : {}),
+            },
+          });
+      }
+    };
+
+    const booksCount = await getCount(type);
+    return booksCount;
+  } catch (error) {
+    return 0;
   }
 }

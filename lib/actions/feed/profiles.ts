@@ -21,7 +21,26 @@ const ParamsValidator = z.object({
     .nullish(),
   order: z.enum(["asc", "desc"]).nullish(),
   page: z.string().nullish(),
+  q: z.string().min(2).nullish(),
 });
+
+async function getSessionAndUserData(
+  variant: "following" | "followers" | null,
+  fullname: string | null
+) {
+  const {
+    data: { session },
+  } = !variant ? await readUserSession() : { data: { session: null } };
+  const userData =
+    !!variant && !!fullname
+      ? await db.profile.findUnique({
+          where: { full_name: fullname },
+          select: { id: true },
+        })
+      : null;
+
+  return { session, userData };
+}
 
 export async function fetchProfiles(
   variant: "followers" | "following" | null,
@@ -31,13 +50,18 @@ export async function fetchProfiles(
         orderBy?: string;
         order?: "asc" | "desc";
         page?: string;
+        q?: string;
       }
     | undefined
 ): Promise<ProfileCardDataInterface[]> {
   unstable_noStore();
 
   try {
-    const { orderBy, order, page } = ParamsValidator.parse(searchParams);
+    const { orderBy, order, page, q } = ParamsValidator.parse(searchParams);
+    const { session, userData } = await getSessionAndUserData(
+      variant,
+      fullname
+    );
 
     const takeLimit = PROFILES_FEED_TAKE_LIMIT;
     const parsedPage = page ? parseInt(page) : 1;
@@ -69,34 +93,23 @@ export async function fetchProfiles(
         break;
     }
 
-    const {
-      data: { session },
-    } = !variant ? await readUserSession() : { data: { session: null } };
-
-    const userData =
-      !!variant && !!fullname
-        ? await db.profile.findUnique({
-            where: { full_name: fullname },
-            select: { id: true },
-          })
-        : null;
-
-    const whereClause = {
-      id: !variant && session?.user ? { not: session.user.id } : {},
-      full_name: { not: null },
-      ...(userData
-        ? variant === "followers"
-          ? { following: { some: { following_id: userData.id } } }
-          : variant === "following"
-          ? { followed_by: { some: { follower_id: userData.id } } }
-          : { private: { not: true } }
-        : { private: { not: true } }),
-    };
-
     const profiles = (await db.profile.findMany({
       take: takeLimit,
       skip: skipItems,
-      where: whereClause,
+      where: {
+        id: !variant && session?.user ? { not: session.user.id } : {},
+        full_name: {
+          not: null,
+          ...(q ? { contains: q, mode: "insensitive" } : {}),
+        },
+        ...(userData
+          ? variant === "followers"
+            ? { following: { some: { following_id: userData.id } } }
+            : variant === "following"
+            ? { followed_by: { some: { follower_id: userData.id } } }
+            : { private: { not: true } }
+          : { private: { not: true } }),
+      },
       orderBy: orderByClause,
       select: {
         id: true,
@@ -115,13 +128,9 @@ export async function fetchProfiles(
             followed_by: true,
             book_owned_as: {
               where: {
-                NOT: {
-                  AND: [
-                    { added_audiobook_at: null },
-                    { added_book_at: null },
-                    { added_ebook_at: null },
-                  ],
-                },
+                added_audiobook_at: { not: null },
+                added_book_at: { not: null },
+                added_ebook_at: { not: null },
               },
             },
           },
@@ -137,37 +146,38 @@ export async function fetchProfiles(
 
 export async function fetchProfilesCount(
   variant: "followers" | "following" | null,
-  fullname: string | null
-) {
+  fullname: string | null,
+  searchParams?: {
+    q?: string;
+  }
+): Promise<number> {
   unstable_noStore();
+  try {
+    const q = searchParams ? ParamsValidator.parse(searchParams).q : undefined;
+    const { session, userData } = await getSessionAndUserData(
+      variant,
+      fullname
+    );
 
-  const {
-    data: { session },
-  } = !variant ? await readUserSession() : { data: { session: null } };
+    const profilesCount = await db.profile.count({
+      where: {
+        id: !variant && session?.user ? { not: session.user.id } : {},
+        full_name: {
+          not: null,
+          ...(q ? { contains: q, mode: "insensitive" } : {}),
+        },
+        ...(userData
+          ? variant === "followers"
+            ? { following: { some: { following_id: userData.id } } }
+            : variant === "following"
+            ? { followed_by: { some: { follower_id: userData.id } } }
+            : { private: { not: true } }
+          : { private: { not: true } }),
+      },
+    });
 
-  const userData =
-    !!variant && !!fullname
-      ? await db.profile.findUnique({
-          where: { full_name: fullname },
-          select: { id: true },
-        })
-      : null;
-
-  const whereClause = {
-    id: !variant && session?.user ? { not: session.user.id } : {},
-    full_name: { not: null },
-    ...(userData
-      ? variant === "followers"
-        ? { following: { some: { following_id: userData.id } } }
-        : variant === "following"
-        ? { followed_by: { some: { follower_id: userData.id } } }
-        : { private: { not: true } }
-      : { private: { not: true } }),
-  };
-
-  const profilesCount = await db.profile.count({
-    where: whereClause,
-  });
-
-  return profilesCount;
+    return profilesCount;
+  } catch (error) {
+    return 0;
+  }
 }

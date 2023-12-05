@@ -4,7 +4,7 @@ import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
 
 import { getBookmarkIcon } from "~/components/ui/getBookmarkIcon";
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
-import { fetchCategoryCount } from "~/lib/actions/profile/fetch";
+import { fetchBooksInCategoryCount } from "~/lib/actions/feed/books";
 
 interface MainStatisticsCardProps {
   fullname: string;
@@ -13,14 +13,12 @@ interface MainStatisticsCardProps {
 export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
   fullname,
 }) => {
-  // const quantities =
-  //   categoryArray.map((categoryVariant) => ({
-  //     [categoryVariant]: await fetchCategoryCount(categoryVariant, fullname),
-  //   }))
-
   const quantities = await Promise.all(
     categoryArray.map(async (categoryVariant) => ({
-      [categoryVariant]: await fetchCategoryCount(categoryVariant, fullname),
+      [categoryVariant]: await fetchBooksInCategoryCount(
+        categoryVariant,
+        fullname
+      ),
     }))
   );
 
