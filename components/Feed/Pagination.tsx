@@ -1,12 +1,10 @@
 "use client";
 
 import { type FC } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
-
-import { Button } from "../ui/Buttons";
 
 interface PaginationProps {
   totalItems: number;
@@ -26,58 +24,69 @@ export const Pagination: FC<PaginationProps> = ({
   searchParams,
 }) => {
   const pathname = usePathname();
-  const router = useRouter();
 
   const allPages = Math.ceil(totalItems / takeLimit);
   const currentPage = searchParams?.page ? parseInt(searchParams.page) : 1;
 
   const changePage = (pageNumber: number) => {
-    if (pageNumber > allPages || pageNumber < 1) return;
-
     const params = new URLSearchParams(searchParams);
 
-    params.set("page", pageNumber.toString());
+    if (pageNumber <= allPages && pageNumber >= 1) {
+      params.set("page", pageNumber.toString());
+    }
 
-    return router.replace(`${pathname}?${params.toString()}`);
+    return `${pathname}?${params.toString()}`;
   };
 
-  if (!(allPages > 1)) return;
+  const commonClass = (i: number) =>
+    clsx(
+      "flex h-9 w-10 flex-none items-center justify-center rounded-sm text-md",
+      currentPage === i + 1
+        ? "bg-gradient-dark text-white-light dark:bg-gradient-light"
+        : "border border-secondary text-secondary dark:border-secondary-light dark:text-secondary-light"
+    );
 
   return (
     <>
-      <div className="mt-6 flex flex-col items-end">
-        {allPages > 2 && (
-          <div className="flex gap-1">
-            {currentPage !== 1 && (
-              <Button size="sm" onClick={() => changePage(currentPage - 1)}>
-                <FaArrowLeft />
-              </Button>
-            )}
-            {currentPage !== allPages && (
-              <Button size="sm" onClick={() => changePage(currentPage + 1)}>
-                <FaArrowRight />
-              </Button>
-            )}
-          </div>
-        )}
-        <div className="custom-scrollbar my-3 flex w-full max-w-md snap-x gap-0.5 overflow-x-auto overflow-y-hidden pb-2 pt-0.5">
-          {Array.from({ length: allPages }, (_, i) => (
-            <button
-              key={i + 1}
-              disabled={currentPage === i + 1}
-              className={clsx(
-                "flex h-9 w-10 flex-none snap-center items-center justify-center rounded-sm text-md",
-                currentPage === i + 1
-                  ? "bg-gradient-dark text-white-light dark:bg-gradient-light"
-                  : "border border-secondary text-secondary dark:border-secondary-light dark:text-secondary-light"
+      {allPages > 1 && (
+        <div className="mt-6 flex flex-col items-end">
+          {allPages > 2 && (
+            <div className="flex gap-1">
+              {currentPage !== 1 && (
+                <a
+                  href={changePage(currentPage - 1)}
+                  className={commonClass(currentPage - 1)}
+                >
+                  <FaArrowLeft />
+                </a>
               )}
-              onClick={() => changePage(i + 1)}
-            >
-              {(i + 1).toString()}
-            </button>
-          ))}
+              {currentPage !== allPages && (
+                <a
+                  href={changePage(currentPage + 1)}
+                  className={commonClass(currentPage - 1)}
+                >
+                  <FaArrowRight />
+                </a>
+              )}
+            </div>
+          )}
+          <div className="custom-scrollbar my-3 flex w-full max-w-md gap-0.5 overflow-x-auto overflow-y-hidden pb-2 pt-0.5">
+            {Array.from({ length: allPages }, (_, i) => (
+              <a
+                href={changePage(i + 1)}
+                key={i + 1}
+                tabIndex={currentPage === i + 1 ? -1 : 0}
+                className={clsx(
+                  currentPage === i + 1 && "pointer-events-none",
+                  commonClass(i)
+                )}
+              >
+                {(i + 1).toString()}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
@@ -26,7 +26,6 @@ export const FeedSort: FC<FeedSortProps> = ({ orderArray, searchParams }) => {
   const t = useTranslations("Sorting");
 
   const pathname = usePathname();
-  const router = useRouter();
 
   const defaultSortCategory = searchParams?.orderBy
     ? searchParams.orderBy
@@ -50,7 +49,7 @@ export const FeedSort: FC<FeedSortProps> = ({ orderArray, searchParams }) => {
       params.set("page", "1");
     }
 
-    router.replace(`${pathname}?${params.toString()}`);
+    return `${pathname}?${params.toString()}`;
   };
 
   return (
@@ -76,18 +75,16 @@ export const FeedSort: FC<FeedSortProps> = ({ orderArray, searchParams }) => {
               const isActive = defaultSortCategory === orderType.sortCategory;
 
               return (
-                <button
+                <a
                   key={orderType.sortCategory}
+                  href={selectOrder(
+                    orderType.isSortingByLetters,
+                    orderType.sortCategory
+                  )}
                   className={clsx(
                     "flex items-center justify-between gap-1 py-0.5 text-left",
                     isActive && "text-secondary dark:text-secondary-light"
                   )}
-                  onClick={() =>
-                    selectOrder(
-                      orderType.isSortingByLetters,
-                      orderType.sortCategory
-                    )
-                  }
                 >
                   <p>{t(orderType.sortCategory)}</p>
                   {isActive ? (
@@ -99,7 +96,7 @@ export const FeedSort: FC<FeedSortProps> = ({ orderArray, searchParams }) => {
                   ) : (
                     <div className="h-6 w-6" />
                   )}
-                </button>
+                </a>
               );
             })}
           </div>

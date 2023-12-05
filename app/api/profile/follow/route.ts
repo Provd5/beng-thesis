@@ -1,5 +1,3 @@
-import { revalidatePath } from "next/cache";
-
 import { db } from "~/lib/db";
 import readUserSession from "~/lib/supabase/readUserSession";
 import { GlobalErrors } from "~/lib/validations/errorsEnums";
@@ -43,7 +41,7 @@ export async function POST(req: Request) {
     }
 
     // on success
-    revalidatePath("/", "layout");
+    // revalidatePath("/", "layout");
     return new Response(GlobalErrors.SUCCESS);
   } catch (error) {
     return new Response(GlobalErrors.SOMETHING_WENT_WRONG);

@@ -10,7 +10,11 @@ import { ManageOwnedAs } from "~/components/Book/Manage/ManageOwnedAs";
 import { ManageReviews } from "~/components/Book/Manage/ManageReviews";
 import { BackFrom } from "~/components/ui/BackCategoryLink";
 import { type localeTypes } from "~/i18n";
-import { fetchBookData, fetchMyBookData } from "~/lib/actions/book/fetch";
+import {
+  fetchBookData,
+  fetchBookNumbers,
+  fetchMyBookData,
+} from "~/lib/actions/book/fetch";
 
 export function generateMetadata({ params }: { params: { title: string } }) {
   return {
@@ -33,8 +37,9 @@ export default async function BookLayout({
     notFound();
   }
 
-  const [{ bookData, bookAvgRate }, myData] = await Promise.all([
+  const [bookData, bookNumbers, myData] = await Promise.all([
     fetchBookData(id),
+    fetchBookNumbers(id),
     fetchMyBookData(id),
   ]);
 
@@ -87,8 +92,8 @@ export default async function BookLayout({
               )}
 
               <BookDetails
-                variant="averge rate:"
-                text={`${bookAvgRate._avg.rate ?? 0}/5`}
+                variant="average rate:"
+                text={`${bookNumbers.averageRate}/5`}
               />
             </div>
           </div>
@@ -105,7 +110,7 @@ export default async function BookLayout({
               <div className="w-36">
                 <ManageLikes
                   bookId={bookData.id}
-                  likesQuantity={bookData._count.liked_by}
+                  likesQuantity={bookNumbers.likes}
                   doILikeThisBook={!!myData?.doILikeThisBook}
                   isSession={!!myData}
                 />
@@ -125,7 +130,7 @@ export default async function BookLayout({
               <div className="w-36">
                 <ManageReviews
                   isReviewExists={!!myData?.myReviewData?.created_at}
-                  reviewsQuantity={bookAvgRate._count.rate}
+                  reviewsQuantity={bookNumbers.ratesCount}
                   createdAt={myData?.myReviewData?.created_at}
                   isSession={!!myData}
                 />

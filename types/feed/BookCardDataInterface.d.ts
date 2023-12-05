@@ -1,18 +1,8 @@
-interface BookBaseInterface {
+interface BookInterface {
   id: string;
   title: string;
   authors: string[];
   thumbnail_url: string | null;
-}
-
-interface BookInterface extends BookBaseInterface {
-  review: {
-    rate: number;
-  }[];
-  _count: {
-    review: number;
-    liked_by: number;
-  };
 }
 
 interface BookCardInterface {
@@ -20,7 +10,7 @@ interface BookCardInterface {
 }
 
 interface BookReviewCardInterface {
-  book: BookBaseInterface & {
+  book: BookInterface & {
     review: ReviewInterface[];
   };
 }

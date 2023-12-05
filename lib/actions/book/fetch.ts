@@ -10,22 +10,33 @@ import readUserSession from "~/lib/supabase/readUserSession";
 export async function fetchBookData(bookId: string) {
   unstable_noStore();
 
-  const [bookData, bookAvgRate] = await Promise.all([
-    db.book.findUnique({
-      where: { id: bookId },
-      include: {
-        _count: { select: { liked_by: true } },
-      },
-    }),
+  const bookData = await db.book.findUnique({
+    where: { id: bookId },
+  });
 
+  return bookData;
+}
+
+export async function fetchBookNumbers(bookId: string) {
+  unstable_noStore();
+
+  const [reviews, likes] = await Promise.all([
     db.review.aggregate({
       where: { book_id: bookId },
       _avg: { rate: true },
       _count: { rate: true },
     }),
+    db.liked_books.count({
+      where: { book_id: bookId },
+    }),
   ]);
 
-  return { bookData, bookAvgRate };
+  const averageRate = reviews._avg.rate
+    ? parseFloat(reviews._avg.rate.toFixed(1))
+    : 0;
+  const ratesCount = reviews._count.rate;
+
+  return { averageRate, ratesCount, likes };
 }
 
 export async function fetchMyBookData(bookId: string) {

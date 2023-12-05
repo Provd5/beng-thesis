@@ -1,7 +1,6 @@
 import type { FC } from "react";
 
-import { fetchMyBookData } from "~/lib/actions/book/fetch";
-import { averageRating } from "~/utils/averageRating";
+import { fetchBookNumbers, fetchMyBookData } from "~/lib/actions/book/fetch";
 
 import { BookCover } from "../Book/BookCover";
 import { LinkToBook } from "../Book/LinkToBook";
@@ -15,7 +14,10 @@ interface BookCardProps {
 }
 
 export const BookCard: FC<BookCardProps> = async ({ bookData }) => {
-  const myData = await fetchMyBookData(bookData.id);
+  const [myData, bookNumbers] = await Promise.all([
+    fetchMyBookData(bookData.id),
+    fetchBookNumbers(bookData.id),
+  ]);
 
   return (
     <div className="flex justify-start gap-3 sm:justify-center lg:justify-start">
@@ -41,15 +43,15 @@ export const BookCard: FC<BookCardProps> = async ({ bookData }) => {
           <div className="flex flex-col justify-between text-sm">
             <div className="h-14 w-36">
               <BookCardDetails
-                ratesQuantity={averageRating(bookData.review)}
-                reviewsQuantity={bookData._count.review}
+                ratesQuantity={bookNumbers.averageRate}
+                reviewsQuantity={bookNumbers.ratesCount}
               />
             </div>
             <div className="h-14 w-36">
               <ManageLikes
                 bookId={bookData.id}
                 doILikeThisBook={!!myData?.doILikeThisBook}
-                likesQuantity={bookData._count.liked_by}
+                likesQuantity={bookNumbers.likes}
                 isSession={!!myData}
               />
             </div>

@@ -116,7 +116,6 @@ export const SearchComponent: FC<SearchComponentProps> = ({ searchParams }) => {
                 name="q"
                 type="search"
                 inverted
-                required
                 min={2}
                 defaultValue={searchParams?.q ? searchParams.q : ""}
                 placeholder={
