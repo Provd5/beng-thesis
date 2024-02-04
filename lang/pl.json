@@ -15,6 +15,7 @@
     "LOGIN_ERROR": "Nieprawidłowe dane logowania",
     "EMAIL_NOT_CONFIRMED": "Email nie został potwierdzony",
     "SAME_USERNAME": "Podana nazwa użytkownika jest taka sama jak bieżąca",
+    "CAPTCHA_ERROR": "Rozwiąż poprawnie Captcha",
 
     "DESCRIPTION_TOO_LONG_5000": "Opis nie może zawierać więcej niż 5000 znaków",
 

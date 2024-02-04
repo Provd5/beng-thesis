@@ -92,6 +92,8 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
         toast.error(te("LOGIN_ERROR"));
       error?.message.includes(SupabaseValidatorErrors.EMAIL_NOT_CONFIRMED) &&
         toast.error(te("EMAIL_NOT_CONFIRMED"));
+      error?.message.includes(SupabaseValidatorErrors.CAPTCHA_ERROR) &&
+        toast.error(te("CAPTCHA_ERROR"));
 
       //on success
       !error &&
@@ -148,6 +150,8 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
         toast.error(te("EMAIL_LINK_ERROR"));
       error?.message.includes(SupabaseValidatorErrors.TOKEN_ERROR) &&
         toast.error(te("TOKEN_ERROR"));
+      error?.message.includes(SupabaseValidatorErrors.CAPTCHA_ERROR) &&
+        toast.error(te("CAPTCHA_ERROR"));
 
       if (!error && !data.user?.identities?.length) {
         toast.error(te(AuthErrors.EMAIL_EXISTS));
@@ -168,10 +172,17 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
   };
 
   const demoLogin = async () => {
-    const { data } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: "123@123.pl",
       password: "1234567890",
+      options: {
+        captchaToken: captchaToken,
+      },
     });
+    captcha.current?.resetCaptcha();
+
+    error?.message.includes(SupabaseValidatorErrors.CAPTCHA_ERROR) &&
+      toast.error(te("CAPTCHA_ERROR"));
 
     !!data.user && router.refresh();
   };
@@ -191,7 +202,7 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
       ) : (
         <>
           <form
-            className="flex max-w-sm flex-1 flex-col items-center justify-center justify-center gap-1"
+            className="flex max-w-sm flex-1 flex-col items-center justify-center gap-1"
             onSubmit={view === "logIn" ? handleLogIn : handleSignUp}
           >
             <Input

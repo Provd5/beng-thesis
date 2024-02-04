@@ -15,6 +15,7 @@
     "LOGIN_ERROR": "Invalid login credentials",
     "EMAIL_NOT_CONFIRMED": "Email not confirmed",
     "SAME_USERNAME": "Given username is the same as the current",
+    "CAPTCHA_ERROR": "Solve the Captcha correctly",
 
     "DESCRIPTION_TOO_LONG_5000": "Description must be less than 5000 characters",
 

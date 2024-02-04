@@ -22,6 +22,7 @@ export enum SupabaseValidatorErrors {
   TOKEN_ERROR = "Token has expired or is invalid",
   LOGIN_ERROR = "Invalid login credentials",
   EMAIL_NOT_CONFIRMED = "Email not confirmed",
+  CAPTCHA_ERROR = "captcha verification process failed",
 }
 
 export enum LoginValidatorErrors {
