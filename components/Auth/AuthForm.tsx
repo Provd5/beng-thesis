@@ -171,28 +171,28 @@ export const AuthForm: FC<AuthFormProps> = ({ view, setCheckMail }) => {
     }
   };
 
-  const demoLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: "123@123.pl",
-      password: "1234567890",
-      options: {
-        captchaToken: captchaToken,
-      },
-    });
-    captcha.current?.resetCaptcha();
+  // const demoLogin = async () => {
+  //   const { data, error } = await supabase.auth.signInWithPassword({
+  //     email: "123@123.pl",
+  //     password: "1234567890",
+  //     options: {
+  //       captchaToken: captchaToken,
+  //     },
+  //   });
+  //   captcha.current?.resetCaptcha();
 
-    error?.message.includes(SupabaseValidatorErrors.CAPTCHA_ERROR) &&
-      toast.error(te("CAPTCHA_ERROR"));
+  //   error?.message.includes(SupabaseValidatorErrors.CAPTCHA_ERROR) &&
+  //     toast.error(te("CAPTCHA_ERROR"));
 
-    !!data.user && router.refresh();
-  };
+  //   !!data.user && router.refresh();
+  // };
 
   return (
     <>
-      <button className="absolute bottom-3 right-3 text-xs" onClick={demoLogin}>
+      {/* <button className="absolute bottom-3 right-3 text-xs" onClick={demoLogin}>
         demo
       </button>
-      {/* ^^^^^^^^^^^^^^^^ temp ^^^^^^^^^^^^^^^^ */}
+      ^^^^^^^^^^^^^^^^ temp ^^^^^^^^^^^^^^^^ */}
       {!loginByEmail ? (
         <Providers
           handleProviderLogin={handleProviderLogin}
