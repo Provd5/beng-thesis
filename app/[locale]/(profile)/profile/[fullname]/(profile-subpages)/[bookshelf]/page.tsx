@@ -42,7 +42,7 @@ export default async function BookshelfPage({
     case "OWNED":
       booksQuantity = await db.book_owned_as.count({
         where: {
-          profile: { full_name: fullname },
+          profile: { full_name: decodeURIComponent(fullname) },
           NOT: {
             AND: [
               { added_audiobook_at: null },
@@ -56,13 +56,13 @@ export default async function BookshelfPage({
       break;
     case "LIKED":
       booksQuantity = await db.liked_books.count({
-        where: { profile: { full_name: fullname } },
+        where: { profile: { full_name: decodeURIComponent(fullname) } },
       });
       variant = bookshelfAsType;
       break;
     case "REVIEWS":
       booksQuantity = await db.review.count({
-        where: { profile: { full_name: fullname } },
+        where: { profile: { full_name: decodeURIComponent(fullname) } },
       });
       variant = bookshelfAsType;
       break;
@@ -70,7 +70,10 @@ export default async function BookshelfPage({
       break;
     default:
       booksQuantity = await db.bookshelf.count({
-        where: { bookshelf: bookshelfAsType, profile: { full_name: fullname } },
+        where: {
+          bookshelf: bookshelfAsType,
+          profile: { full_name: decodeURIComponent(fullname) },
+        },
       });
       variant = bookshelfAsType;
       break;

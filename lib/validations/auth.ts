@@ -31,7 +31,7 @@ export const UsernameValidator = z.object({
     .string()
     .min(3, { message: UsernameValidatorErrors.USERNAME_TOO_SHORT_3 })
     .max(32, { message: UsernameValidatorErrors.USERNAME_TOO_LONG_32 })
-    .regex(/^(?!.*\.\.)[a-zA-Z0-9._-]+$/, {
+    .regex(/^[^\s!@#$%^&*()|\\{}\[\]:;<>/?,+=]+$/, {
       message: UsernameValidatorErrors.WRONG_USERNAME,
     }), // can contain both lower and uppercase letters (a-z), numbers (0-9), and (".", "_", "-")
 });

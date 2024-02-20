@@ -24,7 +24,7 @@ export const FollowPage: FC<FollowPageProps> = async ({
 
   const userData = await db.profile.findUnique({
     where: {
-      full_name: fullname,
+      full_name: decodeURIComponent(fullname),
     },
     select: {
       id: true,

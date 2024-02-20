@@ -14,8 +14,8 @@ import { isFollowed } from "~/utils/isFollowed";
 export function generateMetadata({ params }: { params: { fullname: string } }) {
   return {
     title: {
-      default: `@${params.fullname}`,
-      template: `@${params.fullname}/%s | Booksphere`,
+      default: `@${decodeURIComponent(params.fullname)}`,
+      template: `@${decodeURIComponent(params.fullname)}/%s | Booksphere`,
     },
   };
 }
@@ -30,7 +30,7 @@ export default async function ProfileFullnameLayout({
   unstable_setRequestLocale(locale);
 
   const publicUserData = await db.profile.findUnique({
-    where: { full_name: fullname },
+    where: { full_name: decodeURIComponent(fullname) },
     select: {
       id: true,
       avatar_url: true,

@@ -29,7 +29,7 @@ export default async function StatisticsPage({
   const [userDataCount, alreadyReadBooks] = await Promise.all([
     db.profile.findUnique({
       where: {
-        full_name: fullname,
+        full_name: decodeURIComponent(fullname),
       },
       select: {
         _count: {
@@ -61,7 +61,7 @@ export default async function StatisticsPage({
       orderBy: { updated_at: "desc" },
       where: {
         AND: [
-          { profile: { full_name: fullname } },
+          { profile: { full_name: decodeURIComponent(fullname) } },
           { bookshelf: "ALREADY_READ" },
         ],
       },
