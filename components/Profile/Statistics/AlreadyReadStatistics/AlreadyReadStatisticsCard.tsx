@@ -113,7 +113,7 @@ export const AlreadyReadStatisticsCard: FC<AlreadyReadStatisticsCardProps> = ({
         {readingTimeDifference &&
           readingTimeDifference.longestReadTimeDiff !== Infinity && (
             <AlreadyReadStatisticsLabels
-              variant={"longest-read:"}
+              variant={"shortest-read:"}
               bookTitle={readingTimeDifference.longestReadBook.title}
               bookAuthors={readingTimeDifference.longestReadBook.authors}
               pages={readingTimeDifference.longestReadBook.page_count}
@@ -123,7 +123,7 @@ export const AlreadyReadStatisticsCard: FC<AlreadyReadStatisticsCardProps> = ({
         {readingTimeDifference &&
           readingTimeDifference.shortestReadTimeDiff !== -Infinity && (
             <AlreadyReadStatisticsLabels
-              variant={"shortest-read:"}
+              variant={"longest-read:"}
               bookTitle={readingTimeDifference.shortestReadBook.title}
               bookAuthors={readingTimeDifference.shortestReadBook.authors}
               pages={readingTimeDifference.shortestReadBook.page_count}
