@@ -110,24 +110,26 @@ export const AlreadyReadStatisticsCard: FC<AlreadyReadStatisticsCardProps> = ({
         />
       )}
       <div className="flex flex-wrap gap-x-6 gap-y-3">
-        {readingTimeDifference && (
-          <AlreadyReadStatisticsLabels
-            variant={"longest-read:"}
-            bookTitle={readingTimeDifference.longestReadBook.title}
-            bookAuthors={readingTimeDifference.longestReadBook.authors}
-            pages={readingTimeDifference.longestReadBook.page_count}
-            readTime={readingTimeDifference.longestReadTimeDiff}
-          />
-        )}
-        {readingTimeDifference && (
-          <AlreadyReadStatisticsLabels
-            variant={"shortest-read:"}
-            bookTitle={readingTimeDifference.shortestReadBook.title}
-            bookAuthors={readingTimeDifference.shortestReadBook.authors}
-            pages={readingTimeDifference.shortestReadBook.page_count}
-            readTime={readingTimeDifference.shortestReadTimeDiff}
-          />
-        )}
+        {readingTimeDifference &&
+          readingTimeDifference.longestReadTimeDiff !== Infinity && (
+            <AlreadyReadStatisticsLabels
+              variant={"longest-read:"}
+              bookTitle={readingTimeDifference.longestReadBook.title}
+              bookAuthors={readingTimeDifference.longestReadBook.authors}
+              pages={readingTimeDifference.longestReadBook.page_count}
+              readTime={readingTimeDifference.longestReadTimeDiff}
+            />
+          )}
+        {readingTimeDifference &&
+          readingTimeDifference.shortestReadTimeDiff !== -Infinity && (
+            <AlreadyReadStatisticsLabels
+              variant={"shortest-read:"}
+              bookTitle={readingTimeDifference.shortestReadBook.title}
+              bookAuthors={readingTimeDifference.shortestReadBook.authors}
+              pages={readingTimeDifference.shortestReadBook.page_count}
+              readTime={readingTimeDifference.shortestReadTimeDiff}
+            />
+          )}
       </div>
       {mostPagesBook && (
         <AlreadyReadStatisticsLabels
