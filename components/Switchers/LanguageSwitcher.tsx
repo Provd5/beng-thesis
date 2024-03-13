@@ -5,9 +5,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
-import FlagOfTheUnitedKingdom from "~/assets/flags/flag-icons-gb.png";
-import FlagOfPoland from "~/assets/flags/flag-icons-pl.png";
 import { locales, type localeTypes } from "~/i18n";
+import FlagOfTheUnitedKingdom from "~/public/flags/flag-icons-gb.png";
+import FlagOfPoland from "~/public/flags/flag-icons-pl.png";
 
 export const LanguageSwitcher: FC = () => {
   const pathname = usePathname();

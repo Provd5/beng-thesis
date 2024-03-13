@@ -12,7 +12,7 @@ export const NotFoundItems: FC<NotFoundItemsProps> = ({ itemType }) => {
 
   return (
     <>
-      <div className="flex flex-col justify-center gap-3 p-6 text-center text-md text-gray">
+      <div className="mt-6 flex flex-col justify-center gap-3 p-6 text-center text-md text-gray">
         <h1>
           {itemType === "reviews"
             ? t("this book has no written reviews yet")

@@ -16,7 +16,7 @@ export const AuthPage: FC<AuthPageProps> = ({ view }) => {
   const [checkMail, setCheckMail] = useState<string>();
 
   return (
-    <div className="relative flex h-full flex-col items-center justify-center px-3 py-6 text-sm text-white-light">
+    <div className="relative flex h-full flex-auto flex-col items-center justify-center px-3 py-6 text-sm text-white-light">
       {/* <div /> */}
       <div className="flex flex-col items-center">
         {checkMail ? (

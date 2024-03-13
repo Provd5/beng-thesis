@@ -10,26 +10,30 @@ interface AlreadyReadStatisticsLabelsProps {
     | "shortest-read:"
     | "longest-read:"
     | "last:"
-    | "book with most pages:";
-  bookTitle: string;
-  bookAuthors: string[];
-  pages: number;
-  readTime: number | null;
+    | "book with most pages:"
+    | "most read book:";
+  book: {
+    title: string;
+    authors: string[];
+    page_count: number;
+  };
+  readQuantity?: number;
+  readTime?: number;
   updateDate?: Date;
 }
 
 export const AlreadyReadStatisticsLabels: FC<
   AlreadyReadStatisticsLabelsProps
-> = ({ variant, bookTitle, bookAuthors, pages, readTime, updateDate }) => {
+> = ({ variant, book, readQuantity, readTime, updateDate }) => {
   const t = useTranslations("Statistics.ReadBooks");
 
   return (
     <div className="flex flex-col gap-1">
       <h2 className="text-secondary dark:text-secondary-light">{t(variant)}</h2>
       <div className="flex max-w-[250px] flex-col gap-0.5 text-sm">
-        <h3 className="text-base font-semibold">{bookTitle}</h3>
-        <p>{bookAuthors?.join(", ")}</p>
-        {pages > 0 && (
+        <h3 className="text-base font-semibold">{book.title}</h3>
+        <p>{book.authors.join(", ")}</p>
+        {book.page_count > 0 && (
           <p>
             {t("pages:")}{" "}
             <span
@@ -39,8 +43,20 @@ export const AlreadyReadStatisticsLabels: FC<
                   : ""
               }
             >
-              {pages}
+              {book.page_count}
             </span>
+          </p>
+        )}
+        {!!readQuantity && (
+          <p>
+            {t.rich("read quantity", {
+              numRead: readQuantity,
+              span: (chunks) => (
+                <span className="text-secondary dark:text-secondary-light">
+                  {chunks}
+                </span>
+              ),
+            })}
           </p>
         )}
         {!!readTime && (
@@ -55,7 +71,7 @@ export const AlreadyReadStatisticsLabels: FC<
             })}
           </p>
         )}
-        {updateDate && (
+        {!!updateDate && (
           <p className="text-secondary dark:text-secondary-light">
             {dateFormater(updateDate)}
           </p>

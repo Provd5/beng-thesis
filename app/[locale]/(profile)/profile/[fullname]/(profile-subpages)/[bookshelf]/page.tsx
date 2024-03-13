@@ -2,13 +2,11 @@ import { notFound } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
-import { bookshelvesOrderByArray } from "~/types/feed/OrderVariants";
 
-import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
+import { BooksFeed } from "~/components/Feed/BooksFeed";
 import { BookshelfPageTitle } from "~/components/Profile/Bookshelf/BookshelfPageTitle";
 import { type localeTypes } from "~/i18n";
-import { db } from "~/lib/db";
-import readUserSession from "~/lib/supabase/readUserSession";
+import { fetchBooksInCategoryCount } from "~/lib/actions/feed/books";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
 
 export async function generateMetadata({
@@ -24,79 +22,36 @@ export async function generateMetadata({
 
 export default async function BookshelfPage({
   params: { bookshelf, fullname, locale },
+  searchParams,
 }: {
   params: { bookshelf: string; fullname: string; locale: localeTypes };
+  searchParams?: {
+    orderBy?: string;
+    order?: "asc" | "desc";
+    page?: string;
+    q?: string;
+  };
 }) {
   unstable_setRequestLocale(locale);
 
   const bookshelfAsType = convertPathnameToTypeEnum(bookshelf) as CategoryTypes;
+
   if (!categoryArray.includes(bookshelfAsType)) notFound();
 
-  const {
-    data: { session },
-  } = await readUserSession();
-
-  let booksQuantity;
-  let variant;
-  switch (bookshelfAsType) {
-    case "OWNED":
-      booksQuantity = await db.book_owned_as.count({
-        where: {
-          profile: { full_name: decodeURIComponent(fullname) },
-          NOT: {
-            AND: [
-              { added_audiobook_at: null },
-              { added_book_at: null },
-              { added_ebook_at: null },
-            ],
-          },
-        },
-      });
-      variant = bookshelfAsType;
-      break;
-    case "LIKED":
-      booksQuantity = await db.liked_books.count({
-        where: { profile: { full_name: decodeURIComponent(fullname) } },
-      });
-      variant = bookshelfAsType;
-      break;
-    case "REVIEWS":
-      booksQuantity = await db.review.count({
-        where: { profile: { full_name: decodeURIComponent(fullname) } },
-      });
-      variant = bookshelfAsType;
-      break;
-    case "STATISTICS":
-      break;
-    default:
-      booksQuantity = await db.bookshelf.count({
-        where: {
-          bookshelf: bookshelfAsType,
-          profile: { full_name: decodeURIComponent(fullname) },
-        },
-      });
-      variant = bookshelfAsType;
-      break;
-  }
+  const booksCount = await fetchBooksInCategoryCount(bookshelfAsType, fullname);
 
   return (
     <div className="flex flex-col">
       <BookshelfPageTitle
-        booksQuantity={booksQuantity || 0}
+        booksQuantity={booksCount}
         categoryVariant={bookshelfAsType}
       />
-      {variant && (
-        <FeedWithSorting
-          feedVariant="books"
-          takeLimit={
-            booksQuantity ? (booksQuantity < 10 ? booksQuantity : 10) : 0
-          }
-          sessionId={session?.user.id}
-          profileName={fullname}
-          variant={variant}
-          orderArray={bookshelvesOrderByArray}
-        />
-      )}
+      <BooksFeed
+        variant={bookshelfAsType}
+        fullname={fullname}
+        searchParams={searchParams}
+        booksCount={booksCount}
+      />
     </div>
   );
 }

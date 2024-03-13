@@ -1,12 +1,10 @@
-import { redirect } from "next/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
 
 import { Logo } from "~/components/Logo";
 import { AccountSettings } from "~/components/Modals/AccountSettings";
 import { Settings } from "~/components/Modals/Settings";
 import { type localeTypes } from "~/i18n";
-import { db } from "~/lib/db";
-import readUserSession from "~/lib/supabase/readUserSession";
+import { fetchPublicUserData } from "~/lib/actions/profile/fetch";
 
 export default async function ProfileLayout({
   children,
@@ -16,22 +14,10 @@ export default async function ProfileLayout({
   params: { locale: localeTypes };
 }) {
   unstable_setRequestLocale(locale);
-
-  const {
-    data: { session },
-  } = await readUserSession();
-
-  if (!session?.user) {
-    redirect(`/login`);
-  }
-
-  const userData = await db.profile.findUnique({
-    where: { id: session.user.id },
-    select: { full_name: true, avatar_url: true },
-  });
+  const userData = await fetchPublicUserData();
 
   return (
-    <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll">
+    <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll scroll-smooth">
       <Logo />
       <div className="flex h-[68px] flex-none self-end p-3 text-white">
         <div className="flex h-fit gap-3">

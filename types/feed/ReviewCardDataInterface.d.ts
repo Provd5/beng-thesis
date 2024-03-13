@@ -1,3 +1,5 @@
+import { type reactionType } from "@prisma/client";
+
 import { type ReviewInterface } from "../DataTypes";
 
 interface ReviewCardDataInterface extends ReviewInterface {
@@ -12,4 +14,10 @@ interface ReviewCardDataInterface extends ReviewInterface {
       liked_book: number;
     };
   };
+}
+
+interface ReviewReactionsInterface {
+  OK: number;
+  MEH: number;
+  myReaction: reactionType | undefined;
 }

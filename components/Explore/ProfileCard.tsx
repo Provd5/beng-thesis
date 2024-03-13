@@ -7,26 +7,26 @@ import clsx from "clsx";
 
 import { MdNavigateNext } from "react-icons/md";
 
-import { isFollowed } from "~/utils/isFollowed";
-
 import { AvatarImage } from "../Profile/AvatarImage";
 import { ManageFollow } from "../Profile/ManageFollow";
 import { getBookmarkIcon } from "../ui/getBookmarkIcon";
 
 interface ProfileCardProps {
   profileData: ProfileCardDataInterface;
-  sessionId: string | undefined;
+  isSession: boolean;
+  isFollowed: boolean;
+  isMyProfile: boolean;
 }
 
 export const ProfileCard: FC<ProfileCardProps> = ({
   profileData,
-  sessionId,
+  isSession,
+  isFollowed,
+  isMyProfile,
 }) => {
   const t = useTranslations("Explore.ProfileCard");
 
-  const [isFollowedState, setIsFollowedState] = useState(
-    isFollowed(profileData.followed_by, sessionId)
-  );
+  const [isFollowedState, setIsFollowedState] = useState(isFollowed);
   const [followedByQuantityState, setFollowedByQuantityState] = useState(
     profileData._count.followed_by
   );
@@ -35,13 +35,13 @@ export const ProfileCard: FC<ProfileCardProps> = ({
     <div
       className={clsx(
         "flex h-full w-full max-w-[400px] flex-col rounded-md bg-white px-6 py-3 drop-shadow dark:bg-black",
-        sessionId ? "gap-2" : "gap-0"
+        isSession ? "gap-2" : "gap-0"
       )}
     >
       <div
         className={clsx(
           "flex flex-col gap-1",
-          sessionId ? "flex-auto" : "flex-none"
+          isSession ? "flex-auto" : "flex-none"
         )}
       >
         <Link href={`/profile/${profileData.full_name}`} className="flex gap-1">
@@ -92,7 +92,7 @@ export const ProfileCard: FC<ProfileCardProps> = ({
           )}
         </div>
       </div>
-      {!!sessionId ? (
+      {isSession && !isMyProfile ? (
         <ManageFollow
           userId={profileData.id}
           isFollowedState={isFollowedState}

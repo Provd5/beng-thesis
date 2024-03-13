@@ -1,52 +1,49 @@
 import type { FC } from "react";
-import { type bookshelfType } from "@prisma/client";
 
-import { categoryArray } from "~/types/CategoryTypes";
+import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
 
 import { getBookmarkIcon } from "~/components/ui/getBookmarkIcon";
 import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
-import { quantityPerCategoryType } from "~/utils/quantityPerCategoryType";
+import { fetchBooksInCategoryCount } from "~/lib/actions/feed/books";
 
 interface MainStatisticsCardProps {
-  quantities: {
-    ownedQuantity: number;
-    likedQuantity: number;
-    reviewsQuantity: number;
-  };
-  bookshelfArray:
-    | {
-        bookshelf: bookshelfType | null;
-      }[];
+  fullname: string;
 }
 
-export const MainStatisticsCard: FC<MainStatisticsCardProps> = ({
-  quantities,
-  bookshelfArray,
+export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
+  fullname,
 }) => {
+  const quantities = await Promise.all(
+    categoryArray.map(async (categoryVariant) => ({
+      [categoryVariant]: await fetchBooksInCategoryCount(
+        categoryVariant,
+        fullname
+      ),
+    }))
+  );
+
   return (
     <div className="flex flex-wrap justify-center gap-2">
-      {categoryArray.map((categoryVariant) => {
-        const variantQuantity = quantityPerCategoryType(
-          categoryVariant,
-          bookshelfArray,
-          quantities
-        );
-        if (categoryVariant === "STATISTICS") return null;
+      {quantities.map((categoryVariant) => {
+        const label = Object.keys(categoryVariant)[0] as CategoryTypes;
+        const value = categoryVariant[label];
+
+        if (label === "STATISTICS") return null;
 
         return (
           <div
-            key={categoryVariant}
+            key={label}
             className="flex flex-col items-center justify-center gap-0.5"
           >
             <div className="flex h-8 w-8 items-center justify-center">
-              {categoryVariant === "OWNED" ? (
+              {label === "OWNED" ? (
                 <div className="mb-[-4px]">{getOwnedAsIcon("BOOK", "lg")}</div>
               ) : (
-                getBookmarkIcon(categoryVariant, "lg")
+                getBookmarkIcon(label, "lg")
               )}
             </div>
             <p className="flex h-8 items-center justify-center text-lg">
-              {variantQuantity}
+              {value}
             </p>
           </div>
         );

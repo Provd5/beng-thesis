@@ -6,15 +6,15 @@ interface ReviewInterface {
   updated_at: Date | null;
   text: string | null;
   rate: number;
-  review_reaction: ReactionTypeInterface[];
 }
 
 interface BookshelfInterface {
-  updated_at: Date;
-  began_reading_at: Date | null;
-  read_quantity: number;
-  bookshelf: bookshelfType | null;
-  title: string | null;
+  bookshelfData: {
+    bookshelf: bookshelfType | null;
+    updated_at: Date;
+    began_reading_at: Date | null;
+    read_quantity: number;
+  };
 }
 
 interface BookOwnedAsInterface {

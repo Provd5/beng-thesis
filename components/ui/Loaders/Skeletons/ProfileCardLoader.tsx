@@ -41,3 +41,9 @@ export const ProfileCardLoader: FC<ProfileCardLoaderProps> = ({ index }) => {
     </div>
   );
 };
+
+export const ProfileCardsLoader: FC<{ items: number }> = ({ items }) => {
+  return Array.from({ length: items }, (_, i) => (
+    <ProfileCardLoader key={i} index={i} />
+  ));
+};

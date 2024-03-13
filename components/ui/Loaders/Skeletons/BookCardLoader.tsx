@@ -6,7 +6,6 @@ import { TextLoader } from "../Loader";
 
 interface BookCardLoaderProps {
   index: number;
-  sessionId?: string;
 }
 
 export const BookCardLoader: FC<BookCardLoaderProps> = ({ index }) => {
@@ -34,4 +33,10 @@ export const BookCardLoader: FC<BookCardLoaderProps> = ({ index }) => {
       </div>
     </div>
   );
+};
+
+export const BookCardsLoader: FC<{ items: number }> = ({ items }) => {
+  return Array.from({ length: items }, (_, i) => (
+    <BookCardLoader key={i} index={i} />
+  ));
 };

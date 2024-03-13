@@ -50,7 +50,9 @@ export async function POST(req: Request) {
         },
       });
     }
+
     // on success
+    // revalidatePath("/", "layout");
     return new Response(GlobalErrors.SUCCESS);
   } catch (error) {
     if (error instanceof z.ZodError) {

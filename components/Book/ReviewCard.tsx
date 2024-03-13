@@ -3,10 +3,12 @@
 import { type FC, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { type reactionType } from "@prisma/client";
 import clsx from "clsx";
 
-import { type ReviewCardDataInterface } from "~/types/feed/ReviewCardDataInterface";
+import {
+  type ReviewCardDataInterface,
+  type ReviewReactionsInterface,
+} from "~/types/feed/ReviewCardDataInterface";
 
 import { dateFormater } from "~/utils/dateFormater";
 
@@ -17,13 +19,13 @@ import { ManageReaction } from "./Manage/ManageReaction";
 
 interface ReviewCardProps {
   reviewData: ReviewCardDataInterface;
-  myReaction: reactionType | undefined;
+  reviewReactions: ReviewReactionsInterface;
   isMyReview?: boolean;
 }
 
 export const ReviewCard: FC<ReviewCardProps> = ({
   reviewData,
-  myReaction,
+  reviewReactions,
   isMyReview,
 }) => {
   const t = useTranslations("Reviews.Review");
@@ -136,10 +138,8 @@ export const ReviewCard: FC<ReviewCardProps> = ({
                 {t("was this review helpful?")}
               </p>
               <ManageReaction
-                myReaction={myReaction}
-                reaction={reviewData.review_reaction}
+                reviewReactions={reviewReactions}
                 reviewId={reviewData.id}
-                userId={reviewData.profile.id}
               />
             </div>
           )}

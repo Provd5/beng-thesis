@@ -1,11 +1,11 @@
 import { BookCover } from "~/components/Book/BookCover";
-import { BackCategoryButton } from "~/components/ui/BackCategoryLink";
+import { BackFrom } from "~/components/ui/BackCategoryLink";
 import { TextLoader } from "~/components/ui/Loaders/Loader";
 
 export default function Loading() {
   return (
     <div className="container pb-12 pt-8">
-      <BackCategoryButton />
+      <BackFrom />
       <div className="mt-3 flex-col">
         <div className="flex flex-col gap-x-10 gap-y-8 px-1 xs:px-3 md:flex-row md:justify-between md:px-6">
           <div className="flex gap-3">

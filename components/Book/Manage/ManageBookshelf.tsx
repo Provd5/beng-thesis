@@ -22,18 +22,17 @@ import { ManageBookshelfModalContent } from "./ManageBookshelfModalContent";
 
 interface ManageBookshelfProps {
   bookId: string;
-  bookshelf: bookshelfType | null | undefined;
-  updatedAt: Date | null | undefined;
-  beganReadingAt: Date | null | undefined;
-  readQuantity: number | undefined;
+  bookshelfData: {
+    bookshelf: bookshelfType | null;
+    updated_at: Date;
+    began_reading_at: Date | null;
+    read_quantity: number;
+  } | null;
 }
 
 export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   bookId,
-  bookshelf,
-  updatedAt,
-  beganReadingAt,
-  readQuantity,
+  bookshelfData,
 }) => {
   const t = useTranslations("Book.ManageBookshelf");
   const tb = useTranslations("Book.BookshelfTypes");
@@ -44,16 +43,24 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSelectDate, setIsSelectDate] = useState(false);
 
-  const [currentBookshelf, setCurrentBookshelf] = useState(bookshelf || null);
-  const [selectedBookshelf, setSelectedBookshelf] = useState(bookshelf || null);
+  const [currentBookshelf, setCurrentBookshelf] = useState(
+    bookshelfData?.bookshelf || null
+  );
+  const [selectedBookshelf, setSelectedBookshelf] = useState(
+    bookshelfData?.bookshelf || null
+  );
 
   const [beganReadingAtState, setBeganReadingAtState] = useState(
-    beganReadingAt || null
+    bookshelfData?.began_reading_at || null
   );
-  const [updatedAtState, setUpdatedAtState] = useState(updatedAt || null);
+  const [updatedAtState, setUpdatedAtState] = useState<Date | null>(
+    bookshelfData?.updated_at || null
+  );
 
   const [readQuantityState, setReadQuantityState] = useState(
-    readQuantity && readQuantity > 1 ? readQuantity : 1
+    bookshelfData && bookshelfData.read_quantity > 1
+      ? bookshelfData.read_quantity
+      : 1
   );
 
   const openModalButtonRef = useRef<HTMLButtonElement>(null);

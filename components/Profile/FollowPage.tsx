@@ -1,54 +1,36 @@
-import type { FC } from "react";
-import { notFound } from "next/navigation";
+import { type FC } from "react";
 
-import { profilesOrderByArray } from "~/types/feed/OrderVariants";
+import { fetchProfilesCount } from "~/lib/actions/feed/profiles";
 
-import { db } from "~/lib/db";
-import readUserSession from "~/lib/supabase/readUserSession";
-
-import { FeedWithSorting } from "../Feed/FeedWithSorting";
+import { ProfilesFeed } from "../Feed/ProfilesFeed";
 import { BackCategoryLink } from "../ui/BackCategoryLink";
 
 interface FollowPageProps {
   fullname: string;
   variant: "followers" | "following";
+  searchParams:
+    | {
+        orderBy?: string;
+        order?: "asc" | "desc";
+        page?: string;
+      }
+    | undefined;
 }
 
 export const FollowPage: FC<FollowPageProps> = async ({
   fullname,
   variant,
+  searchParams,
 }) => {
-  const {
-    data: { session },
-  } = await readUserSession();
-
-  const userData = await db.profile.findUnique({
-    where: {
-      full_name: decodeURIComponent(fullname),
-    },
-    select: {
-      id: true,
-      _count: { select: { followed_by: true, following: true } },
-    },
-  });
-
-  if (!userData) notFound();
-
-  const takeLimit =
-    variant === "followers"
-      ? userData._count.followed_by
-      : userData._count.following;
-
+  const profilesCount = await fetchProfilesCount(variant, fullname);
   return (
     <>
       <BackCategoryLink href={`../${fullname}`} variant="RETURN" />
-      <FeedWithSorting
-        feedVariant="profiles"
+      <ProfilesFeed
         variant={variant}
-        userId={userData.id}
-        sessionId={session?.user.id}
-        orderArray={profilesOrderByArray}
-        takeLimit={takeLimit < 30 ? takeLimit : 30}
+        fullname={fullname}
+        searchParams={searchParams}
+        profilesCount={profilesCount}
       />
     </>
   );

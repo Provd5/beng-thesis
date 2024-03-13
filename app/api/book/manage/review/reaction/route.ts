@@ -53,6 +53,7 @@ export async function POST(req: Request) {
     }
 
     // on success
+    // revalidatePath("/", "layout");
     return new Response(GlobalErrors.SUCCESS);
   } catch (error) {
     return new Response(GlobalErrors.SOMETHING_WENT_WRONG);

@@ -2,7 +2,7 @@ import type { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import LogoImage from "~/assets/booksphere-logo.svg";
+import LogoImage from "~/public/booksphere-logo.svg";
 
 export const Logo: FC = ({}) => {
   return (

@@ -6,7 +6,7 @@ import { AllReviewsButton } from "~/components/Book/AllReviewsButton";
 import { MyReview } from "~/components/Book/MyReview";
 import { CategoryLink } from "~/components/ui/CategoryLink";
 import { type localeTypes } from "~/i18n";
-import readUserSession from "~/lib/supabase/readUserSession";
+import { fetchMyReview, fetchReviewReactions } from "~/lib/actions/book/fetch";
 
 export default async function BookPage({
   params: { id, title, locale },
@@ -23,9 +23,8 @@ export default async function BookPage({
     notFound();
   }
 
-  const {
-    data: { session },
-  } = await readUserSession();
+  const myReview = await fetchMyReview(id);
+  const reviewReactions = await fetchReviewReactions(myReview?.id);
 
   return (
     <>
@@ -35,9 +34,13 @@ export default async function BookPage({
           variant="REVIEWS"
           hrefReplace
         />
-        <MyReview bookId={id} sessionId={session?.user.id} />
+        <MyReview
+          reviewData={myReview}
+          reviewReactions={reviewReactions}
+          bookId={id}
+        />
       </div>
-      {session?.user.id && (
+      {myReview !== undefined && (
         <AllReviewsButton
           href={{ pathname: `${title}/reviews`, query: searchParams }}
         />

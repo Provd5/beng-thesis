@@ -2,20 +2,22 @@ import { notFound } from "next/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
 import { z } from "zod";
 
-import { reviewsOrderByArray } from "~/types/feed/OrderVariants";
-
-import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
+import { ReviewsFeed } from "~/components/Feed/ReviewsFeed";
 import { BackCategoryLink } from "~/components/ui/BackCategoryLink";
 import { type localeTypes } from "~/i18n";
-import { db } from "~/lib/db";
-import readUserSession from "~/lib/supabase/readUserSession";
+import { fetchReviewsCount } from "~/lib/actions/feed/reviews";
 
 export default async function BookReviewsPage({
   params: { id, title, locale },
   searchParams,
 }: {
   params: { id: string; title: string; locale: localeTypes };
-  searchParams?: string;
+  searchParams?: {
+    orderBy?: string;
+    order?: "asc" | "desc";
+    page?: string;
+    from?: string;
+  };
 }) {
   unstable_setRequestLocale(locale);
 
@@ -25,19 +27,7 @@ export default async function BookReviewsPage({
     notFound();
   }
 
-  const {
-    data: { session },
-  } = await readUserSession();
-
-  const reviewsQuantity = await db.review.count({
-    where: {
-      book_id: id,
-      text: { not: null },
-      profile: {
-        full_name: { not: null },
-      },
-    },
-  });
+  const reviewsCount = await fetchReviewsCount(id);
 
   return (
     <div className="flex flex-col">
@@ -46,13 +36,10 @@ export default async function BookReviewsPage({
         variant="MY_REVIEW"
         hrefReplace
       />
-      <FeedWithSorting
-        feedVariant="reviews"
-        sessionId={session?.user.id}
-        userId={undefined}
-        orderArray={reviewsOrderByArray}
-        takeLimit={reviewsQuantity < 10 ? reviewsQuantity : 10}
+      <ReviewsFeed
         bookId={id}
+        searchParams={searchParams}
+        reviewsCount={reviewsCount}
       />
     </div>
   );

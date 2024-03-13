@@ -16,10 +16,22 @@ export async function generateMetadata({
 
 export default function FollowersPage({
   params: { fullname, locale },
+  searchParams,
 }: {
   params: { fullname: string; locale: localeTypes };
+  searchParams?: {
+    orderBy?: string;
+    order?: "asc" | "desc";
+    page?: string;
+  };
 }) {
   unstable_setRequestLocale(locale);
 
-  return <FollowPage fullname={fullname} variant="followers" />;
+  return (
+    <FollowPage
+      searchParams={searchParams}
+      fullname={fullname}
+      variant="followers"
+    />
+  );
 }

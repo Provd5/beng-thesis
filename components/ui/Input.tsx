@@ -22,9 +22,11 @@ export const Input = forwardRef<
     ...props,
   };
 
-  const commonClass = inverted
-    ? "dark:bg-white dark:text-black bg-black text-white"
-    : "bg-white-light text-black dark:bg-black-dark dark:text-white";
+  const commonClass = "placeholder:italic placeholder:text-base";
+
+  const commonColor = inverted
+    ? "dark:bg-white dark:text-black bg-black text-white dark:caret-secondary caret-secondary-light"
+    : "bg-white-light text-black dark:bg-black-dark dark:text-white caret-secondary dark:caret-secondary-light";
 
   return (
     <div className="flex w-[inherit] flex-col">
@@ -38,6 +40,7 @@ export const Input = forwardRef<
           {...commonProps}
           className={clsx(
             "rounded-l-md rounded-tr-md p-3 text-base",
+            commonColor,
             commonClass,
             className
           )}
@@ -48,6 +51,7 @@ export const Input = forwardRef<
           {...commonProps}
           className={clsx(
             "rounded-lg px-3 py-2 text-md",
+            commonColor,
             commonClass,
             className
           )}

@@ -66,7 +66,7 @@ export default async function RootLayout({
 
   return (
     <html lang={validLocale} className={quicksandFont.className}>
-      <body className="bodyGradient relative flex h-full flex-col bg-fixed text-base font-medium text-black antialiased dark:text-white">
+      <body className="bodyGradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-black antialiased selection:bg-secondary selection:text-white dark:text-white md:flex-col">
         <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
         <DarkModeInitializer />
         <SvgPainter />

@@ -14,14 +14,14 @@ interface ManageReviewsProps {
   isReviewExists: boolean;
   reviewsQuantity: number;
   createdAt: Date | undefined;
-  sessionId: string | undefined;
+  isSession: boolean;
 }
 
 export const ManageReviews: FC<ManageReviewsProps> = ({
   isReviewExists,
   reviewsQuantity,
   createdAt,
-  sessionId,
+  isSession,
 }) => {
   const t = useTranslations("Book.ManageReviews");
 
@@ -41,7 +41,7 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
   return (
     <button
       className="flex w-fit gap-1 text-left"
-      disabled={!sessionId}
+      disabled={!isSession}
       onClick={handleFocusReview}
     >
       <div className="flex h-fit">
@@ -58,7 +58,7 @@ export const ManageReviews: FC<ManageReviewsProps> = ({
           </h3>
         </div>
         <p>{reviewsQuantity}</p>
-        {!!sessionId && (
+        {isSession && (
           <p className="text-xs text-black-light dark:text-white-dark">
             {createdAt ? (
               dateFormater(createdAt)

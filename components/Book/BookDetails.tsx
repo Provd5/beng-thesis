@@ -12,7 +12,7 @@ type variantTypes =
   | "publisher:"
   | "release date:"
   | "genre:"
-  | "averge rate:"
+  | "average rate:"
   | "description:";
 
 interface BookDetailsProps {
@@ -39,7 +39,7 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
   }, [descriptionParagraphRef.current]);
 
   switch (variant) {
-    case "averge rate:":
+    case "average rate:":
       return (
         <div className="flex flex-col gap-0.5 font-semibold">
           <h3 className="text-base text-secondary dark:text-secondary-light">

@@ -1,10 +1,8 @@
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { booksOrderByArray } from "~/types/feed/OrderVariants";
-
-import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
+import { BooksFeed } from "~/components/Feed/BooksFeed";
 import { type localeTypes } from "~/i18n";
-import readUserSession from "~/lib/supabase/readUserSession";
+import { fetchBooksInCategoryCount } from "~/lib/actions/feed/books";
 
 export async function generateMetadata({
   params: { locale },
@@ -19,24 +17,25 @@ export async function generateMetadata({
 
 export default async function ExplorePage({
   params: { locale },
+  searchParams,
 }: {
   params: { locale: localeTypes };
+  searchParams?: {
+    orderBy?: string;
+    order?: "asc" | "desc";
+    page?: string;
+  };
 }) {
   unstable_setRequestLocale(locale);
-
-  const {
-    data: { session },
-  } = await readUserSession();
+  const booksCount = await fetchBooksInCategoryCount(null, null);
 
   return (
     <div className="container pb-12">
-      <FeedWithSorting
-        feedVariant="books"
-        orderArray={booksOrderByArray}
-        takeLimit={20}
-        sessionId={session?.user.id}
-        profileName={undefined}
-        variant={undefined}
+      <BooksFeed
+        variant={null}
+        fullname={null}
+        searchParams={searchParams}
+        booksCount={booksCount}
       />
     </div>
   );

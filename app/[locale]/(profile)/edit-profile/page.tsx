@@ -6,8 +6,7 @@ import { ManageProfileDescription } from "~/components/Profile/EditProfile/Manag
 import { ManageProfileStatus } from "~/components/Profile/EditProfile/ManageProfileStatus";
 import { ManageProfileUsername } from "~/components/Profile/EditProfile/ManageProfileUsername";
 import { type localeTypes } from "~/i18n";
-import { db } from "~/lib/db";
-import readUserSession from "~/lib/supabase/readUserSession";
+import { fetchPublicUserData } from "~/lib/actions/profile/fetch";
 
 export async function generateMetadata({
   params: { locale },
@@ -27,22 +26,7 @@ export default async function EditProfilePage({
 }) {
   unstable_setRequestLocale(locale);
 
-  const {
-    data: { session },
-  } = await readUserSession();
-
-  const userData =
-    session?.user &&
-    (await db.profile.findUnique({
-      where: { id: session.user.id },
-      select: {
-        avatar_url: true,
-        full_name: true,
-        private: true,
-        description: true,
-      },
-    }));
-
+  const userData = await fetchPublicUserData();
   if (!userData) notFound();
 
   return (
