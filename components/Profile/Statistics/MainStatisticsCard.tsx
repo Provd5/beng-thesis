@@ -1,34 +1,35 @@
 import type { FC } from "react";
 
-import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
+import { BookshelvesArray } from "~/types/categoryArrays";
+import { type BookshelvesTypes } from "~/types/data/bookshelf";
 
-import { getBookmarkIcon } from "~/components/ui/getBookmarkIcon";
-import { getOwnedAsIcon } from "~/components/ui/getOwnedAsIcon";
-import { fetchBooksInCategoryCount } from "~/lib/actions/feed/books";
+import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
+import { OwnedBookIcon } from "~/components/ui/Icons/OwnedBookIcon";
+import { BookshelfService } from "~/lib/services/bookshelf";
 
 interface MainStatisticsCardProps {
-  fullname: string;
+  profileName: string;
 }
 
 export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
-  fullname,
+  profileName,
 }) => {
+  const bookshelfService = new BookshelfService();
+
   const quantities = await Promise.all(
-    categoryArray.map(async (categoryVariant) => ({
-      [categoryVariant]: await fetchBooksInCategoryCount(
-        categoryVariant,
-        fullname
+    BookshelvesArray.map(async (bookshelfVariant) => ({
+      [bookshelfVariant]: await bookshelfService.getQuantity(
+        profileName,
+        bookshelfVariant
       ),
     }))
   );
 
   return (
     <div className="flex flex-wrap justify-center gap-2">
-      {quantities.map((categoryVariant) => {
-        const label = Object.keys(categoryVariant)[0] as CategoryTypes;
-        const value = categoryVariant[label];
-
-        if (label === "STATISTICS") return null;
+      {quantities.map((bookshelfVariant) => {
+        const label = Object.keys(bookshelfVariant)[0] as BookshelvesTypes;
+        const value = bookshelfVariant[label];
 
         return (
           <div
@@ -37,9 +38,11 @@ export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
           >
             <div className="flex h-8 w-8 items-center justify-center">
               {label === "OWNED" ? (
-                <div className="mb-[-4px]">{getOwnedAsIcon("BOOK", "lg")}</div>
+                <div className="mb-[-4px]">
+                  <OwnedBookIcon ownedAs="BOOK" size="lg" />
+                </div>
               ) : (
-                getBookmarkIcon(label, "lg")
+                <BookmarkIcon category={label} size="lg" />
               )}
             </div>
             <p className="flex h-8 items-center justify-center text-lg">

@@ -3,6 +3,7 @@ import createMiddleware from "next-intl/middleware";
 import { type CookieOptions, createServerClient } from "@supabase/ssr";
 
 import { defaultLocale, locales } from "./i18n";
+import ROUTES from "./utils/routes";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export async function middleware(request: NextRequest) {
@@ -81,12 +82,12 @@ export async function middleware(request: NextRequest) {
     !session?.user &&
     (protectedRoute === "profile" || protectedRoute === "edit-profile")
   )
-    return Response.redirect(new URL("/login", nextUrl));
+    return Response.redirect(new URL(ROUTES.auth.login, nextUrl));
   if (
     !!session?.user &&
     (protectedRoute === "login" || protectedRoute === "signup")
   )
-    return Response.redirect(new URL("/profile", nextUrl));
+    return Response.redirect(new URL(ROUTES.profile.session_profile, nextUrl));
 
   return response;
 }

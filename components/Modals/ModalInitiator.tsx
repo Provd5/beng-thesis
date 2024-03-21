@@ -7,7 +7,7 @@ import { ModalWrapper } from "./ModalWrapper";
 interface ModalInitiatorProps {
   children: React.ReactNode;
   initiatorStyle: React.ReactNode;
-  size?: ModalSizes;
+  size?: "default" | "sm" | "xs";
 }
 
 export const ModalInitiator: FC<ModalInitiatorProps> = ({

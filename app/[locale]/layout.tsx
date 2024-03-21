@@ -3,9 +3,9 @@ import { notFound } from "next/navigation";
 import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { Navbar } from "~/components/Navbar/Navbar";
+import { Navbar } from "~/components/Links/Navbar/Navbar";
 import { DarkModeInitializer } from "~/components/ui/DarkModeInitializer";
-import { SvgPainter } from "~/components/ui/SvgIcons/SvgPainter";
+import { SvgPainter } from "~/components/ui/Icons/SvgIcons/SvgPainter";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
 import { defaultLocale, locales, type localeTypes } from "~/i18n";
 
@@ -62,12 +62,9 @@ export default async function RootLayout({
   unstable_setRequestLocale(validLocale);
   const messages = await getMessages(validLocale);
 
-  const themeInitializerScript = `function initializeDarkMode() { localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");} initializeDarkMode();`;
-
   return (
     <html lang={validLocale} className={quicksandFont.className}>
       <body className="bodyGradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-black antialiased selection:bg-secondary selection:text-white dark:text-white md:flex-col">
-        <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
         <DarkModeInitializer />
         <SvgPainter />
 

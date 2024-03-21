@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 interface InputProps extends HTMLProps<HTMLInputElement | HTMLTextAreaElement> {
   id: string;
-  loading: boolean;
+  loading?: boolean;
   isTextarea?: boolean;
   inverted?: boolean;
   label?: string;

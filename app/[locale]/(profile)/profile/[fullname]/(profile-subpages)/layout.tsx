@@ -1,7 +1,7 @@
 import { unstable_setRequestLocale } from "next-intl/server";
 
-import { BackCategoryLink } from "~/components/ui/BackCategoryLink";
-import { CategoryLinksContainer } from "~/components/ui/CategoryLinksContainer";
+import { BackCategoryLink } from "~/components/Links/BackCategoryLink";
+import { CategoryLinksContainer } from "~/components/Links/CategoryLinksContainer";
 import { DragContainer } from "~/components/ui/DragContainer";
 import { type localeTypes } from "~/i18n";
 

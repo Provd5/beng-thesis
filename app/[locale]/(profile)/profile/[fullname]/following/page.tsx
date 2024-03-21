@@ -1,6 +1,7 @@
+import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { FollowPage } from "~/components/Profile/FollowPage";
+import { FollowPage } from "~/components/Profile/Follows/FollowPage";
 import { type localeTypes } from "~/i18n";
 
 export async function generateMetadata({
@@ -19,18 +20,14 @@ export default function FollowingPage({
   searchParams,
 }: {
   params: { fullname: string; locale: localeTypes };
-  searchParams?: {
-    orderBy?: string;
-    order?: "asc" | "desc";
-    page?: string;
-  };
+  searchParams: ReadonlyURLSearchParams;
 }) {
   unstable_setRequestLocale(locale);
 
   return (
     <FollowPage
       searchParams={searchParams}
-      fullname={fullname}
+      profileName={fullname}
       variant="following"
     />
   );

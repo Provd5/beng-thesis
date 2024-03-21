@@ -18,8 +18,8 @@ interface BookCoverLoaderProps {
 }
 
 export const BookCover: FC<BookCoverProps | BookCoverLoaderProps> = ({
-  isLoader,
   coverUrl,
+  isLoader,
   children,
   size = "default",
 }) => {

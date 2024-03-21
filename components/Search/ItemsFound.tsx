@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
 interface ItemsFoundProps {
-  itemsFound: string;
+  itemsFound: number;
 }
 
 export const ItemsFound: FC<ItemsFoundProps> = ({ itemsFound }) => {

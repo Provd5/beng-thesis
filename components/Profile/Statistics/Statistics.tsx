@@ -1,19 +1,21 @@
 import type { FC } from "react";
 import Link from "next/link";
 
+import ROUTES from "~/utils/routes";
+
 import { MainStatisticsCard } from "./MainStatisticsCard";
 import { StatisticsCategoryWrapper } from "./StatisticsCategoryWrapper";
 
 interface StatisticsProps {
-  fullname: string;
+  profileName: string;
 }
 
-export const Statistics: FC<StatisticsProps> = ({ fullname }) => {
+export const Statistics: FC<StatisticsProps> = ({ profileName }) => {
   return (
     <div className="flex justify-center md:justify-start">
-      <Link href={`${fullname}/statistics`}>
+      <Link href={ROUTES.profile.bookshelf("STATISTICS")}>
         <StatisticsCategoryWrapper variant="profile statistics">
-          <MainStatisticsCard fullname={fullname} />
+          <MainStatisticsCard profileName={profileName} />
         </StatisticsCategoryWrapper>
       </Link>
     </div>

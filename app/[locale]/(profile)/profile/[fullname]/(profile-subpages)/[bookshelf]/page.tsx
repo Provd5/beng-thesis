@@ -1,12 +1,14 @@
-import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { notFound, type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { categoryArray, type CategoryTypes } from "~/types/CategoryTypes";
+import { BookshelvesArray } from "~/types/categoryArrays";
+import { type BookshelvesTypes } from "~/types/data/bookshelf";
 
-import { BooksFeed } from "~/components/Feed/BooksFeed";
-import { BookshelfPageTitle } from "~/components/Profile/Bookshelf/BookshelfPageTitle";
+import { BookshelfFeed } from "~/components/Bookshelf/BookshelfFeed";
+import { ReviewBookshelfFeed } from "~/components/Bookshelf/ReviewBookshelfFeed";
+import { Loader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
-import { fetchBooksInCategoryCount } from "~/lib/actions/feed/books";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
 
 export async function generateMetadata({
@@ -20,38 +22,39 @@ export async function generateMetadata({
   };
 }
 
-export default async function BookshelfPage({
+export default function BookshelfPage({
   params: { bookshelf, fullname, locale },
   searchParams,
 }: {
   params: { bookshelf: string; fullname: string; locale: localeTypes };
-  searchParams?: {
-    orderBy?: string;
-    order?: "asc" | "desc";
-    page?: string;
-    q?: string;
-  };
+  searchParams: ReadonlyURLSearchParams;
 }) {
   unstable_setRequestLocale(locale);
 
-  const bookshelfAsType = convertPathnameToTypeEnum(bookshelf) as CategoryTypes;
+  const validBookshelf = convertPathnameToTypeEnum(
+    bookshelf
+  ) as BookshelvesTypes;
 
-  if (!categoryArray.includes(bookshelfAsType)) notFound();
-
-  const booksCount = await fetchBooksInCategoryCount(bookshelfAsType, fullname);
+  if (!BookshelvesArray.includes(validBookshelf)) notFound();
 
   return (
     <div className="flex flex-col">
-      <BookshelfPageTitle
-        booksQuantity={booksCount}
-        categoryVariant={bookshelfAsType}
-      />
-      <BooksFeed
-        variant={bookshelfAsType}
-        fullname={fullname}
-        searchParams={searchParams}
-        booksCount={booksCount}
-      />
+      {validBookshelf === "REVIEWS" ? (
+        <Suspense fallback={<Loader />}>
+          <ReviewBookshelfFeed
+            profileName={fullname}
+            searchParams={searchParams}
+          />
+        </Suspense>
+      ) : (
+        <Suspense fallback={<Loader />}>
+          <BookshelfFeed
+            profileName={fullname}
+            bookshelf={validBookshelf}
+            searchParams={searchParams}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

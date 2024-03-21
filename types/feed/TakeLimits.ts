@@ -1,4 +1,0 @@
-export const PROFILE_PAGE_BOOKS_TAKE_LIMIT = 10;
-export const BOOKS_FEED_TAKE_LIMIT = 20;
-export const PROFILES_FEED_TAKE_LIMIT = 24;
-export const REVIEWS_FEED_TAKE_LIMIT = 10;

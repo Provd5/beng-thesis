@@ -1,8 +1,10 @@
+import { Suspense } from "react";
+import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { ProfilesFeed } from "~/components/Feed/ProfilesFeed";
+import { ProfilesFeed } from "~/components/Profile/ProfilesFeed";
+import { Loader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
-import { fetchProfilesCount } from "~/lib/actions/feed/profiles";
 
 export async function generateMetadata({
   params: { locale },
@@ -15,29 +17,20 @@ export async function generateMetadata({
   };
 }
 
-export default async function CommunityPage({
+export default function CommunityPage({
   params: { locale },
   searchParams,
 }: {
   params: { locale: localeTypes };
-  searchParams?: {
-    orderBy?: string;
-    order?: "asc" | "desc";
-    page?: string;
-  };
+  searchParams: ReadonlyURLSearchParams;
 }) {
   unstable_setRequestLocale(locale);
 
-  const profilesCount = await fetchProfilesCount(null, null);
-
   return (
     <div className="container pb-12">
-      <ProfilesFeed
-        variant={null}
-        fullname={null}
-        searchParams={searchParams}
-        profilesCount={profilesCount}
-      />
+      <Suspense fallback={<Loader />}>
+        <ProfilesFeed searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }

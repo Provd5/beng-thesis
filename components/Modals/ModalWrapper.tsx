@@ -14,7 +14,7 @@ interface ModalWrapperProps
   children: React.ReactNode;
   openModalButtonRef: RefObject<HTMLButtonElement>;
   closeModalHandler: () => void;
-  size?: ModalSizes;
+  size?: "default" | "sm" | "xs";
 }
 
 export const ModalWrapper: FC<ModalWrapperProps> = ({

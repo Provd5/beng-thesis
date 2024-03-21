@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import { unstable_setRequestLocale } from "next-intl/server";
 
-import { categoryArray } from "~/types/CategoryTypes";
+import { CategoriesArray } from "~/types/categoryArrays";
 
-import { CategorySection } from "~/components/Profile/CategorySection";
+import { CategorySection } from "~/components/Bookshelf/CategorySection";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
 
 export default function ProfilePage({
@@ -12,11 +14,13 @@ export default function ProfilePage({
 }) {
   unstable_setRequestLocale(locale);
 
-  return categoryArray.map((categoryVariant) => (
-    <CategorySection
-      key={categoryVariant}
-      categoryVariant={categoryVariant}
-      fullname={fullname}
-    />
+  return CategoriesArray.map((categoryVariant) => (
+    <Suspense key={categoryVariant} fallback={<LargeComponentLoader />}>
+      <CategorySection
+        key={categoryVariant}
+        categoryVariant={categoryVariant}
+        profileName={fullname}
+      />
+    </Suspense>
   ));
 }

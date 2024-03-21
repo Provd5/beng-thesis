@@ -1,50 +1,37 @@
-import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { unstable_setRequestLocale } from "next-intl/server";
-import { z } from "zod";
 
-import { AllReviewsButton } from "~/components/Book/AllReviewsButton";
-import { MyReview } from "~/components/Book/MyReview";
-import { CategoryLink } from "~/components/ui/CategoryLink";
+import { CategoryLink } from "~/components/Links/CategoryLink";
+import { AllReviewsButton } from "~/components/Review/AllReviewsButton";
+import { MyReview } from "~/components/Review/CreateReview/MyReview";
+import { Loader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
-import { fetchMyReview, fetchReviewReactions } from "~/lib/actions/book/fetch";
+import ROUTES from "~/utils/routes";
 
-export default async function BookPage({
-  params: { id, title, locale },
+export default function BookPage({
+  params: { id, locale },
   searchParams,
 }: {
-  params: { id: string; title: string; locale: localeTypes };
+  params: { id: string; locale: localeTypes };
   searchParams?: string;
 }) {
   unstable_setRequestLocale(locale);
-
-  try {
-    z.string().uuid().parse(id);
-  } catch (error) {
-    notFound();
-  }
-
-  const myReview = await fetchMyReview(id);
-  const reviewReactions = await fetchReviewReactions(myReview?.id);
 
   return (
     <>
       <div className="flex flex-col">
         <CategoryLink
-          href={{ pathname: `${title}/reviews`, query: searchParams }}
-          variant="REVIEWS"
-          hrefReplace
+          href={{ pathname: ROUTES.book.reviews, query: searchParams }}
+          categoryVariant="REVIEWS"
+          replace
         />
-        <MyReview
-          reviewData={myReview}
-          reviewReactions={reviewReactions}
-          bookId={id}
-        />
+        <Suspense fallback={<Loader />}>
+          <MyReview bookId={id} />
+        </Suspense>
       </div>
-      {myReview !== undefined && (
-        <AllReviewsButton
-          href={{ pathname: `${title}/reviews`, query: searchParams }}
-        />
-      )}
+      <AllReviewsButton
+        href={{ pathname: ROUTES.book.reviews, query: searchParams }}
+      />
     </>
   );
 }

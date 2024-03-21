@@ -12,50 +12,56 @@ import { MdNightsStay } from "react-icons/md";
 type themeTypes = "default" | "light" | "dark";
 
 export const ThemeSwitcher: FC = () => {
-  const [currentTheme, setCurrentTheme] = useState<themeTypes>(
-    (localStorage.theme as themeTypes) || "default"
-  );
+  const storedTheme = localStorage.getItem("theme") || "default";
+
+  const themes: themeTypes[] = ["default", "light", "dark"];
+  const validTheme = themes.includes(storedTheme as themeTypes)
+    ? (storedTheme as themeTypes)
+    : "default";
+
+  const [currentTheme, setCurrentTheme] = useState<themeTypes>(validTheme);
 
   return (
-    <>
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
+      {themes.map((theme) => (
         <ThemeButton
+          key={theme}
           setCurrentTheme={setCurrentTheme}
-          active={currentTheme === "default"}
-          Icon={IoDesktop}
-          theme={"default"}
+          active={currentTheme === theme}
+          theme={theme}
         />
-        <ThemeButton
-          setCurrentTheme={setCurrentTheme}
-          active={currentTheme === "light"}
-          Icon={FaSun}
-          theme={"light"}
-        />
-        <ThemeButton
-          setCurrentTheme={setCurrentTheme}
-          active={currentTheme === "dark"}
-          Icon={MdNightsStay}
-          theme={"dark"}
-        />
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
 
 interface ThemeButtonProps {
-  Icon: IconType;
   theme: themeTypes;
   setCurrentTheme: Dispatch<SetStateAction<themeTypes>>;
   active: boolean;
 }
 
 const ThemeButton: FC<ThemeButtonProps> = ({
-  Icon,
   theme,
   setCurrentTheme,
   active,
 }) => {
   const t = useTranslations("Nav.Theme");
+
+  let Icon: IconType;
+  switch (theme) {
+    case "dark":
+      Icon = MdNightsStay;
+      break;
+
+    case "light":
+      Icon = FaSun;
+      break;
+
+    default:
+      Icon = IoDesktop;
+      break;
+  }
 
   const handleToggleTheme = (theme: themeTypes) => {
     if (theme === "default") {
@@ -91,17 +97,15 @@ const ThemeButton: FC<ThemeButtonProps> = ({
     >
       <Icon
         className={clsx(
+          "text-lg",
           active
             ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-            : "fill-black-light dark:fill-white",
-          "text-lg"
+            : "fill-black-light dark:fill-white"
         )}
       />
 
-      <p className={active ? "text-secondary dark:text-secondary-light" : ""}>
-        {theme === "dark" && t("dark")}
-        {theme === "default" && t("default")}
-        {theme === "light" && t("light")}
+      <p className={clsx(active && "text-secondary dark:text-secondary-light")}>
+        {t(theme)}
       </p>
     </button>
   );

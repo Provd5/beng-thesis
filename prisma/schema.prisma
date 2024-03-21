@@ -31,10 +31,11 @@ model profile {
 }
 
 model follows {
-  follower_id  String  @db.Uuid
-  following_id String  @db.Uuid
-  follower     profile @relation("follower", fields: [follower_id], references: [id])
-  following    profile @relation("following", fields: [following_id], references: [id])
+  follower_id  String    @db.Uuid
+  following_id String    @db.Uuid
+  updated_at   DateTime? @updatedAt @db.Timestamptz(6)
+  follower     profile   @relation("follower", fields: [follower_id], references: [id])
+  following    profile   @relation("following", fields: [following_id], references: [id])
 
   @@id([follower_id, following_id])
   @@schema("public")
@@ -106,6 +107,7 @@ model book_owned_as {
   added_book_at      DateTime? @db.Timestamptz(6)
   added_ebook_at     DateTime? @db.Timestamptz(6)
   added_audiobook_at DateTime? @db.Timestamptz(6)
+  updated_at         DateTime? @updatedAt @db.Timestamptz(6)
   user_id            String    @db.Uuid
   book_id            String    @db.Uuid
   book               book      @relation(fields: [book_id], references: [id])
@@ -162,12 +164,14 @@ model users {
   reauthentication_sent_at    DateTime?     @db.Timestamptz(6)
   is_sso_user                 Boolean       @default(false)
   deleted_at                  DateTime?     @db.Timestamptz(6)
+  is_anonymous                Boolean       @default(false)
   identities                  identities[]
   mfa_factors                 mfa_factors[]
   sessions                    sessions[]
   profile                     profile?
 
   @@index([instance_id])
+  @@index([is_anonymous])
   @@schema("auth")
 }
 
@@ -312,7 +316,6 @@ model saml_relay_states {
   request_id      String
   for_email       String?
   redirect_to     String?
-  from_ip_address String?       @db.Inet
   created_at      DateTime?     @db.Timestamptz(6)
   updated_at      DateTime?     @db.Timestamptz(6)
   flow_state_id   String?       @db.Uuid

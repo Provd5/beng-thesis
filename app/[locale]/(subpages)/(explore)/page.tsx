@@ -1,8 +1,10 @@
+import { Suspense } from "react";
+import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { BooksFeed } from "~/components/Feed/BooksFeed";
+import { BooksFeed } from "~/components/Book/BooksFeed";
+import { Loader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
-import { fetchBooksInCategoryCount } from "~/lib/actions/feed/books";
 
 export async function generateMetadata({
   params: { locale },
@@ -15,28 +17,20 @@ export async function generateMetadata({
   };
 }
 
-export default async function ExplorePage({
+export default function ExplorePage({
   params: { locale },
   searchParams,
 }: {
   params: { locale: localeTypes };
-  searchParams?: {
-    orderBy?: string;
-    order?: "asc" | "desc";
-    page?: string;
-  };
+  searchParams: ReadonlyURLSearchParams;
 }) {
   unstable_setRequestLocale(locale);
-  const booksCount = await fetchBooksInCategoryCount(null, null);
 
   return (
     <div className="container pb-12">
-      <BooksFeed
-        variant={null}
-        fullname={null}
-        searchParams={searchParams}
-        booksCount={booksCount}
-      />
+      <Suspense fallback={<Loader />}>
+        <BooksFeed searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }

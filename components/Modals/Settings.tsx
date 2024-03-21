@@ -1,13 +1,17 @@
+"use client";
+
 import type { FC } from "react";
+import { useTranslations } from "next-intl";
 
 import { FaCog } from "react-icons/fa";
 
 import { LanguageSwitcher } from "../Switchers/LanguageSwitcher";
 import { ThemeSwitcher } from "../Switchers/ThemeSwitcher";
 import { ModalInitiator } from "./ModalInitiator";
-import { SettingsLabel } from "./SettingsLabel";
 
 export const Settings: FC = ({}) => {
+  const t = useTranslations("Nav.Settings");
+
   return (
     <>
       <ModalInitiator
@@ -18,9 +22,10 @@ export const Settings: FC = ({}) => {
         }
       >
         <div className="flex grow flex-col items-center gap-3 whitespace-nowrap">
-          <SettingsLabel label="app style" />
+          <p className="text-sm">{t("app style")}</p>
           <ThemeSwitcher />
-          <SettingsLabel label="app language" />
+
+          <p className="text-sm">{t("app language")}</p>
           <LanguageSwitcher />
         </div>
       </ModalInitiator>

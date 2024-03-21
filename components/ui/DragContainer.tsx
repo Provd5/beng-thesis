@@ -18,14 +18,6 @@ export const DragContainer: FC<DragContainerProps> = ({
   containerClassName,
   arrowsClassName,
 }) => {
-  const arrowSizeClass = {
-    default: "h-10 w-10",
-    sm: "h-8 w-8",
-  };
-
-  const arrowsCommonClass =
-    "hidden md:block rounded-full drop-shadow-icon text-white-light transition-opacity bg-secondary dark:bg-secondary-light";
-
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [renderLeftButton, setRenderLeftButton] = useState(false);
@@ -54,6 +46,14 @@ export const DragContainer: FC<DragContainerProps> = ({
 
   const isScrollable =
     containerRef.current && containerRef.current?.scrollWidth > 0;
+
+  const arrowSizeClass = {
+    default: "h-10 w-10",
+    sm: "h-8 w-8",
+  };
+
+  const arrowsCommonClass =
+    "hidden md:block rounded-full drop-shadow-icon text-white-light transition-opacity bg-secondary dark:bg-secondary-light";
 
   return (
     <div className="relative flex">

@@ -1,7 +1,10 @@
+import { Suspense } from "react";
+import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { SearchFeed } from "~/components/Feed/SearchFeed";
 import { SearchComponent } from "~/components/Search/SearchComponent";
+import { SearchFeed } from "~/components/Search/SearchFeed";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
 
 export async function generateMetadata({
@@ -20,13 +23,7 @@ export default function SearchPage({
   searchParams,
 }: {
   params: { locale: localeTypes };
-  searchParams?: {
-    orderBy?: string;
-    order?: "asc" | "desc";
-    page?: string;
-    q?: string;
-    category?: "books" | "profiles";
-  };
+  searchParams: ReadonlyURLSearchParams;
 }) {
   unstable_setRequestLocale(locale);
 
@@ -34,7 +31,9 @@ export default function SearchPage({
     <>
       <SearchComponent searchParams={searchParams} />
       <div className="container pb-12">
-        <SearchFeed searchParams={searchParams} />
+        <Suspense fallback={<LargeComponentLoader />}>
+          <SearchFeed searchParams={searchParams} />
+        </Suspense>
       </div>
     </>
   );

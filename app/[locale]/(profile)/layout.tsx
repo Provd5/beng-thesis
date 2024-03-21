@@ -1,12 +1,14 @@
+import { Suspense } from "react";
 import { unstable_setRequestLocale } from "next-intl/server";
 
 import { Logo } from "~/components/Logo";
 import { AccountSettings } from "~/components/Modals/AccountSettings";
 import { Settings } from "~/components/Modals/Settings";
+import { ProfileBadge } from "~/components/Profile/ProfileBadge";
+import { Loader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
-import { fetchPublicUserData } from "~/lib/actions/profile/fetch";
 
-export default async function ProfileLayout({
+export default function ProfileLayout({
   children,
   params: { locale },
 }: {
@@ -14,17 +16,17 @@ export default async function ProfileLayout({
   params: { locale: localeTypes };
 }) {
   unstable_setRequestLocale(locale);
-  const userData = await fetchPublicUserData();
 
   return (
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll scroll-smooth">
       <Logo />
       <div className="flex h-[68px] flex-none self-end p-3 text-white">
         <div className="flex h-fit gap-3">
-          <AccountSettings
-            userFullname={userData?.full_name}
-            userAvatarUrl={userData?.avatar_url}
-          />
+          <AccountSettings>
+            <Suspense fallback={<Loader />}>
+              <ProfileBadge />
+            </Suspense>
+          </AccountSettings>
           <Settings />
         </div>
       </div>
