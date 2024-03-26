@@ -1,37 +1,53 @@
 "use client";
 
-import { type FC, useState } from "react";
+import { type Dispatch, type FC, type SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
+import {
+  type Formats,
+  type TranslationValues,
+  useTranslations,
+} from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { type ChangeBookshelfInterface } from "~/types/data/bookshelf";
+import { type bookshelfType } from "@prisma/client";
 
 import { Button } from "~/components/ui/Buttons";
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
-import { BookshelfService } from "~/lib/services/bookshelf";
-import { ChangeBookshelfValidator } from "~/lib/validations/bookshelf";
+import { changeBookshelf } from "~/lib/services/bookshelf";
+import {
+  ChangeBookshelfValidator,
+  type ChangeBookshelfValidatorType,
+} from "~/lib/validations/bookshelf";
 import { dateFormater } from "~/utils/dateFormater";
+import { translatableError } from "~/utils/translatableError";
 
-import { ReadQuantitySetter } from "../ReadQuantity";
 import { BookshelfModal } from "./BookshelfModal";
+import { ReadQuantitySetter } from "./ReadQuantitySetter";
 
 interface ChangeBookshelfFormProps {
-  setOptimisticBookshlefState: (action: ChangeBookshelfInterface) => void;
-  bookshelfData: ChangeBookshelfInterface;
+  bookId: string;
+  bookshelfData: ChangeBookshelfValidatorType;
+  setBookshlefState: Dispatch<SetStateAction<ChangeBookshelfValidatorType>>;
+  closeModal: () => void;
 }
 
 export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
-  setOptimisticBookshlefState,
+  bookId,
   bookshelfData,
+  setBookshlefState,
+  closeModal,
 }) => {
   const t = useTranslations("Book.ManageBookshelf");
   const tb = useTranslations("Book.BookshelfTypes");
+  const te = useTranslations("Errors") as (
+    key: string,
+    values?: TranslationValues | undefined,
+    formats?: Partial<Formats> | undefined
+  ) => string;
 
   const [isFormOpen, setIsFormOpen] = useState(!bookshelfData);
-
-  const bookshelfService = new BookshelfService();
+  const [newBookshelfData, setNewBookshelfData] =
+    useState<ChangeBookshelfValidatorType>(bookshelfData);
 
   const {
     reset,
@@ -40,52 +56,74 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
     handleSubmit,
     formState: { isSubmitting },
   } = useForm({
+    defaultValues: {
+      bookshelf: newBookshelfData.bookshelf,
+      began_reading_at: newBookshelfData.began_reading_at,
+      updated_at: newBookshelfData.updated_at,
+      read_quantity: newBookshelfData.read_quantity,
+    },
     resolver: zodResolver(ChangeBookshelfValidator),
   });
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      const validData = ChangeBookshelfValidator.parse({
-        formData,
-      });
-      setOptimisticBookshlefState(validData);
+      const validData = ChangeBookshelfValidator.parse(formData);
 
-      await bookshelfService.changeBookshelf(validData.bookId, formData);
-    } catch (error) {
-      toast.error(error as string);
+      // Filter out properties with undefined values
+      const filteredData = Object.fromEntries(
+        Object.entries(validData).filter(([_, value]) => value !== undefined)
+      );
+      setBookshlefState({
+        ...newBookshelfData,
+        ...filteredData,
+      });
+
+      await changeBookshelf(bookId, validData);
+      setIsFormOpen(false);
+      closeModal();
+    } catch (e) {
+      setBookshlefState(bookshelfData);
+      toast.error(te(translatableError(e)));
     }
   });
+
+  const receiveBookshelf = (bookshelf: bookshelfType | null) => {
+    // Set the data received from BookshelfModal
+    setIsFormOpen(true);
+    setValue("bookshelf", bookshelf);
+    setNewBookshelfData({ ...newBookshelfData, bookshelf });
+  };
 
   if (!isFormOpen)
     return (
       <BookshelfModal
-        setValue={setValue}
-        currentBookshelf={
-          bookshelfData?.bookshelf ? bookshelfData.bookshelf : null
-        }
+        changedBookshelf={receiveBookshelf}
+        initialBookshelf={bookshelfData.bookshelf}
       />
     );
 
   return (
     <form className="flex flex-col gap-2" onSubmit={onSubmit}>
       <input
-        {...register("bookshelf")}
+        {...(register("bookshelf"),
+        {
+          type: "hidden",
+        })}
         id="bookshelf-input"
-        name="bookshelf-input"
-        type="hidden"
         className="hidden"
       />
       <div className="mb-2 flex flex-col items-center">
-        {bookshelfData?.bookshelf ? (
+        {newBookshelfData.bookshelf ? (
           <div className="flex flex-col items-center gap-2">
             <h1 className="flex gap-1">
-              <BookmarkIcon category={bookshelfData.bookshelf} size="sm" />
-              <span>{tb(bookshelfData.bookshelf)}</span>
+              <BookmarkIcon category={newBookshelfData.bookshelf} size="sm" />
+              <span>{tb(newBookshelfData.bookshelf)}</span>
             </h1>
-            {bookshelfData?.bookshelf === "ALREADY_READ" && (
+            {newBookshelfData.bookshelf === "ALREADY_READ" && (
               <ReadQuantitySetter
-                initialQuantity={bookshelfData.readQuantity || 0}
+                initialQuantity={newBookshelfData.read_quantity}
                 register={register}
+                setValue={setValue}
               />
             )}
           </div>
@@ -93,7 +131,7 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
           <h1 className="min-w-[150px]">{t("are you sure?")}</h1>
         )}
       </div>
-      {bookshelfData?.bookshelf && (
+      {newBookshelfData.bookshelf && (
         <>
           <div className="flex flex-col gap-1">
             <label
@@ -103,19 +141,20 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
               {t("began reading:")}
             </label>
             <input
-              {...register("beganReadingAt")}
+              {...(register("began_reading_at", { valueAsDate: true }),
+              {
+                type: "date",
+                defaultValue: newBookshelfData.began_reading_at
+                  ? dateFormater(newBookshelfData.began_reading_at)
+                  : undefined,
+                max: dateFormater(newBookshelfData.updated_at),
+              })}
               id="began-reading-at-date-input"
-              name="began-reading-at-date-input"
-              type="date"
-              max={
-                bookshelfData.updatedAt
-                  ? dateFormater(bookshelfData.updatedAt)
-                  : new Date().toISOString().split("T")[0]
-              }
-              defaultValue={
-                bookshelfData.beganReadingAt
-                  ? dateFormater(bookshelfData.beganReadingAt)
-                  : ""
+              onChange={(e) =>
+                setNewBookshelfData({
+                  ...newBookshelfData,
+                  began_reading_at: e.target.valueAsDate,
+                })
               }
               className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
             />
@@ -128,18 +167,21 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
               {t("on this shelf since:")}
             </label>
             <input
-              {...register("updatedAt")}
+              {...(register("updated_at", { valueAsDate: true }),
+              {
+                type: "date",
+                defaultValue: dateFormater(newBookshelfData.updated_at),
+                required: true,
+                max: new Date().toISOString().split("T")[0],
+              })}
               id="updated-at-date-input"
-              name="updated-at-date-input"
-              type="date"
-              max={new Date().toISOString().split("T")[0]}
-              defaultValue={
-                bookshelfData.updatedAt
-                  ? dateFormater(bookshelfData.updatedAt)
-                  : dateFormater(new Date())
+              onChange={(e) =>
+                setNewBookshelfData({
+                  ...newBookshelfData,
+                  updated_at: e.target.valueAsDate || new Date(),
+                })
               }
               className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
-              required
             />
           </div>
         </>

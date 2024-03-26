@@ -1,14 +1,14 @@
-import { type FC, Suspense } from "react";
+import { type FC } from "react";
 import { type ReadonlyURLSearchParams } from "next/navigation";
 
-import { type BookshelvesTypes } from "~/types/data/bookshelf";
+import { type BookshelvesTypes } from "~/types/consts";
 import { SortBookshelvesArray } from "~/types/orderArrays";
 
-import { BookshelfService } from "~/lib/services/bookshelf";
+import { getBookshelfBooks } from "~/lib/services/bookshelf";
 
 import { BookCard } from "../Book/BookCard";
 import { FeedSort } from "../Modals/FeedSort";
-import { BookCardsLoader } from "../ui/Loaders/Skeletons/BookCardLoader";
+import { NotFoundItems } from "../ui/NotFound/NotFoundItems";
 import { BookshelfPageTitle } from "./BookshelfPageTitle";
 
 interface BookshelfFeedProps {
@@ -22,12 +22,7 @@ export const BookshelfFeed: FC<BookshelfFeedProps> = async ({
   profileName,
   searchParams,
 }) => {
-  const bookshelfService = new BookshelfService();
-  const books = await bookshelfService.getBookshelfBooks(
-    bookshelf,
-    profileName,
-    searchParams
-  );
+  const books = await getBookshelfBooks(bookshelf, profileName, searchParams);
 
   return (
     <>
@@ -35,14 +30,21 @@ export const BookshelfFeed: FC<BookshelfFeedProps> = async ({
         booksQuantity={books.allItems}
         bookshelfVariant={bookshelf}
       />
-      <FeedSort orderArray={SortBookshelvesArray} />
-      <div className="grid grid-cols-1 gap-x-5 gap-y-8 lg:grid-cols-2">
-        <Suspense fallback={<BookCardsLoader items={books.itemsPerPage} />}>
-          {books.data.map((book) => (
-            <BookCard key={book.id} bookData={book} />
-          ))}
-        </Suspense>
-      </div>
+      {books.allItems === 0 ? (
+        <NotFoundItems />
+      ) : (
+        <FeedSort
+          currentPage={books.page}
+          totalPages={books.totalPages}
+          orderArray={SortBookshelvesArray}
+        >
+          <div className="grid grid-cols-1 gap-x-5 gap-y-8 lg:grid-cols-2">
+            {books.data.map((book) => (
+              <BookCard key={book.book.id} bookData={book} />
+            ))}
+          </div>
+        </FeedSort>
+      )}
     </>
   );
 };

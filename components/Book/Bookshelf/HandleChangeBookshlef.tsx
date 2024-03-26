@@ -1,23 +1,16 @@
 "use client";
 
-import {
-  experimental_useOptimistic as useOptimistic,
-  type FC,
-  useRef,
-  useState,
-} from "react";
+import { type FC, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { BsBookmarkPlus } from "react-icons/bs";
 
-import {
-  type BookshelfInterface,
-  type ChangeBookshelfInterface,
-} from "~/types/data/bookshelf";
+import { type BookshelfInterface } from "~/types/data/bookshelf";
 
 import { ModalWrapper } from "~/components/Modals/ModalWrapper";
 import { ButtonLink } from "~/components/ui/Buttons";
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
+import { type ChangeBookshelfValidatorType } from "~/lib/validations/bookshelf";
 import { dateFormater } from "~/utils/dateFormater";
 
 import { ChangeBookshelfForm } from "./ChangeBookshelfForm";
@@ -38,19 +31,14 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
   const openModalButtonRef = useRef<HTMLButtonElement>(null);
 
   const formatedData = {
-    bookId,
     bookshelf: bookshelfData?.bookshelf || null,
-    beganReadingAt: bookshelfData?.began_reading_at || null,
-    updatedAt: bookshelfData?.updated_at || null,
-    readQuantity: bookshelfData?.read_quantity || null,
+    began_reading_at: bookshelfData?.began_reading_at,
+    updated_at: bookshelfData?.updated_at || new Date(),
+    read_quantity: bookshelfData?.read_quantity,
   };
 
-  const [optimisticBookshlefState, setOptimisticBookshlefState] = useOptimistic(
-    formatedData,
-    (_, newState: ChangeBookshelfInterface) => {
-      return newState;
-    }
-  );
+  const [bookshlefState, setBookshlefState] =
+    useState<ChangeBookshelfValidatorType>(formatedData);
 
   return (
     <div
@@ -61,20 +49,17 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
       }
     >
       <div className="relative flex h-fit">
-        {optimisticBookshlefState?.bookshelf ? (
-          <BookmarkIcon
-            category={optimisticBookshlefState.bookshelf}
-            size="lg"
-          />
+        {bookshlefState?.bookshelf ? (
+          <BookmarkIcon category={bookshlefState.bookshelf} size="lg" />
         ) : (
           <BookmarkIcon Icon={BsBookmarkPlus} color="gradient" size="lg" />
         )}
-        {optimisticBookshlefState?.bookshelf === "ALREADY_READ" &&
-          optimisticBookshlefState.readQuantity &&
-          optimisticBookshlefState.readQuantity > 1 && (
+        {bookshlefState?.bookshelf === "ALREADY_READ" &&
+          !!bookshlefState.read_quantity &&
+          bookshlefState.read_quantity > 1 && (
             <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red text-xs">
               <p className="text-white-light">
-                ×{optimisticBookshlefState.readQuantity}
+                ×{bookshlefState.read_quantity}
               </p>
             </div>
           )}
@@ -96,23 +81,20 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
             openModalButtonRef={openModalButtonRef}
           >
             <ChangeBookshelfForm
-              bookshelfData={optimisticBookshlefState}
-              setOptimisticBookshlefState={setOptimisticBookshlefState}
+              bookId={bookId}
+              bookshelfData={bookshlefState}
+              setBookshlefState={setBookshlefState}
+              closeModal={() => setIsModalOpen(false)}
             />
           </ModalWrapper>
         )}
-        <p>
-          {optimisticBookshlefState?.bookshelf
-            ? tb(optimisticBookshlefState.bookshelf)
-            : "–"}
-        </p>
+        <p>{bookshlefState?.bookshelf ? tb(bookshlefState.bookshelf) : "–"}</p>
 
-        {optimisticBookshlefState?.bookshelf &&
-          optimisticBookshlefState.updatedAt && (
-            <p className="text-xs text-black-light dark:text-white-dark">
-              {dateFormater(optimisticBookshlefState.updatedAt)}
-            </p>
-          )}
+        {bookshlefState?.bookshelf && bookshlefState.updated_at && (
+          <p className="text-xs text-black-light dark:text-white-dark">
+            {dateFormater(bookshlefState.updated_at)}
+          </p>
+        )}
       </div>
     </div>
   );

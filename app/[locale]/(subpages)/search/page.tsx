@@ -1,10 +1,8 @@
-import { Suspense } from "react";
 import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { SearchComponent } from "~/components/Search/SearchComponent";
 import { SearchFeed } from "~/components/Search/SearchFeed";
-import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
 
 export async function generateMetadata({
@@ -31,9 +29,7 @@ export default function SearchPage({
     <>
       <SearchComponent searchParams={searchParams} />
       <div className="container pb-12">
-        <Suspense fallback={<LargeComponentLoader />}>
-          <SearchFeed searchParams={searchParams} />
-        </Suspense>
+        <SearchFeed searchParams={searchParams} />
       </div>
     </>
   );

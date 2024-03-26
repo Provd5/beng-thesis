@@ -50,36 +50,42 @@ export const BookmarkIcon: FC<
         Icon: BsFillBookmarkDashFill,
         color: "fill-blue",
       };
+      break;
 
     case "ALREADY_READ":
       bookshelfBookmark = {
         Icon: BsFillBookmarkCheckFill,
         color: "fill-green",
       };
+      break;
 
     case "ABANDONED":
       bookshelfBookmark = {
         Icon: BsFillBookmarkXFill,
         color: "fill-red",
       };
+      break;
 
     case "READING":
       bookshelfBookmark = {
         Icon: BsFillBookmarkFill,
         color: "fill-primary-light",
       };
+      break;
 
     case "LIKED":
       bookshelfBookmark = {
         Icon: BsFillBookmarkHeartFill,
         color: "fill-pink",
       };
+      break;
 
     case "REVIEWS":
       bookshelfBookmark = {
         Icon: BsFillBookmarkStarFill,
         color: "fill-yellow",
       };
+      break;
 
     case "OTHER":
     default:
@@ -87,6 +93,7 @@ export const BookmarkIcon: FC<
         Icon: BsFillBookmarksFill,
         color: "fill-gray",
       };
+      break;
   }
 
   return (

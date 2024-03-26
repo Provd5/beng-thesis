@@ -27,7 +27,7 @@ export const AccountSettings: FC<AccountSettingsProps> = ({ children }) => {
         </div>
       }
     >
-      <div className="flex flex-col gap-2 whitespace-nowrap text-md">
+      <div className="flex min-w-[180px] flex-col gap-2 whitespace-nowrap text-md">
         {children && (
           <>
             <div>

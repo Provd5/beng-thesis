@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { FollowPage } from "~/components/Profile/Follows/FollowPage";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
 
 export async function generateMetadata({
@@ -25,10 +27,12 @@ export default function FollowingPage({
   unstable_setRequestLocale(locale);
 
   return (
-    <FollowPage
-      searchParams={searchParams}
-      profileName={fullname}
-      variant="following"
-    />
+    <Suspense fallback={<LargeComponentLoader />}>
+      <FollowPage
+        searchParams={searchParams}
+        profileName={fullname}
+        variant="following"
+      />
+    </Suspense>
   );
 }

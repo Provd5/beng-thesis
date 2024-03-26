@@ -17,6 +17,10 @@ export const orderArray: OrderType[] = ["desc", "asc"];
 
 export const SortBooksArray: SortArrayInterface<SortBooksType>[] = [
   {
+    reverseOrder: false,
+    orderBy: "popularity",
+  },
+  {
     reverseOrder: true,
     orderBy: "title",
   },
@@ -28,18 +32,14 @@ export const SortBooksArray: SortArrayInterface<SortBooksType>[] = [
     reverseOrder: false,
     orderBy: "published_date",
   },
-  {
-    reverseOrder: false,
-    orderBy: "popularity",
-  },
 ];
 
 export const SortBookshelvesArray: SortArrayInterface<SortBookshelvesType>[] = [
-  ...SortBooksArray,
   {
     reverseOrder: false,
     orderBy: "last_added",
   },
+  ...SortBooksArray,
 ];
 
 export const SortReviewBookshelfArray: SortArrayInterface<SortReviewBookshelfType>[] =
@@ -57,12 +57,16 @@ export const SortReviewBookshelfArray: SortArrayInterface<SortReviewBookshelfTyp
 
 export const SortProfilesArray: SortArrayInterface<SortProfilesType>[] = [
   {
-    reverseOrder: true,
-    orderBy: "full_name",
+    reverseOrder: false,
+    orderBy: "activity",
   },
   {
     reverseOrder: false,
-    orderBy: "activity",
+    orderBy: "followers",
+  },
+  {
+    reverseOrder: true,
+    orderBy: "full_name",
   },
   {
     reverseOrder: false,
@@ -74,24 +78,24 @@ export const SortProfilesArray: SortArrayInterface<SortProfilesType>[] = [
   },
   {
     reverseOrder: false,
-    orderBy: "followers",
-  },
-  {
-    reverseOrder: false,
     orderBy: "reviews",
   },
 ];
 
 export const SortFollowProfilesArray: SortArrayInterface<SortFollowProfilesType>[] =
   [
-    ...SortProfilesArray,
     {
       reverseOrder: false,
       orderBy: "last_added",
     },
+    ...SortProfilesArray,
   ];
 
 export const SortReviewsArray: SortArrayInterface<SortReviewsType>[] = [
+  {
+    reverseOrder: false,
+    orderBy: "activity",
+  },
   {
     reverseOrder: false,
     orderBy: "rate",
@@ -102,10 +106,6 @@ export const SortReviewsArray: SortArrayInterface<SortReviewsType>[] = [
   },
   {
     reverseOrder: false,
-    orderBy: "activity",
-  },
-  {
-    reverseOrder: false,
-    orderBy: "review_reaction",
+    orderBy: "reactions",
   },
 ];

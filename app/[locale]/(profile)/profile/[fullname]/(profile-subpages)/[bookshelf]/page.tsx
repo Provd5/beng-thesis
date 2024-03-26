@@ -1,13 +1,13 @@
 import { Suspense } from "react";
 import { notFound, type ReadonlyURLSearchParams } from "next/navigation";
+import { type Formats, type TranslationValues } from "next-intl";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { BookshelvesArray } from "~/types/categoryArrays";
-import { type BookshelvesTypes } from "~/types/data/bookshelf";
+import { BookshelvesArray, type BookshelvesTypes } from "~/types/consts";
 
 import { BookshelfFeed } from "~/components/Bookshelf/BookshelfFeed";
 import { ReviewBookshelfFeed } from "~/components/Bookshelf/ReviewBookshelfFeed";
-import { Loader } from "~/components/ui/Loaders/Loader";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
 import { convertPathnameToTypeEnum } from "~/utils/pathnameTypeEnumConverter";
 
@@ -16,7 +16,14 @@ export async function generateMetadata({
 }: {
   params: { bookshelf: string; locale: localeTypes };
 }) {
-  const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
+  const t = (await getTranslations({
+    locale,
+    namespace: "Nav.CategoryTitles",
+  })) as (
+    key: string,
+    values?: TranslationValues | undefined,
+    formats?: Partial<Formats> | undefined
+  ) => string;
   return {
     title: t(bookshelf),
   };
@@ -40,14 +47,14 @@ export default function BookshelfPage({
   return (
     <div className="flex flex-col">
       {validBookshelf === "REVIEWS" ? (
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<LargeComponentLoader />}>
           <ReviewBookshelfFeed
             profileName={fullname}
             searchParams={searchParams}
           />
         </Suspense>
       ) : (
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<LargeComponentLoader />}>
           <BookshelfFeed
             profileName={fullname}
             bookshelf={validBookshelf}

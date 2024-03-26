@@ -28,7 +28,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
   const pageRoutes = {
     login: ROUTES.auth.login,
     profile: profileName
-      ? ROUTES.profile.root(profileName)
+      ? `${ROUTES.profile.root(profileName)}`
       : ROUTES.profile.session_profile,
     search: ROUTES.search,
     explore: ROUTES.root,

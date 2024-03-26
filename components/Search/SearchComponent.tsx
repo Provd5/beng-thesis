@@ -36,7 +36,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({ searchParams }) => {
       inputRef.current.value = "";
     }
 
-    params.delete("q");
+    params.set("q", "");
     params.set("category", searchCategory);
 
     router.replace(`${pathname}?${params.toString()}`);

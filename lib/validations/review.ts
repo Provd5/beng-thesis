@@ -1,31 +1,31 @@
 import { reactionType } from "@prisma/client";
 import { z } from "zod";
 
-import { CreateReviewValidatorErrors } from "./errorsEnums";
+import { ErrorsToTranslate } from "./errorsEnums";
 
 export type CreateReviewValidatorType = z.infer<typeof CreateReviewValidator>;
 export const CreateReviewValidator = z.object({
-  bookId: z.string().uuid(),
   text: z
     .string()
-    .min(1)
-    .max(5000, { message: CreateReviewValidatorErrors.REVIEW_TOO_LONG_5000 })
-    .nullable(),
+    .max(5000, { message: ErrorsToTranslate.REVIEW.REVIEW_IS_TOO_LONG })
+    .transform((text) => {
+      if (text === "") return null;
+      return text;
+    })
+    .nullish(),
   rate: z
-    .number({ required_error: CreateReviewValidatorErrors.WRONG_RATE })
-    .min(1, { message: CreateReviewValidatorErrors.WRONG_RATE })
-    .max(5, { message: CreateReviewValidatorErrors.WRONG_RATE }),
+    .number({
+      errorMap: () => ({
+        message: ErrorsToTranslate.REVIEW.RATE_IS_INVALID,
+      }),
+    })
+    .min(1, { message: ErrorsToTranslate.REVIEW.RATE_IS_INVALID })
+    .max(5, { message: ErrorsToTranslate.REVIEW.RATE_IS_INVALID }),
 });
 
-export type DeleteReviewValidatorType = z.infer<typeof DeleteReviewValidator>;
-export const DeleteReviewValidator = z.object({
-  reviewId: z.string().uuid(),
-});
-
-export type ReviewReactionValidatorType = z.infer<
-  typeof ReviewReactionValidator
->;
-export const ReviewReactionValidator = z.object({
-  reviewId: z.string().uuid(),
-  reaction: z.enum([reactionType.MEH, reactionType.OK]),
-});
+export const ReviewReactionValidator = z.enum(
+  [reactionType.MEH, reactionType.OK],
+  {
+    errorMap: () => ({ message: ErrorsToTranslate.DATA_TYPES.DATA_IS_INVALID }),
+  }
+);

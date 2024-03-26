@@ -13,7 +13,7 @@ interface StatisticsProps {
 export const Statistics: FC<StatisticsProps> = ({ profileName }) => {
   return (
     <div className="flex justify-center md:justify-start">
-      <Link href={ROUTES.profile.bookshelf("STATISTICS")}>
+      <Link href={ROUTES.profile.bookshelf(profileName, "statistics")}>
         <StatisticsCategoryWrapper variant="profile statistics">
           <MainStatisticsCard profileName={profileName} />
         </StatisticsCategoryWrapper>

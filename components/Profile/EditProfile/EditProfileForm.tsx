@@ -1,18 +1,24 @@
 "use client";
 
-import { type FC } from "react";
+import { type FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
+import {
+  type Formats,
+  type TranslationValues,
+  useTranslations,
+} from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
+import clsx from "clsx";
 
 import { type GetProfileInterface } from "~/types/data/profile";
 
 import { ButtonWhite } from "~/components/ui/Buttons";
 import { Input } from "~/components/ui/Input";
-import { ProfileService } from "~/lib/services/profile";
-import { GlobalErrors } from "~/lib/validations/errorsEnums";
+import { editProfile } from "~/lib/services/profile";
+import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import { EditProfileValidator } from "~/lib/validations/profile";
+import { translatableError } from "~/utils/translatableError";
 
 interface EditProfileFormProps {
   profileData: GetProfileInterface;
@@ -20,25 +26,37 @@ interface EditProfileFormProps {
 
 export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
   const t = useTranslations("Profile.EditProfile");
-  const te = useTranslations("Errors");
+  const te = useTranslations("Errors") as (
+    key: string,
+    values?: TranslationValues | undefined,
+    formats?: Partial<Formats> | undefined
+  ) => string;
 
-  const profileService = new ProfileService();
+  const [isPrivate, setIsPrivate] = useState(profileData.private);
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm({
+    defaultValues: {
+      private: profileData.private,
+      username: profileData.full_name,
+      description: profileData.description,
+    },
     resolver: zodResolver(EditProfileValidator),
   });
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      const res = await profileService.editProfile(formData);
+      const validData = EditProfileValidator.parse(formData);
 
-      if (res.ok) toast.success(te(GlobalErrors.SUCCESS));
-    } catch (error) {
-      toast.error(error as string);
+      const res = await editProfile(validData);
+
+      if (res.success) toast.success(te(ErrorsToTranslate.SUCCESS));
+    } catch (e) {
+      toast.error(te(translatableError(e)));
     }
   });
 
@@ -53,38 +71,49 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
           <input
             {...register("private")}
             type="checkbox"
-            checked={profileData.private}
+            defaultChecked={isPrivate}
             className="peer sr-only"
+            id="visibility-input"
           />
-          <div className="peer relative h-6 w-11 rounded-full bg-black-light after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-transform after:content-[''] peer-checked:bg-secondary-light peer-checked:after:translate-x-full peer-focus:outline-none dark:bg-white-dark dark:after:bg-black dark:peer-checked:bg-secondary-light"></div>
+          <button
+            type="button"
+            className={clsx(
+              "peer relative h-6 w-11 rounded-full after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-transform after:content-[''] peer-focus:outline-none dark:after:bg-black",
+              isPrivate
+                ? "bg-secondary-light after:translate-x-full dark:bg-secondary-light"
+                : "bg-black-light dark:bg-white-dark"
+            )}
+            onClick={() => (
+              setValue("private", !isPrivate), setIsPrivate(!isPrivate)
+            )}
+          />
           <span className="ml-2">
             {t("public/private", {
-              view: profileData.private ? "private" : "public",
+              view: isPrivate ? "private" : "public",
             })}
           </span>
         </label>
       </div>
       <Input
-        {...register("username")}
-        loading={isSubmitting}
+        {...register("username", {
+          minLength: 3,
+          maxLength: 32,
+          required: true,
+        })}
         type="text"
-        id="username-input"
         placeholder={t("enter username")}
-        required
         autoComplete="off"
-        minLength={3}
-        maxLength={32}
         defaultValue={profileData.full_name || ""}
+        id="username-input"
       />
       <Input
-        {...register("description")}
-        isTextarea
-        loading={isSubmitting}
-        type="text"
-        id="description-input"
+        {...register("description", {
+          maxLength: 5000,
+        })}
         placeholder={t("add profile description")}
-        maxLength={5000}
         defaultValue={profileData.description || ""}
+        id="description-input"
+        isTextarea
       />
 
       <ButtonWhite size="xs" loading={isSubmitting} type="submit">

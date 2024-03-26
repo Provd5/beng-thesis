@@ -5,9 +5,11 @@ import { SearchCategoriesArray, type SearchCategoryType } from "~/types/search";
 export const searchCategoryValidator = (
   searchParams: ReadonlyURLSearchParams
 ): { category: SearchCategoryType; q: string } => {
-  const query = searchParams.get("q") || "";
+  const urlSearchParams = new URLSearchParams(searchParams);
 
-  const category = searchParams.get("category") || "";
+  const query = urlSearchParams.get("q") || "";
+
+  const category = urlSearchParams.get("category") || "";
   const filteredCategory = SearchCategoriesArray.find(
     (sort) => sort === category
   );

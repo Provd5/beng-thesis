@@ -1,15 +1,15 @@
-import { type FC, Suspense } from "react";
+import { type FC } from "react";
 
-import { type CategoriesTypes } from "~/types/data/bookshelf";
+import { type CategoriesTypes } from "~/types/consts";
 
-import { BookshelfService } from "~/lib/services/bookshelf";
+import { getBookshelfPreview } from "~/lib/services/bookshelf";
+import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 import ROUTES from "~/utils/routes";
 
 import { SmallBookCard } from "../Book/SmallBookCard";
 import { CategoryLink } from "../Links/CategoryLink";
 import { Statistics } from "../Profile/Statistics/Statistics";
 import { DragContainer } from "../ui/DragContainer";
-import { SmallBookCardsLoader } from "../ui/Loaders/Skeletons/SmallBookCardLoader";
 import { CategoryContentCardPlaceholder } from "./CategoryContentCardPlaceholder";
 
 interface CategorySectionProps {
@@ -21,14 +21,15 @@ export const CategorySection: FC<CategorySectionProps> = async ({
   profileName,
   categoryVariant,
 }) => {
-  const bookshelfService = new BookshelfService();
-
   const books =
     categoryVariant !== "STATISTICS"
-      ? await bookshelfService.getBookshelfPreview(profileName, categoryVariant)
+      ? await getBookshelfPreview(profileName, categoryVariant)
       : null;
 
-  const variantUrl = ROUTES.profile.bookshelf(categoryVariant);
+  const variantUrl = `${ROUTES.profile.bookshelf(
+    profileName,
+    convertTypeEnumToPathname(categoryVariant)
+  )}`;
 
   return (
     <div className="flex flex-col gap-1">
@@ -50,13 +51,9 @@ export const CategorySection: FC<CategorySectionProps> = async ({
           >
             {books && books.allItems > 0 ? (
               <>
-                <Suspense
-                  fallback={<SmallBookCardsLoader items={books.allItems} />}
-                >
-                  {books.data.map((book) => (
-                    <SmallBookCard key={book.id} bookData={book} />
-                  ))}
-                </Suspense>
+                {books.data.map((book) => (
+                  <SmallBookCard key={book.id} bookData={book} />
+                ))}
                 {books.allItems > 10 && (
                   <CategoryContentCardPlaceholder href={variantUrl} />
                 )}

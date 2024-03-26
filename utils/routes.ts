@@ -1,7 +1,3 @@
-import { type CategoriesTypes } from "~/types/data/bookshelf";
-
-import { convertTypeEnumToPathname } from "./pathnameTypeEnumConverter";
-
 const ROUTES = {
   root: "/",
   community: "/community",
@@ -15,16 +11,18 @@ const ROUTES = {
   profile: {
     edit_profile: "/edit-profile",
     session_profile: "/profile",
-    root: (profileName: string) => `/profile/${profileName}`,
-    bookshelf: (bookshelf: CategoriesTypes) =>
-      `./${convertTypeEnumToPathname(bookshelf)}`,
-    followers: `./"followers"`,
-    following: `./"following"`,
+    root: (fullname: string) => `/profile/${fullname}`,
+    bookshelf: (fullname: string, bookshelf: string) =>
+      `/profile/${fullname}/${bookshelf}`,
+    followers: (fullname: string) => `/profile/${fullname}/followers`,
+    following: (fullname: string) => `/profile/${fullname}/following`,
+    back: (fullname: string) => `../${fullname}`,
   },
 
   book: {
     root: (id: string, title: string) => `/book/${id}/${title}`,
-    reviews: "./reviews",
+    back: (title: string) => `../${title}`,
+    reviews: (id: string, title: string) => `/book/${id}/${title}/reviews`,
   },
 };
 

@@ -1,19 +1,19 @@
-import { type FC, Suspense } from "react";
+import { type FC } from "react";
 import { type ReadonlyURLSearchParams } from "next/navigation";
 
 import { SortFollowProfilesArray } from "~/types/orderArrays";
 
-import { ProfileService } from "~/lib/services/profile";
+import { NotFoundItems } from "~/components/ui/NotFound/NotFoundItems";
+import { getFollowProfiles } from "~/lib/services/profile";
 import ROUTES from "~/utils/routes";
 
 import { BackCategoryLink } from "../../Links/BackCategoryLink";
 import { FeedSort } from "../../Modals/FeedSort";
-import { ProfileCardsLoader } from "../../ui/Loaders/Skeletons/ProfileCardLoader";
-import { ProfileCard } from "../ProfileCard";
+import { ProfileCard } from "../ProfileCard/ProfileCard";
 
 interface FollowPageProps {
   profileName: string;
-  variant: "followers" | "following";
+  variant: "follower" | "following";
   searchParams: ReadonlyURLSearchParams;
 }
 
@@ -22,29 +22,30 @@ export const FollowPage: FC<FollowPageProps> = async ({
   variant,
   searchParams,
 }) => {
-  const profileService = new ProfileService();
-  const profiles = await profileService.getFollowProfiles(
-    profileName,
-    variant,
-    searchParams
-  );
+  const profiles = await getFollowProfiles(profileName, variant, searchParams);
 
   return (
     <>
       <BackCategoryLink
-        href={ROUTES.profile.root(profileName)}
+        href={`${ROUTES.profile.root(profileName)}`}
         variant="RETURN"
       />
-      <FeedSort orderArray={SortFollowProfilesArray} />
-      <div className="grid grid-cols-1 gap-x-5 gap-y-8 lg:grid-cols-2">
-        <Suspense
-          fallback={<ProfileCardsLoader items={profiles.itemsPerPage} />}
+
+      {profiles.allItems === 0 ? (
+        <NotFoundItems />
+      ) : (
+        <FeedSort
+          currentPage={profiles.page}
+          totalPages={profiles.totalPages}
+          orderArray={SortFollowProfilesArray}
         >
-          {profiles.data.map((profile) => (
-            <ProfileCard key={profile.id} profileData={profile} />
-          ))}
-        </Suspense>
-      </div>
+          <div className="grid grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {profiles.data.map((profile) => (
+              <ProfileCard key={profile.id} profileData={profile} />
+            ))}
+          </div>
+        </FeedSort>
+      )}
     </>
   );
 };

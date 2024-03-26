@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { ReviewService } from "~/lib/services/review";
+import { getReactions } from "~/lib/services/review";
 
 import { BookReviewCardReactionsLabel } from "./BookReviewCardReactionsLabel";
 
@@ -11,8 +11,7 @@ interface BookReviewCardReactionsProps {
 export const BookReviewCardReactions: FC<
   BookReviewCardReactionsProps
 > = async ({ reviewId }) => {
-  const reviewService = new ReviewService();
-  const reactions = await reviewService.getReactions(reviewId);
+  const reactions = await getReactions(reviewId);
 
   if (!(reactions.upQuantity > 0)) return;
 

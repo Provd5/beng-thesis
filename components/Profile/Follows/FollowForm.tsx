@@ -1,49 +1,53 @@
-import { experimental_useOptimistic as useOptimistic, type FC } from "react";
+"use client";
+
+import { type FC, useState } from "react";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
+import {
+  type Formats,
+  type TranslationValues,
+  useTranslations,
+} from "next-intl";
 
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
-import { type FollowsInterface } from "~/types/data/profile";
-
 import { Button } from "~/components/ui/Buttons";
-import { ProfileService } from "~/lib/services/profile";
+import { postFollow } from "~/lib/services/profile";
+import { translatableError } from "~/utils/translatableError";
 
 interface FollowFormProps {
   userId: string;
-  followsData: FollowsInterface | null | undefined;
+  isFollowed: boolean;
 }
 
-export const FollowForm: FC<FollowFormProps> = ({ userId, followsData }) => {
+export const FollowForm: FC<FollowFormProps> = ({ userId, isFollowed }) => {
   const t = useTranslations("Profile.FollowProfile");
+  const te = useTranslations("Errors") as (
+    key: string,
+    values?: TranslationValues | undefined,
+    formats?: Partial<Formats> | undefined
+  ) => string;
 
-  const profileService = new ProfileService();
-
-  const [optimisticIsFollowState, setOptimisticIsFollowState] = useOptimistic(
-    !!followsData,
-    (_, newFollowState: boolean) => {
-      return newFollowState;
-    }
-  );
+  const [followState, setFollowState] = useState(isFollowed);
 
   const handleFollow = async () => {
-    try {
-      setOptimisticIsFollowState(!optimisticIsFollowState);
+    setFollowState(!followState);
 
-      await profileService.postFollow(userId);
-    } catch (error) {
-      toast.error(error as string);
+    try {
+      await postFollow(userId);
+    } catch (e) {
+      setFollowState(followState);
+      toast.error(te(translatableError(e)));
     }
   };
 
   return (
     <Button
-      onClick={handleFollow}
+      onClick={() => handleFollow()}
       defaultColor={false}
       size="xs"
       className="bg-white-light dark:bg-black-dark"
     >
-      {optimisticIsFollowState ? (
+      {followState ? (
         <>
           <IoMdEyeOff className="text-red" /> {t("unfollow")}
         </>

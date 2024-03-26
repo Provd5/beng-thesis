@@ -32,15 +32,17 @@ export const LinkToBook: FC<LinkToBookProps> = ({
     ? pathnameWithoutLocale
     : `/${pathnameWithoutLocale}`;
 
-  const query = `${normalizedPathname}?${searchParams}`;
-
-  const href = {
-    pathname: ROUTES.book.root(bookId, bookTitle),
-    query: { from: query },
-  };
+  const query =
+    searchParams === "" ? null : `${normalizedPathname}?${searchParams}`;
 
   return (
-    <Link href={href} className={className}>
+    <Link
+      href={{
+        pathname: ROUTES.book.root(bookId, bookTitle),
+        query: query ? { from: query } : {},
+      }}
+      className={className}
+    >
       {children}
     </Link>
   );

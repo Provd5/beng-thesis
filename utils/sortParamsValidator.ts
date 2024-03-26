@@ -12,30 +12,32 @@ export const sortParamsValidator = (
   order: OrderType;
   orderBy: SortsType;
 } => {
-  const page = searchParams.get("page");
+  const urlSearchParams = new URLSearchParams(searchParams);
+
+  const page = urlSearchParams.get("page");
   const parsedPage = page ? parseInt(page) : 0;
   const validPage = parsedPage > 1 ? parsedPage : 1;
 
-  const orderBy = searchParams.get("orderBy") || "";
+  const orderBy = urlSearchParams.get("orderBy");
   const filteredOrderByArray = sortArray.find(
     (sort) => sort.orderBy === orderBy
   );
 
   const validOrderBy = filteredOrderByArray
-    ? filteredOrderByArray.orderBy
-    : sortArray[0].orderBy;
+    ? filteredOrderByArray
+    : sortArray[0];
 
-  const order = searchParams.get("order") || "";
+  const order = urlSearchParams.get("order");
   const filteredOrder = orderArray.find((sort) => sort === order);
   const validOrder = filteredOrder
     ? filteredOrder
-    : filteredOrderByArray?.reverseOrder
+    : validOrderBy.reverseOrder
     ? "asc"
     : "desc";
 
   return {
     page: validPage,
     order: validOrder,
-    orderBy: validOrderBy,
+    orderBy: validOrderBy.orderBy,
   };
 };

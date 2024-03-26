@@ -9,7 +9,7 @@ import { BookReviewCardDetails } from "./BookReviewCardDetails";
 import { BookReviewCardReactions } from "./BookReviewCardReactions";
 
 interface BookReviewCardProps {
-  reviewData: ReviewInterface & { book: GetBookInterface };
+  reviewData: GetBookInterface & { review: ReviewInterface };
 }
 
 export const BookReviewCard: FC<BookReviewCardProps> = ({ reviewData }) => {
@@ -34,14 +34,14 @@ export const BookReviewCard: FC<BookReviewCardProps> = ({ reviewData }) => {
           </p>
         </LinkToBook>
         <BookReviewCardDetails
-          created_at={reviewData.created_at}
-          rate={reviewData.rate}
-          updated_at={reviewData.updated_at}
+          created_at={reviewData.review.created_at}
+          rate={reviewData.review.rate}
+          updated_at={reviewData.review.updated_at}
         />
-        {reviewData.text && (
+        {reviewData.review.text && (
           <div>
-            <p className="py-1 pl-1">{reviewData.text}</p>
-            <BookReviewCardReactions reviewId={reviewData.id} />
+            <p className="py-1 pl-1">{reviewData.review.text}</p>
+            <BookReviewCardReactions reviewId={reviewData.review.id} />
           </div>
         )}
       </div>

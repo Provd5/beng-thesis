@@ -3,12 +3,6 @@ import { type Pick } from "@prisma/client/runtime/library";
 
 import { type BookInterface } from "./book";
 
-export type OwnedBookTypes = "BOOK" | "EBOOK" | "AUDIOBOOK";
-
-export type CategoriesTypes = BookshelvesTypes | "STATISTICS";
-
-export type BookshelvesTypes = bookshelfType | "OWNED" | "LIKED" | "REVIEWS";
-
 export interface BookshelfInterface {
   updated_at: Date;
   bookshelf: bookshelfType | null;
@@ -23,11 +17,3 @@ export type BookshelfPreviewType = Pick<
   BookInterface,
   "id" | "title" | "authors" | "thumbnail_url"
 >;
-
-export interface ChangeBookshelfInterface {
-  bookId: string;
-  bookshelf: bookshelfType | null;
-  beganReadingAt: Date | null;
-  updatedAt: Date | null;
-  readQuantity: number | null;
-}

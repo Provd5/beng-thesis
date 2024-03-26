@@ -2,12 +2,7 @@
 
 import { type ReadonlyURLSearchParams } from "next/navigation";
 
-import {
-  type BookOwnedAsInterface,
-  type GetBookInterface,
-  type LikedBookInterface,
-} from "~/types/data/book";
-import { type BookshelfInterface } from "~/types/data/bookshelf";
+import { type GetBookInterface } from "~/types/data/book";
 import { type GetDataList } from "~/types/list";
 import { SortBooksArray } from "~/types/orderArrays";
 import { type SortBooksType } from "~/types/sort";
@@ -15,18 +10,61 @@ import { type SortBooksType } from "~/types/sort";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
 import { db } from "../db";
+import { errorHandler } from "../errorHandler";
 import readUserSession from "../supabase/readUserSession";
-import { LikeBookValidator, OwnedAsValidator } from "../validations/book";
-import { GlobalErrors } from "../validations/errorsEnums";
+import { totalPages } from "../utils/totalPages";
+import { transformBookData } from "../utils/transformBookData";
+import { OwnedAsValidator } from "../validations/book";
+import { ErrorsToTranslate } from "../validations/errorsEnums";
+import { UuidValidator } from "../validations/others";
 
-export class BookService {
-  private itemsPerPage = 20;
-  private totalPages = (allItems: number) =>
-    Math.ceil(allItems / this.itemsPerPage);
+const itemsPerPage = 20;
 
-  async getQuantity(q?: string): Promise<number> {
-    try {
-      const quantity = await db.book.count({
+export async function getBookQuantity(q?: string): Promise<number> {
+  try {
+    const quantity = await db.book.count({
+      where: {
+        ...(q
+          ? {
+              OR: [
+                { title: { contains: q, mode: "insensitive" } },
+                {
+                  description: { contains: q, mode: "insensitive" },
+                },
+                { subtitle: { contains: q, mode: "insensitive" } },
+                { authors: { has: q } },
+                { isbn_10: { equals: q } },
+                { isbn_13: { equals: q } },
+              ],
+            }
+          : {}),
+      },
+    });
+
+    return quantity;
+  } catch (e) {
+    throw new Error(errorHandler(e));
+  }
+}
+
+export async function getAllBooks(
+  searchParams: ReadonlyURLSearchParams,
+  q?: string
+): Promise<GetDataList<GetBookInterface>> {
+  const validSearchParams = sortParamsValidator(searchParams, SortBooksArray);
+  const { order, orderBy: defaultOrderBy, page } = validSearchParams;
+  const orderBy = defaultOrderBy as SortBooksType;
+
+  try {
+    const {
+      data: { session },
+    } = await readUserSession();
+
+    const [allItems, books] = await Promise.all([
+      getBookQuantity(q),
+      db.book.findMany({
+        skip: (page - 1) * itemsPerPage,
+        take: itemsPerPage,
         where: {
           ...(q
             ? {
@@ -43,256 +81,176 @@ export class BookService {
               }
             : {}),
         },
-      });
+        orderBy:
+          orderBy === "popularity"
+            ? [
+                { liked_by: { _count: order } },
+                { review: { _count: order } },
+                { book_owned_as: { _count: order } },
+                { bookshelf: { _count: order } },
+              ]
+            : { [orderBy]: order },
+        include: {
+          _count: { select: { review: true, liked_by: true } },
+          review: { select: { rate: true } },
+          ...(session
+            ? {
+                book_owned_as: {
+                  where: { profile: { id: session.user.id } },
+                },
+                bookshelf: {
+                  where: { profile: { id: session.user.id } },
+                },
+                liked_by: {
+                  where: { profile: { id: session.user.id } },
+                },
+              }
+            : {}),
+        },
+      }),
+    ]);
 
-      return quantity;
-    } catch (e) {
-      throw new Error(`Error while fetching books quantity.`);
-    }
+    const transformedData = books.map((book) =>
+      transformBookData(!!session, book)
+    );
+
+    return {
+      page,
+      totalPages: totalPages(allItems, itemsPerPage),
+      allItems,
+      itemsPerPage: books.length < itemsPerPage ? books.length : itemsPerPage,
+      data: transformedData,
+    };
+  } catch (e) {
+    throw new Error(errorHandler(e));
   }
+}
 
-  async getAllBooks(
-    searchParams: ReadonlyURLSearchParams,
-    q?: string
-  ): Promise<GetDataList<GetBookInterface>> {
-    const validSearchParams = sortParamsValidator(searchParams, SortBooksArray);
-    const { order, orderBy: defaultOrderBy, page } = validSearchParams;
-    const orderBy = defaultOrderBy as SortBooksType;
+export async function getBook(
+  bookId: string
+): Promise<GetBookInterface | null> {
+  try {
+    const {
+      data: { session },
+    } = await readUserSession();
 
-    try {
-      const [allItems, books] = await Promise.all([
-        this.getQuantity(q),
-        db.book.findMany({
-          skip: (page - 1) * this.itemsPerPage,
-          take: this.itemsPerPage,
-          where: {
-            ...(q
-              ? {
-                  OR: [
-                    { title: { contains: q, mode: "insensitive" } },
-                    {
-                      description: { contains: q, mode: "insensitive" },
-                    },
-                    { subtitle: { contains: q, mode: "insensitive" } },
-                    { authors: { has: q } },
-                    { isbn_10: { equals: q } },
-                    { isbn_13: { equals: q } },
-                  ],
-                }
-              : {}),
-          },
-          orderBy:
-            orderBy === "popularity"
-              ? [
-                  { liked_by: { _count: order } },
-                  { review: { _count: order } },
-                  { book_owned_as: { _count: order } },
-                  { bookshelf: { _count: order } },
-                ]
-              : { [orderBy]: order },
-          include: {
-            _count: { select: { review: true, liked_by: true } },
-            review: { select: { rate: true } },
-          },
-        }),
-      ]);
+    const bookData = await db.book.findUnique({
+      where: { id: bookId },
+      include: {
+        _count: { select: { review: true, liked_by: true } },
+        review: { where: { book_id: bookId }, select: { rate: true } },
+        ...(session
+          ? {
+              book_owned_as: {
+                where: { profile: { id: session.user.id }, book_id: bookId },
+              },
+              bookshelf: {
+                where: { profile: { id: session.user.id }, book_id: bookId },
+              },
+              liked_by: {
+                where: { profile: { id: session.user.id }, book_id: bookId },
+              },
+            }
+          : {}),
+      },
+    });
 
-      if (!(books.length > 0)) throw new Error("No books data.");
+    if (!bookData) return null;
 
-      return {
-        page,
-        totalPages: this.totalPages(allItems),
-        allItems,
-        itemsPerPage:
-          books.length < this.itemsPerPage ? books.length : this.itemsPerPage,
-        data: books,
-      };
-    } catch (e) {
-      throw new Error(`Error while fetching books. ${e as string}`);
-    }
+    const transformedData = transformBookData(!!session, bookData);
+
+    return transformedData;
+  } catch (e) {
+    throw new Error(errorHandler(e));
+  } finally {
   }
+}
 
-  async getBook(
-    bookId: string
-  ): Promise<{ book: GetBookInterface; averageRate: number }> {
-    try {
-      const [book, averageRate] = await Promise.all([
-        db.book.findUnique({
-          where: { id: bookId },
-          include: {
-            _count: { select: { review: true, liked_by: true } },
-          },
-        }),
-        this.getAverageRate(bookId),
-      ]);
+export async function postLike(bookId: unknown): Promise<{ success: boolean }> {
+  try {
+    const {
+      data: { session },
+    } = await readUserSession();
 
-      if (!book) throw new Error("No book data.");
-
-      return { book, averageRate };
-    } catch (e) {
-      throw new Error(`Error while fetching book. ${e as string}`);
+    if (!session?.user) {
+      throw new Error(ErrorsToTranslate.UNAUTHORIZED);
     }
-  }
 
-  async getAverageRate(bookId: string): Promise<number> {
-    try {
-      const rate = await db.review.aggregate({
-        where: { id: bookId },
-        _avg: { rate: true },
-      });
+    const validBookId = UuidValidator.parse(bookId);
 
-      const roundedRate = rate._avg.rate
-        ? parseFloat(rate._avg.rate.toFixed(1))
-        : 0;
+    const alreadyLiked = await db.liked_books.count({
+      where: { book_id: validBookId, user_id: session.user.id },
+    });
 
-      return roundedRate;
-    } catch (e) {
-      throw new Error(`Error while fetching average rate.`);
-    }
-  }
-
-  async getOwnedAsData(
-    bookId: string
-  ): Promise<BookOwnedAsInterface | null | undefined> {
-    try {
-      const {
-        data: { session },
-      } = await readUserSession();
-
-      if (!session) return undefined;
-
-      const ownedAs = await db.book_owned_as.findFirst({
-        where: { profile: { id: session.user.id }, book: { id: bookId } },
-      });
-
-      return ownedAs;
-    } catch (e) {
-      throw new Error(`Error while fetching books.`);
-    }
-  }
-
-  async getLikedData(
-    bookId: string
-  ): Promise<LikedBookInterface | null | undefined> {
-    try {
-      const {
-        data: { session },
-      } = await readUserSession();
-
-      if (!session) return undefined;
-
-      const liked = await db.liked_books.findFirst({
-        where: { profile: { id: session.user.id }, book: { id: bookId } },
-      });
-
-      return liked;
-    } catch (e) {
-      throw new Error(`Error while fetching books.`);
-    }
-  }
-
-  async getBookshelfData(
-    bookId: string
-  ): Promise<BookshelfInterface | null | undefined> {
-    try {
-      const {
-        data: { session },
-      } = await readUserSession();
-
-      if (!session) return undefined;
-
-      const bookshelf = await db.bookshelf.findFirst({
-        where: { profile: { id: session.user.id }, book: { id: bookId } },
-      });
-
-      return bookshelf;
-    } catch (e) {
-      throw new Error(`Error while fetching books.`);
-    }
-  }
-
-  async postLike(bookId: unknown): Promise<Response> {
-    try {
-      const {
-        data: { session },
-      } = await readUserSession();
-
-      if (!session?.user) {
-        throw new Error(GlobalErrors.UNAUTHORIZED);
-      }
-
-      const validBookId = LikeBookValidator.parse({ bookId });
-
-      const alreadyLiked = await db.liked_books.count({
-        where: { book_id: validBookId.bookId, user_id: session.user.id },
-      });
-
-      if (alreadyLiked) {
-        await db.liked_books.delete({
-          where: {
-            user_id_book_id: {
-              book_id: validBookId.bookId,
-              user_id: session.user.id,
-            },
-          },
-        });
-      } else {
-        await db.liked_books.create({
-          data: { book_id: validBookId.bookId, user_id: session.user.id },
-        });
-      }
-
-      // on success
-      return new Response();
-    } catch (error) {
-      throw new Error(GlobalErrors.SOMETHING_WENT_WRONG);
-    }
-  }
-
-  async postOwnedAs(bookId: unknown, ownedAs: unknown): Promise<Response> {
-    try {
-      const {
-        data: { session },
-      } = await readUserSession();
-
-      if (!session?.user) {
-        throw new Error(GlobalErrors.UNAUTHORIZED);
-      }
-
-      const validData = OwnedAsValidator.parse({ bookId, ownedAs });
-      const ownedAsTypeToManage = `added_${validData.ownedAs.toLowerCase()}_at`;
-
-      const ownedAsData = await db.book_owned_as.findFirst({
-        where: { book_id: validData.bookId, user_id: session.user.id },
-        select: { [ownedAsTypeToManage]: true },
-      });
-
-      const ownedAsExists =
-        !!ownedAsData?.added_audiobook_at ||
-        !!ownedAsData?.added_book_at ||
-        !!ownedAsData?.added_ebook_at;
-
-      await db.book_owned_as.upsert({
+    if (alreadyLiked) {
+      await db.liked_books.delete({
         where: {
           user_id_book_id: {
-            book_id: validData.bookId,
+            book_id: validBookId,
             user_id: session.user.id,
           },
         },
-        update: {
-          [ownedAsTypeToManage]: ownedAsExists ? null : new Date(),
-        },
-        create: {
-          book_id: validData.bookId,
-          user_id: session.user.id,
-          [ownedAsTypeToManage]: new Date(),
-        },
       });
-
-      // on success
-      return new Response();
-    } catch (error) {
-      throw new Error(GlobalErrors.SOMETHING_WENT_WRONG);
+    } else {
+      await db.liked_books.create({
+        data: { book_id: validBookId, user_id: session.user.id },
+      });
     }
+
+    // on success
+    return { success: true };
+  } catch (e) {
+    throw new Error(errorHandler(e));
+  }
+}
+
+export async function postOwnedAs(
+  bookId: unknown,
+  ownedAs: unknown
+): Promise<{ success: boolean }> {
+  try {
+    const {
+      data: { session },
+    } = await readUserSession();
+
+    if (!session?.user) {
+      throw new Error(ErrorsToTranslate.UNAUTHORIZED);
+    }
+
+    const validBookId = UuidValidator.parse(bookId);
+    const validData = OwnedAsValidator.parse(ownedAs);
+    const ownedAsTypeToManage = `added_${validData.toLowerCase()}_at`;
+
+    const ownedAsData = await db.book_owned_as.findFirst({
+      where: { book_id: validBookId, user_id: session.user.id },
+      select: { [ownedAsTypeToManage]: true },
+    });
+
+    const ownedAsExists =
+      !!ownedAsData?.added_audiobook_at ||
+      !!ownedAsData?.added_book_at ||
+      !!ownedAsData?.added_ebook_at;
+
+    await db.book_owned_as.upsert({
+      where: {
+        user_id_book_id: {
+          book_id: validBookId,
+          user_id: session.user.id,
+        },
+      },
+      update: {
+        [ownedAsTypeToManage]: ownedAsExists ? null : new Date(),
+      },
+      create: {
+        book_id: validBookId,
+        user_id: session.user.id,
+        [ownedAsTypeToManage]: new Date(),
+      },
+    });
+
+    // on success
+    return { success: true };
+  } catch (e) {
+    throw new Error(errorHandler(e));
   }
 }

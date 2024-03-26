@@ -1,8 +1,13 @@
 "use client";
 
-import { experimental_useOptimistic as useOptimistic, type FC } from "react";
+import { type FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import {
+  type Formats,
+  type TranslationValues,
+  useTranslations,
+} from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type reactionType } from "@prisma/client";
 import clsx from "clsx";
@@ -14,8 +19,9 @@ import {
   RiThumbUpLine,
 } from "react-icons/ri";
 
-import { ReviewService } from "~/lib/services/review";
+import { postReaction } from "~/lib/services/review";
 import { ReviewReactionValidator } from "~/lib/validations/review";
+import { translatableError } from "~/utils/translatableError";
 
 interface HandleSubmitReactionProps {
   reviewId: string;
@@ -30,86 +36,76 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
   downQuantity,
   sessionReaction,
 }) => {
-  const reviewService = new ReviewService();
+  const te = useTranslations("Errors") as (
+    key: string,
+    values?: TranslationValues | undefined,
+    formats?: Partial<Formats> | undefined
+  ) => string;
 
-  const [optimisticReactionState, setOptimisticReactionState] = useOptimistic(
-    {
-      upQuantity,
-      downQuantity,
-      sessionReaction,
-    },
-    (
-      _,
-      newLikesState: {
-        upQuantity: number;
-        downQuantity: number;
-        sessionReaction: reactionType | null;
-      }
-    ) => {
-      return newLikesState;
-    }
-  );
+  const [reactionState, setReactionState] = useState({
+    upQuantity,
+    downQuantity,
+    sessionReaction,
+  });
 
   const { register, setValue, handleSubmit } = useForm({
+    defaultValues: { reaction: sessionReaction },
     resolver: zodResolver(ReviewReactionValidator),
   });
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      const validData = ReviewReactionValidator.parse({
-        reviewId,
-        ...formData,
-      });
+      const validReaction = ReviewReactionValidator.parse(formData);
 
-      setOptimisticReactionState(
+      setReactionState(
         // set reaction
-        optimisticReactionState.sessionReaction === null
+        reactionState.sessionReaction === null
           ? {
               upQuantity:
-                validData.reaction === "OK"
-                  ? optimisticReactionState.upQuantity + 1
-                  : optimisticReactionState.upQuantity,
+                validReaction === "OK"
+                  ? reactionState.upQuantity + 1
+                  : reactionState.upQuantity,
               downQuantity:
-                validData.reaction === "MEH"
-                  ? optimisticReactionState.downQuantity + 1
-                  : optimisticReactionState.downQuantity,
-              sessionReaction: validData.reaction,
+                validReaction === "MEH"
+                  ? reactionState.downQuantity + 1
+                  : reactionState.downQuantity,
+              sessionReaction: validReaction,
             }
           : // unset reaction
-          optimisticReactionState.sessionReaction === validData.reaction
+          reactionState.sessionReaction === validReaction
           ? {
               upQuantity:
-                validData.reaction === "OK"
-                  ? optimisticReactionState.upQuantity - 1
-                  : optimisticReactionState.upQuantity,
+                validReaction === "OK"
+                  ? reactionState.upQuantity - 1
+                  : reactionState.upQuantity,
               downQuantity:
-                validData.reaction === "MEH"
-                  ? optimisticReactionState.downQuantity - 1
-                  : optimisticReactionState.downQuantity,
-              sessionReaction: validData.reaction,
+                validReaction === "MEH"
+                  ? reactionState.downQuantity - 1
+                  : reactionState.downQuantity,
+              sessionReaction: validReaction,
             }
           : // change reaction
-          validData.reaction === "OK"
+          validReaction === "OK"
           ? {
-              upQuantity: optimisticReactionState.upQuantity + 1,
-              downQuantity: optimisticReactionState.downQuantity - 1,
-              sessionReaction: validData.reaction,
+              upQuantity: reactionState.upQuantity + 1,
+              downQuantity: reactionState.downQuantity - 1,
+              sessionReaction: validReaction,
             }
           : {
-              upQuantity: optimisticReactionState.upQuantity - 1,
-              downQuantity: optimisticReactionState.downQuantity + 1,
-              sessionReaction: validData.reaction,
+              upQuantity: reactionState.upQuantity - 1,
+              downQuantity: reactionState.downQuantity + 1,
+              sessionReaction: validReaction,
             }
       );
 
-      await reviewService.postReaction(reviewId, formData);
-    } catch (error) {
-      toast.error(error as string);
+      await postReaction(reviewId, formData);
+    } catch (e) {
+      toast.error(te(translatableError(e)));
     }
   });
 
   const isActive = (reaction: reactionType) =>
-    optimisticReactionState.sessionReaction === reaction;
+    reactionState.sessionReaction === reaction;
 
   return (
     <>
@@ -138,7 +134,7 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
                 isActive("OK") && "text-green"
               )}
             >
-              {optimisticReactionState.upQuantity}
+              {reactionState.upQuantity}
             </p>
           </button>
         </div>
@@ -163,7 +159,7 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
                 isActive("MEH") && "text-red"
               )}
             >
-              {optimisticReactionState.downQuantity}
+              {reactionState.downQuantity}
             </p>
           </button>
         </div>

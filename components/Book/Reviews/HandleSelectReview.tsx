@@ -24,14 +24,10 @@ export const HandleSelectReview: FC<HandleSelectReviewProps> = ({
   const isSession = reviewData !== undefined;
 
   const handleFocusReview = () => {
-    const reviewEditButton = document.getElementById(
-      "review-edit-button"
-    ) as HTMLButtonElement | null;
     const reviewTextarea = document.getElementById(
-      "review-textarea"
+      "review-text"
     ) as HTMLTextAreaElement | null;
 
-    !reviewTextarea && reviewEditButton?.click();
     reviewTextarea?.focus();
     reviewTextarea?.select();
   };

@@ -1,16 +1,14 @@
 import { type FC } from "react";
 
-import { ProfileService } from "~/lib/services/profile";
-
 import { FollowForm } from "./FollowForm";
 
 interface FollowButtonProps {
   userId: string;
+  isFollowed: boolean | undefined;
 }
 
-export const FollowButton: FC<FollowButtonProps> = async ({ userId }) => {
-  const profileService = new ProfileService();
-  const followsData = await profileService.getFollowData(userId);
+export const FollowButton: FC<FollowButtonProps> = ({ userId, isFollowed }) => {
+  if (isFollowed === undefined) return;
 
-  return <FollowForm userId={userId} followsData={followsData} />;
+  return <FollowForm userId={userId} isFollowed={isFollowed} />;
 };

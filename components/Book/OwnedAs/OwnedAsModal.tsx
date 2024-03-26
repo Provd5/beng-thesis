@@ -1,10 +1,12 @@
+"use client";
+
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
 import { BsCheck } from "react-icons/bs";
 
-import { type OwnedBookTypes } from "~/types/data/bookshelf";
+import { type OwnedBookTypes } from "~/types/consts";
 
 import { OwnedBookIcon } from "~/components/ui/Icons/OwnedBookIcon";
 

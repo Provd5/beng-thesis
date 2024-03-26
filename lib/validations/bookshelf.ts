@@ -1,21 +1,38 @@
-import { bookshelfType } from "@prisma/client";
 import { z } from "zod";
+
+import { BookshelfArray } from "~/types/consts";
+
+import { ErrorsToTranslate } from "./errorsEnums";
 
 export type ChangeBookshelfValidatorType = z.infer<
   typeof ChangeBookshelfValidator
 >;
 export const ChangeBookshelfValidator = z.object({
-  bookId: z.string().uuid(),
   bookshelf: z
-    .enum([
-      bookshelfType.ABANDONED,
-      bookshelfType.ALREADY_READ,
-      bookshelfType.OTHER,
-      bookshelfType.READING,
-      bookshelfType.TO_READ,
-    ])
+    .enum(BookshelfArray, {
+      errorMap: () => ({
+        message: ErrorsToTranslate.DATA_TYPES.DATA_IS_INVALID,
+      }),
+    })
     .nullable(),
-  beganReadingAt: z.date().nullable(),
-  updatedAt: z.date().nullable(),
-  readQuantity: z.number().min(0).nullable(),
+  began_reading_at: z
+    .date({
+      errorMap: () => ({
+        message: ErrorsToTranslate.DATA_TYPES.DATE_IS_INVALID,
+      }),
+    })
+    .nullish(),
+  updated_at: z.date({
+    errorMap: () => ({
+      message: ErrorsToTranslate.DATA_TYPES.DATE_IS_INVALID,
+    }),
+  }),
+  read_quantity: z
+    .number({
+      errorMap: () => ({
+        message: ErrorsToTranslate.DATA_TYPES.FORMAT_IS_INVALID,
+      }),
+    })
+    .min(1)
+    .optional(),
 });

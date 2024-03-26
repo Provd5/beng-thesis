@@ -1,6 +1,7 @@
 import type { FC } from "react";
+import { notFound } from "next/navigation";
 
-import { ProfileService } from "~/lib/services/profile";
+import { getProfile } from "~/lib/services/profile";
 import readUserSession from "~/lib/supabase/readUserSession";
 
 import { AvatarImage } from "./AvatarImage";
@@ -16,8 +17,10 @@ interface ProfileProps {
 }
 
 export const Profile: FC<ProfileProps> = async ({ profileName, children }) => {
-  const profileService = new ProfileService();
-  const profileData = await profileService.getProfile(profileName);
+  const profileData = await getProfile(profileName);
+
+  if (!profileData) notFound();
+
   const {
     data: { session },
   } = await readUserSession();
@@ -37,14 +40,21 @@ export const Profile: FC<ProfileProps> = async ({ profileName, children }) => {
           <div className="mx-0.5 mt-3">
             <div className="flex w-fit flex-col gap-2 text-sm">
               <FollowLink
+                profileName={profileName}
                 variant="followers"
                 quantity={profileData._count.followed_by}
               />
               <FollowLink
+                profileName={profileName}
                 variant="following"
                 quantity={profileData._count.following}
               />
-              {!isMyProfile && <FollowButton userId={profileData.id} />}
+              {!isMyProfile && (
+                <FollowButton
+                  userId={profileData.id}
+                  isFollowed={profileData.is_followed}
+                />
+              )}
             </div>
           </div>
         </div>

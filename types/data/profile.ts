@@ -1,4 +1,17 @@
+export interface RawProfileInterface extends ProfileInterface {
+  followed_by: FollowsInterface[];
+  _count: {
+    followed_by: number;
+    following: number;
+    book_owned_as: number;
+    bookshelf: number;
+    liked_book: number;
+    review: number;
+  };
+}
+
 export interface GetProfileInterface extends ProfileInterface {
+  is_followed: boolean | undefined;
   _count: {
     followed_by: number;
     following: number;

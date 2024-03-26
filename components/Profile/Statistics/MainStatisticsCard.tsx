@@ -1,11 +1,10 @@
 import type { FC } from "react";
 
-import { BookshelvesArray } from "~/types/categoryArrays";
-import { type BookshelvesTypes } from "~/types/data/bookshelf";
+import { BookshelvesArray, type BookshelvesTypes } from "~/types/consts";
 
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
 import { OwnedBookIcon } from "~/components/ui/Icons/OwnedBookIcon";
-import { BookshelfService } from "~/lib/services/bookshelf";
+import { getBookshelfQuantity } from "~/lib/services/bookshelf";
 
 interface MainStatisticsCardProps {
   profileName: string;
@@ -14,11 +13,9 @@ interface MainStatisticsCardProps {
 export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
   profileName,
 }) => {
-  const bookshelfService = new BookshelfService();
-
   const quantities = await Promise.all(
     BookshelvesArray.map(async (bookshelfVariant) => ({
-      [bookshelfVariant]: await bookshelfService.getQuantity(
+      [bookshelfVariant]: await getBookshelfQuantity(
         profileName,
         bookshelfVariant
       ),

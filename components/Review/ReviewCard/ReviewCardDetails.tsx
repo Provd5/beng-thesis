@@ -1,3 +1,5 @@
+"use client";
+
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
@@ -23,7 +25,6 @@ export const ReviewCardDetails: FC<ReviewCardDetailsProps> = ({
 
   return (
     <>
-      {" "}
       <h2 className="flex flex-col text-xs text-black-light dark:text-white-dark">
         {t("posted:")} {dateFormater(createdAt, true)}
         {updatedAt && (

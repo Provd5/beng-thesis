@@ -1,17 +1,18 @@
 import { type FC } from "react";
 
-import { BookService } from "~/lib/services/book";
+import { type BookshelfInterface } from "~/types/data/bookshelf";
 
 import { HandleChangeBookshlef } from "./HandleChangeBookshlef";
 
 interface ManageBookshelfProps {
   bookId: string;
+  bookshelfData: BookshelfInterface | null | undefined;
 }
 
-export const ManageBookshelf: FC<ManageBookshelfProps> = async ({ bookId }) => {
-  const booksService = new BookService();
-  const bookshelfData = await booksService.getBookshelfData(bookId);
-
+export const ManageBookshelf: FC<ManageBookshelfProps> = ({
+  bookId,
+  bookshelfData,
+}) => {
   if (bookshelfData === undefined) return;
 
   return (

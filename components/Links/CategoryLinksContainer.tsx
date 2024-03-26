@@ -6,21 +6,28 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
-import { CategoriesArray } from "~/types/categoryArrays";
+import { CategoriesArray } from "~/types/consts";
 
 import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 import ROUTES from "~/utils/routes";
 
-export const CategoryLinksContainer: FC = () => {
+interface CategoryLinksContainerProps {
+  profileName: string;
+}
+
+export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
+  profileName,
+}) => {
   const t = useTranslations("Book.BookshelfTypes");
 
   const pathname = usePathname();
   const pathnameParts = pathname.split("/");
 
   return CategoriesArray.map((categoryVariant) => {
+    const categoryVariantAsPathname =
+      convertTypeEnumToPathname(categoryVariant);
     const isActive = () => {
-      if (pathnameParts[4] === convertTypeEnumToPathname(categoryVariant))
-        return true;
+      if (pathnameParts[4] === categoryVariantAsPathname) return true;
 
       return false;
     };
@@ -29,7 +36,10 @@ export const CategoryLinksContainer: FC = () => {
       <Link
         key={categoryVariant}
         replace
-        href={ROUTES.profile.bookshelf(categoryVariant)}
+        href={ROUTES.profile.bookshelf(
+          profileName,
+          convertTypeEnumToPathname(categoryVariant)
+        )}
         className={clsx(
           "whitespace-nowrap rounded-xl border border-secondary px-5 py-2.5 text-sm dark:border-secondary-light",
           isActive()

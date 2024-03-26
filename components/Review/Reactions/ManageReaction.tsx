@@ -1,6 +1,6 @@
 import { type FC } from "react";
 
-import { ReviewService } from "~/lib/services/review";
+import { getReactions } from "~/lib/services/review";
 
 import { BookReviewCardReactionsLabel } from "../BookReviewCard/BookReviewCardReactionsLabel";
 import { HandleSubmitReaction } from "./HandleSubmitReaction";
@@ -10,8 +10,7 @@ interface ManageReactionProps {
 }
 
 export const ManageReaction: FC<ManageReactionProps> = async ({ reviewId }) => {
-  const reviewService = new ReviewService();
-  const reactions = await reviewService.getReactions(reviewId);
+  const reactions = await getReactions(reviewId);
 
   if (reactions.sessionReaction === undefined)
     return <BookReviewCardReactionsLabel upReactions={reactions.upQuantity} />;

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { ManageProfile } from "~/components/Profile/EditProfile/ManageProfile";
-import { Loader } from "~/components/ui/Loaders/Loader";
+import { EditProfileLoader } from "~/components/ui/Loaders/Skeletons/EditProfileLoader";
 import { type localeTypes } from "~/i18n";
 
 export async function generateMetadata({
@@ -24,7 +24,7 @@ export default function EditProfilePage({
   unstable_setRequestLocale(locale);
 
   return (
-    <Suspense fallback={<Loader />}>
+    <Suspense fallback={<EditProfileLoader />}>
       <ManageProfile />
     </Suspense>
   );

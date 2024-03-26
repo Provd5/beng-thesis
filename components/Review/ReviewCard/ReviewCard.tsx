@@ -1,10 +1,12 @@
-import { type FC } from "react";
+import { type FC, Suspense } from "react";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import clsx from "clsx";
 
 import { type ReviewInterface } from "~/types/data/review";
 
-import { ProfileService } from "~/lib/services/profile";
+import { Loader } from "~/components/ui/Loaders/Loader";
+import { getProfileFromId } from "~/lib/services/profile";
 import ROUTES from "~/utils/routes";
 
 import { ManageReaction } from "../Reactions/ManageReaction";
@@ -18,10 +20,9 @@ interface ReviewCardProps {
 }
 
 export const ReviewCard: FC<ReviewCardProps> = async ({ reviewData }) => {
-  const profileService = new ProfileService();
-  const profileData = await profileService.getProfileFromId(
-    reviewData.author_id
-  );
+  const profileData = await getProfileFromId(reviewData.author_id);
+
+  if (!profileData) notFound();
 
   return (
     <div
@@ -34,7 +35,7 @@ export const ReviewCard: FC<ReviewCardProps> = async ({ reviewData }) => {
       <Link
         href={
           profileData.full_name
-            ? ROUTES.profile.root(profileData.full_name)
+            ? `${ROUTES.profile.root(profileData.full_name)}`
             : "#"
         }
         className="flex h-fit flex-none gap-x-1.5 gap-y-1 sm:w-24 sm:flex-col sm:items-center"
@@ -61,7 +62,9 @@ export const ReviewCard: FC<ReviewCardProps> = async ({ reviewData }) => {
             <>
               <ReviewText reviewText={reviewData.text} />
               <ReactionsLabel />
-              <ManageReaction reviewId={reviewData.id} />
+              <Suspense fallback={<Loader />}>
+                <ManageReaction reviewId={reviewData.id} />
+              </Suspense>
             </>
           )}
         </div>

@@ -1,34 +1,49 @@
 {
   "Errors": {
-    "PASSWORD_REQUIRED_ERROR": "Password is required",
-    "USERNAME_TOO_SHORT_3": "Username must be at least 3 characters",
-    "USERNAME_TOO_LONG_32": "Username must be less than 32 characters",
-    "WRONG_EMAIL": "Email is invalid",
-    "WRONG_PASSWORD": "Password must have at least 10 characters, one number, one special character, both lower and uppercase letters",
-    "WRONG_USERNAME": "Username can only contain letters, numbers and some special characters",
-    "EMAIL_EXISTS": "User with this email address already exists",
-    "USERNAME_EXISTS": "This username is already taken",
-    "NOT_THE_SAME_PASSWORDS": "The passwords are not the same",
-    "DISABLED_SIGNUPS_ERROR": "Email signups are temporary disabled",
-    "EMAIL_LINK_ERROR": "Email link is invalid or has expired",
-    "TOKEN_ERROR": "Token has expired or is invalid",
-    "LOGIN_ERROR": "Invalid login credentials",
-    "EMAIL_NOT_CONFIRMED": "Email not confirmed",
-    "SAME_USERNAME": "Given username is the same as the current",
-    "CAPTCHA_ERROR": "Solve the Captcha correctly",
+    "email is invalid": "Email is invalid",
+    "email already exists": "User with this email address already exists",
+    "email not confirmed": "Email not confirmed",
 
-    "DESCRIPTION_TOO_LONG_5000": "Description must be less than 5000 characters",
+    "email rate limit exceeded": "Email rate limit exceeded",
+    "email signups are disabled": "Email signups are temporary disabled",
+    "email link is invalid or has expired": "Email link is invalid or has expired",
 
-    "REVIEW_TOO_LONG_5000": "Your review is too long",
-    "WRONG_RATE": "Give an adequate rating first",
+    "password is required": "Password is required",
+    "password is invalid": "Password must have at least 10 characters, one number, one special character, both lower and uppercase letters",
+    "passwords are not the same": "The passwords are not the same",
 
-    "SEARCH_TEXT_TOO_SHORT_2": "Enter at least 2 characters",
+    "invalid login credentials": "Invalid login credentials",
 
-    "UNAUTHORIZED": "You are not logged in",
-    "SOMETHING_WENT_WRONG": "Something went wrong, try again in a moment",
-    "COULD_NOT_FETCH": "Failed to load {item, select, books {books} reviews {reviews} profiles {profiles} other {items}}",
-    "PENDING": "Pending...",
-    "SUCCESS": "Success"
+    "captcha was not solved": "Solve the Captcha correctly",
+    "captcha verification process failed": "Captcha verification process failed",
+
+    "token has expired or is invalid": "Token has expired or is invalid",
+
+    "username already exists": "This username is already taken",
+    "username is invalid": "Username can only contain letters, numbers and some special characters",
+    "username is too short": "Username must be at least 3 characters",
+    "username is too long": "Username must be less than 32 characters",
+    "username is the same": "Given username is the same as current",
+    "description is too long": "Given description is too long",
+
+    "cannot follow your own profile": "Cannot follow your own profile",
+
+    "review is too long": "Your review is too long",
+    "rate is invalid": "Give an adequate rating first",
+
+    "search is too short": "Enter at least 2 characters",
+
+    "data is invalid": "Provided data is invalid",
+    "date is invalid": "A valid date is required",
+    "format is invalid": "The data provided is in an incorrect format",
+
+    "unauthorized": "You are not logged in",
+    "failed to load items": "Failed to load items",
+    "not found": "Not found",
+    "something went wrong": "Something went wrong, try again in a moment",
+
+    "pending": "Pending...",
+    "success": "Success"
   },
 
   "NotFound": {
@@ -48,6 +63,7 @@
 
   "Other": {
     "logout": "Logout",
+    "logging out": "Logging out",
     "logged out": "Logged out",
     "loading": "Loading",
     "load more": "load more",
@@ -112,8 +128,9 @@
       "forgot your password?": "Forgot your password?",
       "no account yet? sign up": "No account yet? <Link>Sign up</Link>",
       "already have an account? log in": "Already have an account? <Link>Log in</Link>",
-      "check your email to continue login": "Check your email ({email}), to continue login",
-      "we will redirect you to your profile in a moment": "We will redirect you to your profile in a moment"
+      "check your email to continue login": "Check your email to continue login",
+      "we will redirect you to your profile in a moment": "We will redirect you to your profile in a moment",
+      "we will redirect you to the provider's website in a moment": "We will redirect you to the provider's website in a moment"
     },
     "EditProfile": {
       "account created using:": "Account created using:",
@@ -274,7 +291,7 @@
     "sort by:": "Sort by:",
     "popularity": "popularity",
     "last_added": "last added",
-    "profile_traffic": "user activity",
+    "activity": "user activity",
     "title": "title",
     "full_name": "username",
     "authors": "authors",
@@ -282,10 +299,10 @@
     "created_at": "creation date",
     "rate": "highest rate",
     "liked_by": "likes",
-    "review": "reviews",
-    "review_reaction": "reactions",
-    "book_owned_as": "owned books",
-    "bookshelf": "books on shelves",
-    "followed_by": "followers"
+    "reviews": "reviews",
+    "reactions": "reactions",
+    "owned_books": "owned books",
+    "books_on_shelves": "books on shelves",
+    "followers": "followers"
   }
 }

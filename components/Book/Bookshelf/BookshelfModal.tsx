@@ -1,23 +1,22 @@
 "use client";
 
 import type { FC } from "react";
-import { type FieldValues, type UseFormSetValue } from "react-hook-form";
 import { useTranslations } from "next-intl";
 import { type bookshelfType } from "@prisma/client";
 import clsx from "clsx";
 
-import { BookshelfArray } from "~/types/categoryArrays";
+import { BookshelfArray } from "~/types/consts";
 
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
 
 interface BookshelfModalProps {
-  setValue: UseFormSetValue<FieldValues>;
-  currentBookshelf: bookshelfType | null;
+  changedBookshelf: (data: bookshelfType | null) => void;
+  initialBookshelf: bookshelfType | null;
 }
 
 export const BookshelfModal: FC<BookshelfModalProps> = ({
-  setValue,
-  currentBookshelf,
+  changedBookshelf,
+  initialBookshelf,
 }) => {
   const t = useTranslations("Book.ManageBookshelf");
   const tb = useTranslations("Book.BookshelfTypes");
@@ -28,13 +27,15 @@ export const BookshelfModal: FC<BookshelfModalProps> = ({
         <button
           key={bookshelf}
           className="flex items-center gap-1 py-1.5"
-          onClick={() => setValue("bookshelf", bookshelf)}
+          onClick={() => {
+            changedBookshelf(bookshelf);
+          }}
         >
           <BookmarkIcon category={bookshelf} size="sm" />
           <span
             className={clsx(
               "whitespace-nowrap text-base",
-              currentBookshelf === bookshelf &&
+              initialBookshelf === bookshelf &&
                 "font-semibold text-secondary dark:text-secondary-light"
             )}
           >
@@ -42,10 +43,10 @@ export const BookshelfModal: FC<BookshelfModalProps> = ({
           </span>
         </button>
       ))}
-      {currentBookshelf && (
+      {!!initialBookshelf && (
         <button
           className="flex items-center py-1.5"
-          onClick={() => setValue("bookshelf", null)}
+          onClick={() => changedBookshelf(null)}
         >
           <span className="whitespace-nowrap text-base">
             {t("remove from shelf")}

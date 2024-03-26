@@ -50,6 +50,14 @@ module.exports = {
       colors: {
         transparent: "transparent",
         current: "currentColor",
+        // colors: {
+        //   'text': 'rgb(var(--text))',
+        //   'background': 'rgb(var(--background))',
+        //   'primary': 'rgb(var(--primary))',
+        //   'secondary': 'rgb(var(--secondary))',
+        //   'accent': 'rgb(var(--accent))',
+        //  },
+
         white: {
           light: "rgb(var(--white-light))",
           DEFAULT: "rgb(var(--white-default))",

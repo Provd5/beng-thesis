@@ -1,14 +1,13 @@
 import type { FC } from "react";
 import Link from "next/link";
 
-import { ProfileService } from "~/lib/services/profile";
+import { getSessionProfile } from "~/lib/services/profile";
 import ROUTES from "~/utils/routes";
 
 import { AvatarImage } from "./AvatarImage";
 
 export const ProfileBadge: FC = async () => {
-  const profileService = new ProfileService();
-  const profileData = await profileService.getSessionProfile();
+  const profileData = await getSessionProfile();
 
   if (!profileData) return;
 

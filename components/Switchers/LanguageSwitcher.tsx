@@ -2,7 +2,7 @@
 
 import { type FC } from "react";
 import Image, { type StaticImageData } from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import clsx from "clsx";
 
 import { locales } from "~/i18n";
@@ -11,6 +11,7 @@ import FlagOfPoland from "~/public/flags/flag-icons-pl.png";
 import { getLocaleFromUrl } from "~/utils/getLocaleFromUrl";
 
 export const LanguageSwitcher: FC = () => {
+  const searchParams = useSearchParams();
   const pathname = usePathname();
   const localeFromUrl = getLocaleFromUrl(pathname);
 
@@ -28,14 +29,19 @@ export const LanguageSwitcher: FC = () => {
               src: FlagOfTheUnitedKingdom,
               alt: "Flag Of The United Kingdom",
             };
+            break;
           case "pl":
             flagFromLocale = { src: FlagOfPoland, alt: "Flag of Poland" };
+            break;
         }
 
         return (
           <a
             key={locale}
-            href={pathname.replace(`/${localeFromUrl}`, `/${locale}`)}
+            href={
+              pathname.replace(`/${localeFromUrl}`, `/${locale}`) +
+              `?${searchParams.toString()}`
+            }
             className="flex flex-col items-center text-sm"
           >
             <Image

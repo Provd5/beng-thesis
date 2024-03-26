@@ -1,8 +1,26 @@
-export interface GetBookInterface extends BookInterface {
+import { type BookshelfInterface } from "./bookshelf";
+
+export interface RawGetBookData extends BookInterface {
   _count: {
     liked_by: number;
     review: number;
   };
+  review: { rate: number }[];
+  book_owned_as: BookOwnedAsInterface[];
+  liked_by: LikedBookInterface[];
+  bookshelf: BookshelfInterface[];
+}
+
+export interface GetBookInterface {
+  book: BookInterface;
+  _count: {
+    liked_by: number;
+    review: number;
+  };
+  _avg_rate: number;
+  book_owned_as: BookOwnedAsInterface | null | undefined;
+  liked_by: LikedBookInterface | null | undefined;
+  bookshelf: BookshelfInterface | null | undefined;
 }
 
 export interface BookInterface {

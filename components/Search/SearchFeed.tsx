@@ -5,7 +5,7 @@ import { searchCategoryValidator } from "~/utils/searchCategoryValidator";
 
 import { BooksFeed } from "../Book/BooksFeed";
 import { ProfilesFeed } from "../Profile/ProfilesFeed";
-import { Loader } from "../ui/Loaders/Loader";
+import { LargeComponentLoader } from "../ui/Loaders/Loader";
 import { EmptyQuery } from "./EmptyQuery";
 
 interface SearchFeedProps {
@@ -20,11 +20,11 @@ export const SearchFeed: FC<SearchFeedProps> = ({ searchParams }) => {
   return (
     <>
       {validSearchCategory.category === "profiles" ? (
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<LargeComponentLoader />}>
           <ProfilesFeed searchParams={searchParams} q={validSearchCategory.q} />
         </Suspense>
       ) : (
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<LargeComponentLoader />}>
           <BooksFeed searchParams={searchParams} q={validSearchCategory.q} />
         </Suspense>
       )}

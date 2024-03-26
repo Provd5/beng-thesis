@@ -36,4 +36,4 @@ export type SortFollowProfilesType = SortProfilesType | "last_added";
 export type SortReviewsType =
   | keyof Pick<ReviewInterface, "rate" | "created_at">
   | "activity"
-  | "review_reaction";
+  | "reactions";

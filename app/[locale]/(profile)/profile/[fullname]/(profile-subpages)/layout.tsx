@@ -4,6 +4,7 @@ import { BackCategoryLink } from "~/components/Links/BackCategoryLink";
 import { CategoryLinksContainer } from "~/components/Links/CategoryLinksContainer";
 import { DragContainer } from "~/components/ui/DragContainer";
 import { type localeTypes } from "~/i18n";
+import ROUTES from "~/utils/routes";
 
 export default function ProfileSubpagesLayout({
   children,
@@ -16,12 +17,12 @@ export default function ProfileSubpagesLayout({
 
   return (
     <>
-      <BackCategoryLink variant="RETURN" href={`../${fullname}`} />
+      <BackCategoryLink variant="RETURN" href={ROUTES.profile.back(fullname)} />
       <DragContainer
         arrowSize="sm"
         containerClassName="flex-start py-1 px-0.5 hidden-scrollbar gap-1"
       >
-        <CategoryLinksContainer />
+        <CategoryLinksContainer profileName={fullname} />
       </DragContainer>
       {children}
     </>

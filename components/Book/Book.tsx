@@ -1,8 +1,9 @@
 import { type FC, Suspense } from "react";
+import { notFound } from "next/navigation";
 
 import { HIGHEST_REVIEW_RATE } from "~/types/data/review";
 
-import { BookService } from "~/lib/services/book";
+import { getBook } from "~/lib/services/book";
 
 import { Loader } from "../ui/Loaders/Loader";
 import { BookCover } from "./BookCover";
@@ -18,8 +19,9 @@ interface BookProps {
 }
 
 export const Book: FC<BookProps> = async ({ bookId, children }) => {
-  const bookService = new BookService();
-  const bookData = await bookService.getBook(bookId);
+  const bookData = await getBook(bookId);
+
+  if (!bookData) notFound();
 
   return (
     <div className="mt-3 flex flex-col gap-8">
@@ -70,29 +72,40 @@ export const Book: FC<BookProps> = async ({ bookId, children }) => {
 
             <BookDetails
               variant="average rate:"
-              text={`${bookData.averageRate}/${HIGHEST_REVIEW_RATE}`}
+              text={`${bookData._avg_rate}/${HIGHEST_REVIEW_RATE}`}
             />
           </div>
         </div>
         <div className="flex justify-center gap-x-1 gap-y-4 max-xs:flex-wrap xs:gap-8 xs:px-2 md:justify-end">
           <div className="flex h-fit flex-col items-start justify-center gap-4 xs:gap-8">
             <div className="w-36">
-              <Suspense fallback={<Loader />}></Suspense>
-              <ManageBookshelf bookId={bookData.book.id} />
+              <ManageBookshelf
+                bookId={bookData.book.id}
+                bookshelfData={bookData.bookshelf}
+              />
             </div>
             <div className="w-36">
               <ManageLikes
                 bookId={bookData.book.id}
-                likesQuantity={bookData.book._count.liked_by}
+                likesQuantity={bookData._count.liked_by}
+                likeData={bookData.liked_by}
               />
             </div>
           </div>
           <div className="flex h-fit flex-col items-start justify-center gap-4 xs:gap-8">
             <div className="w-36">
-              <ManageOwnedAs bookId={bookData.book.id} />
+              <ManageOwnedAs
+                bookId={bookData.book.id}
+                ownedAsData={bookData.book_owned_as}
+              />
             </div>
             <div className="w-36">
-              <ManageReviews bookId={bookData.book.id} />
+              <Suspense fallback={<Loader />}>
+                <ManageReviews
+                  bookId={bookData.book.id}
+                  reviewsQuantity={bookData._count.review}
+                />
+              </Suspense>
             </div>
           </div>
         </div>

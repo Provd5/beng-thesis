@@ -4,21 +4,33 @@ import { type FC, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import {
+  type Formats,
+  type TranslationValues,
+  useTranslations,
+} from "next-intl";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { AuthService } from "~/lib/services/auth";
 import { SignupValidator } from "~/lib/validations/auth";
+import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import ROUTES from "~/utils/routes";
+import { translatableError } from "~/utils/translatableError";
 
 import { ButtonWhite } from "../ui/Buttons";
 import { Input } from "../ui/Input";
 
 export const SignupForm: FC = () => {
   const t = useTranslations("Profile.Auth");
+  const te = useTranslations("Errors") as (
+    key: string,
+    values?: TranslationValues | undefined,
+    formats?: Partial<Formats> | undefined
+  ) => string;
 
   const authService = new AuthService();
+
   const router = useRouter();
 
   const captcha = useRef<HCaptcha>(null);
@@ -29,18 +41,20 @@ export const SignupForm: FC = () => {
     handleSubmit,
     formState: { isSubmitting },
   } = useForm({
+    defaultValues: { email: "", password: "", repeat_password: "" },
     resolver: zodResolver(SignupValidator),
   });
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      const res = await authService.signup(captchaToken, formData);
-      if (res.ok) {
-        toast.success(t("we will redirect you to your profile in a moment")),
-          router.replace(ROUTES.profile.session_profile);
+      const validData = SignupValidator.parse(formData);
+      const res = await authService.signup(captchaToken, validData);
+      if (!res.ok) {
+        throw new Error(ErrorsToTranslate.SOMETHING_WENT_WRONG);
       }
+      router.replace(`${ROUTES.auth.signup}?checkMail=${validData.email}`);
     } catch (error) {
-      toast.error(error as string);
+      toast.error(te(translatableError(error)));
     } finally {
       captcha.current?.resetCaptcha();
     }
@@ -49,38 +63,32 @@ export const SignupForm: FC = () => {
   return (
     <form
       className="flex max-w-sm flex-1 flex-col items-center justify-center gap-1"
-      onSubmit={onSubmit}
+      onSubmit={(e) => (e.preventDefault(), onSubmit())}
     >
       <Input
-        {...register("email")}
-        className="w-64"
-        loading={isSubmitting}
-        label={t("email:")}
-        id="email-input"
+        {...register("email", { required: true })}
         type="email"
         autoComplete="email"
         placeholder="✉️"
-        required
+        className="w-64"
+        label={t("email:")}
+        id="email-input"
       />
       <Input
-        {...register("password")}
-        className="w-64"
-        loading={isSubmitting}
-        label={t("password:")}
-        id="password-input"
+        {...register("password", { required: true })}
         type="password"
         placeholder="🔐"
-        required
+        className="w-64"
+        label={t("password:")}
+        id="password-input"
       />
       <Input
-        {...register("password-repeat")}
-        className="w-64"
-        loading={isSubmitting}
-        label={t("repeat password:")}
-        id="password-repeat-input"
+        {...register("repeat_password", { required: true })}
         type="password"
         placeholder="🔒"
-        required
+        className="w-64"
+        label={t("repeat password:")}
+        id="repeat-password-input"
       />
       <div className="mt-1 overflow-hidden rounded-sm">
         <HCaptcha

@@ -1,6 +1,6 @@
 "use client";
 
-import type { FC } from "react";
+import { type FC, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
@@ -12,14 +12,27 @@ import { type SortsType } from "~/types/sort";
 
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
+import { LargeComponentLoader } from "../ui/Loaders/Loader";
+import { Pagination } from "../ui/Pagination/Pagination";
 import { ModalInitiator } from "./ModalInitiator";
 
 interface FeedSortProps {
+  currentPage: number;
+  totalPages: number;
+  children: React.ReactNode;
   orderArray: SortArrayInterface<SortsType>[];
 }
 
-export const FeedSort: FC<FeedSortProps> = ({ orderArray }) => {
+export const FeedSort: FC<FeedSortProps> = ({
+  currentPage,
+  totalPages,
+  children,
+  orderArray,
+}) => {
   const t = useTranslations("Sorting");
+
+  const [isPending, startTransition] = useTransition();
+
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -31,18 +44,22 @@ export const FeedSort: FC<FeedSortProps> = ({ orderArray }) => {
 
     if (sortParams.orderBy === newOrderBy) {
       params.set("order", sortParams.order === "desc" ? "asc" : "desc");
-      params.set("page", "1");
     } else {
       params.set("order", reverseOrder ? "asc" : "desc");
       params.set("orderBy", newOrderBy);
+    }
+
+    if (params.has("page")) {
       params.set("page", "1");
     }
 
-    router.replace(`${pathname}?${params.toString()}`);
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`);
+    });
   };
 
   return (
-    <>
+    <div className="relative">
       <div className="mb-3 flex w-full justify-end">
         <ModalInitiator
           initiatorStyle={
@@ -88,6 +105,15 @@ export const FeedSort: FC<FeedSortProps> = ({ orderArray }) => {
           </div>
         </ModalInitiator>
       </div>
-    </>
+      {isPending ? <LargeComponentLoader /> : children}
+
+      {!isPending && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          startTransition={startTransition}
+        />
+      )}
+    </div>
   );
 };

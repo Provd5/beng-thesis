@@ -1,13 +1,12 @@
 import type { FC } from "react";
 
-import { ProfileService } from "~/lib/services/profile";
+import { getSessionProfile } from "~/lib/services/profile";
 
 import { AvatarImage } from "../AvatarImage";
 import { EditProfileForm } from "./EditProfileForm";
 
 export const ManageProfile: FC = async () => {
-  const profileService = new ProfileService();
-  const profileData = await profileService.getSessionProfile();
+  const profileData = await getSessionProfile();
 
   if (!profileData) return;
 

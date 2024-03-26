@@ -7,7 +7,7 @@ import { Navbar } from "~/components/Links/Navbar/Navbar";
 import { DarkModeInitializer } from "~/components/ui/DarkModeInitializer";
 import { SvgPainter } from "~/components/ui/Icons/SvgIcons/SvgPainter";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
-import { defaultLocale, locales, type localeTypes } from "~/i18n";
+import { type localeTypes } from "~/i18n";
 
 import "~/styles/globals.css";
 
@@ -36,9 +36,8 @@ export async function generateMetadata({
 }: {
   params: { locale: localeTypes };
 }) {
-  const validLocale = locales.includes(locale) ? locale : defaultLocale;
   const t = await getTranslations({
-    validLocale,
+    locale,
     namespace: "Nav.CategoryTitles",
   });
 
@@ -58,17 +57,16 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: localeTypes };
 }) {
-  const validLocale = locales.includes(locale) ? locale : defaultLocale;
-  unstable_setRequestLocale(validLocale);
-  const messages = await getMessages(validLocale);
+  unstable_setRequestLocale(locale);
+  const messages = await getMessages(locale);
 
   return (
-    <html lang={validLocale} className={quicksandFont.className}>
+    <html lang={locale} className={quicksandFont.className}>
       <body className="bodyGradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-black antialiased selection:bg-secondary selection:text-white dark:text-white md:flex-col">
         <DarkModeInitializer />
         <SvgPainter />
 
-        <NextIntlClientProvider locale={validLocale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar />
           {children}
           <ToasterComponent />

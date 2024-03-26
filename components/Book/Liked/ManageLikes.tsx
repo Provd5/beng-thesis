@@ -1,21 +1,20 @@
 import { type FC } from "react";
 
-import { BookService } from "~/lib/services/book";
+import { type LikedBookInterface } from "~/types/data/book";
 
 import { LikeBookForm } from "./LikeBookForm";
 
 interface ManageLikesProps {
   bookId: string;
+  likeData: LikedBookInterface | null | undefined;
   likesQuantity: number;
 }
 
-export const ManageLikes: FC<ManageLikesProps> = async ({
+export const ManageLikes: FC<ManageLikesProps> = ({
   bookId,
+  likeData,
   likesQuantity,
 }) => {
-  const bookService = new BookService();
-  const likeData = await bookService.getLikedData(bookId);
-
   return (
     <LikeBookForm
       bookId={bookId}

@@ -3,7 +3,7 @@ import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { BooksFeed } from "~/components/Book/BooksFeed";
-import { Loader } from "~/components/ui/Loaders/Loader";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
 
 export async function generateMetadata({
@@ -28,7 +28,7 @@ export default function ExplorePage({
 
   return (
     <div className="container pb-12">
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<LargeComponentLoader />}>
         <BooksFeed searchParams={searchParams} />
       </Suspense>
     </div>

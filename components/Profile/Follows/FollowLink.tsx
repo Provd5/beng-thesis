@@ -11,18 +11,23 @@ import { MdNavigateNext } from "react-icons/md";
 import ROUTES from "~/utils/routes";
 
 interface FollowLinkProps {
+  profileName: string;
   variant: "followers" | "following";
   quantity: number;
 }
 
-export const FollowLink: FC<FollowLinkProps> = ({ variant, quantity }) => {
+export const FollowLink: FC<FollowLinkProps> = ({
+  profileName,
+  variant,
+  quantity,
+}) => {
   const t = useTranslations("Profile.Page");
   const pathname = usePathname();
   const pathnameParts = pathname.split("/");
 
   const pageRoutes = {
-    followers: ROUTES.profile.followers,
-    following: ROUTES.profile.following,
+    followers: ROUTES.profile.followers(profileName),
+    following: ROUTES.profile.following(profileName),
   };
 
   const isActive = () => {

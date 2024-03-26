@@ -1,15 +1,20 @@
 "use client";
 
-import { experimental_useOptimistic as useOptimistic, type FC } from "react";
+import { type FC, useState } from "react";
 import toast from "react-hot-toast";
-import { useTranslations } from "next-intl";
+import {
+  type Formats,
+  type TranslationValues,
+  useTranslations,
+} from "next-intl";
 
 import { BsBookmarkHeart } from "react-icons/bs";
 
 import { type LikedBookInterface } from "~/types/data/book";
 
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
-import { BookService } from "~/lib/services/book";
+import { postLike } from "~/lib/services/book";
+import { translatableError } from "~/utils/translatableError";
 
 interface LikeBookFormProps {
   bookId: string;
@@ -23,34 +28,30 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
   likesQuantity,
 }) => {
   const t = useTranslations("Book.ManageLikes");
+  const te = useTranslations("Errors") as (
+    key: string,
+    values?: TranslationValues | undefined,
+    formats?: Partial<Formats> | undefined
+  ) => string;
 
-  const bookService = new BookService();
-
-  const [optimisticLikeDataState, setOptimisticLikeDataState] = useOptimistic(
-    { isLike: !!likeData, likesQuantity },
-    (
-      _,
-      newLikesState: {
-        isLike: boolean;
-        likesQuantity: number;
-      }
-    ) => {
-      return newLikesState;
-    }
-  );
+  const [likeState, setLikeState] = useState({
+    isLike: !!likeData,
+    likesQuantity,
+  });
 
   const handleLike = async () => {
     try {
-      setOptimisticLikeDataState({
-        isLike: !optimisticLikeDataState.isLike,
-        likesQuantity: optimisticLikeDataState.isLike
-          ? optimisticLikeDataState.likesQuantity - 1
-          : optimisticLikeDataState.likesQuantity + 1,
+      setLikeState({
+        isLike: !likeState.isLike,
+        likesQuantity: likeState.isLike
+          ? likeState.likesQuantity - 1
+          : likeState.likesQuantity + 1,
       });
 
-      await bookService.postLike(bookId);
-    } catch (error) {
-      toast.error(error as string);
+      await postLike(bookId);
+    } catch (e) {
+      setLikeState(likeState);
+      toast.error(te(translatableError(e)));
     }
   };
 
@@ -61,7 +62,7 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
       onClick={handleLike}
     >
       <div className="flex h-fit">
-        {!!optimisticLikeDataState.isLike ? (
+        {!!likeState.isLike ? (
           <BookmarkIcon category="LIKED" size="lg" />
         ) : (
           <BookmarkIcon Icon={BsBookmarkHeart} color="gradient" size="lg" />
@@ -73,10 +74,10 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
             {t("likes")}
           </h3>
         </div>
-        <p>{optimisticLikeDataState.likesQuantity}</p>
+        <p>{likeState.likesQuantity}</p>
         {likeData !== undefined && (
           <p className="text-xs text-black-light dark:text-white-dark">
-            {!!optimisticLikeDataState.isLike ? (
+            {!!likeState.isLike ? (
               t("liked")
             ) : (
               <span className="select-none underline">{t("like")}</span>

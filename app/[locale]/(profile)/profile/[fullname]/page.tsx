@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { unstable_setRequestLocale } from "next-intl/server";
 
-import { CategoriesArray } from "~/types/categoryArrays";
+import { CategoriesArray } from "~/types/consts";
 
 import { CategorySection } from "~/components/Bookshelf/CategorySection";
 import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";

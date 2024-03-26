@@ -1,12 +1,9 @@
 import { z } from "zod";
 
-export type LikeBookValidatorType = z.infer<typeof LikeBookValidator>;
-export const LikeBookValidator = z.object({
-  bookId: z.string().uuid(),
-});
+import { OwnedAsArray } from "~/types/consts";
 
-export type OwnedAsValidatorType = z.infer<typeof OwnedAsValidator>;
-export const OwnedAsValidator = z.object({
-  bookId: z.string().uuid(),
-  ownedAs: z.enum(["BOOK", "EBOOK", "AUDIOBOOK"]),
+import { ErrorsToTranslate } from "./errorsEnums";
+
+export const OwnedAsValidator = z.enum(OwnedAsArray, {
+  errorMap: () => ({ message: ErrorsToTranslate.DATA_TYPES.DATA_IS_INVALID }),
 });
