@@ -24,6 +24,7 @@ export const LanguageSwitcher: FC = () => {
         };
 
         switch (locale) {
+          default:
           case "en":
             flagFromLocale = {
               src: FlagOfTheUnitedKingdom,
