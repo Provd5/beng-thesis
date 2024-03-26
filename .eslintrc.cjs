@@ -17,7 +17,12 @@ const config = {
   parserOptions: {
     project: path.join(__dirname, "tsconfig.json"),
   },
-  plugins: ["@typescript-eslint", "unused-imports", "simple-import-sort"],
+  plugins: [
+    "@typescript-eslint",
+    "unused-imports",
+    "simple-import-sort",
+    "import",
+  ],
   extends: ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   rules: {
     "@typescript-eslint/consistent-type-imports": [

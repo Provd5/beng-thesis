@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 
 import { MdNavigateNext } from "react-icons/md";
 
-import { type CategoriesTypes } from "~/types/data/bookshelf";
+import { type CategoriesTypes } from "~/types/consts";
 
 import { BookmarkIcon } from "../ui/Icons/BookmarkIcon";
 import { OwnedBookIcon } from "../ui/Icons/OwnedBookIcon";
