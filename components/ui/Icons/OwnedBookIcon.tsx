@@ -1,6 +1,6 @@
 import { type FC } from "react";
 
-import { type OwnedBookTypes } from "~/types/data/bookshelf";
+import { type OwnedBookTypes } from "~/types/consts";
 
 import { AsAudiobook, AsBook, AsEbook } from "./SvgIcons/OwnedAsIcons";
 

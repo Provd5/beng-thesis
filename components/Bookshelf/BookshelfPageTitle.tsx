@@ -3,7 +3,7 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 
-import { type BookshelvesTypes } from "~/types/data/bookshelf";
+import { type BookshelvesTypes } from "~/types/consts";
 
 import { BookmarkIcon } from "../ui/Icons/BookmarkIcon";
 import { OwnedBookIcon } from "../ui/Icons/OwnedBookIcon";

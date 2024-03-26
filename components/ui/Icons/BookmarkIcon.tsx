@@ -12,7 +12,7 @@ import {
   BsFillBookmarkXFill,
 } from "react-icons/bs";
 
-import { type BookshelvesTypes } from "~/types/data/bookshelf";
+import { type BookshelvesTypes } from "~/types/consts";
 
 type sizes = "default" | "lg" | "sm";
 
