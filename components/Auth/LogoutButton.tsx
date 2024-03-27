@@ -13,7 +13,6 @@ import { createBrowserClient } from "@supabase/ssr";
 
 import { LuLogOut } from "react-icons/lu";
 
-import ROUTES from "~/utils/routes";
 import { translatableError } from "~/utils/translatableError";
 
 import { Loader } from "../ui/Loaders/Loader";
@@ -26,24 +25,26 @@ export const LogoutButton: FC = () => {
     formats?: Partial<Formats> | undefined
   ) => string;
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
   const router = useRouter();
 
   const [isPending, startTransition] = useTransition();
 
-  const signOut = () => {
+  const signOut = async () => {
     try {
-      startTransition(async () => {
-        const { error } = await supabase.auth.signOut();
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
 
-        if (!error) {
-          toast(t("logged out"));
-          router.replace(ROUTES.auth.login);
-        }
+      const { error } = await supabase.auth.signOut();
+
+      if (error) {
+        throw new Error(translatableError(error));
+      }
+
+      toast(t("logged out"));
+      startTransition(() => {
+        router.refresh();
       });
     } catch (error) {
       toast.error(te(translatableError(error)));

@@ -12,10 +12,9 @@ import {
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { AuthService } from "~/lib/services/auth";
+import { login } from "~/lib/services/auth";
 import { LoginValidator } from "~/lib/validations/auth";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
-import ROUTES from "~/utils/routes";
 import { translatableError } from "~/utils/translatableError";
 
 import { ButtonWhite } from "../ui/Buttons";
@@ -29,7 +28,6 @@ export const LoginForm: FC = () => {
     formats?: Partial<Formats> | undefined
   ) => string;
 
-  const authService = new AuthService();
   const router = useRouter();
 
   const captcha = useRef<HCaptcha>(null);
@@ -46,12 +44,13 @@ export const LoginForm: FC = () => {
   const onSubmit = handleSubmit(async (formData) => {
     try {
       const validData = LoginValidator.parse(formData);
-      const res = await authService.login(captchaToken, validData);
-      if (!res.ok) {
+      const res = await login(captchaToken, validData);
+      if (!res.success) {
         throw new Error(ErrorsToTranslate.SOMETHING_WENT_WRONG);
       }
-      toast.success(t("we will redirect you to your profile in a moment")),
-        router.replace(ROUTES.profile.session_profile);
+
+      toast.success(t("we will redirect you to your profile in a moment"));
+      router.refresh();
     } catch (error) {
       toast.error(te(translatableError(error)));
     } finally {
@@ -86,13 +85,15 @@ export const LoginForm: FC = () => {
         id="password-input"
       />
       <div className="mt-1 overflow-hidden rounded-sm">
-        <HCaptcha
-          ref={captcha}
-          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string}
-          onVerify={(token) => {
-            setCaptchaToken(token);
-          }}
-        />
+        {captchaToken === "" && (
+          <HCaptcha
+            ref={captcha}
+            sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string}
+            onVerify={(token) => {
+              setCaptchaToken(token);
+            }}
+          />
+        )}
       </div>
       <ButtonWhite
         loading={isSubmitting}

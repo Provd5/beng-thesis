@@ -9,7 +9,7 @@ import {
 } from "next-intl";
 import { type Provider } from "@supabase/supabase-js";
 
-import { AuthService } from "~/lib/services/auth";
+import { providerAuth } from "~/lib/services/auth";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import { translatableError } from "~/utils/translatableError";
 
@@ -25,14 +25,13 @@ export const Providers: FC = () => {
 
   const Providers: Provider[] = ["discord", "google", "github"];
 
-  const authService = new AuthService();
-
   const onSubmit = async (provider: Provider) => {
     try {
-      const res = await authService.providerAuth(provider);
-      if (!res.ok) {
+      const res = await providerAuth(provider);
+      if (!res.success) {
         throw new Error(ErrorsToTranslate.SOMETHING_WENT_WRONG);
       }
+
       toast.success(
         t("we will redirect you to the provider's website in a moment")
       );

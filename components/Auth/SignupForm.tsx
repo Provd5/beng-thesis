@@ -12,7 +12,7 @@ import {
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { AuthService } from "~/lib/services/auth";
+import { signup } from "~/lib/services/auth";
 import { SignupValidator } from "~/lib/validations/auth";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import ROUTES from "~/utils/routes";
@@ -28,8 +28,6 @@ export const SignupForm: FC = () => {
     values?: TranslationValues | undefined,
     formats?: Partial<Formats> | undefined
   ) => string;
-
-  const authService = new AuthService();
 
   const router = useRouter();
 
@@ -48,10 +46,11 @@ export const SignupForm: FC = () => {
   const onSubmit = handleSubmit(async (formData) => {
     try {
       const validData = SignupValidator.parse(formData);
-      const res = await authService.signup(captchaToken, validData);
-      if (!res.ok) {
+      const res = await signup(captchaToken, validData);
+      if (!res.success) {
         throw new Error(ErrorsToTranslate.SOMETHING_WENT_WRONG);
       }
+
       router.replace(`${ROUTES.auth.signup}?checkMail=${validData.email}`);
     } catch (error) {
       toast.error(te(translatableError(error)));
@@ -91,13 +90,15 @@ export const SignupForm: FC = () => {
         id="repeat-password-input"
       />
       <div className="mt-1 overflow-hidden rounded-sm">
-        <HCaptcha
-          ref={captcha}
-          sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string}
-          onVerify={(token) => {
-            setCaptchaToken(token);
-          }}
-        />
+        {captchaToken === "" && (
+          <HCaptcha
+            ref={captcha}
+            sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string}
+            onVerify={(token) => {
+              setCaptchaToken(token);
+            }}
+          />
+        )}
       </div>
       <ButtonWhite
         loading={isSubmitting}
