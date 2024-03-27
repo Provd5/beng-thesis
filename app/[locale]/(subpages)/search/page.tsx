@@ -27,10 +27,11 @@ export default function SearchPage({
 
   return (
     <>
-      <SearchComponent searchParams={searchParams} />
-      <div className="container pb-12">
-        <SearchFeed searchParams={searchParams} />
-      </div>
+      <SearchComponent searchParams={searchParams}>
+        <div className="container pb-12">
+          <SearchFeed searchParams={searchParams} />
+        </div>
+      </SearchComponent>
     </>
   );
 }

@@ -1,16 +1,17 @@
 import type { FC } from "react";
 import Link from "next/link";
 
-import { getSessionProfile } from "~/lib/services/profile";
+import { type GetProfileInterface } from "~/types/data/profile";
+
 import ROUTES from "~/utils/routes";
 
 import { AvatarImage } from "./AvatarImage";
 
-export const ProfileBadge: FC = async () => {
-  const profileData = await getSessionProfile();
+interface ProfileBadgeProps {
+  profileData: GetProfileInterface;
+}
 
-  if (!profileData) return;
-
+export const ProfileBadge: FC<ProfileBadgeProps> = ({ profileData }) => {
   return (
     <Link
       className="mx-[-14px] flex items-center gap-1.5 py-1 text-sm"

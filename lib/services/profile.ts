@@ -96,39 +96,41 @@ export async function getAllProfiles(
       data: { session },
     } = await readUserSession();
 
-    const allItems = await getProfileQuantity(q);
-    const profiles = await db.profile.findMany({
-      skip: (page - 1) * itemsPerPage,
-      take: itemsPerPage,
-      orderBy:
-        orderBy === "activity"
-          ? [
-              { review: { _count: order } },
-              { review_reaction: { _count: order } },
-              { followed_by: { _count: order } },
-              { following: { _count: order } },
-              { book_owned_as: { _count: order } },
-              { bookshelf: { _count: order } },
-              { liked_book: { _count: order } },
-            ]
-          : orderBy === "books_on_shelves"
-          ? { bookshelf: { _count: order } }
-          : orderBy === "followers"
-          ? { followed_by: { _count: order } }
-          : orderBy === "owned_books"
-          ? { book_owned_as: { _count: order } }
-          : orderBy === "reviews"
-          ? { review: { _count: order } }
-          : { [orderBy]: order },
-      where: {
-        private: { not: true },
-        full_name: {
-          not: null,
-          ...(q ? { contains: q, mode: "insensitive" } : {}),
+    const [allItems, profiles] = await Promise.all([
+      getProfileQuantity(q),
+      db.profile.findMany({
+        skip: (page - 1) * itemsPerPage,
+        take: itemsPerPage,
+        orderBy:
+          orderBy === "activity"
+            ? [
+                { review: { _count: order } },
+                { review_reaction: { _count: order } },
+                { followed_by: { _count: order } },
+                { following: { _count: order } },
+                { book_owned_as: { _count: order } },
+                { bookshelf: { _count: order } },
+                { liked_book: { _count: order } },
+              ]
+            : orderBy === "books_on_shelves"
+            ? { bookshelf: { _count: order } }
+            : orderBy === "followers"
+            ? { followed_by: { _count: order } }
+            : orderBy === "owned_books"
+            ? { book_owned_as: { _count: order } }
+            : orderBy === "reviews"
+            ? { review: { _count: order } }
+            : { [orderBy]: order },
+        where: {
+          private: { not: true },
+          full_name: {
+            not: null,
+            ...(q ? { contains: q, mode: "insensitive" } : {}),
+          },
         },
-      },
-      include: profileSelector(session?.user.id),
-    });
+        include: profileSelector(session?.user.id),
+      }),
+    ]);
 
     const transformedData = profiles.map((profile) =>
       transformProfileData(!!session, profile)

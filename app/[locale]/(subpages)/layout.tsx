@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { unstable_setRequestLocale } from "next-intl/server";
 
 import { Badges } from "~/components/Links/Badges";
 import { Logo } from "~/components/Logo";
+import { Loader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
 
 export default function SubpagesLayout({
@@ -17,7 +19,9 @@ export default function SubpagesLayout({
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll scroll-smooth">
       <Logo />
       <div className="flex h-12 flex-none items-center self-end px-3 text-white">
-        <Badges />
+        <Suspense fallback={<Loader />}>
+          <Badges />
+        </Suspense>
       </div>
       <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/90 dark:bg-black/90 md:rounded-none">
         {children}

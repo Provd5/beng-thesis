@@ -72,23 +72,23 @@ export async function getBookshelfQuantity(
   const decodedProfileName = decodeURIComponent(profileName);
 
   try {
-    let quantity = 0;
+    let quantityPromise;
 
     switch (bookshelf) {
       case "LIKED":
-        quantity = await db.liked_books.count({
+        quantityPromise = db.liked_books.count({
           where: { profile: { full_name: decodedProfileName } },
         });
         break;
 
       case "REVIEWS":
-        quantity = await db.review.count({
+        quantityPromise = db.review.count({
           where: { profile: { full_name: decodedProfileName } },
         });
         break;
 
       case "OWNED":
-        quantity = await db.book_owned_as.count({
+        quantityPromise = db.book_owned_as.count({
           where: {
             profile: { full_name: decodedProfileName },
             NOT: {
@@ -103,11 +103,13 @@ export async function getBookshelfQuantity(
         break;
 
       default:
-        quantity = await db.bookshelf.count({
+        quantityPromise = db.bookshelf.count({
           where: { profile: { full_name: decodedProfileName }, bookshelf },
         });
         break;
     }
+
+    const quantity = await quantityPromise;
 
     return quantity;
   } catch (e) {
@@ -231,12 +233,11 @@ export async function getBookshelfPreview(
   const decodedProfileName = decodeURIComponent(profileName);
 
   try {
-    const allItems = await getBookshelfQuantity(decodedProfileName, bookshelf);
-    let books = [];
+    let booksPromise;
 
     switch (bookshelf) {
       case "LIKED":
-        books = await db.liked_books.findMany({
+        booksPromise = db.liked_books.findMany({
           take: itemsPerPage,
           orderBy: { updated_at: "desc" },
           where: { profile: { full_name: decodedProfileName } },
@@ -245,7 +246,7 @@ export async function getBookshelfPreview(
         break;
 
       case "REVIEWS":
-        books = await db.review.findMany({
+        booksPromise = db.review.findMany({
           take: itemsPerPage,
           orderBy: { updated_at: "desc" },
           where: { profile: { full_name: decodedProfileName } },
@@ -254,7 +255,7 @@ export async function getBookshelfPreview(
         break;
 
       case "OWNED":
-        books = await db.book_owned_as.findMany({
+        booksPromise = db.book_owned_as.findMany({
           take: itemsPerPage,
           orderBy: { updated_at: "desc" },
           where: {
@@ -272,13 +273,18 @@ export async function getBookshelfPreview(
         break;
 
       default:
-        books = await db.bookshelf.findMany({
+        booksPromise = db.bookshelf.findMany({
           take: itemsPerPage,
           where: { profile: { full_name: decodedProfileName }, bookshelf },
           select: bookshelfPreviewSelector,
         });
         break;
     }
+
+    const [allItems, books] = await Promise.all([
+      getBookshelfQuantity(decodedProfileName, bookshelf),
+      booksPromise,
+    ]);
 
     return {
       data: books.map(({ book }) => book),
