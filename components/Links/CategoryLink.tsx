@@ -7,20 +7,20 @@ import { useTranslations } from "next-intl";
 
 import { MdNavigateNext } from "react-icons/md";
 
-import { type CategoriesTypes } from "~/types/consts";
+import { type BookshelvesTypes } from "~/types/consts";
 
 import { BookmarkIcon } from "../ui/Icons/BookmarkIcon";
 import { OwnedBookIcon } from "../ui/Icons/OwnedBookIcon";
 
 interface CategoryLinkProps {
-  categoryVariant: CategoriesTypes;
+  bookshelfVariant: BookshelvesTypes;
   href: Url;
   replace?: boolean;
   allItems?: number;
 }
 
 export const CategoryLink: FC<CategoryLinkProps> = ({
-  categoryVariant,
+  bookshelfVariant,
   href,
   replace = false,
   allItems,
@@ -36,14 +36,13 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
       >
         <div className="text-lg font-semibold text-secondary dark:text-secondary-light">
           <div className="flex items-center gap-1">
-            {categoryVariant !== "STATISTICS" &&
-              (categoryVariant === "OWNED" ? (
-                <OwnedBookIcon ownedAs="BOOK" size="sm" />
-              ) : (
-                <BookmarkIcon category={categoryVariant} />
-              ))}
+            {bookshelfVariant === "OWNED" ? (
+              <OwnedBookIcon ownedAs="BOOK" size="sm" />
+            ) : (
+              <BookmarkIcon category={bookshelfVariant} />
+            )}
             <h1>
-              {t(categoryVariant)}
+              {t(bookshelfVariant)}
               {allItems !== undefined && ` – ${allItems}`}
             </h1>
           </div>

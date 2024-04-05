@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
-import { CategoriesArray } from "~/types/consts";
+import { BookshelvesArray } from "~/types/consts";
 
 import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 import ROUTES from "~/utils/routes";
@@ -23,9 +23,9 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
   const pathname = usePathname();
   const pathnameParts = pathname.split("/");
 
-  return CategoriesArray.map((categoryVariant) => {
+  return BookshelvesArray.map((bookshelfVariant) => {
     const categoryVariantAsPathname =
-      convertTypeEnumToPathname(categoryVariant);
+      convertTypeEnumToPathname(bookshelfVariant);
     const isActive = () => {
       if (pathnameParts[4] === categoryVariantAsPathname) return true;
 
@@ -34,11 +34,11 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
 
     return (
       <Link
-        key={categoryVariant}
+        key={bookshelfVariant}
         replace
         href={ROUTES.profile.bookshelf(
           profileName,
-          convertTypeEnumToPathname(categoryVariant)
+          convertTypeEnumToPathname(bookshelfVariant)
         )}
         className={clsx(
           "whitespace-nowrap rounded-xl border border-secondary px-5 py-2.5 text-sm dark:border-secondary-light",
@@ -47,7 +47,7 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
             : "text-secondary dark:text-secondary-light"
         )}
       >
-        {t(categoryVariant)}
+        {t(bookshelfVariant)}
       </Link>
     );
   });

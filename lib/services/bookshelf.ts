@@ -21,6 +21,10 @@ import { sortParamsValidator } from "~/utils/sortParamsValidator";
 import { db } from "../db";
 import { errorHandler } from "../errorHandler";
 import readUserSession from "../supabase/readUserSession";
+import {
+  bookshelfPreviewSelector,
+  bookshelvesSelector,
+} from "../utils/bookshelvesSelector";
 import { totalPages } from "../utils/totalPages";
 import { transformBookData } from "../utils/transformBookData";
 import { transformReviewBookshelfData } from "../utils/transformReviewBookshelfData";
@@ -29,41 +33,6 @@ import { ErrorsToTranslate } from "../validations/errorsEnums";
 import { UuidValidator } from "../validations/others";
 
 const itemsPerPage = 10;
-
-const bookshelfPreviewSelector = {
-  book: {
-    select: {
-      id: true,
-      title: true,
-      authors: true,
-      thumbnail_url: true,
-    },
-  },
-};
-
-const bookshelvesSelector = (sessionId?: string) => {
-  return {
-    book: {
-      include: {
-        _count: { select: { review: true, liked_by: true } },
-        review: { select: { rate: true } },
-        ...(sessionId
-          ? {
-              book_owned_as: {
-                where: { profile: { id: sessionId } },
-              },
-              bookshelf: {
-                where: { profile: { id: sessionId } },
-              },
-              liked_by: {
-                where: { profile: { id: sessionId } },
-              },
-            }
-          : {}),
-      },
-    },
-  };
-};
 
 export async function getBookshelfQuantity(
   profileName: string,

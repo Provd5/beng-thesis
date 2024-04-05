@@ -108,8 +108,9 @@
 
   "Profile": {
     "Page": {
-      "followers:": "Followers:",
-      "following:": "Following:",
+      "followers": "Followers",
+      "following": "Following",
+      "statistics": "Statistics",
       "reviews:": "Reviews:",
       "profile description:": "Profile descrtiption:",
       "public/private profile": "{view, select, public {Pubilc} private {Private} other {}}",
@@ -160,19 +161,18 @@
       "read books": "Read Books"
     },
     "OwnedBooks": {
-      "unique:": "Unique:",
-      "total in all forms:": "Total in all forms:"
+      "last change:": "Last change:",
+      "last added:": "Last added book:",
+      "total owned books:": "Total owned books:",
+      "no owned books": "You haven't marked any book as owned yet"
     },
     "ReadBooks": {
-      "shortest-read:": "Shortest-read:",
-      "longest-read:": "Longest-read:",
-      "last:": "Last:",
-      "book with most pages:": "Book with most pages:",
+      "last change:": "Last change:",
+      "last read:": "Last read:",
       "most read book:": "Most read book:",
       "read quantity": "read <span>{numRead}</span> times",
-      "read in": "read in <span>{numDays, plural, =0 {less than a day} =1 {# day} other {# days}}</span>",
-      "pages:": "pages:",
-      "total pages read:": "Total pages read:"
+      "total pages read:": "Total pages read:",
+      "no read books": "You haven't marked any book as already read yet"
     }
   },
 

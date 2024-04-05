@@ -31,11 +31,11 @@ model profile {
 }
 
 model follows {
-  follower_id  String    @db.Uuid
-  following_id String    @db.Uuid
-  updated_at   DateTime? @updatedAt @db.Timestamptz(6)
-  follower     profile   @relation("follower", fields: [follower_id], references: [id])
-  following    profile   @relation("following", fields: [following_id], references: [id])
+  follower_id  String   @db.Uuid
+  following_id String   @db.Uuid
+  updated_at   DateTime @default(now()) @updatedAt @db.Timestamptz(6)
+  follower     profile  @relation("follower", fields: [follower_id], references: [id])
+  following    profile  @relation("following", fields: [following_id], references: [id])
 
   @@id([follower_id, following_id])
   @@schema("public")
@@ -89,7 +89,7 @@ model book {
 }
 
 model bookshelf {
-  updated_at       DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at       DateTime       @default(now()) @updatedAt @db.Timestamptz(6)
   bookshelf        bookshelfType?
   user_id          String         @db.Uuid
   book_id          String         @db.Uuid
@@ -107,7 +107,7 @@ model book_owned_as {
   added_book_at      DateTime? @db.Timestamptz(6)
   added_ebook_at     DateTime? @db.Timestamptz(6)
   added_audiobook_at DateTime? @db.Timestamptz(6)
-  updated_at         DateTime? @updatedAt @db.Timestamptz(6)
+  updated_at         DateTime  @default(now()) @updatedAt @db.Timestamptz(6)
   user_id            String    @db.Uuid
   book_id            String    @db.Uuid
   book               book      @relation(fields: [book_id], references: [id])

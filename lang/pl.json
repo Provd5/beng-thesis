@@ -108,8 +108,9 @@
 
   "Profile": {
     "Page": {
-      "followers:": "Obserwujących:",
-      "following:": "Obserwowani:",
+      "followers": "Obserwujących",
+      "following": "Obserwowani",
+      "statistics": "Statystyki",
       "reviews:": "Recenzje:",
       "profile description:": "Opis profilu:",
       "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}",
@@ -160,19 +161,18 @@
       "read books": "Przeczytane książki"
     },
     "OwnedBooks": {
-      "unique:": "Unikalne:",
-      "total in all forms:": "Łącznie w każdej postaci:"
+      "last change:": "Ostatnia zmiana:",
+      "last added:": "Ostatnio dodana książka:",
+      "total owned books:": "Wszystkie posiadane książki:",
+      "no owned books": "Nie oznaczyłeś jeszcze żadnej książki jako posiadanej"
     },
     "ReadBooks": {
-      "shortest-read:": "Najkrócej czytane:",
-      "longest-read:": "Najdłużej czytane:",
-      "last:": "Ostatnio:",
-      "book with most pages:": "Książka z największą liczbą stron:",
+      "last change:": "Ostatnia zmiana:",
+      "last read:": "Ostatnio przeczytana:",
       "most read book:": "Najczęściej czytana książka:",
       "read quantity": "przeczytano <span>{numRead}</span> razy",
-      "read in": "przeczytano w <span>{numDays, plural, =0 {mniej niż dzień} =1 {# dzień} other {# dni}}</span>",
-      "pages:": "stron:",
-      "total pages read:": "Suma przeczytanych stron:"
+      "total pages read:": "Suma przeczytanych stron:",
+      "no read books": "Nie oznaczyłeś jeszcze żadnej książki jako przeczytanej"
     }
   },
 

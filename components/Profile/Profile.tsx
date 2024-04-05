@@ -6,7 +6,7 @@ import readUserSession from "~/lib/supabase/readUserSession";
 
 import { AvatarImage } from "./AvatarImage";
 import { FollowButton } from "./Follows/FollowButton";
-import { FollowLink } from "./Follows/FollowLink";
+import { ProfileSubpageLink } from "./Follows/FollowLink";
 import { PrivateProfilePage } from "./PrivateProfilePage";
 import { ProfileDescription } from "./ProfileDescription";
 import { ProfileStatus } from "./ProfileStatus";
@@ -39,15 +39,20 @@ export const Profile: FC<ProfileProps> = async ({ profileName, children }) => {
           </div>
           <div className="mx-0.5 mt-3">
             <div className="flex w-fit flex-col gap-2 text-sm">
-              <FollowLink
+              <ProfileSubpageLink
                 profileName={profileName}
                 variant="followers"
                 quantity={profileData._count.followed_by}
               />
-              <FollowLink
+              <ProfileSubpageLink
                 profileName={profileName}
                 variant="following"
                 quantity={profileData._count.following}
+              />
+              <ProfileSubpageLink
+                profileName={profileName}
+                variant="statistics"
+                quantity={0}
               />
               {!isMyProfile && (
                 <FollowButton

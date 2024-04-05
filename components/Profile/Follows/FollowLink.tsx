@@ -10,13 +10,13 @@ import { MdNavigateNext } from "react-icons/md";
 
 import ROUTES from "~/utils/routes";
 
-interface FollowLinkProps {
+interface ProfileSubpageLinkProps {
   profileName: string;
-  variant: "followers" | "following";
+  variant: "followers" | "following" | "statistics";
   quantity: number;
 }
 
-export const FollowLink: FC<FollowLinkProps> = ({
+export const ProfileSubpageLink: FC<ProfileSubpageLinkProps> = ({
   profileName,
   variant,
   quantity,
@@ -28,6 +28,7 @@ export const FollowLink: FC<FollowLinkProps> = ({
   const pageRoutes = {
     followers: ROUTES.profile.followers(profileName),
     following: ROUTES.profile.following(profileName),
+    statistics: ROUTES.profile.statistics(profileName),
   };
 
   const isActive = () => {
@@ -47,8 +48,8 @@ export const FollowLink: FC<FollowLinkProps> = ({
           isActive() && "text-secondary dark:text-secondary-light"
         )}
       >
-        <h1 className="py-0.5 font-semibold">{t(`${variant}:`)}</h1>
-        <p className="ml-1">{quantity}</p>
+        <h1 className="py-0.5 font-semibold">{t(variant)}</h1>
+        {quantity > 0 && <p>: {quantity}</p>}
         {!isActive() && <MdNavigateNext className="text-lg" />}
       </div>
     </Link>

@@ -14,7 +14,7 @@ interface ProfileBadgeProps {
 export const ProfileBadge: FC<ProfileBadgeProps> = ({ profileData }) => {
   return (
     <Link
-      className="mx-[-14px] flex items-center gap-1.5 py-1 text-sm"
+      className="mx-[-8px] flex items-center gap-1.5 py-1 text-sm"
       href={ROUTES.profile.session_profile}
     >
       <AvatarImage avatarSrc={profileData.avatar_url} size="xs" />
