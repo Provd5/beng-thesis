@@ -7,11 +7,7 @@ import {
   useRef,
 } from "react";
 import toast from "react-hot-toast";
-import {
-  type ReadonlyURLSearchParams,
-  usePathname,
-  useRouter,
-} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   type Formats,
   type TranslationValues,
@@ -28,7 +24,7 @@ import { Input } from "../ui/Input";
 
 interface SearchEngineProps {
   startTransition: TransitionStartFunction;
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }
 
 export const SearchEngine: FC<SearchEngineProps> = ({
@@ -54,7 +50,7 @@ export const SearchEngine: FC<SearchEngineProps> = ({
 
   const handleSearch = useDebouncedCallback(() => {
     const inputValue = inputRef.current?.value;
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(validSearchCategory);
 
     if (inputValue) {
       if (inputValue.length < 2) {

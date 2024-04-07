@@ -1,5 +1,4 @@
 import { type FC } from "react";
-import { type ReadonlyURLSearchParams } from "next/navigation";
 
 import { type BookshelvesTypes } from "~/types/consts";
 import { SortBookshelvesArray } from "~/types/orderArrays";
@@ -14,7 +13,7 @@ import { BookshelfPageTitle } from "./BookshelfPageTitle";
 interface BookshelfFeedProps {
   profileName: string;
   bookshelf: Exclude<BookshelvesTypes, "REVIEWS">;
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }
 
 export const BookshelfFeed: FC<BookshelfFeedProps> = async ({
@@ -38,7 +37,7 @@ export const BookshelfFeed: FC<BookshelfFeedProps> = async ({
           totalPages={books.totalPages}
           orderArray={SortBookshelvesArray}
         >
-          <div className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 gap-6 2xl:grid-cols-2">
             {books.data.map((book) => (
               <BookCard key={book.book.id} bookData={book} />
             ))}

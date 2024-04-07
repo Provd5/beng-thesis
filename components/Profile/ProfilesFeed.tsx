@@ -1,5 +1,4 @@
 import { type FC } from "react";
-import { type ReadonlyURLSearchParams } from "next/navigation";
 
 import { SortProfilesArray } from "~/types/orderArrays";
 
@@ -11,7 +10,7 @@ import { NotFoundItems } from "../ui/NotFound/NotFoundItems";
 import { ProfileCard } from "./ProfileCard/ProfileCard";
 
 interface ProfilesFeedProps {
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
   q?: string;
 }
 

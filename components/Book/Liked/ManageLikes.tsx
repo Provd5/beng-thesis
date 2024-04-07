@@ -17,6 +17,7 @@ export const ManageLikes: FC<ManageLikesProps> = ({
 }) => {
   return (
     <LikeBookForm
+      key={`LikeBookForm-${bookId}`}
       bookId={bookId}
       likeData={likeData}
       likesQuantity={likesQuantity}

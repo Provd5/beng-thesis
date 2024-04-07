@@ -1,7 +1,5 @@
 "use server";
 
-import { type ReadonlyURLSearchParams } from "next/navigation";
-
 import { type GetBookInterface } from "~/types/data/book";
 import { type GetDataList } from "~/types/list";
 import { SortBooksArray } from "~/types/orderArrays";
@@ -48,7 +46,7 @@ export async function getBookQuantity(q?: string): Promise<number> {
 }
 
 export async function getAllBooks(
-  searchParams: ReadonlyURLSearchParams,
+  searchParams: unknown,
   q?: string
 ): Promise<GetDataList<GetBookInterface>> {
   const validSearchParams = sortParamsValidator(searchParams, SortBooksArray);

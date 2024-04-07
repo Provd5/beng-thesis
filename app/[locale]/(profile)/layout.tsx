@@ -19,7 +19,7 @@ export default function ProfileLayout({
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll scroll-smooth">
       <Logo />
       <div className="flex h-[68px] flex-none self-end p-3 text-white">
-        <Suspense fallback={<Loader />}>
+        <Suspense key={"Badges"} fallback={<Loader />}>
           <Badges />
         </Suspense>
       </div>

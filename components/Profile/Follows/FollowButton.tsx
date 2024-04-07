@@ -10,5 +10,11 @@ interface FollowButtonProps {
 export const FollowButton: FC<FollowButtonProps> = ({ userId, isFollowed }) => {
   if (isFollowed === undefined) return;
 
-  return <FollowForm userId={userId} isFollowed={isFollowed} />;
+  return (
+    <FollowForm
+      key={`FollowForm-${userId}`}
+      userId={userId}
+      isFollowed={isFollowed}
+    />
+  );
 };

@@ -24,7 +24,7 @@ export default function EditProfilePage({
   unstable_setRequestLocale(locale);
 
   return (
-    <Suspense fallback={<EditProfileLoader />}>
+    <Suspense key={"ManageProfile"} fallback={<EditProfileLoader />}>
       <ManageProfile />
     </Suspense>
   );

@@ -1,5 +1,4 @@
 import { type FC, Suspense } from "react";
-import { type ReadonlyURLSearchParams } from "next/navigation";
 
 import { searchCategoryValidator } from "~/utils/searchCategoryValidator";
 
@@ -9,7 +8,7 @@ import { LargeComponentLoader } from "../ui/Loaders/Loader";
 import { EmptyQuery } from "./EmptyQuery";
 
 interface SearchFeedProps {
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }
 
 export const SearchFeed: FC<SearchFeedProps> = ({ searchParams }) => {
@@ -20,11 +19,17 @@ export const SearchFeed: FC<SearchFeedProps> = ({ searchParams }) => {
   return (
     <>
       {validSearchCategory.category === "profiles" ? (
-        <Suspense fallback={<LargeComponentLoader />}>
+        <Suspense
+          key={"SearchFeed-ProfilesFeed"}
+          fallback={<LargeComponentLoader />}
+        >
           <ProfilesFeed searchParams={searchParams} q={validSearchCategory.q} />
         </Suspense>
       ) : (
-        <Suspense fallback={<LargeComponentLoader />}>
+        <Suspense
+          key={"SearchFeed-BooksFeed"}
+          fallback={<LargeComponentLoader />}
+        >
           <BooksFeed searchParams={searchParams} q={validSearchCategory.q} />
         </Suspense>
       )}

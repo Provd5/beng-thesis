@@ -21,19 +21,22 @@ export const OwnedAsStatisticsDetails: FC<OwnedAsStatisticsDetailsProps> = ({
     return <h1>{t("no owned books")}</h1>;
 
   return (
-    <div>
-      <div className="flex flex-col">
-        <h2 className="font-semibold">{t("last change:")}</h2>
-        <span>{dateFormater(ownedBooks.updatedAt)}</span>
+    <div className="mx-auto flex flex-col gap-3">
+      <div className="flex flex-col justify-center gap-x-6 gap-y-3 md:flex-row">
+        <div className="flex flex-col items-center">
+          <h2 className="font-semibold">{t("last change:")}</h2>
+          <span>{dateFormater(ownedBooks.updatedAt)}</span>
+        </div>
+        <div className="flex flex-col items-center">
+          <h2 className="font-semibold">{t("last added:")}</h2>
+          <SmallBookCard bookData={ownedBooks.lastAdded} />
+        </div>
       </div>
-      <div className="flex flex-col">
-        <h2 className="font-semibold">{t("last added:")}</h2>
-        <SmallBookCard bookData={ownedBooks.lastAdded} />
-      </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col items-center">
         <h2 className="font-semibold">
           {t("total owned books:")}
           <span className="text-md text-colors-primary">
+            {" "}
             {ownedBooks.totalOwnedBooks}
           </span>
         </h2>

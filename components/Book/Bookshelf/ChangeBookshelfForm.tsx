@@ -150,12 +150,13 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
                 max: dateFormater(newBookshelfData.updated_at),
               })}
               id="began-reading-at-date-input"
-              onChange={(e) =>
+              onChange={(e) => (
+                setValue("began_reading_at", e.target.valueAsDate),
                 setNewBookshelfData({
                   ...newBookshelfData,
                   began_reading_at: e.target.valueAsDate,
                 })
-              }
+              )}
               className="cursor-pointer rounded border border-colors-text/30 p-1 text-lg text-colors-text"
             />
           </div>
@@ -175,12 +176,13 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
                 max: new Date().toISOString().split("T")[0],
               })}
               id="updated-at-date-input"
-              onChange={(e) =>
+              onChange={(e) => (
+                setValue("updated_at", e.target.valueAsDate || new Date()),
                 setNewBookshelfData({
                   ...newBookshelfData,
                   updated_at: e.target.valueAsDate || new Date(),
                 })
-              }
+              )}
               className="cursor-pointer rounded border border-colors-text/30 p-1 text-lg text-colors-text"
             />
           </div>

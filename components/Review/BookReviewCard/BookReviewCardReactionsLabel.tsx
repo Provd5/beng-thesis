@@ -16,11 +16,7 @@ export const BookReviewCardReactionsLabel: FC<
     <p>
       {t.rich("users found this review helpful", {
         numUsers: upReactions,
-        span: (chunks) => (
-          <span className="text-colors-primarytext-colors-primary">
-            {chunks}
-          </span>
-        ),
+        span: (chunks) => <span className="text-colors-primary">{chunks}</span>,
       })}
     </p>
   );

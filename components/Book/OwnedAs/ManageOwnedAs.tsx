@@ -15,5 +15,11 @@ export const ManageOwnedAs: FC<ManageOwnedAsProps> = ({
 }) => {
   if (ownedAsData === undefined) return;
 
-  return <AddOwnedAsForm bookId={bookId} ownedAsData={ownedAsData} />;
+  return (
+    <AddOwnedAsForm
+      key={`AddOwnedAsForm-${bookId}`}
+      bookId={bookId}
+      ownedAsData={ownedAsData}
+    />
+  );
 };

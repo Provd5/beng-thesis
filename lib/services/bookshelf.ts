@@ -1,6 +1,6 @@
 "use server";
 
-import { type ReadonlyURLSearchParams } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 import { type BookshelvesTypes } from "~/types/consts";
 import { type GetBookInterface } from "~/types/data/book";
@@ -16,6 +16,7 @@ import {
   type SortReviewBookshelfType,
 } from "~/types/sort";
 
+import ROUTES from "~/utils/routes";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
 import { db } from "../db";
@@ -89,7 +90,7 @@ export async function getBookshelfQuantity(
 export async function getBookshelfBooks(
   bookshelf: Exclude<BookshelvesTypes, "REVIEWS">,
   profileName: string,
-  searchParams: ReadonlyURLSearchParams
+  searchParams: unknown
 ): Promise<GetDataList<GetBookInterface>> {
   const decodedProfileName = decodeURIComponent(profileName);
 
@@ -266,7 +267,7 @@ export async function getBookshelfPreview(
 
 export async function getReviewBooks(
   profileName: string,
-  searchParams: ReadonlyURLSearchParams
+  searchParams: unknown
 ): Promise<GetDataList<GetBookInterface & { review: ReviewInterface }>> {
   const decodedProfileName = decodeURIComponent(profileName);
 
@@ -327,7 +328,7 @@ export async function getReviewBooks(
 
 export async function changeBookshelf(
   bookId: unknown,
-  formData: object
+  formData: unknown
 ): Promise<{ success: boolean }> {
   try {
     const {
@@ -348,15 +349,6 @@ export async function changeBookshelf(
           : 1
         : undefined;
 
-    // Filter out properties with null values
-    const filteredData = Object.fromEntries(
-      Object.entries(validData).filter(
-        ([key, value]) =>
-          value !== undefined &&
-          (key === "updated_at" || key === "began_reading_at")
-      )
-    );
-
     await db.bookshelf.upsert({
       where: {
         user_id_book_id: {
@@ -367,17 +359,20 @@ export async function changeBookshelf(
       update: {
         bookshelf: validData.bookshelf,
         read_quantity: validQuantity,
-        ...filteredData,
+        updated_at: validData.updated_at,
+        began_reading_at: validData.began_reading_at,
       },
       create: {
         book_id: validBookId,
         user_id: session.user.id,
         bookshelf: validData.bookshelf,
         read_quantity: validQuantity,
-        ...filteredData,
+        updated_at: validData.updated_at,
+        began_reading_at: validData.began_reading_at,
       },
     });
 
+    revalidatePath(ROUTES.profile.session_profile, "page");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));

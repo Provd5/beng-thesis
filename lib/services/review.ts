@@ -1,7 +1,5 @@
 "use server";
 
-import { type ReadonlyURLSearchParams } from "next/navigation";
-
 import {
   type GetReviewInterface,
   type GetReviewReactionInterface,
@@ -40,7 +38,7 @@ export async function getReviewQuantity(bookId: string): Promise<number> {
 
 export async function getAllReviews(
   bookId: string,
-  searchParams: ReadonlyURLSearchParams
+  searchParams: unknown
 ): Promise<GetDataList<GetReviewInterface>> {
   const validSearchParams = sortParamsValidator(searchParams, SortReviewsArray);
   const { order, orderBy: defaultOrderBy, page } = validSearchParams;

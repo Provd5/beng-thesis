@@ -91,6 +91,7 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
           openModalButtonRef={openModalButtonRef}
         >
           <ChangeBookshelfForm
+            key={`ChangeBookshelfForm-${bookId}`}
             bookId={bookId}
             bookshelfData={bookshlefState}
             setBookshlefState={setBookshlefState}

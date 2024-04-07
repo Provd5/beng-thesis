@@ -19,7 +19,7 @@ export default function SubpagesLayout({
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll scroll-smooth">
       <Logo />
       <div className="flex h-12 flex-none items-center self-end px-3 text-white">
-        <Suspense fallback={<Loader />}>
+        <Suspense key={"Badges"} fallback={<Loader />}>
           <Badges />
         </Suspense>
       </div>

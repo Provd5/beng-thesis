@@ -24,7 +24,7 @@ export default function ProfileFullnameLayout({
   unstable_setRequestLocale(locale);
 
   return (
-    <Suspense fallback={<ProfileLoader />}>
+    <Suspense key={`profile-${fullname}`} fallback={<ProfileLoader />}>
       <Profile profileName={fullname}>{children}</Profile>
     </Suspense>
   );

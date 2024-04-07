@@ -77,6 +77,7 @@ export const Book: FC<BookProps> = async ({ bookId, children }) => {
         </div>
         <div className="flex w-full flex-wrap justify-center gap-2 self-start">
           <Suspense
+            key={"Book-ManageReviews"}
             fallback={
               <div className="h-[70px] w-36 rounded-md bg-white/90 dark:bg-black/30" />
             }

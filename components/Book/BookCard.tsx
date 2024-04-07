@@ -44,17 +44,20 @@ export const BookCard: FC<BookCardProps> = ({ bookData }) => {
           </div>
           <div className="flex gap-2 max-md:flex-wrap">
             <ManageLikes
+              key={`ManageLikes-${bookData.book.id}`}
               bookId={bookData.book.id}
               likesQuantity={bookData._count.liked_by}
               likeData={bookData.liked_by}
             />
 
             <ManageOwnedAs
+              key={`ManageOwnedAs-${bookData.book.id}`}
               bookId={bookData.book.id}
               ownedAsData={bookData.book_owned_as}
             />
 
             <ManageBookshelf
+              key={`ManageBookshelf-${bookData.book.id}`}
               bookId={bookData.book.id}
               bookshelfData={bookData.bookshelf}
             />

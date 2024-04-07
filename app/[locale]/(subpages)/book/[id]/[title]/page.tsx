@@ -28,7 +28,7 @@ export default function BookPage({
           bookshelfVariant="REVIEWS"
           replace
         />
-        <Suspense fallback={<LargeComponentLoader />}>
+        <Suspense key={"MyReview"} fallback={<LargeComponentLoader />}>
           <MyReview bookId={id} />
         </Suspense>
       </div>
