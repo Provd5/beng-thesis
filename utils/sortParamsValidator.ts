@@ -1,3 +1,5 @@
+import { type ReadonlyURLSearchParams } from "next/navigation";
+
 import { type OrderType, type SortsType } from "~/types/sort";
 
 import { orderArray, type SortArrayInterface } from "../types/orderArrays";
@@ -10,7 +12,9 @@ export const sortParamsValidator = (
   order: OrderType;
   orderBy: SortsType;
 } => {
-  const urlSearchParams = new URLSearchParams(searchParams);
+  const urlSearchParams = new URLSearchParams(
+    searchParams as ReadonlyURLSearchParams
+  );
 
   const page = urlSearchParams.get("page");
   const parsedPage = page ? parseInt(page) : 0;
