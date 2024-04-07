@@ -81,7 +81,6 @@ export const SearchEngine: FC<SearchEngineProps> = ({
         id="search-input"
         name="q"
         type="search"
-        inverted
         min={2}
         defaultValue={validSearchCategory.q || ""}
         placeholder={
