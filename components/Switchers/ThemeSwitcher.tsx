@@ -2,60 +2,67 @@
 
 import { type Dispatch, type FC, type SetStateAction, useState } from "react";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
 
 import { type IconType } from "react-icons/lib";
 import { FaSun } from "react-icons/fa";
 import { IoDesktop } from "react-icons/io5";
 import { MdNightsStay } from "react-icons/md";
 
+import { cn } from "~/utils/cn";
+
 type themeTypes = "default" | "light" | "dark";
 
 export const ThemeSwitcher: FC = () => {
-  const [currentTheme, setCurrentTheme] = useState<themeTypes>(
-    (localStorage.theme as themeTypes) || "default"
-  );
+  const storedTheme = localStorage.getItem("theme") || "default";
+
+  const themes: themeTypes[] = ["default", "light", "dark"];
+  const validTheme = themes.includes(storedTheme as themeTypes)
+    ? (storedTheme as themeTypes)
+    : "default";
+
+  const [currentTheme, setCurrentTheme] = useState<themeTypes>(validTheme);
 
   return (
-    <>
-      <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
+      {themes.map((theme) => (
         <ThemeButton
+          key={theme}
           setCurrentTheme={setCurrentTheme}
-          active={currentTheme === "default"}
-          Icon={IoDesktop}
-          theme={"default"}
+          active={currentTheme === theme}
+          theme={theme}
         />
-        <ThemeButton
-          setCurrentTheme={setCurrentTheme}
-          active={currentTheme === "light"}
-          Icon={FaSun}
-          theme={"light"}
-        />
-        <ThemeButton
-          setCurrentTheme={setCurrentTheme}
-          active={currentTheme === "dark"}
-          Icon={MdNightsStay}
-          theme={"dark"}
-        />
-      </div>
-    </>
+      ))}
+    </div>
   );
 };
 
 interface ThemeButtonProps {
-  Icon: IconType;
   theme: themeTypes;
   setCurrentTheme: Dispatch<SetStateAction<themeTypes>>;
   active: boolean;
 }
 
 const ThemeButton: FC<ThemeButtonProps> = ({
-  Icon,
   theme,
   setCurrentTheme,
   active,
 }) => {
   const t = useTranslations("Nav.Theme");
+
+  let Icon: IconType;
+  switch (theme) {
+    case "dark":
+      Icon = MdNightsStay;
+      break;
+
+    case "light":
+      Icon = FaSun;
+      break;
+
+    default:
+      Icon = IoDesktop;
+      break;
+  }
 
   const handleToggleTheme = (theme: themeTypes) => {
     if (theme === "default") {
@@ -86,23 +93,17 @@ const ThemeButton: FC<ThemeButtonProps> = ({
 
   return (
     <button
-      className="flex items-center gap-1.5 py-0.5 text-md"
+      className="text-md flex items-center gap-1.5 py-0.5"
       onClick={() => handleToggleTheme(theme)}
     >
       <Icon
-        className={clsx(
-          active
-            ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-            : "fill-black-light dark:fill-white",
-          "text-lg"
+        className={cn(
+          "text-lg",
+          active ? "fill-colors-primary" : "fill-colors-text"
         )}
       />
 
-      <p className={active ? "text-secondary dark:text-secondary-light" : ""}>
-        {theme === "dark" && t("dark")}
-        {theme === "default" && t("default")}
-        {theme === "light" && t("light")}
-      </p>
+      <p className={cn(active && "text-colors-primary")}>{t(theme)}</p>
     </button>
   );
 };

@@ -7,14 +7,15 @@ import {
   useRef,
   useState,
 } from "react";
-import clsx from "clsx";
+
+import { cn } from "~/utils/cn";
 
 interface ModalWrapperProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children: React.ReactNode;
   openModalButtonRef: RefObject<HTMLButtonElement>;
   closeModalHandler: () => void;
-  size?: ModalSizes;
+  size?: "default" | "sm" | "xs";
 }
 
 export const ModalWrapper: FC<ModalWrapperProps> = ({
@@ -24,9 +25,9 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
   size = "default",
 }) => {
   const sizeClass = {
-    default: "px-7 py-5 rounded-lg",
-    sm: "px-4 py-3 rounded-md",
-    xs: "p-1 rounded-sm",
+    default: "px-7 py-5 rounded-xl",
+    sm: "px-4 py-3 rounded-lg",
+    xs: "p-1 rounded-md",
   };
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -103,8 +104,8 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
     <>
       <div
         ref={containerRef}
-        className={clsx(
-          "absolute z-20 my-1 flex cursor-default bg-white-light text-black-light drop-shadow-modal transition-opacity dark:bg-black-light dark:text-white",
+        className={cn(
+          "absolute z-40 my-1 flex cursor-default border border-black/10 bg-white text-colors-text drop-shadow transition-opacity dark:border-white/10 dark:bg-black",
           sizeClass[size],
           topPosition,
           rightPosiotion,

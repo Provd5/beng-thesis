@@ -1,6 +1,6 @@
 import { unstable_setRequestLocale } from "next-intl/server";
 
-import { SubpageNavbar } from "~/components/Explore/SubpageNavbar";
+import { SubpageNavbar } from "~/components/Links/SubpageNavbar";
 import { type localeTypes } from "~/i18n";
 
 export default function ExploreLayout({

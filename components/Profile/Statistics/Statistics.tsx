@@ -1,36 +1,24 @@
-import type { FC } from "react";
+import { type FC, Suspense } from "react";
 import Link from "next/link";
-import { type bookshelfType } from "@prisma/client";
 
-import { MainStatisticsCard } from "./MainStatisticsCard";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
+import ROUTES from "~/utils/routes";
+
+import { MainStatisticsCard } from "./MainStatistics/MainStatisticsCard";
 import { StatisticsCategoryWrapper } from "./StatisticsCategoryWrapper";
 
 interface StatisticsProps {
-  userFullname: string;
-  quantities: {
-    ownedQuantity: number;
-    likedQuantity: number;
-    reviewsQuantity: number;
-  };
-  bookshelfArray:
-    | {
-        bookshelf: bookshelfType | null;
-      }[];
+  profileName: string;
 }
 
-export const Statistics: FC<StatisticsProps> = ({
-  userFullname,
-  quantities,
-  bookshelfArray,
-}) => {
+export const Statistics: FC<StatisticsProps> = ({ profileName }) => {
   return (
     <div className="flex justify-center md:justify-start">
-      <Link href={`${userFullname}/statistics`}>
+      <Link href={ROUTES.profile.statistics(profileName)}>
         <StatisticsCategoryWrapper variant="profile statistics">
-          <MainStatisticsCard
-            quantities={quantities}
-            bookshelfArray={bookshelfArray}
-          />
+          <Suspense fallback={<LargeComponentLoader />}>
+            <MainStatisticsCard profileName={profileName} />
+          </Suspense>
         </StatisticsCategoryWrapper>
       </Link>
     </div>

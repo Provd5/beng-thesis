@@ -1,6 +1,7 @@
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { AuthPage } from "~/components/Auth/AuthPage";
+import { LoginForm } from "~/components/Auth/LoginForm";
 import { type localeTypes } from "~/i18n";
 
 export async function generateMetadata({
@@ -21,5 +22,9 @@ export default function LoginPage({
 }) {
   unstable_setRequestLocale(locale);
 
-  return <AuthPage view="logIn" />;
+  return (
+    <AuthPage view="logIn">
+      <LoginForm />
+    </AuthPage>
+  );
 }

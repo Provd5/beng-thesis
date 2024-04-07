@@ -1,10 +1,10 @@
+import { Suspense } from "react";
+import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { booksOrderByArray } from "~/types/feed/OrderVariants";
-
-import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
+import { BooksFeed } from "~/components/Book/BooksFeed";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
-import readUserSession from "~/lib/supabase/readUserSession";
 
 export async function generateMetadata({
   params: { locale },
@@ -17,27 +17,20 @@ export async function generateMetadata({
   };
 }
 
-export default async function ExplorePage({
+export default function ExplorePage({
   params: { locale },
+  searchParams,
 }: {
   params: { locale: localeTypes };
+  searchParams: ReadonlyURLSearchParams;
 }) {
   unstable_setRequestLocale(locale);
 
-  const {
-    data: { session },
-  } = await readUserSession();
-
   return (
     <div className="container pb-12">
-      <FeedWithSorting
-        feedVariant="books"
-        orderArray={booksOrderByArray}
-        takeLimit={20}
-        sessionId={session?.user.id}
-        profileName={undefined}
-        variant={undefined}
-      />
+      <Suspense fallback={<LargeComponentLoader />}>
+        <BooksFeed searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }

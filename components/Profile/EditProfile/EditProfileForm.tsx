@@ -1,149 +1,135 @@
 "use client";
 
-import {
-  type Dispatch,
-  type FC,
-  type FormEvent,
-  type SetStateAction,
-  useState,
-} from "react";
+import { type FC, useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import axios from "axios";
-import clsx from "clsx";
-import { z } from "zod";
-
-import { RxCross2 } from "react-icons/rx";
-
-import { ButtonWhite } from "~/components/ui/Buttons";
-import { Input } from "~/components/ui/Input";
 import {
-  DescriptionValidator,
-  UsernameValidator,
-} from "~/lib/validations/auth";
-import { GlobalErrors } from "~/lib/validations/errorsEnums";
+  type Formats,
+  type TranslationValues,
+  useTranslations,
+} from "next-intl";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { type GetProfileInterface } from "~/types/data/profile";
+
+import { Button } from "~/components/ui/Buttons";
+import { Input } from "~/components/ui/Input";
+import { editProfile } from "~/lib/services/profile";
+import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
+import { EditProfileValidator } from "~/lib/validations/profile";
+import { cn } from "~/utils/cn";
+import { translatableError } from "~/utils/translatableError";
 
 interface EditProfileFormProps {
-  data: string | null;
-  setData: Dispatch<SetStateAction<string | null>>;
-  formType: "username" | "description";
-  cancelForm: () => void;
+  profileData: GetProfileInterface;
 }
 
-export const EditProfileForm: FC<EditProfileFormProps> = ({
-  data,
-  setData,
-  formType,
-  cancelForm,
-}) => {
+export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
   const t = useTranslations("Profile.EditProfile");
-  const ta = useTranslations("Profile.Auth");
-  const te = useTranslations("Errors");
+  const te = useTranslations("Errors") as (
+    key: string,
+    values?: TranslationValues | undefined,
+    formats?: Partial<Formats> | undefined
+  ) => string;
 
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(profileData.private);
 
-  const handleUpdate = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsLoading(true);
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    formState: { isSubmitting, isDirty },
+  } = useForm({
+    defaultValues: {
+      private: profileData.private,
+      username: profileData.full_name,
+      description: profileData.description,
+    },
+    resolver: zodResolver(EditProfileValidator),
+  });
 
+  const onSubmit = handleSubmit(async (formData) => {
     try {
-      const form = event.currentTarget as HTMLFormElement;
-      const inputElement = form.elements.namedItem(`${formType}-input`) as
-        | HTMLInputElement
-        | HTMLTextAreaElement;
-      const inputElementValue =
-        inputElement.value.trim().length > 0 ? inputElement.value : "";
+      const validData = EditProfileValidator.parse(formData);
 
-      if (data === inputElementValue) {
-        cancelForm();
-        return;
-      }
+      const res = await editProfile(validData);
 
-      if (formType === "description") {
-        DescriptionValidator.parse({ description: inputElementValue });
-      } else {
-        UsernameValidator.parse({ username: inputElementValue });
-      }
-
-      const { data: updatedData }: { data: string } = await axios.patch(
-        `/api/profile/${formType}/`,
-        {
-          [formType === "description" ? "description" : "username"]:
-            inputElementValue,
-        }
-      );
-
-      if (updatedData !== GlobalErrors.SUCCESS) {
-        toast.error(te(updatedData));
-        return;
-      }
-
-      // on success
-      setData(inputElementValue);
-      toast.success(te(GlobalErrors.SUCCESS));
-      cancelForm();
-
-      if (!data && inputElementValue && formType === "username") {
-        toast(ta("we will redirect you to your profile in a moment"));
-        router.push(`/profile/${inputElementValue}`);
-      }
-
-      router.refresh();
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        toast.error(te(error.issues[0].message));
-      } else {
-        toast.error(te(GlobalErrors.SOMETHING_WENT_WRONG));
-      }
-    } finally {
-      setIsLoading(false);
+      if (res.success) toast.success(te(ErrorsToTranslate.SUCCESS));
+    } catch (e) {
+      toast.error(te(translatableError(e)));
     }
-  };
+  });
 
   return (
     <form
-      className="flex h-full w-full flex-col items-start gap-1.5"
-      onSubmit={handleUpdate}
+      className="flex size-full flex-col items-start gap-1.5"
+      onSubmit={onSubmit}
     >
-      <div className="flex gap-2">
-        <ButtonWhite size="xs" loading={isLoading} type="submit">
-          {t("save")}
-        </ButtonWhite>
-        {data && (
+      <div className="mt-3 flex flex-col items-start">
+        <h1 className="text-md mb-1">{t("profile visibility:")}</h1>
+        <label className="mb-2 inline-flex cursor-pointer items-center">
+          <input
+            {...register("private")}
+            type="checkbox"
+            defaultChecked={isPrivate}
+            className="peer sr-only"
+            id="visibility-input"
+          />
           <button
-            disabled={isLoading}
-            className="rounded-sm bg-red p-2 text-base text-white-light"
-            onClick={() => cancelForm()}
-          >
-            <RxCross2 />
-          </button>
+            type="button"
+            className={cn(
+              "peer relative h-6 w-11 rounded-full after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-transform after:content-[''] peer-focus:outline-none dark:after:bg-black",
+              isPrivate
+                ? "bg-colors-primary after:translate-x-full"
+                : "bg-black dark:bg-white"
+            )}
+            onClick={() => (
+              setValue("private", !isPrivate), setIsPrivate(!isPrivate)
+            )}
+          />
+          <span className="ml-2">
+            {t("public/private", {
+              view: isPrivate ? "private" : "public",
+            })}
+          </span>
+        </label>
+      </div>
+      <Input
+        {...register("username", {
+          minLength: 3,
+          maxLength: 32,
+          required: true,
+        })}
+        type="text"
+        placeholder={t("enter username")}
+        autoComplete="off"
+        defaultValue={profileData.full_name || ""}
+        id="username-input"
+      />
+      <Input
+        {...register("description", {
+          maxLength: 5000,
+        })}
+        placeholder={t("add profile description")}
+        defaultValue={profileData.description || ""}
+        id="description-input"
+        isTextarea
+      />
+
+      <Button
+        size="xs"
+        loading={isSubmitting}
+        disabled={!isDirty}
+        type="submit"
+        className={cn(
+          "transition-colors",
+          isPrivate === profileData.private &&
+            !isDirty &&
+            "bg-colors-gray/20 text-white hover:bg-colors-gray/20"
         )}
-      </div>
-      <div className="min-h-[40px] w-full">
-        <Input
-          isTextarea={formType === "description"}
-          className={clsx(
-            "w-full",
-            formType === "username" ? "max-w-xs" : "h-full min-h-[250px]"
-          )}
-          loading={isLoading}
-          type="text"
-          id={`${formType}-input`}
-          name={`${formType}-input`}
-          placeholder={
-            formType === "description"
-              ? t("add profile description")
-              : t("enter username")
-          }
-          required={formType === "username"}
-          autoComplete="off"
-          minLength={formType === "description" ? 0 : 3}
-          maxLength={formType === "description" ? 5000 : 32}
-          defaultValue={data || ""}
-        />
-      </div>
+      >
+        {t("save")}
+      </Button>
     </form>
   );
 };

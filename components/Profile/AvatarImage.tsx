@@ -1,8 +1,9 @@
 import type { FC } from "react";
 import Image from "next/image";
-import clsx from "clsx";
 
-import AvatarPlaceholder from "../../assets/AvatarPlaceholder.png";
+import { cn } from "~/utils/cn";
+
+import AvatarPlaceholder from "../../public/AvatarPlaceholder.png";
 
 interface AvatarImageProps {
   avatarSrc: string | null;
@@ -31,16 +32,16 @@ export const AvatarImage: FC<AvatarImageProps | AvatarImageLoaderProps> = ({
     lg: "100px",
   };
   const sizeClass = {
-    default: "h-[75px] w-[75px]",
-    xs: "h-[25px] w-[25px]",
-    sm: "h-[50px] w-[50px]",
-    lg: "h-[100px] w-[100px]",
+    default: "size-[75px]",
+    xs: "size-[25px]",
+    sm: "size-[50px]",
+    lg: "size-[100px]",
   };
 
   return (
-    <div className={clsx("relative flex-none", sizeClass[size], className)}>
+    <div className={cn("relative flex-none", sizeClass[size], className)}>
       {isLoader ? (
-        <div className="h-full w-full rounded-full bg-gray" />
+        <div className="size-full rounded-full border border-colors-text/30 bg-colors-gray" />
       ) : (
         <Image
           sizes={sizes[size]}

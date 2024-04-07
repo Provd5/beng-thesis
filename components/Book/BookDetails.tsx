@@ -3,7 +3,8 @@
 import type { FC } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
+
+import { cn } from "~/utils/cn";
 
 import { ButtonLink } from "../ui/Buttons";
 
@@ -12,7 +13,7 @@ type variantTypes =
   | "publisher:"
   | "release date:"
   | "genre:"
-  | "averge rate:"
+  | "average rate:"
   | "description:";
 
 interface BookDetailsProps {
@@ -39,13 +40,11 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
   }, [descriptionParagraphRef.current]);
 
   switch (variant) {
-    case "averge rate:":
+    case "average rate:":
       return (
         <div className="flex flex-col gap-0.5 font-semibold">
-          <h3 className="text-base text-secondary dark:text-secondary-light">
-            {t(variant)}
-          </h3>
-          <p className="text-md">{text}</p>
+          <h3 className="text-base text-colors-primary">{t(variant)}</h3>
+          <p className="text-xl">{text}</p>
         </div>
       );
     case "description:":
@@ -55,9 +54,9 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
             <h3 className="font-semibold">{t(variant)}</h3>
             <p
               ref={descriptionParagraphRef}
-              className={clsx(
+              className={cn(
                 "whitespace-break-spaces",
-                !isExpanded && "line-clamp-4 max-h-[58px]"
+                !isExpanded && "line-clamp-4"
               )}
             >
               {text}
@@ -65,7 +64,7 @@ export const BookDetails: FC<BookDetailsProps> = ({ text, variant }) => {
           </div>
           {renderButton && (
             <ButtonLink
-              className="mx-auto"
+              className="mx-auto mt-1"
               size="sm"
               active={isExpanded}
               onClick={() => setIsExpanded(!isExpanded)}

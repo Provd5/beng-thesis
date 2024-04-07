@@ -20,9 +20,9 @@ export const ProfileCardLoader: FC<ProfileCardLoaderProps> = ({ index }) => {
           <div className="flex w-full flex-col gap-0.5">
             <TextLoader height="h2" className="w-32" />
             <div className="my-0.5 flex gap-1.5">
-              <div className="h-5 w-7 rounded bg-gray" />
-              <div className="h-5 w-7 rounded bg-gray" />
-              <div className="h-5 w-7 rounded bg-gray" />
+              <div className="h-5 w-7 rounded bg-colors-gray" />
+              <div className="h-5 w-7 rounded bg-colors-gray" />
+              <div className="h-5 w-7 rounded bg-colors-gray" />
             </div>
           </div>
         </div>
@@ -37,7 +37,13 @@ export const ProfileCardLoader: FC<ProfileCardLoaderProps> = ({ index }) => {
           </div>
         </div>
       </div>
-      <div className="h-8 w-2/3 max-w-[200px] self-end rounded-sm bg-gray" />
+      <div className="h-8 w-2/3 max-w-[200px] self-end rounded-sm bg-colors-gray" />
     </div>
   );
+};
+
+export const ProfileCardsLoader: FC<{ items: number }> = ({ items }) => {
+  return Array.from({ length: items }, (_, i) => (
+    <ProfileCardLoader key={i} index={i} />
+  ));
 };

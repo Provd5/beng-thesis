@@ -1,34 +1,49 @@
 {
   "Errors": {
-    "PASSWORD_REQUIRED_ERROR": "Podanie hasła jest wymagane",
-    "USERNAME_TOO_SHORT_3": "Nazwa użytkownika musi mieć co najmniej 3 znaki",
-    "USERNAME_TOO_LONG_32": "Nazwa użytkownika nie może zawierać więcej niż 32 znaki",
-    "WRONG_EMAIL": "Adres email jest nieprawidłowy",
-    "WRONG_PASSWORD": "Hasło musi zawierać co najmniej 10 znaków, jedną cyfrę, jeden znak specjalny, małe i wielkie litery",
-    "WRONG_USERNAME": "Nazwa użytkownika może zawierać tylko litery, cyfry i niektóre znaki specjalne",
-    "EMAIL_EXISTS": "Użytkownik o tym adresie e-mail już istnieje",
-    "USERNAME_EXISTS": "Ta nazwa użytkownika jest już zajęta",
-    "NOT_THE_SAME_PASSWORDS": "Hasła nie są takie same",
-    "DISABLED_SIGNUPS_ERROR": "Rejestracja przez email jest tymczasowo wyłączona",
-    "EMAIL_LINK_ERROR": "Link email jest nieprawidłowy lub wygasł",
-    "TOKEN_ERROR": "Token wygasł lub jest nieprawidłowy",
-    "LOGIN_ERROR": "Nieprawidłowe dane logowania",
-    "EMAIL_NOT_CONFIRMED": "Email nie został potwierdzony",
-    "SAME_USERNAME": "Podana nazwa użytkownika jest taka sama jak bieżąca",
-    "CAPTCHA_ERROR": "Rozwiąż poprawnie Captcha",
+    "email is invalid": "Adres email jest nieprawidłowy",
+    "email already exists": "Użytkownik o tym adresie e-mail już istnieje",
+    "email not confirmed": "Email nie został potwierdzony",
 
-    "DESCRIPTION_TOO_LONG_5000": "Opis nie może zawierać więcej niż 5000 znaków",
+    "email rate limit exceeded": "Przekroczono limit wysyłania adresu e-mail",
+    "email signups are disabled": "Rejestracja przez email jest tymczasowo wyłączona",
+    "email link is invalid or has expired": "Link email jest nieprawidłowy lub wygasł",
 
-    "REVIEW_TOO_LONG_5000": "Twoja recenzja jest zbyt długa",
-    "WRONG_RATE": "Najpierw wystaw odpowiednią ocenę",
+    "password is required": "Podanie hasła jest wymagane",
+    "password is invalid": "Hasło musi zawierać co najmniej 10 znaków, jedną cyfrę, jeden znak specjalny, małe i wielkie litery",
+    "passwords are not the same": "Podane hasła nie są takie same",
 
-    "SEARCH_TEXT_TOO_SHORT_2": "Podaj co najmniej 2 znaki",
+    "invalid login credentials": "Nieprawidłowe dane logowania",
 
-    "UNAUTHORIZED": "Nie jesteś zalogowany",
-    "SOMETHING_WENT_WRONG": "Coś poszło nie tak, spróbuj ponownie za chwilę",
-    "COULD_NOT_FETCH": "Nie udało się załadować {item, select, books {książek} reviews {recenzji} profiles {profili} other {elementów}}",
-    "PENDING": "W toku...",
-    "SUCCESS": "Sukces"
+    "captcha was not solved": "Rozwiąż poprawnie Captcha",
+    "captcha verification process failed": "Proces weryfikacji captcha nie powiódł się",
+
+    "token has expired or is invalid": "Token wygasł lub jest nieprawidłowy",
+
+    "username is invalid": "Nazwa użytkownika może zawierać tylko litery, cyfry i niektóre znaki specjalne",
+    "username already exists": "Ta nazwa użytkownika jest już zajęta",
+    "username is too short": "Nazwa użytkownika musi mieć co najmniej 3 znaki",
+    "username is too long": "Nazwa użytkownika nie może zawierać więcej niż 32 znaki",
+    "username is the same": "Podana nazwa użytkownika jest taka sama jak bieżąca",
+    "description is too long": "Twój opis jest zbyt długi",
+
+    "cannot follow your own profile": "Nie możesz obserwować własnego profilu",
+
+    "review is too long": "Twoja recenzja jest zbyt długa",
+    "rate is invalid": "Najpierw wystaw odpowiednią ocenę",
+
+    "search is too short": "Podaj co najmniej 2 znaki",
+
+    "data is invalid": "Podane dane są nieprawidłowe",
+    "date is invalid": "Wymagane jest podanie prawidłowej daty",
+    "format is invalid": "Podane dane są w nieprawidłowym formacie",
+
+    "unauthorized": "Nie jesteś zalogowany",
+    "failed to load items": "Nie udało się załadować elementów",
+    "not found": "Nie znaleziono",
+    "something went wrong": "Coś poszło nie tak, spróbuj ponownie za chwilę",
+
+    "pending": "W toku...",
+    "success": "Sukces"
   },
 
   "NotFound": {
@@ -48,13 +63,16 @@
 
   "Other": {
     "logout": "Wyloguj",
+    "logging out": "Wylogowywanie",
     "logged out": "Wylogowano",
     "loading": "Ładowanie",
     "load more": "załaduj więcej",
     "my account": "Moje konto",
     "edit profile": "Edytuj profil",
     "collapse": "zwiń",
-    "expand": "rozwiń"
+    "expand": "rozwiń",
+    "next page": "następna",
+    "previous page": "poprzednia"
   },
 
   "Nav": {
@@ -80,7 +98,7 @@
       "statistics": "statystyki",
       "owned": "posiadane",
       "liked": "polubione",
-      "to-read": "do przeczytania",
+      "to-read": "do poznania",
       "already-read": "przeczytane",
       "abandoned": "porzucone",
       "reading": "w trakcie",
@@ -92,8 +110,9 @@
 
   "Profile": {
     "Page": {
-      "followers:": "Obserwujących:",
-      "following:": "Obserwowani:",
+      "followers": "Obserwujących",
+      "following": "Obserwowani",
+      "statistics": "Statystyki",
       "reviews:": "Recenzje:",
       "profile description:": "Opis profilu:",
       "public/private profile": "{view, select, public {Publiczny} private {Prywatny} other {}}",
@@ -112,8 +131,9 @@
       "forgot your password?": "Nie pamiętasz hasła?",
       "no account yet? sign up": "Nie masz jeszcze konta? <Link>Stwórz je</Link>",
       "already have an account? log in": "Masz już konto? <Link>Zaloguj się</Link>",
-      "check your email to continue login": "Sprawdź swój adres email ({email}), aby kontynuować logowanie",
-      "we will redirect you to your profile in a moment": "Za chwilę przekierujemy Cię do twojego profilu"
+      "check your email to continue login": "Sprawdź swój adres email, aby kontynuować logowanie",
+      "we will redirect you to your profile in a moment": "Za chwilę przekierujemy Cię do twojego profilu",
+      "we will redirect you to the provider's website in a moment": "Za chwilę przekierujemy Cię na stronę dostawcy"
     },
     "EditProfile": {
       "account created using:": "konto utworzone za pomocą:",
@@ -143,17 +163,18 @@
       "read books": "Przeczytane książki"
     },
     "OwnedBooks": {
-      "unique:": "Unikalne:",
-      "total in all forms:": "Łącznie w każdej postaci:"
+      "last change:": "Ostatnia zmiana:",
+      "last added:": "Ostatnio dodana książka:",
+      "total owned books:": "Wszystkie posiadane książki:",
+      "no owned books": "Nie oznaczyłeś jeszcze żadnej książki jako posiadanej"
     },
     "ReadBooks": {
-      "shortest-read:": "Najkrócej czytane:",
-      "longest-read:": "Najdłużej czytane:",
-      "last:": "Ostatnio:",
-      "book with most pages:": "Książka z największą liczbą stron:",
-      "read in": "przeczytano w <span>{numDays, plural, =0 {mniej niż dzień} =1 {# dzień} other {# dni}}</span>",
-      "pages:": "stron:",
-      "total pages read:": "Suma przeczytanych stron:"
+      "last change:": "Ostatnia zmiana:",
+      "last read:": "Ostatnio przeczytana:",
+      "most read book:": "Najczęściej czytana książka:",
+      "read quantity": "przeczytano <span>{numRead}</span> razy",
+      "total pages read:": "Suma przeczytanych stron:",
+      "no read books": "Nie oznaczyłeś jeszcze żadnej książki jako przeczytanej"
     }
   },
 
@@ -166,7 +187,7 @@
       "STATISTICS": "Statystyki",
       "OWNED": "Posiadane",
       "LIKED": "Polubione",
-      "TO_READ": "Do przeczytania",
+      "TO_READ": "Do poznania",
       "ALREADY_READ": "Przeczytane",
       "ABANDONED": "Porzucone",
       "READING": "W trakcie",
@@ -180,14 +201,14 @@
     "BookCard": {
       "rate": "Ocena",
       "likes": "Polubień",
-      "reviews": "Recenzji"
+      "reviews": "Recenzje"
     },
     "Details": {
       "pages:": "Stron:",
       "publisher:": "Wydawca:",
       "release date:": "Data wydania:",
       "genre:": "Gatunek:",
-      "averge rate:": "Średnia ocen:",
+      "average rate:": "Średnia ocen:",
       "description:": "Opis:"
     },
     "ManageLikes": {
@@ -261,7 +282,7 @@
   "Search": {
     "search categories:": "kategorie wyszukiwania:",
     "books": "książki",
-    "users": "profile",
+    "profiles": "profile",
     "enter title/isbn": "wpisz tytuł/isbn",
     "enter username": "wpisz nazwę",
     "items found:": "Znaleziono:",
@@ -272,7 +293,7 @@
     "sort by:": "Sortuj po:",
     "popularity": "popularność",
     "last_added": "nowo dodane",
-    "profile_traffic": "aktywność profilu",
+    "activity": "aktywność profilu",
     "title": "tytuł",
     "full_name": "nazwa profilu",
     "authors": "autorzy",
@@ -280,10 +301,10 @@
     "created_at": "data utworzenia",
     "rate": "najwyższa ocena",
     "liked_by": "polubień",
-    "review": "recenzji",
-    "review_reaction": "reakcji",
-    "book_owned_as": "posiadanych książek",
-    "bookshelf": "książek na półkach",
-    "followed_by": "obserwujących"
+    "reviews": "recenzji",
+    "reactions": "reakcji",
+    "owned_books": "posiadanych książek",
+    "books_on_shelves": "książek na półkach",
+    "followers": "obserwujących"
   }
 }

@@ -3,11 +3,10 @@ import { notFound } from "next/navigation";
 import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { Navbar } from "~/components/Navbar/Navbar";
+import { Navbar } from "~/components/Links/Navbar/Navbar";
 import { DarkModeInitializer } from "~/components/ui/DarkModeInitializer";
-import { SvgPainter } from "~/components/ui/SvgIcons/SvgPainter";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
-import { defaultLocale, locales, type localeTypes } from "~/i18n";
+import { type localeTypes } from "~/i18n";
 
 import "~/styles/globals.css";
 
@@ -36,9 +35,8 @@ export async function generateMetadata({
 }: {
   params: { locale: localeTypes };
 }) {
-  const validLocale = locales.includes(locale) ? locale : defaultLocale;
   const t = await getTranslations({
-    validLocale,
+    locale,
     namespace: "Nav.CategoryTitles",
   });
 
@@ -58,20 +56,15 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: { locale: localeTypes };
 }) {
-  const validLocale = locales.includes(locale) ? locale : defaultLocale;
-  unstable_setRequestLocale(validLocale);
-  const messages = await getMessages(validLocale);
-
-  const themeInitializerScript = `function initializeDarkMode() { localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");} initializeDarkMode();`;
+  unstable_setRequestLocale(locale);
+  const messages = await getMessages(locale);
 
   return (
-    <html lang={validLocale} className={quicksandFont.className}>
-      <body className="bodyGradient relative flex h-full flex-col bg-fixed text-base font-medium text-black antialiased dark:text-white">
-        <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
+    <html lang={locale} className={quicksandFont.className}>
+      <body className="bg-gradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-colors-text antialiased selection:bg-colors-accent selection:text-white md:flex-col">
         <DarkModeInitializer />
-        <SvgPainter />
 
-        <NextIntlClientProvider locale={validLocale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar />
           {children}
           <ToasterComponent />

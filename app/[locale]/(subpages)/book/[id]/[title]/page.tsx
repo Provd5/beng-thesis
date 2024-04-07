@@ -1,14 +1,14 @@
-import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { unstable_setRequestLocale } from "next-intl/server";
-import { z } from "zod";
 
-import { AllReviewsButton } from "~/components/Book/AllReviewsButton";
-import { MyReview } from "~/components/Book/MyReview";
-import { CategoryLink } from "~/components/ui/CategoryLink";
+import { CategoryLink } from "~/components/Links/CategoryLink";
+import { AllReviewsButton } from "~/components/Review/AllReviewsButton";
+import { MyReview } from "~/components/Review/CreateReview/MyReview";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
-import readUserSession from "~/lib/supabase/readUserSession";
+import ROUTES from "~/utils/routes";
 
-export default async function BookPage({
+export default function BookPage({
   params: { id, title, locale },
   searchParams,
 }: {
@@ -17,31 +17,24 @@ export default async function BookPage({
 }) {
   unstable_setRequestLocale(locale);
 
-  try {
-    z.string().uuid().parse(id);
-  } catch (error) {
-    notFound();
-  }
-
-  const {
-    data: { session },
-  } = await readUserSession();
-
   return (
     <>
       <div className="flex flex-col">
         <CategoryLink
-          href={{ pathname: `${title}/reviews`, query: searchParams }}
-          variant="REVIEWS"
-          hrefReplace
+          href={{
+            pathname: ROUTES.book.reviews(id, title),
+            query: searchParams,
+          }}
+          bookshelfVariant="REVIEWS"
+          replace
         />
-        <MyReview bookId={id} sessionId={session?.user.id} />
+        <Suspense fallback={<LargeComponentLoader />}>
+          <MyReview bookId={id} />
+        </Suspense>
       </div>
-      {session?.user.id && (
-        <AllReviewsButton
-          href={{ pathname: `${title}/reviews`, query: searchParams }}
-        />
-      )}
+      <AllReviewsButton
+        href={{ pathname: ROUTES.book.reviews(id, title), query: searchParams }}
+      />
     </>
   );
 }

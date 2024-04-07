@@ -1,8 +1,9 @@
 import type { ButtonHTMLAttributes } from "react";
 import React, { forwardRef } from "react";
-import { clsx } from "clsx";
 
 import { MdKeyboardArrowDown } from "react-icons/md";
+
+import { cn } from "~/utils/cn";
 
 import { Loader } from "./Loaders/Loader";
 
@@ -18,14 +19,14 @@ const sharedClass =
 type commonSizeTypes = "default" | "sm" | "xs";
 
 const commonSizeClass = {
-  default: "rounded-xl px-8 py-3.5 text-base",
-  sm: "rounded-lg px-6 py-3 text-sm",
-  xs: "rounded-sm px-4 py-2 text-sm",
+  default: "rounded-2xl px-8 py-3.5 text-base",
+  sm: "rounded-xl px-6 py-3 text-sm",
+  xs: "rounded-md px-4 py-2 text-sm",
 };
 const commonLoadingSizeClass = {
-  default: "w-[1.125rem] h-[1.125rem]",
-  sm: "w-4 h-4",
-  xs: "w-4 h-4",
+  default: "size-[1.125rem]",
+  sm: "size-4",
+  xs: "size-4",
 };
 
 const Button = forwardRef<
@@ -47,11 +48,10 @@ const Button = forwardRef<
       <button
         ref={ref}
         disabled={loading}
-        className={clsx(
+        className={cn(
           sharedClass,
-          "gap-1 hover:scale-105",
-          defaultColor &&
-            "bg-gradient-dark text-white-light hover:bg-gradient-light dark:bg-gradient-light dark:hover:bg-gradient-dark",
+          "gap-1 transition-transform hover:scale-105",
+          defaultColor && "bg-colors-primary text-white hover:bg-colors-accent",
           commonSizeClass[size],
           className
         )}
@@ -71,29 +71,20 @@ const ButtonWhite = forwardRef<
     <button
       ref={ref}
       disabled={loading}
-      className={clsx(
-        "bg-white-light hover:scale-105 hover:bg-white-light/80",
+      className={cn(
+        sharedClass,
+        "gap-1 bg-white text-colors-primary transition-all hover:scale-105 hover:bg-white/80",
         commonSizeClass[size],
         className
       )}
       {...restProps}
     >
-      <div
-        className={clsx(
-          sharedClass,
-          "flex gap-1 bg-gradient-dark bg-clip-text text-transparent"
-        )}
-      >
-        {loading && (
-          <Loader
-            className={clsx(
-              "stroke-[var(--svg-gradient-dark)]",
-              commonLoadingSizeClass[size]
-            )}
-          />
-        )}
-        {children}
-      </div>
+      {loading && (
+        <Loader
+          className={cn("stroke-colors-primary", commonLoadingSizeClass[size])}
+        />
+      )}
+      {children}
     </button>
   );
 });
@@ -124,20 +115,21 @@ const ButtonLink = forwardRef<
       <button
         ref={ref}
         disabled={loading}
-        className={clsx(
+        className={cn(
+          "px-1 py-0.5 hover:animate-pulse",
           sharedClass,
-          defaultColor && "text-secondary dark:text-secondary-light",
+          defaultColor && "text-colors-primary",
           sizeClass[size],
           className
         )}
         {...restProps}
       >
         {children}
-        <span className={clsx("transition-transform", active && "rotate-180")}>
+        <span className={cn("transition-transform", active && "rotate-180")}>
           <MdKeyboardArrowDown
-            className={clsx(
+            className={cn(
               "flex-none text-xl",
-              defaultColor && "fill-primary dark:fill-secondary-light"
+              defaultColor && "fill-colors-primary"
             )}
           />
         </span>

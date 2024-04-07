@@ -1,217 +1,97 @@
 "use client";
 
-import { type FC, type FormEvent, useState } from "react";
-import toast from "react-hot-toast";
+import React, { type FC, useRef, useTransition } from "react";
+import {
+  type ReadonlyURLSearchParams,
+  usePathname,
+  useRouter,
+} from "next/navigation";
 import { useTranslations } from "next-intl";
-import axios from "axios";
-import clsx from "clsx";
 
-import { BiSearchAlt } from "react-icons/bi";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
-import { GlobalErrors, SearchErrors } from "~/lib/validations/errorsEnums";
+import { SearchCategoriesArray } from "~/types/search";
 
-import { BookCard } from "../Explore/BookCard";
-import { ProfileCard } from "../Explore/ProfileCard";
+import { cn } from "~/utils/cn";
+import { searchCategoryValidator } from "~/utils/searchCategoryValidator";
+
 import { ModalInitiator } from "../Modals/ModalInitiator";
-import { Input } from "../ui/Input";
-import { Loader } from "../ui/Loaders/Loader";
-import { BookCardLoader } from "../ui/Loaders/Skeletons/BookCardLoader";
-import { ProfileCardLoader } from "../ui/Loaders/Skeletons/ProfileCardLoader";
-import { NotFoundItems } from "../ui/NotFoundItems";
+import { LargeComponentLoader } from "../ui/Loaders/Loader";
+import { SearchEngine } from "./SearchEngine";
 
 interface SearchComponentProps {
-  sessionId: string | undefined;
+  searchParams: ReadonlyURLSearchParams;
+  children: React.ReactNode;
 }
 
-type searchCategoryType = "books" | "users";
-
-export const SearchComponent: FC<SearchComponentProps> = ({ sessionId }) => {
+export const SearchComponent: FC<SearchComponentProps> = ({
+  searchParams,
+  children,
+}) => {
   const t = useTranslations("Search");
-  const te = useTranslations("Errors");
 
-  const searchCategories: searchCategoryType[] = ["books", "users"];
-  const [searchCategory, setSearchCategory] = useState<searchCategoryType>(
-    searchCategories[0]
-  );
+  const pathname = usePathname();
+  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const validSearchCategory = searchCategoryValidator(searchParams);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  const [itemsFound, setItemsFound] = useState<number | null>(null);
-  const [fetchedData, setFetchedData] = useState<
-    (ProfileCardDataInterface | BookInterface)[]
-  >([]);
-
-  const changeCategory = (category: searchCategoryType) => {
-    setSearchCategory(category);
-    setItemsFound(null);
-    setFetchedData([]);
-  };
-
-  const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsLoading(true);
-    setItemsFound(null);
-    setFetchedData([]);
-
-    try {
-      const form = event.currentTarget as HTMLFormElement;
-      const search = form.elements.namedItem("q") as HTMLInputElement;
-
-      const searchText = search.value.trim();
-
-      if (searchText.length < 2) {
-        toast.error(te(SearchErrors.SEARCH_TEXT_TOO_SHORT_2));
-        return;
-      }
-
-      const query = `/api/feed/search?searchCategory=${searchCategory}&searchText=${searchText}`;
-
-      await axios
-        .get(query)
-        .then(
-          ({
-            data,
-          }: {
-            data: SearchBooksInterface | SearchProfilesInterface;
-          }) => {
-            if (!data) throw new Error();
-            const narrowedData = "profile" in data ? data.profile : data.book;
-
-            setFetchedData((prevData) => [...prevData, ...narrowedData]);
-            setItemsFound(data.itemsFound);
-          }
-        );
-    } catch (error) {
-      toast.error(te(GlobalErrors.COULD_NOT_FETCH, { item: "other" }));
-    } finally {
-      setIsLoading(false);
+  const changeCategory = (searchCategory: string) => {
+    const params = new URLSearchParams(searchParams);
+    if (inputRef.current) {
+      inputRef.current.value = "";
     }
+
+    params.set("q", "");
+    params.set("category", searchCategory);
+
+    startTransition(() => {
+      router.replace(`${pathname}?${params.toString()}`);
+    });
   };
 
   return (
     <>
-      <div className="w-full rounded-t-3xl border-b border-white-light bg-white dark:border-black-dark dark:bg-black md:rounded-none">
-        <div className="container flex h-full w-full items-center justify-center px-8 py-3">
-          <div className="flex w-full flex-col-reverse xs:flex-row xs:justify-end">
+      <div className="w-full border-b border-colors-accent bg-white dark:bg-black max-md:rounded-t-3xl">
+        <div className="container flex size-full items-center justify-center px-8 py-3">
+          <div className="flex w-full flex-col-reverse">
             <ModalInitiator
               initiatorStyle={
-                <div className="flex h-full items-center justify-center gap-0.5 rounded-b-lg bg-gray py-1.5 pl-3 pr-2 text-white xs:rounded-l-lg xs:rounded-r-none">
-                  <p>{t(searchCategory)}</p>
+                <div className="flex h-full origin-top-left items-center justify-center gap-0.5 rounded-b-lg bg-colors-primary py-1.5 pl-3 pr-2 text-white transition-transform hover:scale-105">
+                  <p>{t(validSearchCategory.category)}</p>
                   <MdKeyboardArrowDown className="mt-0.5 text-xl" />
                 </div>
               }
             >
-              <div className="flex flex-col gap-1 whitespace-nowrap text-md">
+              <div className="text-md flex flex-col gap-1 whitespace-nowrap">
                 <h1 className="mb-1 text-sm">{t("search categories:")}</h1>
-                {searchCategories.map((category) => (
+                {SearchCategoriesArray.map((searchCategory) => (
                   <button
-                    className={clsx(
-                      "py-1 text-left",
-                      searchCategory === category &&
-                        "text-secondary dark:text-secondary-light"
+                    key={searchCategory}
+                    disabled={validSearchCategory.category === searchCategory}
+                    className={cn(
+                      "py-1 text-left transition-transform",
+                      validSearchCategory.category === searchCategory &&
+                        "text-colors-primary",
+                      validSearchCategory.category !== searchCategory &&
+                        "hover:translate-x-1"
                     )}
-                    key={category}
-                    onClick={() => changeCategory(category)}
+                    onClick={() => changeCategory(searchCategory)}
                   >
-                    {t(category)}
+                    {t(searchCategory)}
                   </button>
                 ))}
               </div>
             </ModalInitiator>
-            <form
-              role="search"
-              className="flex w-full sm:w-auto"
-              onSubmit={handleSearch}
-            >
-              <Input
-                id="search-input"
-                name="q"
-                type="search"
-                required
-                minLength={2}
-                loading={isLoading}
-                className="h-full w-full rounded-none rounded-tl-lg xs:rounded-tl-none sm:w-80"
-                inverted
-                placeholder={
-                  searchCategory === "books"
-                    ? t("enter title/isbn")
-                    : t("enter username")
-                }
-              />
-
-              <button
-                type="submit"
-                className="flex w-11 shrink-0 items-center justify-center rounded-r-lg bg-primary-light dark:bg-secondary"
-              >
-                <BiSearchAlt className="h-6 w-6 text-white" />
-              </button>
-            </form>
+            <SearchEngine
+              searchParams={searchParams}
+              startTransition={startTransition}
+            />
           </div>
         </div>
       </div>
-      <div className="container pb-12 pt-6">
-        {itemsFound !== null ? (
-          <h1 className="mb-3 flex items-center gap-1">
-            <span className="py-0.5">{t("items found:")}</span>
-            <span className="text-secondary dark:text-secondary-light">
-              {isLoading ? <Loader /> : itemsFound}
-            </span>
-          </h1>
-        ) : (
-          <div className="mb-3 h-5 py-0.5" />
-        )}
-        {isLoading ? (
-          searchCategory === "books" ? (
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              {Array.from({ length: 20 }, (_, i) => (
-                <BookCardLoader key={i} index={i} />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 30 }, (_, i) => (
-                <ProfileCardLoader key={i} index={i} />
-              ))}
-            </div>
-          )
-        ) : itemsFound !== null ? (
-          itemsFound > 0 ? (
-            <>
-              {searchCategory === "books" ? (
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                  {(fetchedData as BookInterface[]).map((data) => (
-                    <BookCard
-                      key={data.id}
-                      bookData={data}
-                      sessionId={sessionId}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 justify-items-center gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                  {(
-                    (fetchedData && fetchedData) as ProfileCardDataInterface[]
-                  ).map((data) => (
-                    <ProfileCard
-                      key={data.id}
-                      profileData={data}
-                      sessionId={sessionId}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <NotFoundItems />
-          )
-        ) : (
-          <div className="flex flex-col justify-center gap-3 p-6 text-center text-md text-gray">
-            {t("what are you searching for?")}{" "}
-            <span className="text-xl">👀</span>
-          </div>
-        )}
-      </div>
+      {isPending ? <LargeComponentLoader /> : children}
     </>
   );
 };

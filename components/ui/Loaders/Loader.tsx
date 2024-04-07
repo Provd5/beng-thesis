@@ -1,14 +1,15 @@
 import type { FC } from "react";
-import clsx from "clsx";
 
 import { TbLoader3 } from "react-icons/tb";
+
+import { cn } from "~/utils/cn";
 
 interface LoaderProps {
   className?: string;
 }
 
 export const Loader: FC<LoaderProps> = ({ className }) => {
-  return <TbLoader3 className={clsx(className, "animate-spin")} />;
+  return <TbLoader3 className={cn(className, "animate-spin")} />;
 };
 
 interface TextLoaderProps {
@@ -25,7 +26,7 @@ export const TextLoader: FC<TextLoaderProps> = ({ className, height }) => {
 
   return (
     <div
-      className={clsx("rounded bg-gray", size[height], className)}
+      className={cn("rounded bg-colors-gray", size[height], className)}
       style={{ animationDelay: "0.5s" }}
     />
   );
@@ -33,8 +34,10 @@ export const TextLoader: FC<TextLoaderProps> = ({ className, height }) => {
 
 export const LargeComponentLoader: FC = () => {
   return (
-    <div className="pointer-events-none relative my-6 flex h-full w-full items-center justify-center">
-      <Loader className="h-12 w-12" />
+    <div className="relative h-full w-full pb-12 pt-24">
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <Loader className="h-12 w-12" />
+      </div>
     </div>
   );
 };

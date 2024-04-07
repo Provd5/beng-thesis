@@ -1,8 +1,9 @@
 import type { FC } from "react";
 import Image from "next/image";
-import clsx from "clsx";
 
-import ThumbnailPlaceholder from "../../assets/ThumbnailPlaceholder.png";
+import { cn } from "~/utils/cn";
+
+import ThumbnailPlaceholder from "../../public/ThumbnailPlaceholder.png";
 
 interface BookCoverProps {
   coverUrl: string | null;
@@ -18,8 +19,8 @@ interface BookCoverLoaderProps {
 }
 
 export const BookCover: FC<BookCoverProps | BookCoverLoaderProps> = ({
-  isLoader,
   coverUrl,
+  isLoader,
   children,
   size = "default",
 }) => {
@@ -34,13 +35,13 @@ export const BookCover: FC<BookCoverProps | BookCoverLoaderProps> = ({
 
   return (
     <div
-      className={clsx(
-        "relative flex-none overflow-hidden rounded-sm drop-shadow-book",
+      className={cn(
+        "relative flex-none overflow-hidden rounded-md border border-colors-text/30 drop-shadow",
         sizeClass[size]
       )}
     >
       {isLoader ? (
-        <div className="h-full w-full bg-gray" />
+        <div className="size-full bg-colors-gray" />
       ) : (
         <Image
           alt="Book cover"

@@ -3,39 +3,28 @@
 @tailwind utilities;
 
 @layer base {
-  /* */
   :root {
-    --nav-height: 52px;
-    --white-default: 235 234 232;
-    --white-light: 255 255 255;
-    --white-dark: 214 214 214;
-    --black-default: 38 38 38;
-    --black-light: 60 60 60;
-    --black-dark: 18 18 18;
-    --primary-default: 8 131 149;
-    --primary-light: 4 170 194;
-    --primary-dark: 10 77 104;
-    --secondary-default: 8 149 116;
-    --secondary-light: 4 194 150;
-    --secondary-dark: 10 104 96;
-    --green-default: 9 170 62;
-    --red-default: 194 26 10;
-    --blue-default: 11 110 208;
-    --yellow-default: 229 172 0;
-    --pink-default: 229 25 60;
-    --gray-default: 128 128 128;
-    --gradient-light: linear-gradient(
-      175deg,
-      rgb(var(--primary-light)),
-      rgb(var(--secondary-light))
-    );
-    --gradient-dark: linear-gradient(
-      175deg,
-      rgb(var(--secondary-default)),
-      rgb(var(--primary-default))
-    );
-    --svg-gradient: url(#myGradient);
-    --svg-gradient-dark: url(#myGradientDark);
+    --nav-height: 58px;
+    --text: 6 9 8;
+    --background: 245 250 249;
+    --primary: 66 189 160;
+    --secondary: 148 230 211;
+    --accent: 93 234 201;
+
+    --green: 9 170 62;
+    --red: 194 26 10;
+    --blue: 11 110 208;
+    --cyan: 4 170 194;
+    --yellow: 229 172 0;
+    --pink: 229 25 60;
+    --gray: 128 128 128;
+  }
+  .dark {
+    --text: 246 249 248;
+    --background: 10 15 14;
+    --primary: 66 189 160;
+    --secondary: 25 107 88;
+    --accent: 21 162 129;
   }
 }
 
@@ -43,32 +32,9 @@
   .nav-padding {
     @apply pb-[var(--nav-height)] md:pb-0;
   }
-
-  /* border-secondary dark:border-secondary-light */
-  /* text-secondary dark:text-secondary-light */
-  /* bg-gradient-dark bg-clip-text font-semibold text-transparent dark:bg-gradient-light */
-  /* fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)] */
-}
-
-.bodyGradient {
-  background-image: linear-gradient(
-    175deg,
-    #089574,
-    #1b9d83,
-    #2ca491,
-    #3cac9f,
-    #4cb3ac,
-    #4db1ae,
-    #4eb0b0,
-    #50aeb2,
-    #42a3ab,
-    #3398a4,
-    #228e9c,
-    #088395
-  );
-}
-.bodyGradientForAvatar {
-  background-image: linear-gradient(175deg, #1b9d83, #2ca491, #3cac9f);
+  .bg-gradient {
+    @apply bg-gradient-to-tr from-colors-primary to-colors-accent;
+  }
 }
 
 html {

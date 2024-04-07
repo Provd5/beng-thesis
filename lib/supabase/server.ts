@@ -1,13 +1,10 @@
 "use server";
 
-import { unstable_noStore } from "next/cache";
 import { cookies } from "next/headers";
 import { type CookieOptions, createServerClient } from "@supabase/ssr";
 
 // eslint-disable-next-line @typescript-eslint/require-await
 export default async function createSupabaseServerClient() {
-  unstable_noStore();
-
   const cookieStore = cookies();
 
   return createServerClient(

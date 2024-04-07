@@ -1,7 +1,7 @@
 import type { FC } from "react";
-import clsx from "clsx";
 
 import { AvatarImage } from "~/components/Profile/AvatarImage";
+import { cn } from "~/utils/cn";
 
 import { TextLoader } from "../Loader";
 
@@ -16,10 +16,10 @@ export const ReviewCardLoader: FC<ReviewCardLoaderProps> = ({
 }) => {
   return (
     <div
-      className={clsx(
+      className={cn(
         "relative flex w-full animate-pulse flex-col gap-1 py-3 sm:flex-row",
         isMyReview &&
-          "min-h-[350px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/10 before:dark:bg-yellow/5 sm:min-h-[260px] before:sm:rounded-md"
+          "min-h-[350px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-colors-yellow/10 before:dark:bg-colors-yellow/5 sm:min-h-[260px] before:sm:rounded-md"
       )}
       style={{ animationDelay: `${index * 0.1}s` }}
     >
@@ -29,8 +29,8 @@ export const ReviewCardLoader: FC<ReviewCardLoaderProps> = ({
           <TextLoader height="h1" className="w-36 sm:w-full" />
           <TextLoader height="h2" className="w-40 sm:w-10/12" />
           <div className="mt-1 flex gap-2">
-            <div className="h-6 w-8 rounded bg-gray" />
-            <div className="h-6 w-8 rounded bg-gray" />
+            <div className="h-6 w-8 rounded bg-colors-gray" />
+            <div className="h-6 w-8 rounded bg-colors-gray" />
           </div>
         </div>
       </div>
@@ -49,8 +49,8 @@ export const ReviewCardLoader: FC<ReviewCardLoaderProps> = ({
         <div className="flex flex-col items-end gap-1 self-end">
           <TextLoader height="h3" className="w-44" />
           <div className="flex gap-1">
-            <div className="h-8 w-14 rounded-sm bg-gray" />
-            <div className="h-8 w-14 rounded-sm bg-gray" />
+            <div className="h-8 w-14 rounded-sm bg-colors-gray" />
+            <div className="h-8 w-14 rounded-sm bg-colors-gray" />
           </div>
         </div>
       </div>

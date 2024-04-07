@@ -1,10 +1,10 @@
+import { Suspense } from "react";
+import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
-import { profilesOrderByArray } from "~/types/feed/OrderVariants";
-
-import { FeedWithSorting } from "~/components/Feed/FeedWithSorting";
+import { ProfilesFeed } from "~/components/Profile/ProfilesFeed";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { type localeTypes } from "~/i18n";
-import readUserSession from "~/lib/supabase/readUserSession";
 
 export async function generateMetadata({
   params: { locale },
@@ -17,27 +17,20 @@ export async function generateMetadata({
   };
 }
 
-export default async function CommunityPage({
+export default function CommunityPage({
   params: { locale },
+  searchParams,
 }: {
   params: { locale: localeTypes };
+  searchParams: ReadonlyURLSearchParams;
 }) {
   unstable_setRequestLocale(locale);
 
-  const {
-    data: { session },
-  } = await readUserSession();
-
   return (
     <div className="container pb-12">
-      <FeedWithSorting
-        feedVariant="profiles"
-        orderArray={profilesOrderByArray}
-        takeLimit={30}
-        sessionId={session?.user.id}
-        userId={undefined}
-        variant={undefined}
-      />
+      <Suspense fallback={<LargeComponentLoader />}>
+        <ProfilesFeed searchParams={searchParams} />
+      </Suspense>
     </div>
   );
 }

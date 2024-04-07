@@ -1,9 +1,10 @@
 "use client";
 
 import { type FC, useEffect, useRef, useState } from "react";
-import clsx from "clsx";
 
 import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
+
+import { cn } from "~/utils/cn";
 
 interface DragContainerProps {
   children: React.ReactNode;
@@ -18,14 +19,6 @@ export const DragContainer: FC<DragContainerProps> = ({
   containerClassName,
   arrowsClassName,
 }) => {
-  const arrowSizeClass = {
-    default: "h-10 w-10",
-    sm: "h-8 w-8",
-  };
-
-  const arrowsCommonClass =
-    "hidden md:block rounded-full drop-shadow-icon text-white-light transition-opacity bg-secondary dark:bg-secondary-light";
-
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [renderLeftButton, setRenderLeftButton] = useState(false);
@@ -55,12 +48,20 @@ export const DragContainer: FC<DragContainerProps> = ({
   const isScrollable =
     containerRef.current && containerRef.current?.scrollWidth > 0;
 
+  const arrowSizeClass = {
+    default: "size-10",
+    sm: "size-8",
+  };
+
+  const arrowsCommonClass =
+    "hidden md:block rounded-full drop-shadow-icon text-white transition-all bg-colors-primary hover:scale-105 hover:bg-colors-accent";
+
   return (
-    <div className="relative">
+    <div className="relative flex">
       <div
         ref={containerRef}
-        className={clsx(
-          "overflow-x-auto overflow-y-hidden",
+        className={cn(
+          "flex w-fit max-w-full overflow-x-auto overflow-y-hidden",
           containerClassName
         )}
       >
@@ -71,7 +72,7 @@ export const DragContainer: FC<DragContainerProps> = ({
           <div className="pointer-events-none absolute bottom-0 left-[-20px] top-0 flex items-center">
             <button
               tabIndex={renderLeftButton ? 0 : -1}
-              className={clsx(
+              className={cn(
                 arrowSizeClass[arrowSize],
                 arrowsCommonClass,
                 renderLeftButton
@@ -81,13 +82,13 @@ export const DragContainer: FC<DragContainerProps> = ({
               )}
               onClick={() => handleClickToScroll(-256)}
             >
-              <MdNavigateBefore className="h-full w-full" />
+              <MdNavigateBefore className="size-full" />
             </button>
           </div>
           <div className="pointer-events-none absolute bottom-0 right-[-20px] top-0 flex items-center">
             <button
               tabIndex={renderRightButton ? 0 : -1}
-              className={clsx(
+              className={cn(
                 arrowSizeClass[arrowSize],
                 arrowsCommonClass,
                 renderRightButton
@@ -97,7 +98,7 @@ export const DragContainer: FC<DragContainerProps> = ({
               )}
               onClick={() => handleClickToScroll(256)}
             >
-              <MdNavigateNext className="h-full w-full" />
+              <MdNavigateNext className="size-full" />
             </button>
           </div>
         </>
