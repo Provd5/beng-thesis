@@ -1,4 +1,5 @@
 import { type FC } from "react";
+import { type ReadonlyURLSearchParams } from "next/navigation";
 import { URLSearchParams } from "url";
 
 import { SortReviewsArray } from "~/types/orderArrays";
@@ -15,7 +16,7 @@ import { ReviewCard } from "./ReviewCard/ReviewCard";
 interface ReviewsFeedProps {
   bookTitle: string;
   bookId: string;
-  searchParams: unknown;
+  searchParams: ReadonlyURLSearchParams;
 }
 
 export const ReviewsFeed: FC<ReviewsFeedProps> = async ({

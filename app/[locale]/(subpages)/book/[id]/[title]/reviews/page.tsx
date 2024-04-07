@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { type ReadonlyURLSearchParams } from "next/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
 
 import { ReviewsFeed } from "~/components/Review/ReviewsFeed";
@@ -10,7 +11,7 @@ export default function BookReviewsPage({
   searchParams,
 }: {
   params: { id: string; title: string; locale: localeTypes };
-  searchParams: unknown;
+  searchParams: ReadonlyURLSearchParams;
 }) {
   unstable_setRequestLocale(locale);
 

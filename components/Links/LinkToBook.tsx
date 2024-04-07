@@ -33,7 +33,9 @@ export const LinkToBook: FC<LinkToBookProps> = ({
     : `/${pathnameWithoutLocale}`;
 
   const query =
-    searchParams === "" ? null : `${normalizedPathname}?${searchParams}`;
+    searchParams === ""
+      ? normalizedPathname
+      : `${normalizedPathname}?${searchParams}`;
 
   return (
     <Link
