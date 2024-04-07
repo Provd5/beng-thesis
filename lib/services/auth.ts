@@ -58,6 +58,30 @@ export async function login(
   }
 }
 
+export async function demoLogin(
+  captchaToken: string
+): Promise<{ success: true }> {
+  try {
+    if (captchaToken === "") {
+      throw new Error(ErrorsToTranslate.AUTH.CAPTCHA_WAS_NOT_SOLVED);
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: "test@test.test",
+      password: "test",
+      options: { captchaToken: captchaToken },
+    });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return { success: true };
+  } catch (e) {
+    throw new Error(errorHandler(e));
+  }
+}
+
 export async function signup(
   captchaToken: string,
   formData: unknown
