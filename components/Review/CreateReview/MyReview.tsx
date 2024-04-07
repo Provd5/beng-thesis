@@ -16,7 +16,7 @@ export const MyReview: FC<MyReviewProps> = async ({ bookId }) => {
   if (reviewData === undefined) return <MyReviewLogin />;
 
   return (
-    <Suspense fallback={<LargeComponentLoader />}>
+    <Suspense key={"CreateReview"} fallback={<LargeComponentLoader />}>
       <CreateReview bookId={bookId} reviewData={reviewData} />
     </Suspense>
   );

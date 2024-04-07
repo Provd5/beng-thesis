@@ -24,7 +24,7 @@ export default function BookLayout({
   return (
     <div className="container pb-12 pt-8">
       <BackFrom />
-      <Suspense fallback={<BookLoader />}>
+      <Suspense key={"Book"} fallback={<BookLoader />}>
         <Book bookId={id}>{children}</Book>
       </Suspense>
     </div>

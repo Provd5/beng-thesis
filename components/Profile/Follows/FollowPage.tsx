@@ -1,5 +1,4 @@
 import { type FC } from "react";
-import { type ReadonlyURLSearchParams } from "next/navigation";
 
 import { SortFollowProfilesArray } from "~/types/orderArrays";
 
@@ -14,7 +13,7 @@ import { ProfileCard } from "../ProfileCard/ProfileCard";
 interface FollowPageProps {
   profileName: string;
   variant: "follower" | "following";
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }
 
 export const FollowPage: FC<FollowPageProps> = async ({

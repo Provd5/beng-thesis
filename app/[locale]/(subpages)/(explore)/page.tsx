@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { BooksFeed } from "~/components/Book/BooksFeed";
@@ -22,13 +21,16 @@ export default function ExplorePage({
   searchParams,
 }: {
   params: { locale: localeTypes };
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }) {
   unstable_setRequestLocale(locale);
 
   return (
     <div className="container pb-12">
-      <Suspense fallback={<LargeComponentLoader />}>
+      <Suspense
+        key={"ExplorePage-BooksFeed"}
+        fallback={<LargeComponentLoader />}
+      >
         <BooksFeed searchParams={searchParams} />
       </Suspense>
     </div>

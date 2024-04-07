@@ -16,7 +16,7 @@ import { ReviewCard } from "./ReviewCard/ReviewCard";
 interface ReviewsFeedProps {
   bookTitle: string;
   bookId: string;
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }
 
 export const ReviewsFeed: FC<ReviewsFeedProps> = async ({
@@ -24,7 +24,7 @@ export const ReviewsFeed: FC<ReviewsFeedProps> = async ({
   bookId,
   searchParams,
 }) => {
-  const params = new URLSearchParams(searchParams);
+  const params = new URLSearchParams(searchParams as ReadonlyURLSearchParams);
   const from = params.get("from");
   const reviews = await getAllReviews(bookId, searchParams);
 

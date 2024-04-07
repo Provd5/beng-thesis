@@ -173,6 +173,7 @@
       "last read:": "Ostatnio przeczytana:",
       "most read book:": "Najczęściej czytana książka:",
       "read quantity": "przeczytano <span>{numRead}</span> razy",
+      "total books read:": "Przeczytanych książek:",
       "total pages read:": "Suma przeczytanych stron:",
       "no read books": "Nie oznaczyłeś jeszcze żadnej książki jako przeczytanej"
     }
@@ -292,7 +293,7 @@
   "Sorting": {
     "sort by:": "Sortuj po:",
     "popularity": "popularność",
-    "last_added": "nowo dodane",
+    "last_added": "najnowsze",
     "activity": "aktywność profilu",
     "title": "tytuł",
     "full_name": "nazwa profilu",

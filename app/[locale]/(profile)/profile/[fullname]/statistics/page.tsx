@@ -31,24 +31,33 @@ export default function StatisticsPage({
   return (
     <>
       <BackCategoryLink variant="RETURN" href={ROUTES.profile.back(fullname)} />
-      <div className="flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+      <div className="flex flex-col justify-center gap-3">
         {/* all categories statistics */}
         <StatisticsCategoryWrapper variant="profile statistics">
-          <Suspense fallback={<LargeComponentLoader />}>
+          <Suspense
+            key="profile statistics"
+            fallback={<LargeComponentLoader />}
+          >
             <MainStatisticsCard profileName={fullname} />
           </Suspense>
         </StatisticsCategoryWrapper>
 
         {/* owned statistics */}
         <StatisticsCategoryWrapper variant="owned books">
-          <Suspense fallback={<LargeComponentLoader />}>
+          <Suspense
+            key="owned books statistics"
+            fallback={<LargeComponentLoader />}
+          >
             <OwnedAsStatisticsCard profileName={fullname} />
           </Suspense>
         </StatisticsCategoryWrapper>
 
         {/* reading statistics */}
         <StatisticsCategoryWrapper variant="read books">
-          <Suspense fallback={<LargeComponentLoader />}>
+          <Suspense
+            key="read books statistics"
+            fallback={<LargeComponentLoader />}
+          >
             <AlreadyReadStatisticsCard profileName={fullname} />
           </Suspense>
         </StatisticsCategoryWrapper>

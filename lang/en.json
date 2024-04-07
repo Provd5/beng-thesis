@@ -173,6 +173,7 @@
       "last read:": "Last read:",
       "most read book:": "Most read book:",
       "read quantity": "read <span>{numRead}</span> times",
+      "total books read:": "Already read books:",
       "total pages read:": "Total pages read:",
       "no read books": "You haven't marked any book as already read yet"
     }
@@ -292,7 +293,7 @@
   "Sorting": {
     "sort by:": "Sort by:",
     "popularity": "popularity",
-    "last_added": "last added",
+    "last_added": "newest",
     "activity": "user activity",
     "title": "title",
     "full_name": "username",

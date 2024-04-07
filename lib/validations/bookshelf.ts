@@ -33,6 +33,6 @@ export const ChangeBookshelfValidator = z.object({
         message: ErrorsToTranslate.DATA_TYPES.FORMAT_IS_INVALID,
       }),
     })
-    .min(1)
+    .min(0)
     .optional(),
 });

@@ -3,9 +3,11 @@ import { type ReadonlyURLSearchParams } from "next/navigation";
 import { SearchCategoriesArray, type SearchCategoryType } from "~/types/search";
 
 export const searchCategoryValidator = (
-  searchParams: ReadonlyURLSearchParams
+  searchParams: unknown
 ): { category: SearchCategoryType; q: string } => {
-  const urlSearchParams = new URLSearchParams(searchParams);
+  const urlSearchParams = new URLSearchParams(
+    searchParams as ReadonlyURLSearchParams
+  );
 
   const query = urlSearchParams.get("q") || "";
 

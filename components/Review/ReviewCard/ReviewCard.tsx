@@ -56,7 +56,7 @@ export const ReviewCard: FC<ReviewCardProps> = ({ reviewData }) => {
           {reviewData.text && (
             <>
               <ReviewText reviewText={reviewData.text} />
-              <Suspense fallback={<Loader />}>
+              <Suspense key={"ManageReaction"} fallback={<Loader />}>
                 <ManageReaction
                   reviewId={reviewData.id}
                   reviewReaction={reviewData.review_reaction}

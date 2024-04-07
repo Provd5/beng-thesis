@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { FollowPage } from "~/components/Profile/Follows/FollowPage";
@@ -22,12 +21,12 @@ export default function FollowingPage({
   searchParams,
 }: {
   params: { fullname: string; locale: localeTypes };
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }) {
   unstable_setRequestLocale(locale);
 
   return (
-    <Suspense fallback={<LargeComponentLoader />}>
+    <Suspense key={"following"} fallback={<LargeComponentLoader />}>
       <FollowPage
         searchParams={searchParams}
         profileName={fullname}

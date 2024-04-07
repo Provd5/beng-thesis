@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { type ReadonlyURLSearchParams } from "next/navigation";
 import { unstable_setRequestLocale } from "next-intl/server";
 
 import { ReviewsFeed } from "~/components/Review/ReviewsFeed";
@@ -11,13 +10,16 @@ export default function BookReviewsPage({
   searchParams,
 }: {
   params: { id: string; title: string; locale: localeTypes };
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }) {
   unstable_setRequestLocale(locale);
 
   return (
     <div className="flex flex-col">
-      <Suspense fallback={<LargeComponentLoader />}>
+      <Suspense
+        key={"BookReviewsPage-ReviewsFeed"}
+        fallback={<LargeComponentLoader />}
+      >
         <ReviewsFeed
           bookId={id}
           bookTitle={title}

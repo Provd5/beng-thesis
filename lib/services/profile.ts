@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { type ReadonlyURLSearchParams } from "next/navigation";
 
 import { type GetProfileInterface } from "~/types/data/profile";
 import { type GetDataList } from "~/types/list";
@@ -81,7 +80,7 @@ export async function getProfileQuantity(q?: string): Promise<number> {
 }
 
 export async function getAllProfiles(
-  searchParams: ReadonlyURLSearchParams,
+  searchParams: unknown,
   q?: string
 ): Promise<GetDataList<GetProfileInterface>> {
   const validSearchParams = sortParamsValidator(
@@ -253,7 +252,7 @@ export async function getFollowQuantity(
 export async function getFollowProfiles(
   profileName: string,
   variant: "follower" | "following",
-  searchParams: ReadonlyURLSearchParams
+  searchParams: unknown
 ): Promise<GetDataList<GetProfileInterface>> {
   const decodedProfileName = decodeURIComponent(profileName);
 
@@ -374,6 +373,7 @@ export async function postFollow(
     }
 
     // on success
+    revalidatePath(ROUTES.profile.session_profile, "page");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));

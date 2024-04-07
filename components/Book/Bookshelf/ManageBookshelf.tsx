@@ -16,6 +16,10 @@ export const ManageBookshelf: FC<ManageBookshelfProps> = ({
   if (bookshelfData === undefined) return;
 
   return (
-    <HandleChangeBookshlef bookId={bookId} bookshelfData={bookshelfData} />
+    <HandleChangeBookshlef
+      key={`HandleChangeBookshlef-${bookId}`}
+      bookId={bookId}
+      bookshelfData={bookshelfData}
+    />
   );
 };

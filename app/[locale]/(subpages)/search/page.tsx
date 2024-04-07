@@ -1,4 +1,3 @@
-import { type ReadonlyURLSearchParams } from "next/navigation";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { SearchComponent } from "~/components/Search/SearchComponent";
@@ -21,7 +20,7 @@ export default function SearchPage({
   searchParams,
 }: {
   params: { locale: localeTypes };
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }) {
   unstable_setRequestLocale(locale);
 

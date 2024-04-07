@@ -1,5 +1,4 @@
 import { type FC } from "react";
-import { type ReadonlyURLSearchParams } from "next/navigation";
 
 import { SortReviewBookshelfArray } from "~/types/orderArrays";
 
@@ -11,7 +10,7 @@ import { NotFoundItems } from "../ui/NotFound/NotFoundItems";
 
 interface ReviewBookshelfFeedProps {
   profileName: string;
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
 }
 
 export const ReviewBookshelfFeed: FC<ReviewBookshelfFeedProps> = async ({

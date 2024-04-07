@@ -60,6 +60,7 @@ export const Profile: FC<ProfileProps> = async ({ profileName, children }) => {
               {!isMyProfile && (
                 <div className="mt-2 grid">
                   <FollowButton
+                    key={`FollowButton-${profileData.id}`}
                     userId={profileData.id}
                     isFollowed={profileData.is_followed}
                   />

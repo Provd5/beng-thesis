@@ -5,14 +5,16 @@ import { type OrderType, type SortsType } from "~/types/sort";
 import { orderArray, type SortArrayInterface } from "../types/orderArrays";
 
 export const sortParamsValidator = (
-  searchParams: ReadonlyURLSearchParams,
+  searchParams: unknown,
   sortArray: SortArrayInterface<SortsType>[]
 ): {
   page: number;
   order: OrderType;
   orderBy: SortsType;
 } => {
-  const urlSearchParams = new URLSearchParams(searchParams);
+  const urlSearchParams = new URLSearchParams(
+    searchParams as ReadonlyURLSearchParams
+  );
 
   const page = urlSearchParams.get("page");
   const parsedPage = page ? parseInt(page) : 0;

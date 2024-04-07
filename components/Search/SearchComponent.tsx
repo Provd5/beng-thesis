@@ -1,11 +1,7 @@
 "use client";
 
 import React, { type FC, useRef, useTransition } from "react";
-import {
-  type ReadonlyURLSearchParams,
-  usePathname,
-  useRouter,
-} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { MdKeyboardArrowDown } from "react-icons/md";
@@ -20,7 +16,7 @@ import { LargeComponentLoader } from "../ui/Loaders/Loader";
 import { SearchEngine } from "./SearchEngine";
 
 interface SearchComponentProps {
-  searchParams: ReadonlyURLSearchParams;
+  searchParams: unknown;
   children: React.ReactNode;
 }
 
@@ -38,7 +34,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({
   const [isPending, startTransition] = useTransition();
 
   const changeCategory = (searchCategory: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(validSearchCategory);
     if (inputRef.current) {
       inputRef.current.value = "";
     }
