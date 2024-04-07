@@ -1,4 +1,4 @@
-import { type FC, Suspense } from "react";
+import { type FC } from "react";
 import { type ReadonlyURLSearchParams } from "next/navigation";
 import { URLSearchParams } from "url";
 
@@ -10,7 +10,6 @@ import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
 import { BackCategoryLink } from "../Links/BackCategoryLink";
 import { FeedSort } from "../Modals/FeedSort";
-import { BookReviewCardsLoader } from "../ui/Loaders/Skeletons/BookReviewCardLoader";
 import { NotFoundItems } from "../ui/NotFound/NotFoundItems";
 import { ReviewCard } from "./ReviewCard/ReviewCard";
 
@@ -50,13 +49,9 @@ export const ReviewsFeed: FC<ReviewsFeedProps> = async ({
           orderArray={SortReviewsArray}
         >
           <div className="grid grid-cols-1 gap-3">
-            <Suspense
-              fallback={<BookReviewCardsLoader items={reviews.itemsPerPage} />}
-            >
-              {reviews.data.map((review) => (
-                <ReviewCard key={review.id} reviewData={review} />
-              ))}
-            </Suspense>
+            {reviews.data.map((review) => (
+              <ReviewCard key={review.id} reviewData={review} />
+            ))}
           </div>
         </FeedSort>
       )}

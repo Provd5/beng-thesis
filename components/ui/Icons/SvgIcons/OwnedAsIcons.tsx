@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-const className = "h-full w-full fill-[var(--svg-gradient)] drop-shadow-icon";
+const className = "size-full fill-colors-primary drop-shadow-icon";
 
 export const AsEbook: FC = () => {
   return (

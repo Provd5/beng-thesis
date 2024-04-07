@@ -3,13 +3,13 @@
 import { type FC, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
 
 import { TbSortAscending2, TbSortDescending2 } from "react-icons/tb";
 
 import { type SortArrayInterface } from "~/types/orderArrays";
 import { type SortsType } from "~/types/sort";
 
+import { cn } from "~/utils/cn";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
 import { LargeComponentLoader } from "../ui/Loaders/Loader";
@@ -65,18 +65,18 @@ export const FeedSort: FC<FeedSortProps> = ({
           initiatorStyle={
             <div className="flex items-center gap-1 whitespace-nowrap px-1 py-1 text-sm">
               <span>{t("sort by:")}</span>
-              <span className="flex items-center gap-0.5 text-secondary dark:text-secondary-light">
+              <span className="flex items-center gap-0.5 text-colors-primary hover:animate-pulse">
                 {t(sortParams.orderBy)}{" "}
                 {sortParams.order === "desc" ? (
-                  <TbSortDescending2 className="mt-1 text-lg" />
+                  <TbSortDescending2 className="text-lg" />
                 ) : (
-                  <TbSortAscending2 className="mt-1 text-lg" />
+                  <TbSortAscending2 className="text-lg" />
                 )}
               </span>
             </div>
           }
         >
-          <div className="flex flex-col gap-2 whitespace-nowrap text-md">
+          <div className="text-md flex flex-col gap-2 whitespace-nowrap">
             {orderArray.map((sort) => {
               const isActive = sortParams.orderBy === sort.orderBy;
 
@@ -84,20 +84,21 @@ export const FeedSort: FC<FeedSortProps> = ({
                 <button
                   key={sort.orderBy}
                   onClick={() => selectOrder(sort.reverseOrder, sort.orderBy)}
-                  className={clsx(
-                    "flex items-center justify-between gap-1 py-0.5 text-left",
-                    isActive && "text-secondary dark:text-secondary-light"
+                  className={cn(
+                    "flex items-center justify-between gap-1 py-0.5 text-left transition-transform",
+                    isActive && "text-colors-primary",
+                    !isActive && "hover:translate-x-1"
                   )}
                 >
                   <p>{t(sort.orderBy)}</p>
                   {isActive ? (
                     sortParams.order === "desc" ? (
-                      <TbSortDescending2 className="h-6 w-6" />
+                      <TbSortDescending2 className="size-6" />
                     ) : (
-                      <TbSortAscending2 className="h-6 w-6" />
+                      <TbSortAscending2 className="size-6" />
                     )
                   ) : (
-                    <div className="h-6 w-6" />
+                    <div className="size-6" />
                   )}
                 </button>
               );

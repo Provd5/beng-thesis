@@ -12,10 +12,16 @@ export const BookReviewCardReactionsLabel: FC<
 > = ({ upReactions }) => {
   const t = useTranslations("Reviews.BookReviewCard");
 
-  return t.rich("users found this review helpful", {
-    numUsers: upReactions,
-    span: (chunks) => (
-      <span className="text-secondary dark:text-secondary-light">{chunks}</span>
-    ),
-  });
+  return (
+    <p>
+      {t.rich("users found this review helpful", {
+        numUsers: upReactions,
+        span: (chunks) => (
+          <span className="text-colors-primarytext-colors-primary">
+            {chunks}
+          </span>
+        ),
+      })}
+    </p>
+  );
 };

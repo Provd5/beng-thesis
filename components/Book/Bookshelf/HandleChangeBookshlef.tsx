@@ -42,7 +42,7 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
 
   return (
     <div
-      className="flex w-fit cursor-pointer gap-1"
+      className="relative flex h-fit min-h-[70px] w-36 cursor-pointer gap-1 rounded-md bg-white/90 p-1 transition-colors hover:bg-colors-gray/10 dark:bg-black/30 hover:dark:bg-white/10"
       onClick={(e) =>
         !openModalButtonRef.current?.contains(e?.target as Node) &&
         setIsModalOpen(true)
@@ -57,15 +57,13 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
         {bookshlefState?.bookshelf === "ALREADY_READ" &&
           !!bookshlefState.read_quantity &&
           bookshlefState.read_quantity > 1 && (
-            <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red text-xs">
-              <p className="text-white-light">
-                ×{bookshlefState.read_quantity}
-              </p>
+            <div className="absolute -bottom-0.5 -right-0.5 flex size-5 items-center justify-center rounded-full bg-colors-red text-xs">
+              <p className="text-white">×{bookshlefState.read_quantity}</p>
             </div>
           )}
       </div>
 
-      <div className="relative flex flex-auto flex-col">
+      <div className="flex flex-col">
         <ButtonLink
           ref={openModalButtonRef}
           aria-label="open-modal-button"
@@ -75,27 +73,31 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
         >
           {t("on a shelf")}
         </ButtonLink>
-        {isModalOpen && (
-          <ModalWrapper
-            closeModalHandler={() => setIsModalOpen(false)}
-            openModalButtonRef={openModalButtonRef}
-          >
-            <ChangeBookshelfForm
-              bookId={bookId}
-              bookshelfData={bookshlefState}
-              setBookshlefState={setBookshlefState}
-              closeModal={() => setIsModalOpen(false)}
-            />
-          </ModalWrapper>
-        )}
-        <p>{bookshlefState?.bookshelf ? tb(bookshlefState.bookshelf) : "–"}</p>
-
-        {bookshlefState?.bookshelf && bookshlefState.updated_at && (
-          <p className="text-xs text-black-light dark:text-white-dark">
-            {dateFormater(bookshlefState.updated_at)}
+        <div className="mr-1 flex flex-col items-end">
+          <p className="-mt-1 whitespace-nowrap text-sm">
+            {bookshlefState?.bookshelf && tb(bookshlefState.bookshelf)}
           </p>
-        )}
+
+          {bookshlefState?.bookshelf && bookshlefState.updated_at && (
+            <p className="whitespace-nowrap text-xs text-colors-text">
+              {dateFormater(bookshlefState.updated_at)}
+            </p>
+          )}
+        </div>
       </div>
+      {isModalOpen && (
+        <ModalWrapper
+          closeModalHandler={() => setIsModalOpen(false)}
+          openModalButtonRef={openModalButtonRef}
+        >
+          <ChangeBookshelfForm
+            bookId={bookId}
+            bookshelfData={bookshlefState}
+            setBookshlefState={setBookshlefState}
+            closeModal={() => setIsModalOpen(false)}
+          />
+        </ModalWrapper>
+      )}
     </div>
   );
 };

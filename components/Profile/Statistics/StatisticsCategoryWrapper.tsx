@@ -15,9 +15,9 @@ export const StatisticsCategoryWrapper: FC<StatisticsCategoryWrapperProps> = ({
   const t = useTranslations("Statistics.CategoryTitles");
 
   return (
-    <div className="h-fit w-full rounded-md bg-white-light p-5 dark:bg-black-dark sm:w-fit sm:max-w-[600px]">
+    <div className="h-fit w-full rounded-md bg-colors-background p-5 sm:w-fit sm:max-w-[600px]">
       {variant && (
-        <h1 className="mb-3 text-center text-lg font-semibold text-secondary dark:text-secondary-light">
+        <h1 className="mb-3 text-center text-lg font-semibold text-colors-primary">
           {t(variant)}
         </h1>
       )}

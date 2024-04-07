@@ -17,7 +17,7 @@ export const Settings: FC = ({}) => {
       <ModalInitiator
         initiatorStyle={
           <div className="transition-transform hover:rotate-90 hover:scale-110">
-            <FaCog className="h-6 w-6" />
+            <FaCog className="size-6" />
           </div>
         }
       >

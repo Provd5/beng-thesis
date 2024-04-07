@@ -5,7 +5,6 @@ import { HIGHEST_REVIEW_RATE } from "~/types/data/review";
 
 import { getBook } from "~/lib/services/book";
 
-import { Loader } from "../ui/Loaders/Loader";
 import { BookCover } from "./BookCover";
 import { BookDetails } from "./BookDetails";
 import { ManageBookshelf } from "./Bookshelf/ManageBookshelf";
@@ -24,8 +23,8 @@ export const Book: FC<BookProps> = async ({ bookId, children }) => {
   if (!bookData) notFound();
 
   return (
-    <div className="mt-3 flex flex-col gap-8">
-      <div className="flex flex-col gap-x-10 gap-y-8 px-1 xs:px-3 md:flex-row md:justify-between md:px-6">
+    <div className="mt-3 flex flex-col gap-8 text-sm">
+      <div className="flex flex-col gap-x-10 gap-y-8 px-1 md:px-6">
         <div className="flex gap-3">
           <BookCover size="lg" coverUrl={bookData.book.thumbnail_url} />
 
@@ -35,7 +34,7 @@ export const Book: FC<BookProps> = async ({ bookId, children }) => {
               {bookData.book.subtitle && <h2>{bookData.book.subtitle}</h2>}
             </div>
 
-            <p className="text-black-light dark:text-white-dark">
+            <p className="text-colors-text">
               {bookData.book.authors.join(", ")}
             </p>
 
@@ -76,38 +75,30 @@ export const Book: FC<BookProps> = async ({ bookId, children }) => {
             />
           </div>
         </div>
-        <div className="flex justify-center gap-x-1 gap-y-4 max-xs:flex-wrap xs:gap-8 xs:px-2 md:justify-end">
-          <div className="flex h-fit flex-col items-start justify-center gap-4 xs:gap-8">
-            <div className="w-36">
-              <ManageBookshelf
-                bookId={bookData.book.id}
-                bookshelfData={bookData.bookshelf}
-              />
-            </div>
-            <div className="w-36">
-              <ManageLikes
-                bookId={bookData.book.id}
-                likesQuantity={bookData._count.liked_by}
-                likeData={bookData.liked_by}
-              />
-            </div>
-          </div>
-          <div className="flex h-fit flex-col items-start justify-center gap-4 xs:gap-8">
-            <div className="w-36">
-              <ManageOwnedAs
-                bookId={bookData.book.id}
-                ownedAsData={bookData.book_owned_as}
-              />
-            </div>
-            <div className="w-36">
-              <Suspense fallback={<Loader />}>
-                <ManageReviews
-                  bookId={bookData.book.id}
-                  reviewsQuantity={bookData._count.review}
-                />
-              </Suspense>
-            </div>
-          </div>
+        <div className="flex w-full flex-wrap justify-center gap-2 self-start">
+          <Suspense
+            fallback={
+              <div className="h-[70px] w-36 rounded-md bg-white/90 dark:bg-black/30" />
+            }
+          >
+            <ManageReviews
+              bookId={bookData.book.id}
+              reviewsQuantity={bookData._count.review}
+            />
+          </Suspense>
+          <ManageLikes
+            bookId={bookData.book.id}
+            likesQuantity={bookData._count.liked_by}
+            likeData={bookData.liked_by}
+          />
+          <ManageOwnedAs
+            bookId={bookData.book.id}
+            ownedAsData={bookData.book_owned_as}
+          />
+          <ManageBookshelf
+            bookId={bookData.book.id}
+            bookshelfData={bookData.bookshelf}
+          />
         </div>
       </div>
       {bookData.book.description && (

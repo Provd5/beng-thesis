@@ -25,7 +25,7 @@ export default function BookPage({
             pathname: ROUTES.book.reviews(id, title),
             query: searchParams,
           }}
-          categoryVariant="REVIEWS"
+          bookshelfVariant="REVIEWS"
           replace
         />
         <Suspense fallback={<LargeComponentLoader />}>

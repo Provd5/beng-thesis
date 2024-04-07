@@ -28,10 +28,10 @@ export const BackCategoryLink: FC<BackCategoryLinkProps> = ({
       <Link
         replace={replace}
         href={href}
-        className="flex grow items-center gap-3 md:grow-0 md:justify-start"
+        className="flex grow items-center gap-3 transition-transform hover:-translate-x-1 md:grow-0 md:justify-start"
       >
-        <MdNavigateBefore className="fill-primary text-xl dark:fill-secondary-light" />
-        <div className="text-lg font-semibold text-secondary dark:text-secondary-light">
+        <MdNavigateBefore className="fill-colors-primary text-xl" />
+        <div className="text-lg font-semibold text-colors-primary">
           <h1>{t(variant)}</h1>
         </div>
       </Link>
@@ -47,10 +47,10 @@ export const BackFrom: FC = () => {
     <div className="flex">
       <Link
         href={prevLocation ? prevLocation : ROUTES.root}
-        className="flex grow-0 items-center gap-3 md:justify-start"
+        className="flex grow-0 items-center gap-3 transition-transform hover:-translate-x-1 md:justify-start"
       >
-        <MdNavigateBefore className="fill-primary text-xl dark:fill-secondary-light" />
-        <div className="text-lg font-semibold text-secondary dark:text-secondary-light">
+        <MdNavigateBefore className="fill-colors-primary text-xl" />
+        <div className="text-lg font-semibold text-colors-primary">
           <h1>{t("RETURN")}</h1>
         </div>
       </Link>

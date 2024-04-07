@@ -4,10 +4,10 @@ import { type FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
 
 import { BookshelvesArray } from "~/types/consts";
 
+import { cn } from "~/utils/cn";
 import { convertTypeEnumToPathname } from "~/utils/pathnameTypeEnumConverter";
 import ROUTES from "~/utils/routes";
 
@@ -40,11 +40,11 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
           profileName,
           convertTypeEnumToPathname(bookshelfVariant)
         )}
-        className={clsx(
-          "whitespace-nowrap rounded-xl border border-secondary px-5 py-2.5 text-sm dark:border-secondary-light",
+        className={cn(
+          "whitespace-nowrap rounded-xl border border-colors-primary px-5 py-2.5 text-sm transition-colors",
           isActive()
-            ? "bg-secondary text-white dark:bg-secondary-light"
-            : "text-secondary dark:text-secondary-light"
+            ? "cursor-default bg-colors-primary text-white"
+            : "text-colors-primary hover:bg-colors-primary/70 hover:text-white"
         )}
       >
         {t(bookshelfVariant)}

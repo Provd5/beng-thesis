@@ -18,7 +18,7 @@ export const CreateReviewProfileDetails: FC<
         size="sm"
         avatarSrc={profileData.avatar_url}
       />
-      <h1 className="line-clamp-3 break-all font-bold">
+      <h1 className="line-clamp-3 break-words font-bold">
         {profileData.full_name}
       </h1>
     </div>

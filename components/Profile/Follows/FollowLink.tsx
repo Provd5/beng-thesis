@@ -4,10 +4,10 @@ import { type FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
 
 import { MdNavigateNext } from "react-icons/md";
 
+import { cn } from "~/utils/cn";
 import ROUTES from "~/utils/routes";
 
 interface ProfileSubpageLinkProps {
@@ -40,12 +40,15 @@ export const ProfileSubpageLink: FC<ProfileSubpageLinkProps> = ({
   return (
     <Link
       href={pageRoutes[variant]}
-      className={clsx(isActive() && "pointer-events-none")}
+      className={cn(
+        "transition-transform hover:translate-x-1",
+        isActive() && "pointer-events-none"
+      )}
     >
       <div
-        className={clsx(
+        className={cn(
           "flex w-fit items-center",
-          isActive() && "text-secondary dark:text-secondary-light"
+          isActive() && "text-colors-primary"
         )}
       >
         <h1 className="py-0.5 font-semibold">{t(variant)}</h1>

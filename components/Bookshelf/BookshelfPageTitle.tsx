@@ -36,9 +36,7 @@ export const BookshelfPageTitle: FC<BookshelfPageTitleProps> = ({
             {tb.rich("books quantity", {
               numBooks: booksQuantity,
               span: (chunks) => (
-                <span className="text-secondary dark:text-secondary-light">
-                  {chunks}
-                </span>
+                <span className="text-colors-primary">{chunks}</span>
               ),
             })}
           </p>

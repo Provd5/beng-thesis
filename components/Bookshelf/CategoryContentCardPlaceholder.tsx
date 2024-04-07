@@ -21,19 +21,19 @@ export const CategoryContentCardPlaceholder: FC<
   return (
     <Link
       href={href}
-      className="flex w-32 flex-none snap-center flex-col items-center gap-1 py-0.5 md:snap-start"
+      className="flex w-32 flex-none snap-center flex-col items-center gap-1 py-0.5 transition-transform hover:-translate-y-1 md:snap-start"
     >
-      <div className="relative flex h-[140px] w-[97px] flex-none items-center justify-center overflow-hidden rounded-sm drop-shadow-book">
+      <div className="relative flex h-[140px] w-[97px] flex-none items-center justify-center overflow-hidden rounded-md drop-shadow">
         {isEmpty ? (
           <AddBookPlaceholder />
         ) : (
-          <div className="h-20 w-20 overflow-hidden rounded-full">
+          <div className="size-20 overflow-hidden rounded-full">
             <ShowMorePlaceholder />
           </div>
         )}
       </div>
       <div>
-        <h1 className="text-center text-sm text-black-light dark:text-white-dark">
+        <h1 className="text-center text-sm text-colors-text">
           {isEmpty ? t("this shelf is currently empty") : t("show more")}
         </h1>
       </div>

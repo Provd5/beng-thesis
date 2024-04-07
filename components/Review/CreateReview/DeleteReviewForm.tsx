@@ -7,7 +7,6 @@ import {
   type TranslationValues,
   useTranslations,
 } from "next-intl";
-import clsx from "clsx";
 
 import { ModalWrapper } from "~/components/Modals/ModalWrapper";
 import { Button } from "~/components/ui/Buttons";
@@ -64,9 +63,10 @@ export const DeleteReviewForm: FC<DeleteReviewFormProps> = ({
         size="sm"
         onClick={() => setIsModalOpen(!isModalOpen)}
         defaultColor={false}
-        className={clsx("text-white-light", isModalOpen ? "bg-gray" : "bg-red")}
+        className="bg-colors-red text-white"
+        disabled={isModalOpen}
       >
-        {isModalOpen ? t("cancel") : t("delete")}
+        {t("delete")}
       </Button>
       {isModalOpen && (
         <ModalWrapper
@@ -74,16 +74,27 @@ export const DeleteReviewForm: FC<DeleteReviewFormProps> = ({
           openModalButtonRef={openModalButtonRef}
         >
           <div className="flex min-w-[200px] flex-col items-center gap-3">
-            <h1 className="text-center text-md">{t("are you sure?")}</h1>
-            <Button
-              type="submit"
-              size="sm"
-              onClick={handleDeleteReview}
-              defaultColor={false}
-              className="bg-red text-white-light"
-            >
-              {t("delete")}
-            </Button>
+            <h1 className="text-md text-center">{t("are you sure?")}</h1>
+            <div className="flex gap-3">
+              <Button
+                type="submit"
+                size="sm"
+                onClick={handleDeleteReview}
+                defaultColor={false}
+                className="bg-colors-red text-white"
+              >
+                {t("delete")}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => setIsModalOpen(false)}
+                defaultColor={false}
+                className="bg-colors-gray text-white"
+              >
+                {t("cancel")}
+              </Button>
+            </div>
           </div>
         </ModalWrapper>
       )}

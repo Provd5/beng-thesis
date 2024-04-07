@@ -70,7 +70,9 @@
     "my account": "Moje konto",
     "edit profile": "Edytuj profil",
     "collapse": "zwiń",
-    "expand": "rozwiń"
+    "expand": "rozwiń",
+    "next page": "następna",
+    "previous page": "poprzednia"
   },
 
   "Nav": {
@@ -96,7 +98,7 @@
       "statistics": "statystyki",
       "owned": "posiadane",
       "liked": "polubione",
-      "to-read": "do przeczytania",
+      "to-read": "do poznania",
       "already-read": "przeczytane",
       "abandoned": "porzucone",
       "reading": "w trakcie",
@@ -185,7 +187,7 @@
       "STATISTICS": "Statystyki",
       "OWNED": "Posiadane",
       "LIKED": "Polubione",
-      "TO_READ": "Do przeczytania",
+      "TO_READ": "Do poznania",
       "ALREADY_READ": "Przeczytane",
       "ABANDONED": "Porzucone",
       "READING": "W trakcie",
@@ -199,7 +201,7 @@
     "BookCard": {
       "rate": "Ocena",
       "likes": "Polubień",
-      "reviews": "Recenzji"
+      "reviews": "Recenzje"
     },
     "Details": {
       "pages:": "Stron:",

@@ -1,6 +1,11 @@
 "use client";
 
-import { type FC, type TransitionStartFunction, useRef } from "react";
+import {
+  type FC,
+  type TransitionStartFunction,
+  useEffect,
+  useRef,
+} from "react";
 import toast from "react-hot-toast";
 import {
   type ReadonlyURLSearchParams,
@@ -42,6 +47,11 @@ export const SearchEngine: FC<SearchEngineProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const validSearchCategory = searchCategoryValidator(searchParams);
 
+  useEffect(() => {
+    inputRef.current?.focus();
+    inputRef.current?.select();
+  }, []);
+
   const handleSearch = useDebouncedCallback(() => {
     const inputValue = inputRef.current?.value;
     const params = new URLSearchParams(searchParams);
@@ -62,12 +72,12 @@ export const SearchEngine: FC<SearchEngineProps> = ({
   return (
     <form
       role="search"
-      className="flex w-full sm:w-auto"
+      className="flex w-full max-w-96"
       onSubmit={(e) => (e.preventDefault(), handleSearch())}
     >
       <Input
         ref={inputRef}
-        className="h-full w-full rounded-none rounded-tl-lg xs:rounded-tl-none sm:w-80"
+        className="rounded-none rounded-tl-lg border-colors-primary/50"
         id="search-input"
         name="q"
         type="search"
@@ -84,9 +94,9 @@ export const SearchEngine: FC<SearchEngineProps> = ({
 
       <button
         type="submit"
-        className="flex w-11 shrink-0 items-center justify-center rounded-r-lg bg-primary-light dark:bg-secondary"
+        className="flex w-11 shrink-0 items-center justify-center rounded-r-lg bg-colors-primary"
       >
-        <BiSearchAlt className="h-6 w-6 text-white" />
+        <BiSearchAlt className="size-6 text-white transition-transform hover:scale-110" />
       </button>
     </form>
   );

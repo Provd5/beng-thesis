@@ -28,7 +28,7 @@ export const ProfileCardDetails: FC<ProfileCardDetailsProps> = ({
     <div className="flex flex-auto flex-col gap-1">
       <Link
         href={ROUTES.profile.root(profileData.full_name)}
-        className="flex gap-1"
+        className="flex gap-1 transition-transform hover:translate-x-1"
       >
         <AvatarImage
           size="sm"
@@ -36,7 +36,7 @@ export const ProfileCardDetails: FC<ProfileCardDetailsProps> = ({
           avatarSrc={profileData.avatar_url}
         />
         <div className="flex w-full flex-col gap-0.5">
-          <h1 className="line-clamp-2 break-all text-sm font-bold">
+          <h1 className="line-clamp-2 break-words text-sm font-bold">
             {profileData.full_name}
           </h1>
           <div className="my-0.5 flex gap-1.5">
@@ -55,7 +55,7 @@ export const ProfileCardDetails: FC<ProfileCardDetailsProps> = ({
           </div>
         </div>
         <div className="flex items-center justify-end">
-          <MdNavigateNext className="h-8 w-8" />
+          <MdNavigateNext className="size-8" />
         </div>
       </Link>
       <div className="flex flex-col gap-0.5 text-xs">
@@ -69,9 +69,7 @@ export const ProfileCardDetails: FC<ProfileCardDetailsProps> = ({
         </p>
         {profileData.description && (
           <div>
-            <h2 className="text-black-light dark:text-white-dark">
-              {t("profile description:")}
-            </h2>
+            <h2 className="text-colors-text">{t("profile description:")}</h2>
             <p className="line-clamp-3">{profileData.description}</p>
           </div>
         )}

@@ -28,8 +28,8 @@ export const ReviewCardProfileDetails: FC<ReviewCardProfileDetailsProps> = ({
     <>
       <AvatarImage className="drop-shadow-icon" avatarSrc={avatarUrl} />
       <div className="flex flex-col gap-0.5 sm:items-center">
-        <h1 className="line-clamp-3 break-all font-bold">{profileName}</h1>
-        <h2 className="flex flex-wrap text-xs text-black-light dark:text-white-dark sm:justify-center">
+        <h1 className="line-clamp-3 break-words font-bold">{profileName}</h1>
+        <h2 className="flex flex-wrap text-xs text-colors-text sm:justify-center">
           {t("joined:")} <span>{dateFormater(createdAt)}</span>
         </h2>
         <div className="my-1 flex gap-2 text-base">

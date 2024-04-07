@@ -12,8 +12,8 @@ export const ManageProfile: FC = async () => {
 
   return (
     <div className="flex gap-3">
-      <div className="ml-0 mt-[-30px] xs:ml-6">
-        <div className="bodyGradientForAvatar relative flex h-[112px] w-[112px] items-center justify-center rounded-full">
+      <div className="mt-[-30px]">
+        <div className="bodyGradientForAvatar relative flex size-[112px] items-center justify-center rounded-full">
           <AvatarImage size="lg" avatarSrc={profileData.avatar_url} />
         </div>
       </div>

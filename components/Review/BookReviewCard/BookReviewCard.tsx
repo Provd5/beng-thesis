@@ -18,7 +18,7 @@ export const BookReviewCard: FC<BookReviewCardProps> = ({ reviewData }) => {
       <LinkToBook
         bookId={reviewData.book.id}
         bookTitle={reviewData.book.title}
-        className="float-left mr-3 h-fit w-fit"
+        className="float-left mr-3 size-fit"
       >
         <BookCover coverUrl={reviewData.book.thumbnail_url} />
       </LinkToBook>
@@ -29,7 +29,7 @@ export const BookReviewCard: FC<BookReviewCardProps> = ({ reviewData }) => {
           className="block w-auto"
         >
           <h1 className="line-clamp-2">{reviewData.book.title}</h1>
-          <p className="text-sm text-black-light dark:text-white-dark">
+          <p className="text-sm text-colors-text">
             {reviewData.book.authors.join(", ")}
           </p>
         </LinkToBook>

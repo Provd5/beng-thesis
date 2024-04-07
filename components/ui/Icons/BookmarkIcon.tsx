@@ -1,5 +1,4 @@
 import type { FC } from "react";
-import clsx from "clsx";
 
 import { type IconType } from "react-icons/lib";
 import {
@@ -13,6 +12,8 @@ import {
 } from "react-icons/bs";
 
 import { type BookshelvesTypes } from "~/types/consts";
+
+import { cn } from "~/utils/cn";
 
 type sizes = "default" | "lg" | "sm";
 
@@ -48,42 +49,42 @@ export const BookmarkIcon: FC<
     case "TO_READ":
       bookshelfBookmark = {
         Icon: BsFillBookmarkDashFill,
-        color: "fill-blue",
+        color: "fill-colors-blue",
       };
       break;
 
     case "ALREADY_READ":
       bookshelfBookmark = {
         Icon: BsFillBookmarkCheckFill,
-        color: "fill-green",
+        color: "fill-colors-green",
       };
       break;
 
     case "ABANDONED":
       bookshelfBookmark = {
         Icon: BsFillBookmarkXFill,
-        color: "fill-red",
+        color: "fill-colors-red",
       };
       break;
 
     case "READING":
       bookshelfBookmark = {
         Icon: BsFillBookmarkFill,
-        color: "fill-primary-light",
+        color: "fill-colors-cyan",
       };
       break;
 
     case "LIKED":
       bookshelfBookmark = {
         Icon: BsFillBookmarkHeartFill,
-        color: "fill-pink",
+        color: "fill-colors-pink",
       };
       break;
 
     case "REVIEWS":
       bookshelfBookmark = {
         Icon: BsFillBookmarkStarFill,
-        color: "fill-yellow",
+        color: "fill-colors-yellow",
       };
       break;
 
@@ -91,26 +92,24 @@ export const BookmarkIcon: FC<
     default:
       bookshelfBookmark = {
         Icon: BsFillBookmarksFill,
-        color: "fill-gray",
+        color: "fill-colors-gray",
       };
       break;
   }
 
   return (
-    <div className="flex self-start">
+    <div className="flex">
       {Icon ? (
         <Icon
-          className={clsx(
+          className={cn(
             "h-auto drop-shadow-icon",
-            color === "gradient"
-              ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-              : color,
+            color === "gradient" ? "fill-colors-primary" : color,
             sizeClass[size]
           )}
         />
       ) : (
         <bookshelfBookmark.Icon
-          className={clsx(
+          className={cn(
             "h-auto drop-shadow-icon",
             bookshelfBookmark.color,
             sizeClass[size]

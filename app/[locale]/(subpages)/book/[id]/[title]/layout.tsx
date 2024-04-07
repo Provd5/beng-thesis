@@ -22,7 +22,7 @@ export default function BookLayout({
   unstable_setRequestLocale(locale);
 
   return (
-    <div className="container pb-12 pt-8 text-sm">
+    <div className="container pb-12 pt-8">
       <BackFrom />
       <Suspense fallback={<BookLoader />}>
         <Book bookId={id}>{children}</Book>

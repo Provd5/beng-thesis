@@ -13,11 +13,9 @@ export const ReviewsQuantity: FC<ReviewsQuantityProps> = ({
   const t = useTranslations("Book.BookCard");
 
   return (
-    <div className="flex flex-col pt-1">
-      <h3 className="text-secondary dark:text-secondary-light">
-        {t("reviews")}
-      </h3>
-      <p>{reviewsQuantity}</p>
+    <div className="flex gap-2">
+      <h3 className="text-colors-primary">{t("reviews")}</h3>
+      <p className="text-md">{reviewsQuantity}</p>
     </div>
   );
 };

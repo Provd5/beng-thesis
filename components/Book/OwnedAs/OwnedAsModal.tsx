@@ -2,13 +2,13 @@
 
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
 
 import { BsCheck } from "react-icons/bs";
 
 import { type OwnedBookTypes } from "~/types/consts";
 
 import { OwnedBookIcon } from "~/components/ui/Icons/OwnedBookIcon";
+import { cn } from "~/utils/cn";
 
 interface OwnedAsModalProps {
   ownedAs: OwnedBookTypes;
@@ -26,28 +26,19 @@ export const OwnedAsModal: FC<OwnedAsModalProps> = ({
   return (
     <button
       onClick={handleAddFunc}
-      className="flex flex-auto justify-between gap-2 py-1"
+      className="flex flex-auto justify-between gap-2 py-1 transition-transform hover:scale-95"
     >
       <div className="flex items-center gap-1.5">
         <OwnedBookIcon ownedAs={ownedAs} />
         <div className="flex h-8 flex-col items-start justify-center">
-          <h1
-            className={clsx(
-              "text-base",
-              state && "text-secondary dark:text-secondary-light"
-            )}
-          >
+          <h1 className={cn("text-base", state && "text-colors-primary")}>
             {t(ownedAs)}
           </h1>
-          <p className="text-xs text-black-light dark:text-white-dark">
-            {state}
-          </p>
+          <p className="text-xs text-colors-text">{state}</p>
         </div>
       </div>
-      <div className="h-6 w-6 self-center">
-        {state && (
-          <BsCheck className="h-full w-full fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]" />
-        )}
+      <div className="size-6 self-center">
+        {state && <BsCheck className="size-full fill-colors-primary" />}
       </div>
     </button>
   );

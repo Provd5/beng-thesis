@@ -25,7 +25,7 @@ export const ReviewCardDetails: FC<ReviewCardDetailsProps> = ({
 
   return (
     <>
-      <h2 className="flex flex-col text-xs text-black-light dark:text-white-dark">
+      <h2 className="flex flex-col text-xs text-colors-text">
         {t("posted:")} {dateFormater(createdAt, true)}
         {updatedAt && (
           <span>
@@ -36,7 +36,7 @@ export const ReviewCardDetails: FC<ReviewCardDetailsProps> = ({
       <div className="my-1 flex flex-wrap items-center gap-x-2 text-base">
         <h1 className="whitespace-nowrap font-semibold">
           {t("rate:")}{" "}
-          <span className="font-bold text-secondary dark:text-secondary-light">
+          <span className="font-bold text-colors-primary">
             {`${rate}/${HIGHEST_REVIEW_RATE}`}
           </span>
         </h1>

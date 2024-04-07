@@ -24,9 +24,9 @@ export const BookReviewCardDetails: FC<BookReviewCardDetailsProps> = ({
     <div className="mt-1 flex flex-col gap-1">
       <h1>
         {t("your rate:")}{" "}
-        <span className="text-secondary dark:text-secondary-light">{`${rate}/${HIGHEST_REVIEW_RATE}`}</span>
+        <span className="text-colors-primary">{`${rate}/${HIGHEST_REVIEW_RATE}`}</span>
       </h1>
-      <h2 className="flex text-xs text-black-light dark:text-white-dark">
+      <h2 className="flex text-xs text-colors-text">
         {t("posted:")} {dateFormater(created_at, true)}
         {updated_at && ` / ${t("edited:")} ${dateFormater(updated_at, true)}`}
       </h2>

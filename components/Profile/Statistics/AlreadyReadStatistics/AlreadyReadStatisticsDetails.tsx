@@ -44,9 +44,7 @@ export const AlreadyReadStatisticsDetails: FC<
             {t.rich("read quantity", {
               numRead: readBooks.mostRead.read_quantity,
               span: (chunks) => (
-                <span className="text-secondary dark:text-secondary-light">
-                  {chunks}
-                </span>
+                <span className="text-colors-primary">{chunks}</span>
               ),
             })}
           </p>
@@ -55,7 +53,7 @@ export const AlreadyReadStatisticsDetails: FC<
       <div className="flex flex-col">
         <h2 className="font-semibold">
           {t("total pages read:")}
-          <span className="text-md text-secondary dark:text-secondary-light">
+          <span className="text-md text-colors-primary">
             {readBooks.totalReadPages}
           </span>
         </h2>

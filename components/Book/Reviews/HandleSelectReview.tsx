@@ -30,11 +30,12 @@ export const HandleSelectReview: FC<HandleSelectReviewProps> = ({
 
     reviewTextarea?.focus();
     reviewTextarea?.select();
+    reviewTextarea?.scrollIntoView();
   };
 
   return (
     <button
-      className="flex w-fit gap-1 text-left"
+      className="flex h-fit min-h-[70px] w-36 gap-1 rounded-md bg-white/90 p-1 transition-colors hover:bg-colors-gray/10 dark:bg-black/30 hover:dark:bg-white/10"
       disabled={!isSession}
       onClick={handleFocusReview}
     >
@@ -46,14 +47,12 @@ export const HandleSelectReview: FC<HandleSelectReviewProps> = ({
         )}
       </div>
       <div className="flex flex-col">
-        <div className="flex h-6 items-center">
-          <h3 className="text-base font-semibold text-secondary dark:text-secondary-light">
-            {t("reviews")}
-          </h3>
-        </div>
-        <p>{reviewsQuantity}</p>
+        <h3 className="px-1 py-0.5 text-base font-semibold text-colors-primary hover:animate-pulse">
+          {t("reviews")}
+        </h3>
+        <p className="-mt-1">{reviewsQuantity}</p>
         {isSession && (
-          <p className="text-xs text-black-light dark:text-white-dark">
+          <p className="text-xs text-colors-text">
             {reviewData?.created_at ? (
               dateFormater(reviewData.created_at)
             ) : (

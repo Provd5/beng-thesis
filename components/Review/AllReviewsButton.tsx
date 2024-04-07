@@ -13,11 +13,11 @@ export const AllReviewsButton: FC<AllReviewsButtonProps> = ({ href }) => {
   const t = useTranslations("Reviews.CreateReview");
 
   return (
-    <div className="flex justify-center text-md">
+    <div className="text-md flex justify-center">
       <Link
         replace
         href={href}
-        className="rounded-sm border border-secondary px-6 py-3 text-secondary dark:border-secondary-light dark:text-secondary-light"
+        className="rounded-lg border border-colors-primary px-6 py-3 text-colors-primary transition-colors hover:bg-colors-primary hover:text-white"
       >
         {t("all reviews")}
       </Link>

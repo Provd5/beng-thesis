@@ -23,7 +23,7 @@ export default function SubpagesLayout({
           <Badges />
         </Suspense>
       </div>
-      <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/90 dark:bg-black/90 md:rounded-none">
+      <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-colors-background md:rounded-none">
         {children}
       </div>
     </main>

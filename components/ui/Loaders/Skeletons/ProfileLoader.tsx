@@ -9,7 +9,7 @@ export const ProfileLoader: FC = ({}) => {
     <>
       <div className="mb-2 flex flex-col gap-3">
         <div className="flex gap-3">
-          <div className="ml-0 mt-[-30px] xs:ml-6">
+          <div className="mt-[-30px]">
             <div className="bodyGradientForAvatar relative flex h-[112px] w-[112px] items-center justify-center rounded-full">
               <AvatarImage size="lg" className="animate-pulse" isLoader />
             </div>
@@ -25,7 +25,7 @@ export const ProfileLoader: FC = ({}) => {
           </div>
         </div>
         <div
-          className="mx-0 mb-3 mt-1 h-8 w-44 animate-pulse rounded-sm bg-gray xs:mx-6"
+          className="mb-3 mt-1 h-8 w-44 animate-pulse rounded-sm bg-colors-gray"
           style={{ animationDelay: "0.4s" }}
         />
       </div>

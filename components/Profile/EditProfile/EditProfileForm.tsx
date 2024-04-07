@@ -9,15 +9,15 @@ import {
   useTranslations,
 } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
-import clsx from "clsx";
 
 import { type GetProfileInterface } from "~/types/data/profile";
 
-import { ButtonWhite } from "~/components/ui/Buttons";
+import { Button } from "~/components/ui/Buttons";
 import { Input } from "~/components/ui/Input";
 import { editProfile } from "~/lib/services/profile";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import { EditProfileValidator } from "~/lib/validations/profile";
+import { cn } from "~/utils/cn";
 import { translatableError } from "~/utils/translatableError";
 
 interface EditProfileFormProps {
@@ -38,7 +38,7 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
     register,
     setValue,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = useForm({
     defaultValues: {
       private: profileData.private,
@@ -62,11 +62,11 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
 
   return (
     <form
-      className="flex h-full w-full flex-col items-start gap-1.5"
+      className="flex size-full flex-col items-start gap-1.5"
       onSubmit={onSubmit}
     >
       <div className="mt-3 flex flex-col items-start">
-        <h1 className="mb-1 text-md">{t("profile visibility:")}</h1>
+        <h1 className="text-md mb-1">{t("profile visibility:")}</h1>
         <label className="mb-2 inline-flex cursor-pointer items-center">
           <input
             {...register("private")}
@@ -77,11 +77,11 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
           />
           <button
             type="button"
-            className={clsx(
+            className={cn(
               "peer relative h-6 w-11 rounded-full after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-transform after:content-[''] peer-focus:outline-none dark:after:bg-black",
               isPrivate
-                ? "bg-secondary-light after:translate-x-full dark:bg-secondary-light"
-                : "bg-black-light dark:bg-white-dark"
+                ? "bg-colors-primary after:translate-x-full"
+                : "bg-black dark:bg-white"
             )}
             onClick={() => (
               setValue("private", !isPrivate), setIsPrivate(!isPrivate)
@@ -116,9 +116,20 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
         isTextarea
       />
 
-      <ButtonWhite size="xs" loading={isSubmitting} type="submit">
+      <Button
+        size="xs"
+        loading={isSubmitting}
+        disabled={!isDirty}
+        type="submit"
+        className={cn(
+          "transition-colors",
+          isPrivate === profileData.private &&
+            !isDirty &&
+            "bg-colors-gray/20 text-white hover:bg-colors-gray/20"
+        )}
+      >
         {t("save")}
-      </ButtonWhite>
+      </Button>
     </form>
   );
 };

@@ -3,6 +3,7 @@
 import { type ReadonlyURLSearchParams } from "next/navigation";
 
 import {
+  type GetReviewInterface,
   type GetReviewReactionInterface,
   type ReviewInterface,
 } from "~/types/data/review";
@@ -40,7 +41,7 @@ export async function getReviewQuantity(bookId: string): Promise<number> {
 export async function getAllReviews(
   bookId: string,
   searchParams: ReadonlyURLSearchParams
-): Promise<GetDataList<ReviewInterface>> {
+): Promise<GetDataList<GetReviewInterface>> {
   const validSearchParams = sortParamsValidator(searchParams, SortReviewsArray);
   const { order, orderBy: defaultOrderBy, page } = validSearchParams;
   const orderBy = defaultOrderBy as SortReviewsType;
@@ -66,6 +67,20 @@ export async function getAllReviews(
             ? { review_reaction: { _count: order } }
             : { [orderBy]: order },
         where: { book_id: bookId },
+        include: {
+          profile: {
+            include: {
+              _count: {
+                select: {
+                  bookshelf: { where: { bookshelf: "ALREADY_READ" } },
+                  liked_book: { where: { book_id: bookId } },
+                  review: { where: { book_id: bookId } },
+                },
+              },
+            },
+          },
+          review_reaction: true,
+        },
       }),
     ]);
 
@@ -137,7 +152,7 @@ export async function getReactions(
       upQuantity,
       downQuantity,
       sessionReaction:
-        sessionReaction === undefined ? undefined : sessionReaction?.reaction,
+        sessionReaction === null ? null : sessionReaction?.reaction,
     };
   } catch (e) {
     throw new Error(errorHandler(e));

@@ -1,5 +1,3 @@
-import { type BookshelvesTypes } from "~/types/consts";
-
 const ROUTES = {
   root: "/",
   community: "/community",
@@ -14,7 +12,7 @@ const ROUTES = {
     edit_profile: "/edit-profile",
     session_profile: "/profile",
     root: (fullname: string) => `/profile/${fullname}`,
-    bookshelf: (fullname: string, bookshelf: BookshelvesTypes) =>
+    bookshelf: (fullname: string, bookshelf: string) =>
       `/profile/${fullname}/${bookshelf}`,
     followers: (fullname: string) => `/profile/${fullname}/followers`,
     following: (fullname: string) => `/profile/${fullname}/following`,

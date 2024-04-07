@@ -3,7 +3,7 @@ import type { FC } from "react";
 export const AddBookPlaceholder: FC = () => {
   return (
     <svg
-      className="pointer-events-none h-full w-full fill-gray/70"
+      className="size-full pointer-events-none fill-colors-gray/70"
       viewBox="0 0 97 140"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

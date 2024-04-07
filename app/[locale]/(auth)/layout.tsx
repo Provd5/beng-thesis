@@ -14,7 +14,7 @@ export default function AuthLayout({
   unstable_setRequestLocale(locale);
 
   return (
-    <main className="nav-padding grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-hidden text-xl text-white-light">
+    <main className="nav-padding grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-hidden text-xl text-white">
       {children}
       <div className="absolute right-4 top-3 md:right-6 md:top-5">
         <Settings />

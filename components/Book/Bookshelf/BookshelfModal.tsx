@@ -3,11 +3,11 @@
 import type { FC } from "react";
 import { useTranslations } from "next-intl";
 import { type bookshelfType } from "@prisma/client";
-import clsx from "clsx";
 
 import { BookshelfArray } from "~/types/consts";
 
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
+import { cn } from "~/utils/cn";
 
 interface BookshelfModalProps {
   changedBookshelf: (data: bookshelfType | null) => void;
@@ -22,21 +22,24 @@ export const BookshelfModal: FC<BookshelfModalProps> = ({
   const tb = useTranslations("Book.BookshelfTypes");
 
   return (
-    <div className="flex grow flex-col gap-2">
+    <div className="flex grow flex-col gap-1">
       {BookshelfArray.map((bookshelf) => (
         <button
           key={bookshelf}
-          className="flex items-center gap-1 py-1.5"
+          className={cn(
+            "flex items-center gap-1 py-1.5 transition-transform",
+            initialBookshelf !== bookshelf && "hover:translate-x-1"
+          )}
           onClick={() => {
             changedBookshelf(bookshelf);
           }}
         >
           <BookmarkIcon category={bookshelf} size="sm" />
           <span
-            className={clsx(
+            className={cn(
               "whitespace-nowrap text-base",
               initialBookshelf === bookshelf &&
-                "font-semibold text-secondary dark:text-secondary-light"
+                "font-semibold text-colors-primary"
             )}
           >
             {tb(bookshelf)}
@@ -45,7 +48,7 @@ export const BookshelfModal: FC<BookshelfModalProps> = ({
       ))}
       {!!initialBookshelf && (
         <button
-          className="flex items-center py-1.5"
+          className="flex items-center gap-1 py-1.5 transition-transform hover:translate-x-1"
           onClick={() => changedBookshelf(null)}
         >
           <span className="whitespace-nowrap text-base">

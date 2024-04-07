@@ -1,11 +1,11 @@
 import { forwardRef, type HTMLProps, type Ref } from "react";
-import clsx from "clsx";
+
+import { cn } from "~/utils/cn";
 
 interface InputProps extends HTMLProps<HTMLInputElement | HTMLTextAreaElement> {
   id: string;
   loading?: boolean;
   isTextarea?: boolean;
-  inverted?: boolean;
   label?: string;
 }
 
@@ -13,7 +13,7 @@ export const Input = forwardRef<
   HTMLInputElement | HTMLTextAreaElement,
   InputProps
 >(function InputComponent(
-  { id, loading, isTextarea, inverted, label, className, ...props },
+  { id, loading, isTextarea, label, className, ...props },
   ref
 ) {
   const commonProps = {
@@ -21,12 +21,6 @@ export const Input = forwardRef<
     id: id,
     ...props,
   };
-
-  const commonClass = "placeholder:italic placeholder:text-base";
-
-  const commonColor = inverted
-    ? "dark:bg-white dark:text-black bg-black text-white dark:caret-secondary caret-secondary-light"
-    : "bg-white-light text-black dark:bg-black-dark dark:text-white caret-secondary dark:caret-secondary-light";
 
   return (
     <div className="flex w-[inherit] flex-col">
@@ -38,10 +32,8 @@ export const Input = forwardRef<
       {isTextarea ? (
         <textarea
           {...commonProps}
-          className={clsx(
-            "rounded-l-md rounded-tr-md p-3 text-base",
-            commonColor,
-            commonClass,
+          className={cn(
+            "rounded-l-md rounded-tr-md border border-colors-gray/30 p-3 text-base caret-colors-accent placeholder:text-base",
             className
           )}
           ref={ref as Ref<HTMLTextAreaElement>}
@@ -49,10 +41,8 @@ export const Input = forwardRef<
       ) : (
         <input
           {...commonProps}
-          className={clsx(
-            "rounded-lg px-3 py-2 text-md",
-            commonColor,
-            commonClass,
+          className={cn(
+            "text-md rounded-lg border border-colors-gray/30 px-3 py-2 caret-colors-accent placeholder:text-base",
             className
           )}
           ref={ref as Ref<HTMLInputElement>}

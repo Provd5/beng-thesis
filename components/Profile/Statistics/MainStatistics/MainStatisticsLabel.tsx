@@ -16,7 +16,7 @@ export const MainStatisticsLabel: FC<MainStatisticsLabelProps> = ({
 }) => {
   return (
     <div className="flex flex-col items-center justify-center gap-0.5">
-      <div className="flex h-8 w-8 items-center justify-center">
+      <div className="flex size-8 items-center justify-center">
         {label === "OWNED" ? (
           <div className="mb-[-4px]">
             <OwnedBookIcon ownedAs="BOOK" size="lg" />

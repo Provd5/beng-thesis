@@ -1,16 +1,13 @@
 "use client";
 
 import { type FC, useState } from "react";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
   type Formats,
   type TranslationValues,
   useTranslations,
 } from "next-intl";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { type reactionType } from "@prisma/client";
-import clsx from "clsx";
 
 import {
   RiThumbDownFill,
@@ -21,6 +18,7 @@ import {
 
 import { postReaction } from "~/lib/services/review";
 import { ReviewReactionValidator } from "~/lib/validations/review";
+import { cn } from "~/utils/cn";
 import { translatableError } from "~/utils/translatableError";
 
 interface HandleSubmitReactionProps {
@@ -48,14 +46,9 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
     sessionReaction,
   });
 
-  const { register, setValue, handleSubmit } = useForm({
-    defaultValues: { reaction: sessionReaction },
-    resolver: zodResolver(ReviewReactionValidator),
-  });
-
-  const onSubmit = handleSubmit(async (formData) => {
+  const handleReaction = async (reaction: reactionType) => {
     try {
-      const validReaction = ReviewReactionValidator.parse(formData);
+      const validReaction = ReviewReactionValidator.parse(reaction);
 
       setReactionState(
         // set reaction
@@ -82,7 +75,7 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
                 validReaction === "MEH"
                   ? reactionState.downQuantity - 1
                   : reactionState.downQuantity,
-              sessionReaction: validReaction,
+              sessionReaction: null,
             }
           : // change reaction
           validReaction === "OK"
@@ -98,72 +91,66 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
             }
       );
 
-      await postReaction(reviewId, formData);
+      await postReaction(reviewId, validReaction);
     } catch (e) {
       toast.error(te(translatableError(e)));
     }
-  });
+  };
 
   const isActive = (reaction: reactionType) =>
     reactionState.sessionReaction === reaction;
 
   return (
-    <>
-      <form
-        className="flex gap-1 px-1 text-black-light dark:text-white-dark"
-        onSubmit={onSubmit}
+    <div className="flex px-1 text-colors-gray">
+      <button
+        type="submit"
+        className={cn(
+          "text-md flex items-center gap-1.5 rounded-l-md border border-transparent px-2 py-1.5 transition-colors hover:bg-colors-green/10",
+          isActive("OK")
+            ? "border-y-colors-green border-l-colors-green"
+            : "border-y-colors-gray border-l-colors-gray"
+        )}
+        onClick={() => handleReaction("OK")}
       >
-        <div className="flex flex-col items-end gap-1">
-          <button
-            {...register("reaction")}
-            type="submit"
-            className={clsx(
-              "flex items-center gap-1.5 rounded-sm border px-2 py-1.5 text-md",
-              isActive("OK") ? "border-green" : "border-black dark:border-white"
-            )}
-            onClick={() => setValue("reaction", "OK")}
-          >
-            {isActive("OK") ? (
-              <RiThumbUpFill className="fill-green" />
-            ) : (
-              <RiThumbUpLine />
-            )}
-            <p
-              className={clsx(
-                "min-w-[12px] text-base",
-                isActive("OK") && "text-green"
-              )}
-            >
-              {reactionState.upQuantity}
-            </p>
-          </button>
-        </div>
-        <div className="flex flex-col items-end gap-1">
-          <button
-            {...register("reaction")}
-            type="submit"
-            className={clsx(
-              "flex items-center gap-1.5 rounded-sm border px-2 py-1.5 text-md",
-              isActive("MEH") ? "border-red" : "border-black dark:border-white"
-            )}
-            onClick={() => setValue("reaction", "MEH")}
-          >
-            {isActive("MEH") ? (
-              <RiThumbDownFill className="fill-red" />
-            ) : (
-              <RiThumbDownLine />
-            )}
-            <p
-              className={clsx(
-                "min-w-[12px] text-base",
-                isActive("MEH") && "text-red"
-              )}
-            >
-              {reactionState.downQuantity}
-            </p>
-          </button>
-        </div>
-      </form>
-    </>
+        {isActive("OK") ? (
+          <RiThumbUpFill className="fill-colors-green" />
+        ) : (
+          <RiThumbUpLine />
+        )}
+        <p
+          className={cn(
+            "min-w-[12px] text-base",
+            isActive("OK") && "text-colors-green"
+          )}
+        >
+          {reactionState.upQuantity}
+        </p>
+      </button>
+      <hr className="h-full w-px bg-colors-gray" />
+      <button
+        type="submit"
+        className={cn(
+          "text-md flex items-center gap-1.5 rounded-r-md border border-transparent px-2 py-1.5 transition-colors hover:bg-colors-red/10",
+          isActive("MEH")
+            ? "border-y-colors-red border-r-colors-red"
+            : "border-y-colors-gray border-r-colors-gray"
+        )}
+        onClick={() => handleReaction("MEH")}
+      >
+        {isActive("MEH") ? (
+          <RiThumbDownFill className="fill-colors-red" />
+        ) : (
+          <RiThumbDownLine />
+        )}
+        <p
+          className={cn(
+            "min-w-[12px] text-base",
+            isActive("MEH") && "text-colors-red"
+          )}
+        >
+          {reactionState.downQuantity}
+        </p>
+      </button>
+    </div>
   );
 };

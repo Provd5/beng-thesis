@@ -2,6 +2,7 @@
 
 import { type FC, type TransitionStartFunction } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 import { Button } from "../Buttons";
 
@@ -16,6 +17,8 @@ export const Pagination: FC<PaginationProps> = ({
   currentPage,
   totalPages,
 }) => {
+  const t = useTranslations("Other");
+
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const router = useRouter();
@@ -29,19 +32,21 @@ export const Pagination: FC<PaginationProps> = ({
     });
   };
 
+  if (!(currentPage > 1) && !(currentPage < totalPages)) return;
+
   return (
     <>
       <div className="mb-6 mt-12 flex items-center justify-between gap-3">
         {currentPage > 1 ? (
           <Button onClick={() => changePage(currentPage - 1)} size="sm">
-            previous page
+            {t("previous page")}
           </Button>
         ) : (
           <div />
         )}
         {currentPage < totalPages ? (
           <Button onClick={() => changePage(currentPage + 1)} size="sm">
-            next page
+            {t("next page")}
           </Button>
         ) : (
           <div />

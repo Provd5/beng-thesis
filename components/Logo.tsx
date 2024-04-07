@@ -21,7 +21,7 @@ export const Logo: FC = ({}) => {
           width={28}
           priority
         />
-        <h1 className="text-md text-white-light">{APP_NAME}</h1>
+        <h1 className="text-md text-white">{APP_NAME}</h1>
       </Link>
     </div>
   );

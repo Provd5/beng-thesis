@@ -16,7 +16,7 @@ export const BookReviewCardReactions: FC<
   if (!(reactions.upQuantity > 0)) return;
 
   return (
-    <p className="text-xs text-black-light dark:text-white-dark">
+    <p className="text-xs text-colors-text">
       <BookReviewCardReactionsLabel upReactions={reactions.upQuantity} />
     </p>
   );

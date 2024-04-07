@@ -14,9 +14,9 @@ export const OwnedBookIcon: FC<OwnedBookIconProps> = ({
   size = "default",
 }) => {
   const sizeClass = {
-    lg: "h-8 w-8",
-    default: "h-7 w-7",
-    sm: "h-6 w-6",
+    lg: "size-8",
+    default: "size-7",
+    sm: "size-6",
   };
 
   const renderIcon = (ownedAs: OwnedBookTypes) => {

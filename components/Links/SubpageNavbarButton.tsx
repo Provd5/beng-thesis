@@ -4,11 +4,11 @@ import type { FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
 
 import { BsBookFill } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 
+import { cn } from "~/utils/cn";
 import ROUTES from "~/utils/routes";
 
 interface SubpageNavbarButtonProps {
@@ -40,32 +40,25 @@ export const SubpageNavbarButton: FC<SubpageNavbarButtonProps> = ({
   return (
     <Link
       href={pageRoutes[pageVariant]}
-      className={clsx(
-        "flex h-full w-32 items-center justify-center gap-2 xs:w-36",
-        isActive() && "border-b border-secondary dark:border-secondary-light"
+      className={cn(
+        "flex h-full w-32 items-center justify-center gap-2 transition-transform",
+        isActive() && "border-b border-colors-primary",
+        !isActive() && "hover:-translate-y-1"
       )}
     >
       {pageVariant === "community" ? (
         <FaUsers
-          className={clsx(
-            "text-lg",
-            isActive() &&
-              "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-          )}
+          className={cn("text-lg", isActive() && "fill-colors-primary")}
         />
       ) : (
         <BsBookFill
-          className={clsx(
-            "text-lg",
-            isActive() &&
-              "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-          )}
+          className={cn("text-lg", isActive() && "fill-colors-primary")}
         />
       )}
       <span
-        className={clsx(
-          "hidden text-md xs:block",
-          isActive() && "text-secondary dark:text-secondary-light"
+        className={cn(
+          "text-md hidden sm:block",
+          isActive() && "text-colors-primary"
         )}
       >
         {pageVariant === "community" ? t("community") : t("books")}

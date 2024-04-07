@@ -23,24 +23,24 @@ export const AccountSettings: FC<AccountSettingsProps> = ({ children }) => {
     <ModalInitiator
       initiatorStyle={
         <div className="transition-transform hover:scale-110">
-          <FaUserCircle className="h-6 w-6" />
+          <FaUserCircle className="size-6" />
         </div>
       }
     >
-      <div className="flex min-w-[180px] flex-col gap-2 whitespace-nowrap text-md">
+      <div className="text-md flex min-w-[180px] flex-col gap-2 whitespace-nowrap">
         {children && (
           <>
             <div>
-              <h1 className="my-1 text-center font-semibold text-secondary dark:text-secondary-light">
+              <h1 className="my-1 text-center font-semibold text-colors-primary">
                 {t("my account")}
               </h1>
               {children}
             </div>
-            <hr className="mx-[-10px] h-px border-0 bg-black-light dark:bg-white-dark" />
+            <hr className="mx-[-10px] h-px border-0 bg-colors-gray/30" />
           </>
         )}
         <Link
-          className="flex items-center gap-1.5 whitespace-nowrap py-1"
+          className="flex items-center gap-1.5 whitespace-nowrap py-1 transition-transform hover:translate-x-1"
           href={ROUTES.profile.edit_profile}
         >
           <FaPenToSquare />

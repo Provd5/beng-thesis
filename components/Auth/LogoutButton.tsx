@@ -54,7 +54,7 @@ export const LogoutButton: FC = () => {
   return (
     <>
       <button
-        className="flex items-center gap-1 py-0.5"
+        className="flex items-center gap-1 py-0.5 transition-transform hover:translate-x-1"
         disabled={isPending}
         onClick={signOut}
       >

@@ -9,7 +9,6 @@ import {
   useTranslations,
 } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
-import clsx from "clsx";
 
 import {
   HIGHEST_REVIEW_RATE,
@@ -22,6 +21,7 @@ import { Input } from "~/components/ui/Input";
 import { postReview } from "~/lib/services/review";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import { CreateReviewValidator } from "~/lib/validations/review";
+import { cn } from "~/utils/cn";
 import { translatableError } from "~/utils/translatableError";
 
 import { DeleteReviewForm } from "./DeleteReviewForm";
@@ -51,7 +51,8 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+
+    formState: { isSubmitting, isDirty },
   } = useForm({
     defaultValues: {
       text: reviewData?.text,
@@ -97,18 +98,18 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
           {t("your rate")}
           <div className="flex min-w-[36px] items-center gap-1 text-right text-lg font-bold">
             <select
-              className="flex flex-col gap-1.5 py-1.5 text-md"
+              className=" text-md size-10 cursor-pointer border border-colors-gray/30"
               {...register("rate", { valueAsNumber: true })}
               id="review-rate"
             >
-              <option value="">–</option>
+              <option className="hidden" value="" />
               {ReviewRatesArray.map((rate) => (
                 <option
                   key={rate}
-                  className={clsx(
-                    "flex h-8 w-8 cursor-pointer items-center justify-center rounded-full",
+                  className={cn(
+                    "text-center",
                     reviewDataState.rate === rate &&
-                      "font-bold text-secondary dark:text-secondary-light"
+                      "font-bold text-colors-primary"
                   )}
                 >
                   {rate}
@@ -118,17 +119,29 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
             <span>{`/ ${HIGHEST_REVIEW_RATE}`}</span>
           </div>
         </div>
-
-        <Button type="submit" size="sm" loading={isSubmitting}>
-          {reviewDataState.isReview ? t("edit") : t("add")}
-        </Button>
+        <div className="relative flex gap-1">
+          {reviewDataState.isReview && (
+            <DeleteReviewForm
+              reviewId={reviewData?.id}
+              setReviewDataState={setReviewDataState}
+            />
+          )}
+          {
+            <Button
+              type="submit"
+              size="sm"
+              loading={isSubmitting}
+              disabled={!isDirty}
+              className={cn(
+                "transition-colors",
+                !isDirty && "bg-colors-gray/20"
+              )}
+            >
+              {reviewDataState.isReview ? t("edit") : t("add")}
+            </Button>
+          }
+        </div>
       </div>
-      {reviewDataState.isReview && (
-        <DeleteReviewForm
-          reviewId={reviewData?.id}
-          setReviewDataState={setReviewDataState}
-        />
-      )}
     </form>
   );
 };

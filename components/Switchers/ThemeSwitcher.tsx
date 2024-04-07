@@ -2,12 +2,13 @@
 
 import { type Dispatch, type FC, type SetStateAction, useState } from "react";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
 
 import { type IconType } from "react-icons/lib";
 import { FaSun } from "react-icons/fa";
 import { IoDesktop } from "react-icons/io5";
 import { MdNightsStay } from "react-icons/md";
+
+import { cn } from "~/utils/cn";
 
 type themeTypes = "default" | "light" | "dark";
 
@@ -92,21 +93,17 @@ const ThemeButton: FC<ThemeButtonProps> = ({
 
   return (
     <button
-      className="flex items-center gap-1.5 py-0.5 text-md"
+      className="text-md flex items-center gap-1.5 py-0.5"
       onClick={() => handleToggleTheme(theme)}
     >
       <Icon
-        className={clsx(
+        className={cn(
           "text-lg",
-          active
-            ? "fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]"
-            : "fill-black-light dark:fill-white"
+          active ? "fill-colors-primary" : "fill-colors-text"
         )}
       />
 
-      <p className={clsx(active && "text-secondary dark:text-secondary-light")}>
-        {t(theme)}
-      </p>
+      <p className={cn(active && "text-colors-primary")}>{t(theme)}</p>
     </button>
   );
 };

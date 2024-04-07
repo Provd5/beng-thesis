@@ -4,8 +4,8 @@ import type { FC } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
 
+import { cn } from "~/utils/cn";
 import ROUTES from "~/utils/routes";
 
 import {
@@ -56,20 +56,21 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
   return (
     <Link
       href={pageRoutes[pageVariant]}
-      className={clsx(
-        "flex flex-none items-center justify-center rounded-full hover:bg-white-light/50 dark:hover:bg-black-dark/50 md:rounded-sm md:px-2 md:py-3",
+      className={cn(
+        "flex items-center justify-center rounded-full transition-all md:rounded-lg md:px-2 md:py-3",
         pageVariant === "login" || pageVariant === "profile"
-          ? "max-md:h-[52px] max-md:w-[52px]"
-          : "max-md:h-[48px] max-md:w-[48px]",
-        isActive() && "pointer-events-none cursor-default"
+          ? "max-md:size-[58px]"
+          : "max-md:size-[48px]",
+        isActive() && "pointer-events-none cursor-default",
+        !isActive() && "hover:scale-95 hover:bg-colors-text/10"
       )}
     >
-      <div className="flex flex-col items-center justify-center gap-0.5 max-md:mt-[-4px] md:flex-row-reverse md:gap-1.5">
+      <div className="flex flex-col items-center justify-center gap-0.5 md:flex-row-reverse md:gap-1.5">
         <div
           className={
             pageVariant === "login" || pageVariant === "profile"
-              ? "h-7 w-7"
-              : "h-6 w-6"
+              ? "size-7"
+              : "size-6"
           }
         >
           {(pageVariant === "login" || pageVariant === "profile") && (
@@ -79,9 +80,9 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
           {pageVariant === "search" && <SearchIcon isActive={isActive()} />}
         </div>
         <p
-          className={clsx(
-            "text-2xs md:text-base",
-            isActive() && "text-secondary dark:text-secondary-light"
+          className={cn(
+            "whitespace-nowrap text-center text-xs md:text-base",
+            isActive() && "text-colors-primary"
           )}
         >
           {t(pageVariant)}

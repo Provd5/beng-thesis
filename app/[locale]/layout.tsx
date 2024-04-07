@@ -5,7 +5,6 @@ import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { Navbar } from "~/components/Links/Navbar/Navbar";
 import { DarkModeInitializer } from "~/components/ui/DarkModeInitializer";
-import { SvgPainter } from "~/components/ui/Icons/SvgIcons/SvgPainter";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
 import { type localeTypes } from "~/i18n";
 
@@ -62,9 +61,8 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} className={quicksandFont.className}>
-      <body className="bodyGradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-black antialiased selection:bg-secondary selection:text-white dark:text-white md:flex-col">
+      <body className="bg-gradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-colors-text antialiased selection:bg-colors-accent selection:text-white md:flex-col">
         <DarkModeInitializer />
-        <SvgPainter />
 
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar />

@@ -3,11 +3,11 @@
 import { type FC } from "react";
 import Image, { type StaticImageData } from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
-import clsx from "clsx";
 
 import { locales } from "~/i18n";
 import FlagOfTheUnitedKingdom from "~/public/flags/flag-icons-gb.png";
 import FlagOfPoland from "~/public/flags/flag-icons-pl.png";
+import { cn } from "~/utils/cn";
 import { getLocaleFromUrl } from "~/utils/getLocaleFromUrl";
 
 export const LanguageSwitcher: FC = () => {
@@ -46,11 +46,10 @@ export const LanguageSwitcher: FC = () => {
             className="flex flex-col items-center text-sm"
           >
             <Image
-              className={
-                localeFromUrl === locale
-                  ? "border border-transparent bg-gradient-dark dark:bg-gradient-light"
-                  : "drop-shadow"
-              }
+              className={cn(
+                "border-2 border-transparent",
+                localeFromUrl === locale && "border-colors-primary"
+              )}
               src={flagFromLocale.src}
               alt={flagFromLocale.alt}
               width={28}
@@ -60,9 +59,8 @@ export const LanguageSwitcher: FC = () => {
             />
 
             <p
-              className={clsx(
-                localeFromUrl === locale &&
-                  "text-secondary dark:text-secondary-light",
+              className={cn(
+                localeFromUrl === locale && "text-colors-primary",
                 "font-semibold"
               )}
             >

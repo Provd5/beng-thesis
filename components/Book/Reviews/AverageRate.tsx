@@ -10,9 +10,9 @@ interface AverageRateProps {
 
 export const AverageRate: FC<AverageRateProps> = ({ averageRate }) => {
   return (
-    <div className="flex flex-col pt-0.5">
+    <div className="flex gap-2">
       <AverageRateLabel />
-      <p className="text-md">{`${averageRate}/${HIGHEST_REVIEW_RATE}`}</p>
+      <p className="text-lg">{`${averageRate}/${HIGHEST_REVIEW_RATE}`}</p>
     </div>
   );
 };

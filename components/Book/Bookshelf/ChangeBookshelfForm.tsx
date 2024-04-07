@@ -156,7 +156,7 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
                   began_reading_at: e.target.valueAsDate,
                 })
               }
-              className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
+              className="cursor-pointer rounded border border-colors-text/30 p-1 text-lg text-colors-text"
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -181,7 +181,7 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
                   updated_at: e.target.valueAsDate || new Date(),
                 })
               }
-              className="cursor-pointer py-0.5 text-md text-black-dark dark:text-white-light"
+              className="cursor-pointer rounded border border-colors-text/30 p-1 text-lg text-colors-text"
             />
           </div>
         </>
@@ -189,7 +189,7 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
       <div className="mt-3 flex justify-between">
         <button
           type="reset"
-          className="self-center py-2 underline"
+          className="self-center py-2 underline transition-transform hover:scale-105"
           onClick={() => {
             reset();
             setIsFormOpen(false);

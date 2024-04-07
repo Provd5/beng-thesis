@@ -31,14 +31,17 @@ export const Profile: FC<ProfileProps> = async ({ profileName, children }) => {
     <>
       <div className="mb-2 flex flex-col">
         <div className="flex gap-3">
-          <div className="ml-0 mt-[-30px] xs:ml-6">
-            <div className="bodyGradientForAvatar relative flex h-[112px] w-[112px] items-center justify-center rounded-full">
+          <div className="ml-0 mt-[-30px]">
+            <div className="relative flex size-[115px] items-center justify-center rounded-full bg-gradient-to-t from-colors-primary via-colors-accent via-75% to-transparent to-85%">
               <AvatarImage size="lg" avatarSrc={profileData.avatar_url} />
               <ProfileStatus isPrivate={profileData.private} />
             </div>
           </div>
-          <div className="mx-0.5 mt-3">
-            <div className="flex w-fit flex-col gap-2 text-sm">
+          <div className="ml-1 mt-3">
+            <h1 className="break-word text-2xl font-bold text-colors-primary">
+              {profileData.full_name}
+            </h1>
+            <div className="mt-1 flex w-fit flex-col gap-0.5 text-sm">
               <ProfileSubpageLink
                 profileName={profileName}
                 variant="followers"
@@ -55,17 +58,16 @@ export const Profile: FC<ProfileProps> = async ({ profileName, children }) => {
                 quantity={0}
               />
               {!isMyProfile && (
-                <FollowButton
-                  userId={profileData.id}
-                  isFollowed={profileData.is_followed}
-                />
+                <div className="mt-2 grid">
+                  <FollowButton
+                    userId={profileData.id}
+                    isFollowed={profileData.is_followed}
+                  />
+                </div>
               )}
             </div>
           </div>
         </div>
-        <h1 className="break-word mx-0 mb-3 mt-1 text-xl font-semibold text-primary dark:text-primary-light xs:mx-6">
-          {profileData.full_name}
-        </h1>
       </div>
       {profileData.description && (
         <ProfileDescription description={profileData.description} />

@@ -32,9 +32,9 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
       <Link
         replace={replace}
         href={href}
-        className="flex grow items-center justify-between gap-3 md:grow-0 md:justify-start"
+        className="flex grow items-center justify-between gap-3 transition-transform hover:translate-x-1 md:grow-0 md:justify-start"
       >
-        <div className="text-lg font-semibold text-secondary dark:text-secondary-light">
+        <div className="text-lg font-semibold text-colors-primary">
           <div className="flex items-center gap-1">
             {bookshelfVariant === "OWNED" ? (
               <OwnedBookIcon ownedAs="BOOK" size="sm" />
@@ -47,7 +47,7 @@ export const CategoryLink: FC<CategoryLinkProps> = ({
             </h1>
           </div>
         </div>
-        <MdNavigateNext className="text-xl text-secondary dark:text-secondary-light" />
+        <MdNavigateNext className="text-xl text-colors-primary" />
       </Link>
     </div>
   );

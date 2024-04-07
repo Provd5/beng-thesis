@@ -57,7 +57,7 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
 
   return (
     <button
-      className="flex w-fit gap-1 text-left"
+      className="flex h-fit min-h-[70px] w-36 gap-1 rounded-md bg-white/90 p-1 transition-colors hover:bg-colors-gray/10 dark:bg-black/30 hover:dark:bg-white/10"
       disabled={likeData === undefined}
       onClick={handleLike}
     >
@@ -69,14 +69,12 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
         )}
       </div>
       <div className="flex flex-col">
-        <div className="flex h-6 items-center">
-          <h3 className="text-base font-semibold text-secondary dark:text-secondary-light">
-            {t("likes")}
-          </h3>
-        </div>
-        <p>{likeState.likesQuantity}</p>
+        <h3 className="px-1 py-0.5 text-base font-semibold text-colors-primary hover:animate-pulse">
+          {t("likes")}
+        </h3>
+        <p className="-mt-1">{likeState.likesQuantity}</p>
         {likeData !== undefined && (
-          <p className="text-xs text-black-light dark:text-white-dark">
+          <p className="text-xs text-colors-text">
             {!!likeState.isLike ? (
               t("liked")
             ) : (

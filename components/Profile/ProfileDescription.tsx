@@ -2,7 +2,8 @@
 
 import { type FC, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import clsx from "clsx";
+
+import { cn } from "~/utils/cn";
 
 import { ButtonLink } from "../ui/Buttons";
 
@@ -35,9 +36,9 @@ export const ProfileDescription: FC<ProfileDescriptionProps> = ({
         </h1>
         <p
           ref={descriptionRef}
-          className={clsx(
+          className={cn(
             "mx-0.5 whitespace-break-spaces text-xs",
-            !isExpanded && "line-clamp-6 max-h-[78px]"
+            !isExpanded && "line-clamp-6"
           )}
         >
           {description}

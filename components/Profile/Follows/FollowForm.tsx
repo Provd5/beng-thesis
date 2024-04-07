@@ -45,15 +45,15 @@ export const FollowForm: FC<FollowFormProps> = ({ userId, isFollowed }) => {
       onClick={() => handleFollow()}
       defaultColor={false}
       size="xs"
-      className="bg-white-light dark:bg-black-dark"
+      className="w-48 bg-black/5 text-colors-text transition-colors hover:bg-black/20 dark:bg-white/20 hover:dark:bg-white/50"
     >
       {followState ? (
         <>
-          <IoMdEyeOff className="text-red" /> {t("unfollow")}
+          <IoMdEyeOff className="size-4 text-colors-red" /> {t("unfollow")}
         </>
       ) : (
         <>
-          <IoMdEye className="text-green" /> {t("follow")}
+          <IoMdEye className="size-4 text-colors-green" /> {t("follow")}
         </>
       )}
     </Button>

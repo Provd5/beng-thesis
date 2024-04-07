@@ -85,7 +85,7 @@ export const AddOwnedAsForm: FC<AddOwnedAsFormProps> = ({
 
   return (
     <div
-      className="relative flex w-fit cursor-pointer flex-col"
+      className="relative flex h-fit min-h-[70px] w-36 cursor-pointer flex-col rounded-md bg-white/90 p-1 transition-colors hover:bg-colors-gray/10 dark:bg-black/30 hover:dark:bg-white/10"
       onClick={(e) =>
         !openModalButtonRef.current?.contains(e?.target as Node) &&
         setIsModalOpen(true)
@@ -97,7 +97,7 @@ export const AddOwnedAsForm: FC<AddOwnedAsFormProps> = ({
         active={isModalOpen}
         className="self-start"
         onClick={() => setIsModalOpen(!isModalOpen)}
-        size="sm"
+        size="default"
       >
         {t("owned as")}
       </ButtonLink>
@@ -125,15 +125,12 @@ export const AddOwnedAsForm: FC<AddOwnedAsFormProps> = ({
           </div>
         </ModalWrapper>
       )}
-      <div className="flex gap-1">
+      <div className="mr-2 flex gap-1 self-center">
         {ownedBookState.book && <OwnedBookIcon ownedAs="BOOK" size="sm" />}
         {ownedBookState.ebook && <OwnedBookIcon ownedAs="EBOOK" size="sm" />}
         {ownedBookState.audiobook && (
           <OwnedBookIcon ownedAs="AUDIOBOOK" size="sm" />
         )}
-        {!ownedBookState.audiobook &&
-          !ownedBookState.book &&
-          !ownedBookState.ebook && <p className="h-8 w-8">–</p>}
       </div>
     </div>
   );

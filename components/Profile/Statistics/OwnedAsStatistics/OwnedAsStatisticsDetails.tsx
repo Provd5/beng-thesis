@@ -33,7 +33,7 @@ export const OwnedAsStatisticsDetails: FC<OwnedAsStatisticsDetailsProps> = ({
       <div className="flex flex-col">
         <h2 className="font-semibold">
           {t("total owned books:")}
-          <span className="text-md text-secondary dark:text-secondary-light">
+          <span className="text-md text-colors-primary">
             {ownedBooks.totalOwnedBooks}
           </span>
         </h2>

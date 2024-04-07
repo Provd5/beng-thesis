@@ -4,9 +4,8 @@ interface NavIconsProps {
   isActive: boolean;
 }
 
-const className = "h-full w-full fill-black-dark dark:fill-white-light";
-const activeClassName =
-  "h-full w-full fill-[var(--svg-gradient-dark)] dark:fill-[var(--svg-gradient)]";
+const className = "size-full fill-colors-text";
+const activeClassName = "size-full fill-colors-primary";
 
 export const SearchIcon: FC<NavIconsProps> = ({ isActive }) => {
   return (
