@@ -25,7 +25,7 @@ export const AuthPage: FC<AuthPageProps> = ({ children, view }) => {
 
   if (checkMail)
     return (
-      <div className="size-full mx-auto mb-12 flex max-w-sm flex-col justify-center gap-1 px-6 text-center">
+      <div className="mx-auto mb-12 flex size-full max-w-sm flex-col justify-center gap-1 px-6 text-center">
         <div className="text-3xl">✉️</div>
         <h2 className="text-xl">{t("check your email to continue login")}</h2>
         <h1 className="underline">{checkMail}</h1>
