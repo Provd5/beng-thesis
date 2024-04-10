@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import { notFound } from "next/navigation";
 import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
@@ -34,7 +35,7 @@ export async function generateMetadata({
   params: { locale },
 }: {
   params: { locale: localeTypes };
-}) {
+}): Promise<Metadata> {
   const t = await getTranslations({
     locale,
     namespace: "Nav.CategoryTitles",
@@ -46,6 +47,26 @@ export async function generateMetadata({
       template: "%s | Booksphere",
     },
     description: t("page description"),
+
+    twitter: {
+      card: "summary_large_image",
+    },
+    alternates: {
+      canonical: "/",
+      languages: {
+        en: "/en",
+        pl: "/pl",
+      },
+    },
+    openGraph: {
+      title: {
+        default: "Booksphere",
+        template: "%s | Booksphere",
+      },
+      description: t("page description"),
+      siteName: "Booksphere",
+      type: "website",
+    },
   };
 }
 

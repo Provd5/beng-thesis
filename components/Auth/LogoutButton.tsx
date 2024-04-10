@@ -42,10 +42,10 @@ export const LogoutButton: FC = () => {
         throw new Error(translatableError(error));
       }
 
-      toast(t("logged out"));
       startTransition(() => {
         router.refresh();
       });
+      toast(t("logged out"));
     } catch (error) {
       toast.error(te(translatableError(error)));
     }

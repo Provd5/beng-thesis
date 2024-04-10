@@ -1,5 +1,7 @@
+"use client";
+
 import { NotFoundPage } from "~/components/ui/NotFound/NotFoundPage";
 
 export default function NotFound() {
-  return <NotFoundPage variant="page" />;
+  return <NotFoundPage variant="book" />;
 }

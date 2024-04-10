@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { type Metadata } from "next";
 import { type Formats, type TranslationValues } from "next-intl";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
@@ -21,7 +22,7 @@ export async function generateMetadata({
 }: {
   params: { fullname: string; locale: localeTypes };
   searchParams: { bookshelf?: string };
-}) {
+}): Promise<Metadata> {
   const t = (await getTranslations({
     locale,
     namespace: "Nav.CategoryTitles",

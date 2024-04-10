@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { type Metadata } from "next";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { BackCategoryLink } from "~/components/Links/BackCategoryLink";
@@ -14,7 +15,7 @@ export async function generateMetadata({
   params: { locale },
 }: {
   params: { locale: localeTypes };
-}) {
+}): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
     title: t("statistics"),
