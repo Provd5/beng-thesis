@@ -1,5 +1,5 @@
-import { LoadingPage } from "~/components/ui/Loaders/LoadingPage";
+import { ProfileLoader } from "~/components/ui/Loaders/Skeletons/ProfileLoader";
 
 export default function Loading() {
-  return <LoadingPage />;
+  return <ProfileLoader />;
 }

@@ -79,14 +79,20 @@ export default function BookshelfPage({
       </DragContainer>
       <div className="flex flex-col">
         {validBookshelf === "REVIEWS" ? (
-          <Suspense key={validBookshelf} fallback={<LargeComponentLoader />}>
+          <Suspense
+            key={`${fullname}-${validBookshelf}`}
+            fallback={<LargeComponentLoader />}
+          >
             <ReviewBookshelfFeed
               profileName={fullname}
               searchParams={searchParams}
             />
           </Suspense>
         ) : (
-          <Suspense key={validBookshelf} fallback={<LargeComponentLoader />}>
+          <Suspense
+            key={`${fullname}-${validBookshelf}`}
+            fallback={<LargeComponentLoader />}
+          >
             <BookshelfFeed
               profileName={fullname}
               bookshelf={validBookshelf}
