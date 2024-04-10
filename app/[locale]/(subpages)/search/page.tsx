@@ -1,3 +1,4 @@
+import { type Metadata } from "next";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { SearchComponent } from "~/components/Search/SearchComponent";
@@ -8,7 +9,7 @@ export async function generateMetadata({
   params: { locale },
 }: {
   params: { locale: localeTypes };
-}) {
+}): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
     title: t("search"),

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { type Metadata } from "next";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 import { BooksFeed } from "~/components/Book/BooksFeed";
@@ -9,7 +10,7 @@ export async function generateMetadata({
   params: { locale },
 }: {
   params: { locale: localeTypes };
-}) {
+}): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
     title: t("explore"),

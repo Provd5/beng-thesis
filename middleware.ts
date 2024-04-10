@@ -68,15 +68,19 @@ export async function middleware(request: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
   const nextUrl = request.nextUrl;
-  const protectedRoute = nextUrl.pathname.split("/")[2];
+  const pathnameParts = nextUrl.pathname.split("/");
+  const isLocale = locales.includes(pathnameParts[1]);
+  const protectedRoute = pathnameParts[2];
 
   if (
     !session?.user &&
+    isLocale &&
     (protectedRoute === "profile" || protectedRoute === "edit-profile")
   )
     return Response.redirect(new URL(ROUTES.auth.login, nextUrl));
   if (
     !!session?.user &&
+    isLocale &&
     (protectedRoute === "login" || protectedRoute === "signup")
   )
     return Response.redirect(new URL(ROUTES.profile.session_profile, nextUrl));

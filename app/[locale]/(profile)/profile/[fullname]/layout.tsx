@@ -1,11 +1,16 @@
 import { Suspense } from "react";
+import { type Metadata } from "next";
 import { unstable_setRequestLocale } from "next-intl/server";
 
 import { Profile } from "~/components/Profile/Profile";
 import { ProfileLoader } from "~/components/ui/Loaders/Skeletons/ProfileLoader";
 import { type localeTypes } from "~/i18n";
 
-export function generateMetadata({ params }: { params: { fullname: string } }) {
+export function generateMetadata({
+  params,
+}: {
+  params: { fullname: string };
+}): Metadata {
   return {
     title: {
       default: `@${decodeURIComponent(params.fullname)}`,

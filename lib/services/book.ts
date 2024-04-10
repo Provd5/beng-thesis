@@ -1,15 +1,20 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { type GetBookInterface } from "~/types/data/book";
+import { type BookshelfPreviewType } from "~/types/data/bookshelf";
 import { type GetDataList } from "~/types/list";
 import { SortBooksArray } from "~/types/orderArrays";
 import { type SortBooksType } from "~/types/sort";
 
+import ROUTES from "~/utils/routes";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
 import { db } from "../db";
 import { errorHandler } from "../errorHandler";
 import readUserSession from "../supabase/readUserSession";
+import { bookshelfPreviewSelector } from "../utils/bookshelvesSelector";
 import { totalPages } from "../utils/totalPages";
 import { transformBookData } from "../utils/transformBookData";
 import { OwnedAsValidator } from "../validations/book";
@@ -128,25 +133,36 @@ export async function getBook(
   bookId: string
 ): Promise<GetBookInterface | null> {
   try {
+    const validBookId = UuidValidator.parse(bookId);
+
     const {
       data: { session },
     } = await readUserSession();
 
     const bookData = await db.book.findUnique({
-      where: { id: bookId },
+      where: { id: validBookId },
       include: {
         _count: { select: { review: true, liked_by: true } },
-        review: { where: { book_id: bookId }, select: { rate: true } },
+        review: { where: { book_id: validBookId }, select: { rate: true } },
         ...(session
           ? {
               book_owned_as: {
-                where: { profile: { id: session.user.id }, book_id: bookId },
+                where: {
+                  profile: { id: session.user.id },
+                  book_id: validBookId,
+                },
               },
               bookshelf: {
-                where: { profile: { id: session.user.id }, book_id: bookId },
+                where: {
+                  profile: { id: session.user.id },
+                  book_id: validBookId,
+                },
               },
               liked_by: {
-                where: { profile: { id: session.user.id }, book_id: bookId },
+                where: {
+                  profile: { id: session.user.id },
+                  book_id: validBookId,
+                },
               },
             }
           : {}),
@@ -158,6 +174,26 @@ export async function getBook(
     const transformedData = transformBookData(!!session, bookData);
 
     return transformedData;
+  } catch (e) {
+    throw new Error(errorHandler(e));
+  } finally {
+  }
+}
+
+export async function getBookPreview(
+  bookId: string
+): Promise<BookshelfPreviewType | null> {
+  try {
+    const validBookId = UuidValidator.parse(bookId);
+
+    const bookData = await db.book.findUnique({
+      where: { id: validBookId },
+      select: bookshelfPreviewSelector.book.select,
+    });
+
+    if (!bookData) return null;
+
+    return bookData;
   } catch (e) {
     throw new Error(errorHandler(e));
   } finally {
@@ -196,6 +232,7 @@ export async function postLike(bookId: unknown): Promise<{ success: boolean }> {
     }
 
     // on success
+    revalidatePath(ROUTES.profile.session_profile, "page");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));
@@ -247,6 +284,7 @@ export async function postOwnedAs(
     });
 
     // on success
+    revalidatePath(ROUTES.profile.session_profile, "page");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));

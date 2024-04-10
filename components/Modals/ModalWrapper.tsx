@@ -105,7 +105,7 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
       <div
         ref={containerRef}
         className={cn(
-          "absolute z-40 my-1 flex cursor-default border border-black/10 bg-white text-colors-text drop-shadow transition-opacity dark:border-white/10 dark:bg-black",
+          "absolute z-50 my-1 flex cursor-default border border-black/10 bg-white text-colors-text drop-shadow transition-opacity dark:border-white/10 dark:bg-black",
           sizeClass[size],
           topPosition,
           rightPosiotion,
