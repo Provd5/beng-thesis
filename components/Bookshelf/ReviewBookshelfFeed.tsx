@@ -3,6 +3,7 @@ import { type FC } from "react";
 import { SortReviewBookshelfArray } from "~/types/orderArrays";
 
 import { getReviewBooks } from "~/lib/services/bookshelf";
+import { getSessionUser } from "~/lib/services/session";
 
 import { FeedSort } from "../Modals/FeedSort";
 import { BookReviewCard } from "../Review/BookReviewCard/BookReviewCard";
@@ -17,7 +18,12 @@ export const ReviewBookshelfFeed: FC<ReviewBookshelfFeedProps> = async ({
   profileName,
   searchParams,
 }) => {
-  const reviews = await getReviewBooks(profileName, searchParams);
+  const sessionUser = await getSessionUser();
+  const reviews = await getReviewBooks(
+    sessionUser?.id,
+    profileName,
+    searchParams,
+  );
 
   return reviews.allItems === 0 ? (
     <NotFoundItems />

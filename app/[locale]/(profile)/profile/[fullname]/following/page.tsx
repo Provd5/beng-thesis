@@ -1,35 +1,37 @@
 import { Suspense } from "react";
 import { type Metadata } from "next";
-import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { FollowPage } from "~/components/Profile/Follows/FollowPage";
 import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
-import { type localeTypes } from "~/i18n";
+import { type localeTypes } from "~/i18n/routing";
 
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: {
   params: { locale: localeTypes };
 }): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
     title: t("following"),
   };
 }
 
-export default function FollowingPage({
-  params: { fullname, locale },
+export default async function FollowingPage({
+  params,
   searchParams,
 }: {
-  params: { fullname: string; locale: localeTypes };
+  params: { fullname: string };
   searchParams: unknown;
 }) {
-  unstable_setRequestLocale(locale);
+  const { fullname } = await params;
+  const awaitedSearchParams = await searchParams;
 
   return (
     <Suspense key={"following"} fallback={<LargeComponentLoader />}>
       <FollowPage
-        searchParams={searchParams}
+        searchParams={awaitedSearchParams}
         profileName={fullname}
         variant="following"
       />

@@ -1,11 +1,9 @@
 import { Suspense } from "react";
 import { type Metadata } from "next";
-import { unstable_setRequestLocale } from "next-intl/server";
 
 import { Book } from "~/components/Book/Book";
 import { BackFrom } from "~/components/Links/BackCategoryLink";
 import { BookLoader } from "~/components/ui/Loaders/Skeletons/BookLoader";
-import { type localeTypes } from "~/i18n";
 import { getBookPreview } from "~/lib/services/book";
 
 export async function generateMetadata({
@@ -13,11 +11,12 @@ export async function generateMetadata({
 }: {
   params: { id: string; title: string };
 }): Promise<Metadata> {
-  const bookData = await getBookPreview(params.id);
+  const { id, title } = await params;
+  const bookData = await getBookPreview(id);
 
   if (!bookData)
     return {
-      title: decodeURIComponent(params.title),
+      title: decodeURIComponent(title),
     };
 
   return {
@@ -28,14 +27,14 @@ export async function generateMetadata({
   };
 }
 
-export default function BookLayout({
+export default async function BookLayout({
   children,
-  params: { id, locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { id: string; locale: localeTypes };
+  params: { id: string };
 }) {
-  unstable_setRequestLocale(locale);
+  const { id } = await params;
 
   return (
     <div className="container pb-12 pt-8">

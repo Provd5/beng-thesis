@@ -8,11 +8,11 @@ import {
 
 import { db } from "../db";
 import { errorHandler } from "../errorHandler";
-import { bookshelfPreviewSelector } from "../utils/bookshelvesSelector";
+import { bookshelfPreviewSelector } from "../utils/prismaSelectors";
 import { getBookshelfQuantity } from "./bookshelf";
 
 export async function getAllBookshelvesQuantity(
-  profileName: string
+  profileName: string,
 ): Promise<BookshelfQuantitiesInterface> {
   const decodedProfileName = decodeURIComponent(profileName);
 
@@ -66,7 +66,7 @@ export async function getAllBookshelvesQuantity(
 }
 
 export async function getOwnedStatistics(
-  profileName: string
+  profileName: string,
 ): Promise<OwnedBooksInterface> {
   const decodedProfileName = decodeURIComponent(profileName);
 
@@ -115,7 +115,7 @@ export async function getOwnedStatistics(
 }
 
 export async function getReadStatistics(
-  profileName: string
+  profileName: string,
 ): Promise<ReadBooksInterface> {
   const decodedProfileName = decodeURIComponent(profileName);
 

@@ -1,23 +1,25 @@
 import type { FC } from "react";
 
-import { getSessionProfile } from "~/lib/services/profile";
+import { getSessionUser, getSessionUserDetails } from "~/lib/services/session";
 
 import { AvatarImage } from "../AvatarImage";
 import { EditProfileForm } from "./EditProfileForm";
 
 export const ManageProfile: FC = async () => {
-  const profileData = await getSessionProfile();
+  const sessionUser = await getSessionUser();
+  if (!sessionUser) return;
 
-  if (!profileData) return;
+  const userDetails = await getSessionUserDetails(sessionUser?.id);
+  if (!userDetails) return;
 
   return (
     <div className="flex gap-3">
       <div className="mt-[-30px]">
         <div className="bodyGradientForAvatar relative flex size-[112px] items-center justify-center rounded-full">
-          <AvatarImage size="lg" avatarSrc={profileData.avatar_url} />
+          <AvatarImage size="lg" avatarSrc={userDetails.avatar_url} />
         </div>
       </div>
-      <EditProfileForm profileData={profileData} />
+      <EditProfileForm profileData={userDetails} />
     </div>
   );
 };

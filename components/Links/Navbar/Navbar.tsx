@@ -1,21 +1,12 @@
 import type { FC } from "react";
 
-import { db } from "~/lib/db";
-import readUserSession from "~/lib/supabase/readUserSession";
+import { getSessionUser, getSessionUserDetails } from "~/lib/services/session";
 
 import { NavbarLink } from "./NavbarLink";
 
 export const Navbar: FC = async () => {
-  const {
-    data: { session },
-  } = await readUserSession();
-
-  const userData =
-    session?.user &&
-    (await db.profile.findUnique({
-      where: { id: session.user.id },
-      select: { full_name: true },
-    }));
+  const sessionUser = await getSessionUser();
+  const userDetails = await getSessionUserDetails(sessionUser?.id);
 
   return (
     <>
@@ -23,8 +14,8 @@ export const Navbar: FC = async () => {
         <div className="flex size-full max-w-sm items-center justify-between gap-3 px-8 md:max-w-7xl md:justify-end md:px-6">
           <NavbarLink pageVariant={"explore"} />
           <NavbarLink
-            profileName={userData?.full_name}
-            pageVariant={session ? "profile" : "login"}
+            profileName={userDetails?.full_name}
+            pageVariant={userDetails ? "profile" : "login"}
           />
           <NavbarLink pageVariant="search" />
         </div>

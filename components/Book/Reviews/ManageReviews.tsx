@@ -1,6 +1,7 @@
 import type { FC } from "react";
 
 import { getReview } from "~/lib/services/review";
+import { getSessionUser } from "~/lib/services/session";
 
 import { HandleSelectReview } from "./HandleSelectReview";
 
@@ -13,7 +14,8 @@ export const ManageReviews: FC<ManageReviewsProps> = async ({
   bookId,
   reviewsQuantity,
 }) => {
-  const reviewData = await getReview(bookId);
+  const sessionUser = await getSessionUser();
+  const reviewData = await getReview(sessionUser?.id, bookId);
 
   return (
     <HandleSelectReview

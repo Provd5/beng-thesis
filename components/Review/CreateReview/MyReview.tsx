@@ -2,6 +2,7 @@ import { type FC, Suspense } from "react";
 
 import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 import { getReview } from "~/lib/services/review";
+import { getSessionUser } from "~/lib/services/session";
 
 import { CreateReview } from "./CreateReview";
 import { MyReviewLogin } from "./MyReviewLogin";
@@ -11,7 +12,8 @@ interface MyReviewProps {
 }
 
 export const MyReview: FC<MyReviewProps> = async ({ bookId }) => {
-  const reviewData = await getReview(bookId);
+  const sessionUser = await getSessionUser();
+  const reviewData = await getReview(sessionUser?.id, bookId);
 
   if (reviewData === undefined) return <MyReviewLogin />;
 

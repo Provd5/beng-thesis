@@ -3,6 +3,7 @@ import { type FC } from "react";
 import { SortBooksArray } from "~/types/orderArrays";
 
 import { getAllBooks } from "~/lib/services/book";
+import { getSessionUser } from "~/lib/services/session";
 
 import { FeedSort } from "../Modals/FeedSort";
 import { ItemsFound } from "../Search/ItemsFound";
@@ -15,7 +16,8 @@ interface BooksFeedProps {
 }
 
 export const BooksFeed: FC<BooksFeedProps> = async ({ searchParams, q }) => {
-  const books = await getAllBooks(searchParams, q);
+  const sessionUser = await getSessionUser();
+  const books = await getAllBooks(sessionUser?.id, searchParams, q);
 
   return (
     <>

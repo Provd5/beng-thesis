@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
+
 import {
   type GetReviewInterface,
   type GetReviewReactionInterface,
@@ -13,7 +15,7 @@ import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
 import { db } from "../db";
 import { errorHandler } from "../errorHandler";
-import readUserSession from "../supabase/readUserSession";
+import { unstable_cache } from "../unstable-cache";
 import { totalPages } from "../utils/totalPages";
 import { ErrorsToTranslate } from "../validations/errorsEnums";
 import { UuidValidator } from "../validations/others";
@@ -21,152 +23,164 @@ import {
   CreateReviewValidator,
   ReviewReactionValidator,
 } from "../validations/review";
+import { getSessionUser } from "./session";
 
 const itemsPerPage = 15;
 
-export async function getReviewQuantity(bookId: string): Promise<number> {
-  try {
-    const quantity = await db.review.count({
-      where: { book_id: bookId },
-    });
-
-    return quantity;
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
-
-export async function getAllReviews(
-  bookId: string,
-  searchParams: unknown
-): Promise<GetDataList<GetReviewInterface>> {
-  const validSearchParams = sortParamsValidator(searchParams, SortReviewsArray);
-  const { order, orderBy: defaultOrderBy, page } = validSearchParams;
-  const orderBy = defaultOrderBy as SortReviewsType;
-
-  try {
-    const [allItems, reviews] = await Promise.all([
-      getReviewQuantity(bookId),
-      db.review.findMany({
-        skip: (page - 1) * itemsPerPage,
-        take: itemsPerPage,
-        orderBy:
-          orderBy === "activity"
-            ? [
-                { profile: { review: { _count: order } } },
-                { profile: { review_reaction: { _count: order } } },
-                { profile: { followed_by: { _count: order } } },
-                { profile: { following: { _count: order } } },
-                { profile: { book_owned_as: { _count: order } } },
-                { profile: { bookshelf: { _count: order } } },
-                { profile: { liked_book: { _count: order } } },
-              ]
-            : orderBy === "reactions"
-            ? { review_reaction: { _count: order } }
-            : { [orderBy]: order },
+export const getReviewQuantity = unstable_cache(
+  async (bookId: string): Promise<number> => {
+    try {
+      const quantity = await db.review.count({
         where: { book_id: bookId },
-        include: {
-          profile: {
-            include: {
-              _count: {
-                select: {
-                  bookshelf: { where: { bookshelf: "ALREADY_READ" } },
-                  liked_book: { where: { book_id: bookId } },
-                  review: { where: { book_id: bookId } },
+      });
+
+      return quantity;
+    } catch (e) {
+      throw new Error(errorHandler(e));
+    }
+  },
+  ["review-quantity"],
+  { revalidate: 60 * 60 * 2 }, // two hours
+);
+
+export const getAllReviews = unstable_cache(
+  async (
+    bookId: string,
+    searchParams: unknown,
+  ): Promise<GetDataList<GetReviewInterface>> => {
+    const validSearchParams = sortParamsValidator(
+      searchParams,
+      SortReviewsArray,
+    );
+    const { order, orderBy: defaultOrderBy, page } = validSearchParams;
+    const orderBy = defaultOrderBy as SortReviewsType;
+
+    try {
+      const [allItems, reviews] = await Promise.all([
+        getReviewQuantity(bookId),
+        db.review.findMany({
+          skip: (page - 1) * itemsPerPage,
+          take: itemsPerPage,
+          orderBy:
+            orderBy === "activity"
+              ? [
+                  { profile: { review: { _count: order } } },
+                  { profile: { review_reaction: { _count: order } } },
+                  { profile: { followed_by: { _count: order } } },
+                  { profile: { following: { _count: order } } },
+                  { profile: { book_owned_as: { _count: order } } },
+                  { profile: { bookshelf: { _count: order } } },
+                  { profile: { liked_book: { _count: order } } },
+                ]
+              : orderBy === "reactions"
+                ? { review_reaction: { _count: order } }
+                : { [orderBy]: order },
+          where: { book_id: bookId },
+          include: {
+            profile: {
+              include: {
+                _count: {
+                  select: {
+                    bookshelf: { where: { bookshelf: "ALREADY_READ" } },
+                    liked_book: { where: { book_id: bookId } },
+                    review: { where: { book_id: bookId } },
+                  },
                 },
               },
             },
+            review_reaction: true,
           },
-          review_reaction: true,
-        },
-      }),
-    ]);
+        }),
+      ]);
 
-    return {
-      page,
-      totalPages: totalPages(allItems, itemsPerPage),
-      allItems,
-      itemsPerPage:
-        reviews.length < itemsPerPage ? reviews.length : itemsPerPage,
-      data: reviews,
-    };
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
+      return {
+        page,
+        totalPages: totalPages(allItems, itemsPerPage),
+        allItems,
+        itemsPerPage:
+          reviews.length < itemsPerPage ? reviews.length : itemsPerPage,
+        data: reviews,
+      };
+    } catch (e) {
+      throw new Error(errorHandler(e));
+    }
+  },
+  ["all-reviews"],
+  { revalidate: 60 * 60 * 2 }, // two hours
+);
 
-export async function getReview(
-  bookId: string
-): Promise<ReviewInterface | null | undefined> {
-  try {
-    const {
-      data: { session },
-    } = await readUserSession();
+export const getReview = unstable_cache(
+  async (
+    sessionId: string | undefined,
+    bookId: string,
+  ): Promise<ReviewInterface | null | undefined> => {
+    try {
+      if (!sessionId) return undefined;
 
-    if (!session) return undefined;
+      const review = await db.review.findFirst({
+        where: { book_id: bookId, author_id: sessionId },
+      });
 
-    const review = await db.review.findFirst({
-      where: { book_id: bookId, author_id: session.user.id },
-    });
+      return review;
+    } catch (e) {
+      throw new Error(errorHandler(e));
+    }
+  },
+  ["review"],
+  { revalidate: 60 * 60 * 2 }, // two hours
+);
 
-    return review;
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
+export const getReactions = unstable_cache(
+  async (
+    sessionId: string | undefined,
+    reviewId: string,
+  ): Promise<GetReviewReactionInterface> => {
+    try {
+      const [upQuantity, downQuantity, sessionReaction] = await Promise.all([
+        db.review_reaction.count({
+          where: {
+            review_id: reviewId,
+            reaction: "OK",
+          },
+        }),
+        db.review_reaction.count({
+          where: {
+            review_id: reviewId,
+            reaction: "MEH",
+          },
+        }),
+        sessionId
+          ? db.review_reaction.findFirst({
+              where: {
+                review_id: reviewId,
+                user_id: sessionId,
+              },
+            })
+          : undefined,
+      ]);
 
-export async function getReactions(
-  reviewId: string
-): Promise<GetReviewReactionInterface> {
-  try {
-    const {
-      data: { session },
-    } = await readUserSession();
-
-    const [upQuantity, downQuantity, sessionReaction] = await Promise.all([
-      db.review_reaction.count({
-        where: {
-          review_id: reviewId,
-          reaction: "OK",
-        },
-      }),
-      db.review_reaction.count({
-        where: {
-          review_id: reviewId,
-          reaction: "MEH",
-        },
-      }),
-      session
-        ? db.review_reaction.findFirst({
-            where: {
-              review_id: reviewId,
-              user_id: session.user.id,
-            },
-          })
-        : undefined,
-    ]);
-
-    return {
-      upQuantity,
-      downQuantity,
-      sessionReaction:
-        sessionReaction === null ? null : sessionReaction?.reaction,
-    };
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
+      return {
+        upQuantity,
+        downQuantity,
+        sessionReaction:
+          sessionReaction === null ? null : sessionReaction?.reaction,
+      };
+    } catch (e) {
+      throw new Error(errorHandler(e));
+    }
+  },
+  ["reactions"],
+  { revalidate: 60 * 60 * 2 }, // two hours
+);
 
 export async function postReaction(
   reviewId: unknown,
-  reaction: unknown
+  reaction: unknown,
 ): Promise<{ success: boolean }> {
   try {
-    const {
-      data: { session },
-    } = await readUserSession();
+    const sessionUser = await getSessionUser();
 
-    if (!session?.user) {
+    if (!sessionUser) {
       throw new Error(ErrorsToTranslate.UNAUTHORIZED);
     }
 
@@ -174,7 +188,7 @@ export async function postReaction(
     const validReaction = ReviewReactionValidator.parse(reaction);
 
     const currentReaction = await db.review_reaction.findFirst({
-      where: { review_id: validReviewData, user_id: session.user.id },
+      where: { review_id: validReviewData, user_id: sessionUser.id },
     });
 
     if (currentReaction && currentReaction.reaction === validReaction) {
@@ -182,7 +196,7 @@ export async function postReaction(
         where: {
           user_id_review_id: {
             review_id: validReviewData,
-            user_id: session.user.id,
+            user_id: sessionUser.id,
           },
         },
       });
@@ -191,7 +205,7 @@ export async function postReaction(
         where: {
           user_id_review_id: {
             review_id: validReviewData,
-            user_id: session.user.id,
+            user_id: sessionUser.id,
           },
         },
         update: {
@@ -199,12 +213,14 @@ export async function postReaction(
         },
         create: {
           review_id: validReviewData,
-          user_id: session.user.id,
+          user_id: sessionUser.id,
           reaction: validReaction,
         },
       });
     }
 
+    // on success
+    revalidateTag("session-user");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));
@@ -213,14 +229,12 @@ export async function postReaction(
 
 export async function postReview(
   bookId: unknown,
-  formData: object
+  formData: object,
 ): Promise<{ success: boolean }> {
   try {
-    const {
-      data: { session },
-    } = await readUserSession();
+    const sessionUser = await getSessionUser();
 
-    if (!session?.user) {
+    if (!sessionUser) {
       throw new Error(ErrorsToTranslate.UNAUTHORIZED);
     }
 
@@ -229,7 +243,7 @@ export async function postReview(
 
     const reviewExists = await db.review.findFirst({
       where: {
-        author_id: session.user.id,
+        author_id: sessionUser.id,
         book_id: validBookId,
       },
       select: { id: true },
@@ -246,7 +260,7 @@ export async function postReview(
     } else {
       await db.review.create({
         data: {
-          author_id: session.user.id,
+          author_id: sessionUser.id,
           book_id: validBookId,
           text: validData.text,
           rate: validData.rate,
@@ -256,7 +270,7 @@ export async function postReview(
     }
 
     // on success
-    // revalidatePath("/", "layout");
+    revalidateTag("session-user");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));
@@ -264,14 +278,12 @@ export async function postReview(
 }
 
 export async function deleteReview(
-  reviewId: unknown
+  reviewId: unknown,
 ): Promise<{ success: boolean }> {
   try {
-    const {
-      data: { session },
-    } = await readUserSession();
+    const sessionUser = await getSessionUser();
 
-    if (!session?.user) {
+    if (!sessionUser) {
       throw new Error(ErrorsToTranslate.UNAUTHORIZED);
     }
 
@@ -282,7 +294,7 @@ export async function deleteReview(
     });
 
     // on success
-    // revalidatePath("/", "layout");
+    revalidateTag("session-user");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));

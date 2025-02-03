@@ -1,3 +1,37 @@
+export const profileSelector = (userId: string | undefined) => {
+  return {
+    _count: {
+      select: {
+        followed_by: true,
+        following: true,
+        book_owned_as: {
+          where: {
+            NOT: {
+              AND: [
+                { added_audiobook_at: null },
+                { added_book_at: null },
+                { added_ebook_at: null },
+              ],
+            },
+          },
+        },
+        bookshelf: true,
+        liked_book: true,
+        review: true,
+      },
+    },
+    ...(userId
+      ? {
+          followed_by: {
+            where: {
+              follower_id: userId,
+            },
+          },
+        }
+      : {}),
+  };
+};
+
 export const bookshelvesSelector = (sessionId?: string) => {
   return {
     book: {

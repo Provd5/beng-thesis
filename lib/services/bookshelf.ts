@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 import { type BookshelvesTypes } from "~/types/consts";
 import { type GetBookInterface } from "~/types/data/book";
@@ -16,326 +16,331 @@ import {
   type SortReviewBookshelfType,
 } from "~/types/sort";
 
-import ROUTES from "~/utils/routes";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
 import { db } from "../db";
 import { errorHandler } from "../errorHandler";
-import readUserSession from "../supabase/readUserSession";
+import { unstable_cache } from "../unstable-cache";
 import {
   bookshelfPreviewSelector,
   bookshelvesSelector,
-} from "../utils/bookshelvesSelector";
+} from "../utils/prismaSelectors";
 import { totalPages } from "../utils/totalPages";
 import { transformBookData } from "../utils/transformBookData";
 import { transformReviewBookshelfData } from "../utils/transformReviewBookshelfData";
 import { ChangeBookshelfValidator } from "../validations/bookshelf";
 import { ErrorsToTranslate } from "../validations/errorsEnums";
 import { UuidValidator } from "../validations/others";
+import { getSessionUser } from "./session";
 
 const itemsPerPage = 10;
 
-export async function getBookshelfQuantity(
-  profileName: string,
-  bookshelf: BookshelvesTypes
-): Promise<number> {
-  const decodedProfileName = decodeURIComponent(profileName);
+export const getBookshelfQuantity = unstable_cache(
+  async (profileName: string, bookshelf: BookshelvesTypes): Promise<number> => {
+    const decodedProfileName = decodeURIComponent(profileName);
 
-  try {
-    let quantityPromise;
+    try {
+      let quantityPromise;
 
-    switch (bookshelf) {
-      case "LIKED":
-        quantityPromise = db.liked_books.count({
-          where: { profile: { full_name: decodedProfileName } },
-        });
-        break;
+      switch (bookshelf) {
+        case "LIKED":
+          quantityPromise = db.liked_books.count({
+            where: { profile: { full_name: decodedProfileName } },
+          });
+          break;
 
-      case "REVIEWS":
-        quantityPromise = db.review.count({
-          where: { profile: { full_name: decodedProfileName } },
-        });
-        break;
+        case "REVIEWS":
+          quantityPromise = db.review.count({
+            where: { profile: { full_name: decodedProfileName } },
+          });
+          break;
 
-      case "OWNED":
-        quantityPromise = db.book_owned_as.count({
-          where: {
-            profile: { full_name: decodedProfileName },
-            NOT: {
-              AND: [
-                { added_audiobook_at: null },
-                { added_book_at: null },
-                { added_ebook_at: null },
-              ],
+        case "OWNED":
+          quantityPromise = db.book_owned_as.count({
+            where: {
+              profile: { full_name: decodedProfileName },
+              NOT: {
+                AND: [
+                  { added_audiobook_at: null },
+                  { added_book_at: null },
+                  { added_ebook_at: null },
+                ],
+              },
             },
-          },
-        });
-        break;
+          });
+          break;
 
-      default:
-        quantityPromise = db.bookshelf.count({
-          where: { profile: { full_name: decodedProfileName }, bookshelf },
-        });
-        break;
+        default:
+          quantityPromise = db.bookshelf.count({
+            where: { profile: { full_name: decodedProfileName }, bookshelf },
+          });
+          break;
+      }
+
+      const quantity = await quantityPromise;
+
+      return quantity;
+    } catch (e) {
+      throw new Error(errorHandler(e));
     }
+  },
+  ["bookshelf-quantity"],
+  { revalidate: 60 * 60 * 2 }, // two hours
+);
 
-    const quantity = await quantityPromise;
+export const getBookshelfBooks = unstable_cache(
+  async (
+    sessionId: string | undefined,
+    bookshelf: Exclude<BookshelvesTypes, "REVIEWS">,
+    profileName: string,
+    searchParams: unknown,
+  ): Promise<GetDataList<GetBookInterface>> => {
+    const decodedProfileName = decodeURIComponent(profileName);
 
-    return quantity;
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
-
-export async function getBookshelfBooks(
-  bookshelf: Exclude<BookshelvesTypes, "REVIEWS">,
-  profileName: string,
-  searchParams: unknown
-): Promise<GetDataList<GetBookInterface>> {
-  const decodedProfileName = decodeURIComponent(profileName);
-
-  const validSearchParams = sortParamsValidator(
-    searchParams,
-    SortBookshelvesArray
-  );
-  const { order, orderBy: defaultOrderBy, page } = validSearchParams;
-  const orderBy = defaultOrderBy as SortBookshelvesType;
-
-  const popularityOrder = [
-    { book: { liked_by: { _count: order } } },
-    { book: { review: { _count: order } } },
-    { book: { book_owned_as: { _count: order } } },
-    { book: { bookshelf: { _count: order } } },
-  ];
-  try {
-    const {
-      data: { session },
-    } = await readUserSession();
-
-    let booksPromise;
-
-    switch (bookshelf) {
-      case "LIKED":
-        booksPromise = db.liked_books.findMany({
-          skip: (page - 1) * itemsPerPage,
-          take: itemsPerPage,
-          orderBy:
-            orderBy === "last_added"
-              ? { updated_at: order }
-              : orderBy === "popularity"
-              ? popularityOrder
-              : { book: { [orderBy]: order } },
-          where: { profile: { full_name: decodedProfileName } },
-          select: bookshelvesSelector(session?.user.id),
-        });
-        break;
-
-      case "OWNED":
-        booksPromise = db.book_owned_as.findMany({
-          skip: (page - 1) * itemsPerPage,
-          take: itemsPerPage,
-          orderBy:
-            orderBy === "last_added"
-              ? { updated_at: order }
-              : orderBy === "popularity"
-              ? popularityOrder
-              : { book: { [orderBy]: order } },
-          where: {
-            profile: { full_name: decodedProfileName },
-            NOT: {
-              AND: [
-                { added_audiobook_at: null },
-                { added_book_at: null },
-                { added_ebook_at: null },
-              ],
-            },
-          },
-          select: bookshelvesSelector(session?.user.id),
-        });
-        break;
-
-      default:
-        booksPromise = db.bookshelf.findMany({
-          skip: (page - 1) * itemsPerPage,
-          take: itemsPerPage,
-          orderBy:
-            orderBy === "last_added"
-              ? { updated_at: order }
-              : orderBy === "popularity"
-              ? popularityOrder
-              : { book: { [orderBy]: order } },
-          where: { profile: { full_name: decodedProfileName }, bookshelf },
-          select: bookshelvesSelector(session?.user.id),
-        });
-        break;
-    }
-
-    const [allItems, books] = await Promise.all([
-      getBookshelfQuantity(decodedProfileName, bookshelf),
-      booksPromise,
-    ]);
-
-    const transformedData = books.map(({ book }) =>
-      transformBookData(!!session, book)
+    const validSearchParams = sortParamsValidator(
+      searchParams,
+      SortBookshelvesArray,
     );
+    const { order, orderBy: defaultOrderBy, page } = validSearchParams;
+    const orderBy = defaultOrderBy as SortBookshelvesType;
 
-    return {
-      page,
-      totalPages: totalPages(allItems, itemsPerPage),
-      allItems,
-      itemsPerPage: books.length < itemsPerPage ? books.length : itemsPerPage,
-      data: transformedData,
-    };
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
+    const popularityOrder = [
+      { book: { liked_by: { _count: order } } },
+      { book: { review: { _count: order } } },
+      { book: { book_owned_as: { _count: order } } },
+      { book: { bookshelf: { _count: order } } },
+    ];
+    try {
+      let booksPromise;
 
-export async function getBookshelfPreview(
-  profileName: string,
-  bookshelf: BookshelvesTypes
-): Promise<
-  Omit<
-    GetDataList<BookshelfPreviewType>,
-    "page" | "totalPages" | "itemsPerPage"
-  >
-> {
-  const decodedProfileName = decodeURIComponent(profileName);
+      switch (bookshelf) {
+        case "LIKED":
+          booksPromise = db.liked_books.findMany({
+            skip: (page - 1) * itemsPerPage,
+            take: itemsPerPage,
+            orderBy:
+              orderBy === "last_added"
+                ? { updated_at: order }
+                : orderBy === "popularity"
+                  ? popularityOrder
+                  : { book: { [orderBy]: order } },
+            where: { profile: { full_name: decodedProfileName } },
+            select: bookshelvesSelector(sessionId),
+          });
+          break;
 
-  try {
-    let booksPromise;
-
-    switch (bookshelf) {
-      case "LIKED":
-        booksPromise = db.liked_books.findMany({
-          take: itemsPerPage,
-          orderBy: { updated_at: "desc" },
-          where: { profile: { full_name: decodedProfileName } },
-          select: bookshelfPreviewSelector,
-        });
-        break;
-
-      case "REVIEWS":
-        booksPromise = db.review.findMany({
-          take: itemsPerPage,
-          orderBy: { updated_at: "desc" },
-          where: { profile: { full_name: decodedProfileName } },
-          select: bookshelfPreviewSelector,
-        });
-        break;
-
-      case "OWNED":
-        booksPromise = db.book_owned_as.findMany({
-          take: itemsPerPage,
-          orderBy: { updated_at: "desc" },
-          where: {
-            profile: { full_name: decodedProfileName },
-            NOT: {
-              AND: [
-                { added_audiobook_at: null },
-                { added_book_at: null },
-                { added_ebook_at: null },
-              ],
+        case "OWNED":
+          booksPromise = db.book_owned_as.findMany({
+            skip: (page - 1) * itemsPerPage,
+            take: itemsPerPage,
+            orderBy:
+              orderBy === "last_added"
+                ? { updated_at: order }
+                : orderBy === "popularity"
+                  ? popularityOrder
+                  : { book: { [orderBy]: order } },
+            where: {
+              profile: { full_name: decodedProfileName },
+              NOT: {
+                AND: [
+                  { added_audiobook_at: null },
+                  { added_book_at: null },
+                  { added_ebook_at: null },
+                ],
+              },
             },
-          },
-          select: bookshelfPreviewSelector,
-        });
-        break;
+            select: bookshelvesSelector(sessionId),
+          });
+          break;
 
-      default:
-        booksPromise = db.bookshelf.findMany({
-          take: itemsPerPage,
-          where: { profile: { full_name: decodedProfileName }, bookshelf },
-          select: bookshelfPreviewSelector,
-        });
-        break;
+        default:
+          booksPromise = db.bookshelf.findMany({
+            skip: (page - 1) * itemsPerPage,
+            take: itemsPerPage,
+            orderBy:
+              orderBy === "last_added"
+                ? { updated_at: order }
+                : orderBy === "popularity"
+                  ? popularityOrder
+                  : { book: { [orderBy]: order } },
+            where: { profile: { full_name: decodedProfileName }, bookshelf },
+            select: bookshelvesSelector(sessionId),
+          });
+          break;
+      }
+
+      const [allItems, books] = await Promise.all([
+        getBookshelfQuantity(decodedProfileName, bookshelf),
+        booksPromise,
+      ]);
+
+      const transformedData = books.map(({ book }) =>
+        transformBookData(!!sessionId, book),
+      );
+
+      return {
+        page,
+        totalPages: totalPages(allItems, itemsPerPage),
+        allItems,
+        itemsPerPage: books.length < itemsPerPage ? books.length : itemsPerPage,
+        data: transformedData,
+      };
+    } catch (e) {
+      throw new Error(errorHandler(e));
     }
+  },
+  ["bookshelf-books"],
+  { revalidate: 60 * 60 * 2 }, // two hours
+);
 
-    const [allItems, books] = await Promise.all([
-      getBookshelfQuantity(decodedProfileName, bookshelf),
-      booksPromise,
-    ]);
+export const getBookshelfPreview = unstable_cache(
+  async (
+    profileName: string,
+    bookshelf: BookshelvesTypes,
+  ): Promise<
+    Omit<
+      GetDataList<BookshelfPreviewType>,
+      "page" | "totalPages" | "itemsPerPage"
+    >
+  > => {
+    const decodedProfileName = decodeURIComponent(profileName);
 
-    return {
-      data: books.map(({ book }) => book),
-      allItems,
-    };
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
+    try {
+      let booksPromise;
 
-export async function getReviewBooks(
-  profileName: string,
-  searchParams: unknown
-): Promise<GetDataList<GetBookInterface & { review: ReviewInterface }>> {
-  const decodedProfileName = decodeURIComponent(profileName);
+      switch (bookshelf) {
+        case "LIKED":
+          booksPromise = db.liked_books.findMany({
+            take: itemsPerPage,
+            orderBy: { updated_at: "desc" },
+            where: { profile: { full_name: decodedProfileName } },
+            select: bookshelfPreviewSelector,
+          });
+          break;
 
-  const validSearchParams = sortParamsValidator(
-    searchParams,
-    SortReviewBookshelfArray
-  );
-  const { order, orderBy: defaultOrderBy, page } = validSearchParams;
-  const orderBy = defaultOrderBy as SortReviewBookshelfType;
+        case "REVIEWS":
+          booksPromise = db.review.findMany({
+            take: itemsPerPage,
+            orderBy: { updated_at: "desc" },
+            where: { profile: { full_name: decodedProfileName } },
+            select: bookshelfPreviewSelector,
+          });
+          break;
 
-  const popularityOrder = [
-    { book: { liked_by: { _count: order } } },
-    { book: { review: { _count: order } } },
-    { book: { book_owned_as: { _count: order } } },
-    { book: { bookshelf: { _count: order } } },
-  ];
+        case "OWNED":
+          booksPromise = db.book_owned_as.findMany({
+            take: itemsPerPage,
+            orderBy: { updated_at: "desc" },
+            where: {
+              profile: { full_name: decodedProfileName },
+              NOT: {
+                AND: [
+                  { added_audiobook_at: null },
+                  { added_book_at: null },
+                  { added_ebook_at: null },
+                ],
+              },
+            },
+            select: bookshelfPreviewSelector,
+          });
+          break;
 
-  try {
-    const {
-      data: { session },
-    } = await readUserSession();
+        default:
+          booksPromise = db.bookshelf.findMany({
+            take: itemsPerPage,
+            where: { profile: { full_name: decodedProfileName }, bookshelf },
+            select: bookshelfPreviewSelector,
+          });
+          break;
+      }
 
-    const [allItems, books] = await Promise.all([
-      getBookshelfQuantity(decodedProfileName, "REVIEWS"),
-      db.review.findMany({
-        skip: (page - 1) * itemsPerPage,
-        take: itemsPerPage,
-        orderBy:
-          orderBy === "last_added"
-            ? { updated_at: order }
-            : orderBy === "popularity"
-            ? popularityOrder
-            : orderBy === "reactions"
-            ? { review_reaction: { _count: order } }
-            : orderBy === "rate"
-            ? { rate: order }
-            : { book: { [orderBy]: order } },
-        where: { profile: { full_name: decodedProfileName } },
-        include: bookshelvesSelector(session?.user.id),
-      }),
-    ]);
+      const [allItems, books] = await Promise.all([
+        getBookshelfQuantity(decodedProfileName, bookshelf),
+        booksPromise,
+      ]);
 
-    const transformedData = books.map((data) =>
-      transformReviewBookshelfData(!!session, data)
+      return {
+        data: books.map(({ book }) => book),
+        allItems,
+      };
+    } catch (e) {
+      throw new Error(errorHandler(e));
+    }
+  },
+  ["bookshelf-preview"],
+  { revalidate: 60 * 60 * 2 }, // two hours
+);
+
+export const getReviewBooks = unstable_cache(
+  async (
+    sessionId: string | undefined,
+    profileName: string,
+    searchParams: unknown,
+  ): Promise<GetDataList<GetBookInterface & { review: ReviewInterface }>> => {
+    const decodedProfileName = decodeURIComponent(profileName);
+
+    const validSearchParams = sortParamsValidator(
+      searchParams,
+      SortReviewBookshelfArray,
     );
+    const { order, orderBy: defaultOrderBy, page } = validSearchParams;
+    const orderBy = defaultOrderBy as SortReviewBookshelfType;
 
-    return {
-      page,
-      totalPages: totalPages(allItems, itemsPerPage),
-      allItems,
-      itemsPerPage: books.length < itemsPerPage ? books.length : itemsPerPage,
-      data: transformedData,
-    };
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
+    const popularityOrder = [
+      { book: { liked_by: { _count: order } } },
+      { book: { review: { _count: order } } },
+      { book: { book_owned_as: { _count: order } } },
+      { book: { bookshelf: { _count: order } } },
+    ];
+
+    try {
+      const [allItems, books] = await Promise.all([
+        getBookshelfQuantity(decodedProfileName, "REVIEWS"),
+        db.review.findMany({
+          skip: (page - 1) * itemsPerPage,
+          take: itemsPerPage,
+          orderBy:
+            orderBy === "last_added"
+              ? { updated_at: order }
+              : orderBy === "popularity"
+                ? popularityOrder
+                : orderBy === "reactions"
+                  ? { review_reaction: { _count: order } }
+                  : orderBy === "rate"
+                    ? { rate: order }
+                    : { book: { [orderBy]: order } },
+          where: { profile: { full_name: decodedProfileName } },
+          include: bookshelvesSelector(sessionId),
+        }),
+      ]);
+
+      const transformedData = books.map((data) =>
+        transformReviewBookshelfData(!!sessionId, data),
+      );
+
+      return {
+        page,
+        totalPages: totalPages(allItems, itemsPerPage),
+        allItems,
+        itemsPerPage: books.length < itemsPerPage ? books.length : itemsPerPage,
+        data: transformedData,
+      };
+    } catch (e) {
+      throw new Error(errorHandler(e));
+    }
+  },
+  ["review-books"],
+  { revalidate: 60 * 60 * 2 }, // two hours
+);
 
 export async function changeBookshelf(
   bookId: unknown,
-  formData: unknown
+  formData: unknown,
 ): Promise<{ success: boolean }> {
   try {
-    const {
-      data: { session },
-    } = await readUserSession();
+    const sessionUser = await getSessionUser();
 
-    if (!session?.user) {
+    if (!sessionUser) {
       throw new Error(ErrorsToTranslate.UNAUTHORIZED);
     }
 
@@ -353,7 +358,7 @@ export async function changeBookshelf(
       where: {
         user_id_book_id: {
           book_id: validBookId,
-          user_id: session.user.id,
+          user_id: sessionUser.id,
         },
       },
       update: {
@@ -364,7 +369,7 @@ export async function changeBookshelf(
       },
       create: {
         book_id: validBookId,
-        user_id: session.user.id,
+        user_id: sessionUser.id,
         bookshelf: validData.bookshelf,
         read_quantity: validQuantity,
         updated_at: validData.updated_at,
@@ -372,7 +377,8 @@ export async function changeBookshelf(
       },
     });
 
-    revalidatePath(ROUTES.profile.session_profile, "page");
+    // on success
+    revalidateTag("session-user");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));

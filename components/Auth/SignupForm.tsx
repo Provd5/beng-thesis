@@ -3,7 +3,6 @@
 import { type FC, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import {
   type Formats,
   type TranslationValues,
@@ -12,10 +11,8 @@ import {
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { signup } from "~/lib/services/auth";
+import { signUp } from "~/lib/services/auth";
 import { SignupValidator } from "~/lib/validations/auth";
-import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
-import ROUTES from "~/utils/routes";
 import { translatableError } from "~/utils/translatableError";
 
 import { ButtonWhite } from "../ui/Buttons";
@@ -26,11 +23,10 @@ export const SignupForm: FC = () => {
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
-  const router = useRouter();
-
+  const captchaSiteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY!;
   const captcha = useRef<HCaptcha>(null);
   const [captchaToken, setCaptchaToken] = useState("");
 
@@ -45,13 +41,7 @@ export const SignupForm: FC = () => {
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      const validData = SignupValidator.parse(formData);
-      const res = await signup(captchaToken, validData);
-      if (!res.success) {
-        throw new Error(ErrorsToTranslate.SOMETHING_WENT_WRONG);
-      }
-
-      router.replace(`${ROUTES.auth.signup}?checkMail=${validData.email}`);
+      await signUp(captchaToken, formData);
     } catch (error) {
       toast.error(te(translatableError(error)));
     } finally {
@@ -93,7 +83,7 @@ export const SignupForm: FC = () => {
         {captchaToken === "" && (
           <HCaptcha
             ref={captcha}
-            sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string}
+            sitekey={captchaSiteKey}
             onVerify={(token) => {
               setCaptchaToken(token);
             }}

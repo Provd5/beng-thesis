@@ -1,19 +1,20 @@
 import { type FC } from "react";
 
-import { getSessionProfile } from "~/lib/services/profile";
+import { getSessionUser, getSessionUserDetails } from "~/lib/services/session";
 
 import { AccountSettings } from "../Modals/AccountSettings";
 import { Settings } from "../Modals/Settings";
 import { ProfileBadge } from "../Profile/ProfileBadge";
 
 export const Badges: FC = async ({}) => {
-  const profileData = await getSessionProfile();
+  const sessionUser = await getSessionUser();
+  const userDetails = await getSessionUserDetails(sessionUser?.id);
 
   return (
     <div className="flex h-fit gap-3">
-      {profileData && (
+      {userDetails && (
         <AccountSettings>
-          <ProfileBadge profileData={profileData} />
+          <ProfileBadge profileData={userDetails} />
         </AccountSettings>
       )}
       <Settings />

@@ -3,7 +3,6 @@
 import { type FC, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import {
   type Formats,
   type TranslationValues,
@@ -14,7 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { demoLogin, login } from "~/lib/services/auth";
 import { LoginValidator } from "~/lib/validations/auth";
-import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import { translatableError } from "~/utils/translatableError";
 
 import { ButtonWhite } from "../ui/Buttons";
@@ -25,13 +23,13 @@ export const LoginForm: FC = () => {
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
-  const router = useRouter();
-
+  const captchaSiteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY!;
   const captcha = useRef<HCaptcha>(null);
   const [captchaToken, setCaptchaToken] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -43,14 +41,8 @@ export const LoginForm: FC = () => {
 
   const onSubmit = handleSubmit(async (formData) => {
     try {
-      const validData = LoginValidator.parse(formData);
-      const res = await login(captchaToken, validData);
-      if (!res.success) {
-        throw new Error(ErrorsToTranslate.SOMETHING_WENT_WRONG);
-      }
-
+      await login(captchaToken, formData);
       toast.success(t("we will redirect you to your profile in a moment"));
-      router.refresh();
     } catch (error) {
       toast.error(te(translatableError(error)));
     } finally {
@@ -66,14 +58,10 @@ export const LoginForm: FC = () => {
           className="px-3 py-2"
           onClick={async () => {
             try {
-              const res = await demoLogin(captchaToken);
-              if (!res.success) {
-                throw new Error(ErrorsToTranslate.SOMETHING_WENT_WRONG);
-              }
+              await demoLogin();
               toast.success(
-                t("we will redirect you to your profile in a moment")
+                t("we will redirect you to your profile in a moment"),
               );
-              router.refresh();
             } catch (error) {
               toast.error(te(translatableError(error)));
             } finally {
@@ -114,7 +102,7 @@ export const LoginForm: FC = () => {
           {captchaToken === "" && (
             <HCaptcha
               ref={captcha}
-              sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string}
+              sitekey={captchaSiteKey}
               onVerify={(token) => {
                 setCaptchaToken(token);
               }}

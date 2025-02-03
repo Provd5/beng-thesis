@@ -36,12 +36,12 @@ export const BookCover: FC<BookCoverProps | BookCoverLoaderProps> = ({
   return (
     <div
       className={cn(
-        "relative flex-none overflow-hidden rounded-md border border-colors-text/30 drop-shadow",
-        sizeClass[size]
+        "border-colors-text/30 relative flex-none overflow-hidden rounded-md border drop-shadow",
+        sizeClass[size],
       )}
     >
       {isLoader ? (
-        <div className="size-full bg-colors-gray" />
+        <div className="bg-colors-gray size-full" />
       ) : (
         <Image
           alt="Book cover"
