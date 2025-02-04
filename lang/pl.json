@@ -142,7 +142,7 @@
       "your profile description:": "Twój opis profilu:",
       "enter username": "Podaj nazwę...",
       "add profile description": "Dodaj opis profilu...",
-      "profile visibility:": "Widoczność profilu:",
+      "profile visibility:": "Prywatność profilu:",
       "public/private": "{view, select, public {Publiczny} private {Prywatny} other {}}",
       "edit": "Edytuj",
       "save": "Zapisz"

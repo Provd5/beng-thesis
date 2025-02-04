@@ -10,7 +10,7 @@ import {
 
 import { ModalWrapper } from "~/components/Modals/ModalWrapper";
 import { Button } from "~/components/ui/Buttons";
-import { deleteReview } from "~/lib/services/review";
+import { deleteReview } from "~/lib/services/review/actions";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import { translatableError } from "~/utils/translatableError";
 
@@ -31,7 +31,7 @@ export const DeleteReviewForm: FC<DeleteReviewFormProps> = ({
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [isModalOpen, setIsModalOpen] = useState(false);

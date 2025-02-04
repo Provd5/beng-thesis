@@ -1,7 +1,6 @@
 "use client";
 
 import type { FC } from "react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { MdNavigateNext } from "react-icons/md";
@@ -9,6 +8,7 @@ import { MdNavigateNext } from "react-icons/md";
 import { type GetProfileInterface } from "~/types/data/profile";
 
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
+import { Link } from "~/i18n/routing";
 import ROUTES from "~/utils/routes";
 
 import { AvatarImage } from "../AvatarImage";

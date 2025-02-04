@@ -11,7 +11,7 @@ import {
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { demoLogin, login } from "~/lib/services/auth";
+import { login } from "~/lib/services/auth/actions";
 import { LoginValidator } from "~/lib/validations/auth";
 import { translatableError } from "~/utils/translatableError";
 
@@ -52,27 +52,6 @@ export const LoginForm: FC = () => {
 
   return (
     <>
-      {/* demo */}
-      <div className="absolute inset-x-0 bottom-0 text-center">
-        <button
-          className="px-3 py-2"
-          onClick={async () => {
-            try {
-              await demoLogin();
-              toast.success(
-                t("we will redirect you to your profile in a moment"),
-              );
-            } catch (error) {
-              toast.error(te(translatableError(error)));
-            } finally {
-              captcha.current?.resetCaptcha();
-            }
-          }}
-        >
-          DEMO
-        </button>
-      </div>
-      {/* demo */}
       <form
         className="flex max-w-sm flex-1 flex-col items-center justify-center gap-1"
         onSubmit={onSubmit}

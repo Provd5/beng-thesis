@@ -11,7 +11,7 @@ import {
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { signUp } from "~/lib/services/auth";
+import { signUp } from "~/lib/services/auth/actions";
 import { SignupValidator } from "~/lib/validations/auth";
 import { translatableError } from "~/utils/translatableError";
 

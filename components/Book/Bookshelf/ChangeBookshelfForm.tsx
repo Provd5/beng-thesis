@@ -13,7 +13,7 @@ import { type bookshelfType } from "@prisma/client";
 
 import { Button } from "~/components/ui/Buttons";
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
-import { changeBookshelf } from "~/lib/services/bookshelf";
+import { changeBookshelf } from "~/lib/services/bookshelf/actions";
 import {
   ChangeBookshelfValidator,
   type ChangeBookshelfValidatorType,
@@ -42,7 +42,7 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [isFormOpen, setIsFormOpen] = useState(!bookshelfData);
@@ -71,7 +71,7 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
 
       // Filter out properties with undefined values
       const filteredData = Object.fromEntries(
-        Object.entries(validData).filter(([_, value]) => value !== undefined)
+        Object.entries(validData).filter(([_, value]) => value !== undefined),
       );
       setBookshlefState({
         ...newBookshelfData,

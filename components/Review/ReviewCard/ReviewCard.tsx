@@ -1,9 +1,9 @@
 import { type FC, Suspense } from "react";
-import Link from "next/link";
 
 import { type GetReviewInterface } from "~/types/data/review";
 
 import { Loader } from "~/components/ui/Loaders/Loader";
+import { Link } from "~/i18n/routing";
 import { cn } from "~/utils/cn";
 import ROUTES from "~/utils/routes";
 
@@ -22,7 +22,7 @@ export const ReviewCard: FC<ReviewCardProps> = ({ reviewData }) => {
   return (
     <div
       className={cn(
-        "relative flex w-full flex-col gap-1 py-3 sm:flex-row"
+        "relative flex w-full flex-col gap-1 py-3 sm:flex-row",
         // isMyReview &&
         //   "min-h-[350px] before:pointer-events-none before:absolute before:inset-x-[-10px] before:inset-y-0 before:bg-yellow/10 before:dark:bg-yellow/5 sm:min-h-[260px] before:sm:rounded-md"
       )}

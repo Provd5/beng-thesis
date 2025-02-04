@@ -2,8 +2,8 @@ import { type FC } from "react";
 
 import { SortProfilesArray } from "~/types/orderArrays";
 
-import { getAllProfiles } from "~/lib/services/profile";
-import { getSessionUser } from "~/lib/services/session";
+import { getAllProfiles } from "~/lib/services/profile/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { FeedSort } from "../Modals/FeedSort";
 import { ItemsFound } from "../Search/ItemsFound";

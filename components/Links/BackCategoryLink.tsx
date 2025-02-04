@@ -2,12 +2,12 @@
 
 import type { FC } from "react";
 import { type Url } from "next/dist/shared/lib/router/router";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { MdNavigateBefore } from "react-icons/md";
 
+import { Link } from "~/i18n/routing";
 import ROUTES from "~/utils/routes";
 
 interface BackCategoryLinkProps {

@@ -2,8 +2,9 @@
 
 import type { FC } from "react";
 import { type Url } from "next/dist/shared/lib/router/router";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
+
+import { Link } from "~/i18n/routing";
 
 import { AddBookPlaceholder } from "../ui/Icons/SvgIcons/AddBookPlaceholder";
 import { ShowMorePlaceholder } from "../ui/Icons/SvgIcons/ShowMorePlaceholder";

@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { getAllBookshelvesQuantity } from "~/lib/services/statistics";
+import { getAllBookshelvesQuantity } from "~/lib/services/statistics/queries";
 
 import { MainStatisticsLabel } from "./MainStatisticsLabel";
 

@@ -7,12 +7,23 @@ import { updateSession } from "./lib/supabase/middleware";
 const handleI18nRouting = createMiddleware(routing);
 
 export async function middleware(request: NextRequest) {
-  const response = handleI18nRouting(request);
+  const [, locale] = request.nextUrl.pathname.split("/");
 
-  // A `response` can now be passed here
+  if (!routing.locales.includes(locale)) {
+    const usesNewProfile = request.cookies.get("NEXT_LOCALE")?.value;
+    const pathname = request.nextUrl.pathname;
+    const slash = pathname.startsWith("/") ? "" : "/";
+    const newUrl = (locale: string) => `/${locale}` + slash + pathname;
+
+    if (usesNewProfile) {
+      request.nextUrl.pathname = newUrl(usesNewProfile);
+    } else request.nextUrl.pathname = newUrl(routing.defaultLocale);
+  }
+
+  const response = handleI18nRouting(request);
   return await updateSession(request, response);
 }
 
 export const config = {
-  matcher: ["/", "/(pl|en)/:path*"],
+  matcher: ["/((?!api|_next|.*\\..*).*)"],
 };

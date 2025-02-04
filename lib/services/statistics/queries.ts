@@ -6,10 +6,11 @@ import {
   type ReadBooksInterface,
 } from "~/types/data/statistics";
 
-import { db } from "../db";
-import { errorHandler } from "../errorHandler";
-import { bookshelfPreviewSelector } from "../utils/prismaSelectors";
-import { getBookshelfQuantity } from "./bookshelf";
+import { db } from "~/lib/db";
+import { errorHandler } from "~/lib/errorHandler";
+import { bookshelfPreviewSelector } from "~/lib/utils/prismaSelectors";
+
+import { getBookshelfQuantity } from "../bookshelf/queries";
 
 export async function getAllBookshelvesQuantity(
   profileName: string,

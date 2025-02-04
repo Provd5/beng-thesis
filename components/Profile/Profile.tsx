@@ -1,8 +1,11 @@
 import type { FC } from "react";
 import { notFound } from "next/navigation";
 
-import { getProfile } from "~/lib/services/profile";
-import { getSessionUser, getSessionUserDetails } from "~/lib/services/session";
+import { getProfile } from "~/lib/services/profile/queries";
+import {
+  getSessionUser,
+  getSessionUserDetails,
+} from "~/lib/services/session/queries";
 
 import { AvatarImage } from "./AvatarImage";
 import { FollowButton } from "./Follows/FollowButton";

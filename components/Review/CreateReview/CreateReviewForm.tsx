@@ -18,7 +18,7 @@ import {
 
 import { Button } from "~/components/ui/Buttons";
 import { Input } from "~/components/ui/Input";
-import { postReview } from "~/lib/services/review";
+import { postReview } from "~/lib/services/review/actions";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import { CreateReviewValidator } from "~/lib/validations/review";
 import { cn } from "~/utils/cn";
@@ -39,7 +39,7 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [reviewDataState, setReviewDataState] = useState({
@@ -98,7 +98,7 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
           {t("your rate")}
           <div className="flex min-w-[36px] items-center gap-1 text-right text-lg font-bold">
             <select
-              className=" text-md size-10 cursor-pointer border border-colors-gray/30"
+              className="text-md size-10 cursor-pointer border border-colors-gray/30"
               {...register("rate", { valueAsNumber: true })}
               id="review-rate"
             >
@@ -109,7 +109,7 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
                   className={cn(
                     "text-center",
                     reviewDataState.rate === rate &&
-                      "font-bold text-colors-primary"
+                      "font-bold text-colors-primary",
                   )}
                 >
                   {rate}
@@ -134,7 +134,7 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
               disabled={!isDirty}
               className={cn(
                 "transition-colors",
-                !isDirty && "bg-colors-gray/20"
+                !isDirty && "bg-colors-gray/20",
               )}
             >
               {reviewDataState.isReview ? t("edit") : t("add")}

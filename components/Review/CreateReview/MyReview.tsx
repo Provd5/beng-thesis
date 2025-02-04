@@ -1,8 +1,8 @@
 import { type FC, Suspense } from "react";
 
 import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
-import { getReview } from "~/lib/services/review";
-import { getSessionUser } from "~/lib/services/session";
+import { getReview } from "~/lib/services/review/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { CreateReview } from "./CreateReview";
 import { MyReviewLogin } from "./MyReviewLogin";

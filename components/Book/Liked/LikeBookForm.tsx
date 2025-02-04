@@ -13,7 +13,7 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { type LikedBookInterface } from "~/types/data/book";
 
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
-import { postLike } from "~/lib/services/book";
+import { postLike } from "~/lib/services/book/actions";
 import { translatableError } from "~/utils/translatableError";
 
 interface LikeBookFormProps {
@@ -31,7 +31,7 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [likeState, setLikeState] = useState({

@@ -1,6 +1,9 @@
 import { type FC } from "react";
 
-import { getSessionUser, getSessionUserDetails } from "~/lib/services/session";
+import {
+  getSessionUser,
+  getSessionUserDetails,
+} from "~/lib/services/session/queries";
 
 import { AccountSettings } from "../Modals/AccountSettings";
 import { Settings } from "../Modals/Settings";

@@ -2,7 +2,10 @@ import { type FC } from "react";
 
 import { type ReviewInterface } from "~/types/data/review";
 
-import { getSessionUser, getSessionUserDetails } from "~/lib/services/session";
+import {
+  getSessionUser,
+  getSessionUserDetails,
+} from "~/lib/services/session/queries";
 
 import { CreateReviewForm } from "./CreateReviewForm";
 import { CreateReviewProfileDetails } from "./CreateReviewProfileDetails";

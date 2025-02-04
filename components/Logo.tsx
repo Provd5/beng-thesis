@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import Image, { type StaticImageData } from "next/image";
-import Link from "next/link";
 
+import { Link } from "~/i18n/routing";
 import LogoImage from "~/public/booksphere-logo.svg";
 import ROUTES from "~/utils/routes";
 

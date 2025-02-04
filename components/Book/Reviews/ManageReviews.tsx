@@ -1,7 +1,7 @@
 import type { FC } from "react";
 
-import { getReview } from "~/lib/services/review";
-import { getSessionUser } from "~/lib/services/session";
+import { getReview } from "~/lib/services/review/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { HandleSelectReview } from "./HandleSelectReview";
 

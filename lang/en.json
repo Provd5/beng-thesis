@@ -142,7 +142,7 @@
       "your profile description:": "Your profile description:",
       "enter username": "Enter username...",
       "add profile description": "Add profile description...",
-      "profile visibility:": "Profile visibility:",
+      "profile visibility:": "Profile privacy:",
       "public/private": "{view, select, public {Pubilc} private {Private} other {}}",
       "edit": "Edit",
       "save": "Save"

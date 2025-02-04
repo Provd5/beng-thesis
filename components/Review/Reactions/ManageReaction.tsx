@@ -2,7 +2,7 @@ import { type FC } from "react";
 
 import { type ReviewReactionInterface } from "~/types/data/review";
 
-import { getSessionUser } from "~/lib/services/session";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { BookReviewCardReactionsLabel } from "../BookReviewCard/BookReviewCardReactionsLabel";
 import { HandleSubmitReaction } from "./HandleSubmitReaction";

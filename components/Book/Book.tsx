@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 
 import { HIGHEST_REVIEW_RATE } from "~/types/data/review";
 
-import { getBook } from "~/lib/services/book";
-import { getSessionUser } from "~/lib/services/session";
+import { getBook } from "~/lib/services/book/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { BookCover } from "./BookCover";
 import { BookDetails } from "./BookDetails";

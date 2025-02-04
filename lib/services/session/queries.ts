@@ -1,13 +1,15 @@
+"use server";
+
 import { type User } from "@supabase/supabase-js";
 
 import { type GetProfileInterface } from "~/types/data/profile";
 
-import { db } from "../db";
-import { errorHandler } from "../errorHandler";
-import { createClient } from "../supabase/server";
-import { unstable_cache } from "../unstable-cache";
-import { profileSelector } from "../utils/prismaSelectors";
-import { transformProfileData } from "../utils/transformProfileData";
+import { db } from "~/lib/db";
+import { errorHandler } from "~/lib/errorHandler";
+import { createClient } from "~/lib/supabase/server";
+import { unstable_cache } from "~/lib/unstable-cache";
+import { profileSelector } from "~/lib/utils/prismaSelectors";
+import { transformProfileData } from "~/lib/utils/transformProfileData";
 
 export const getSessionUser = async (): Promise<User | null> => {
   try {

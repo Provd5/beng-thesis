@@ -1,8 +1,8 @@
 import type { FC } from "react";
-import Link from "next/link";
 
 import { type GetProfileInterface } from "~/types/data/profile";
 
+import { Link } from "~/i18n/routing";
 import ROUTES from "~/utils/routes";
 
 import { AvatarImage } from "./AvatarImage";

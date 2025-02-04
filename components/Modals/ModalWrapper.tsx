@@ -13,7 +13,7 @@ import { cn } from "~/utils/cn";
 interface ModalWrapperProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   children: React.ReactNode;
-  openModalButtonRef: RefObject<HTMLButtonElement>;
+  openModalButtonRef: RefObject<HTMLButtonElement | null>;
   closeModalHandler: () => void;
   size?: "default" | "sm" | "xs";
 }
@@ -109,7 +109,7 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
           sizeClass[size],
           topPosition,
           rightPosiotion,
-          topPosition && rightPosiotion ? "opacity-100" : "opacity-0"
+          topPosition && rightPosiotion ? "opacity-100" : "opacity-0",
         )}
       >
         {children}

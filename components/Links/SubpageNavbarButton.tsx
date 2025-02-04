@@ -1,13 +1,13 @@
 "use client";
 
 import type { FC } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { BsBookFill } from "react-icons/bs";
 import { FaUsers } from "react-icons/fa";
 
+import { Link } from "~/i18n/routing";
 import { cn } from "~/utils/cn";
 import ROUTES from "~/utils/routes";
 
@@ -26,13 +26,12 @@ export const SubpageNavbarButton: FC<SubpageNavbarButtonProps> = ({
   };
 
   const pathname = usePathname();
-  const pathnameParts = pathname.split("/");
+  const isCommunityPage = pathname.split("/").includes("community");
 
   const isActive = () => {
-    if (pageVariant === "community" && pathnameParts[2] === "community")
-      return true;
+    if (pageVariant === "community" && isCommunityPage) return true;
 
-    if (pageVariant === "explore" && !pathnameParts[2]) return true;
+    if (pageVariant === "explore" && !isCommunityPage) return true;
 
     return false;
   };
@@ -43,7 +42,7 @@ export const SubpageNavbarButton: FC<SubpageNavbarButtonProps> = ({
       className={cn(
         "flex h-full w-32 items-center justify-center gap-2 transition-transform",
         isActive() && "border-b border-colors-primary",
-        !isActive() && "hover:-translate-y-1"
+        !isActive() && "hover:-translate-y-1",
       )}
     >
       {pageVariant === "community" ? (
@@ -58,7 +57,7 @@ export const SubpageNavbarButton: FC<SubpageNavbarButtonProps> = ({
       <span
         className={cn(
           "text-md hidden sm:block",
-          isActive() && "text-colors-primary"
+          isActive() && "text-colors-primary",
         )}
       >
         {pageVariant === "community" ? t("community") : t("books")}

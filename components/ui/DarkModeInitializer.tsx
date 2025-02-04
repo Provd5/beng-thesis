@@ -3,7 +3,7 @@
 import { type FC, useEffect } from "react";
 
 export const DarkModeInitializer: FC = () => {
-  const themeInitializerScript = `function initializeDarkMode() { localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");} initializeDarkMode();`;
+  // const themeInitializerScript = `function initializeDarkMode() { localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches) ? document.documentElement.classList.add("dark") : document.documentElement.classList.remove("dark");} initializeDarkMode();`;
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -16,7 +16,6 @@ export const DarkModeInitializer: FC = () => {
     } else document.documentElement.classList.remove("dark");
   }, []);
 
-  return (
-    <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
-  );
+  return null;
+  // <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
 };

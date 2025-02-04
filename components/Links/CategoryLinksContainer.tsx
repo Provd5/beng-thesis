@@ -44,26 +44,24 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
     const isActive = currentBookshelf === bookshelfVariant;
 
     return (
-      <>
-        <button
-          key={bookshelfVariant}
-          ref={ref}
-          onClick={() => changeBookshelf(bookshelfVariantAsPathname)}
-          className={cn(
-            "flex items-center gap-2 whitespace-nowrap rounded-xl border border-colors-primary px-5 py-2 text-sm transition-colors",
-            isActive
-              ? "cursor-default bg-colors-primary text-white"
-              : "text-colors-primary hover:bg-colors-primary/70 hover:text-white"
-          )}
-        >
-          {bookshelfVariant === "OWNED" ? (
-            <OwnedBookIcon ownedAs="BOOK" size="sm" />
-          ) : (
-            <BookmarkIcon category={bookshelfVariant} />
-          )}
-          {t(bookshelfVariant)}
-        </button>
-      </>
+      <button
+        key={`CategoryLinksContainer-${bookshelfVariant}`}
+        ref={ref}
+        onClick={() => changeBookshelf(bookshelfVariantAsPathname)}
+        className={cn(
+          "flex items-center gap-2 whitespace-nowrap rounded-xl border border-colors-primary px-5 py-2 text-sm transition-colors",
+          isActive
+            ? "cursor-default bg-colors-primary text-white"
+            : "text-colors-primary hover:bg-colors-primary/70 hover:text-white",
+        )}
+      >
+        {bookshelfVariant === "OWNED" ? (
+          <OwnedBookIcon ownedAs="BOOK" size="sm" />
+        ) : (
+          <BookmarkIcon category={bookshelfVariant} />
+        )}
+        {t(bookshelfVariant)}
+      </button>
     );
   });
 };

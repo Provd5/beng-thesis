@@ -14,7 +14,7 @@ import { type BookOwnedAsInterface } from "~/types/data/book";
 import { ModalWrapper } from "~/components/Modals/ModalWrapper";
 import { ButtonLink } from "~/components/ui/Buttons";
 import { OwnedBookIcon } from "~/components/ui/Icons/OwnedBookIcon";
-import { postOwnedAs } from "~/lib/services/book";
+import { postOwnedAs } from "~/lib/services/book/actions";
 import { dateFormater } from "~/utils/dateFormater";
 import { translatableError } from "~/utils/translatableError";
 
@@ -33,7 +33,7 @@ export const AddOwnedAsForm: FC<AddOwnedAsFormProps> = ({
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [isModalOpen, setIsModalOpen] = useState(false);

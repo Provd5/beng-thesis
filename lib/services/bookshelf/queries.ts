@@ -1,10 +1,7 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
-
 import { type BookshelvesTypes } from "~/types/consts";
 import { type GetBookInterface } from "~/types/data/book";
-import { type BookshelfPreviewType } from "~/types/data/bookshelf";
 import { type ReviewInterface } from "~/types/data/review";
 import { type GetDataList } from "~/types/list";
 import {
@@ -16,22 +13,14 @@ import {
   type SortReviewBookshelfType,
 } from "~/types/sort";
 
+import { db } from "~/lib/db";
+import { errorHandler } from "~/lib/errorHandler";
+import { unstable_cache } from "~/lib/unstable-cache";
+import { bookshelvesSelector } from "~/lib/utils/prismaSelectors";
+import { totalPages } from "~/lib/utils/totalPages";
+import { transformBookData } from "~/lib/utils/transformBookData";
+import { transformReviewBookshelfData } from "~/lib/utils/transformReviewBookshelfData";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
-
-import { db } from "../db";
-import { errorHandler } from "../errorHandler";
-import { unstable_cache } from "../unstable-cache";
-import {
-  bookshelfPreviewSelector,
-  bookshelvesSelector,
-} from "../utils/prismaSelectors";
-import { totalPages } from "../utils/totalPages";
-import { transformBookData } from "../utils/transformBookData";
-import { transformReviewBookshelfData } from "../utils/transformReviewBookshelfData";
-import { ChangeBookshelfValidator } from "../validations/bookshelf";
-import { ErrorsToTranslate } from "../validations/errorsEnums";
-import { UuidValidator } from "../validations/others";
-import { getSessionUser } from "./session";
 
 const itemsPerPage = 10;
 
@@ -193,84 +182,6 @@ export const getBookshelfBooks = unstable_cache(
   { revalidate: 60 * 60 * 2 }, // two hours
 );
 
-export const getBookshelfPreview = unstable_cache(
-  async (
-    profileName: string,
-    bookshelf: BookshelvesTypes,
-  ): Promise<
-    Omit<
-      GetDataList<BookshelfPreviewType>,
-      "page" | "totalPages" | "itemsPerPage"
-    >
-  > => {
-    const decodedProfileName = decodeURIComponent(profileName);
-
-    try {
-      let booksPromise;
-
-      switch (bookshelf) {
-        case "LIKED":
-          booksPromise = db.liked_books.findMany({
-            take: itemsPerPage,
-            orderBy: { updated_at: "desc" },
-            where: { profile: { full_name: decodedProfileName } },
-            select: bookshelfPreviewSelector,
-          });
-          break;
-
-        case "REVIEWS":
-          booksPromise = db.review.findMany({
-            take: itemsPerPage,
-            orderBy: { updated_at: "desc" },
-            where: { profile: { full_name: decodedProfileName } },
-            select: bookshelfPreviewSelector,
-          });
-          break;
-
-        case "OWNED":
-          booksPromise = db.book_owned_as.findMany({
-            take: itemsPerPage,
-            orderBy: { updated_at: "desc" },
-            where: {
-              profile: { full_name: decodedProfileName },
-              NOT: {
-                AND: [
-                  { added_audiobook_at: null },
-                  { added_book_at: null },
-                  { added_ebook_at: null },
-                ],
-              },
-            },
-            select: bookshelfPreviewSelector,
-          });
-          break;
-
-        default:
-          booksPromise = db.bookshelf.findMany({
-            take: itemsPerPage,
-            where: { profile: { full_name: decodedProfileName }, bookshelf },
-            select: bookshelfPreviewSelector,
-          });
-          break;
-      }
-
-      const [allItems, books] = await Promise.all([
-        getBookshelfQuantity(decodedProfileName, bookshelf),
-        booksPromise,
-      ]);
-
-      return {
-        data: books.map(({ book }) => book),
-        allItems,
-      };
-    } catch (e) {
-      throw new Error(errorHandler(e));
-    }
-  },
-  ["bookshelf-preview"],
-  { revalidate: 60 * 60 * 2 }, // two hours
-);
-
 export const getReviewBooks = unstable_cache(
   async (
     sessionId: string | undefined,
@@ -332,55 +243,3 @@ export const getReviewBooks = unstable_cache(
   ["review-books"],
   { revalidate: 60 * 60 * 2 }, // two hours
 );
-
-export async function changeBookshelf(
-  bookId: unknown,
-  formData: unknown,
-): Promise<{ success: boolean }> {
-  try {
-    const sessionUser = await getSessionUser();
-
-    if (!sessionUser) {
-      throw new Error(ErrorsToTranslate.UNAUTHORIZED);
-    }
-
-    const validBookId = UuidValidator.parse(bookId);
-    const validData = ChangeBookshelfValidator.parse(formData);
-
-    const validQuantity =
-      validData.bookshelf === "ALREADY_READ" && !!validData.read_quantity
-        ? validData.read_quantity > 1
-          ? validData.read_quantity
-          : 1
-        : undefined;
-
-    await db.bookshelf.upsert({
-      where: {
-        user_id_book_id: {
-          book_id: validBookId,
-          user_id: sessionUser.id,
-        },
-      },
-      update: {
-        bookshelf: validData.bookshelf,
-        read_quantity: validQuantity,
-        updated_at: validData.updated_at,
-        began_reading_at: validData.began_reading_at,
-      },
-      create: {
-        book_id: validBookId,
-        user_id: sessionUser.id,
-        bookshelf: validData.bookshelf,
-        read_quantity: validQuantity,
-        updated_at: validData.updated_at,
-        began_reading_at: validData.began_reading_at,
-      },
-    });
-
-    // on success
-    revalidateTag("session-user");
-    return { success: true };
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}

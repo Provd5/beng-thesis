@@ -11,7 +11,7 @@ import {
 
 import { LuLogOut } from "react-icons/lu";
 
-import { signOut } from "~/lib/services/auth";
+import { signOut } from "~/lib/services/auth/actions";
 import { translatableError } from "~/utils/translatableError";
 
 import { Loader } from "../ui/Loaders/Loader";
@@ -31,8 +31,6 @@ export const LogoutButton: FC = () => {
       startTransition(async () => {
         await signOut();
       });
-
-      toast(t("logged out"));
     } catch (error) {
       toast.error(te(translatableError(error)));
     }

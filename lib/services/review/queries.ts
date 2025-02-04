@@ -1,7 +1,5 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
-
 import {
   type GetReviewInterface,
   type GetReviewReactionInterface,
@@ -11,19 +9,11 @@ import { type GetDataList } from "~/types/list";
 import { SortReviewsArray } from "~/types/orderArrays";
 import { type SortReviewsType } from "~/types/sort";
 
+import { db } from "~/lib/db";
+import { errorHandler } from "~/lib/errorHandler";
+import { unstable_cache } from "~/lib/unstable-cache";
+import { totalPages } from "~/lib/utils/totalPages";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
-
-import { db } from "../db";
-import { errorHandler } from "../errorHandler";
-import { unstable_cache } from "../unstable-cache";
-import { totalPages } from "../utils/totalPages";
-import { ErrorsToTranslate } from "../validations/errorsEnums";
-import { UuidValidator } from "../validations/others";
-import {
-  CreateReviewValidator,
-  ReviewReactionValidator,
-} from "../validations/review";
-import { getSessionUser } from "./session";
 
 const itemsPerPage = 15;
 
@@ -172,131 +162,3 @@ export const getReactions = unstable_cache(
   ["reactions"],
   { revalidate: 60 * 60 * 2 }, // two hours
 );
-
-export async function postReaction(
-  reviewId: unknown,
-  reaction: unknown,
-): Promise<{ success: boolean }> {
-  try {
-    const sessionUser = await getSessionUser();
-
-    if (!sessionUser) {
-      throw new Error(ErrorsToTranslate.UNAUTHORIZED);
-    }
-
-    const validReviewData = UuidValidator.parse(reviewId);
-    const validReaction = ReviewReactionValidator.parse(reaction);
-
-    const currentReaction = await db.review_reaction.findFirst({
-      where: { review_id: validReviewData, user_id: sessionUser.id },
-    });
-
-    if (currentReaction && currentReaction.reaction === validReaction) {
-      await db.review_reaction.delete({
-        where: {
-          user_id_review_id: {
-            review_id: validReviewData,
-            user_id: sessionUser.id,
-          },
-        },
-      });
-    } else {
-      await db.review_reaction.upsert({
-        where: {
-          user_id_review_id: {
-            review_id: validReviewData,
-            user_id: sessionUser.id,
-          },
-        },
-        update: {
-          reaction: validReaction,
-        },
-        create: {
-          review_id: validReviewData,
-          user_id: sessionUser.id,
-          reaction: validReaction,
-        },
-      });
-    }
-
-    // on success
-    revalidateTag("session-user");
-    return { success: true };
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
-
-export async function postReview(
-  bookId: unknown,
-  formData: object,
-): Promise<{ success: boolean }> {
-  try {
-    const sessionUser = await getSessionUser();
-
-    if (!sessionUser) {
-      throw new Error(ErrorsToTranslate.UNAUTHORIZED);
-    }
-
-    const validBookId = UuidValidator.parse(bookId);
-    const validData = CreateReviewValidator.parse(formData);
-
-    const reviewExists = await db.review.findFirst({
-      where: {
-        author_id: sessionUser.id,
-        book_id: validBookId,
-      },
-      select: { id: true },
-    });
-
-    if (reviewExists) {
-      await db.review.update({
-        where: { id: reviewExists.id },
-        data: {
-          text: validData.text,
-          rate: validData.rate,
-        },
-      });
-    } else {
-      await db.review.create({
-        data: {
-          author_id: sessionUser.id,
-          book_id: validBookId,
-          text: validData.text,
-          rate: validData.rate,
-          updated_at: null,
-        },
-      });
-    }
-
-    // on success
-    revalidateTag("session-user");
-    return { success: true };
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}
-
-export async function deleteReview(
-  reviewId: unknown,
-): Promise<{ success: boolean }> {
-  try {
-    const sessionUser = await getSessionUser();
-
-    if (!sessionUser) {
-      throw new Error(ErrorsToTranslate.UNAUTHORIZED);
-    }
-
-    const validReviewId = UuidValidator.parse(reviewId);
-
-    await db.review.delete({
-      where: { id: validReviewId },
-    });
-
-    // on success
-    revalidateTag("session-user");
-    return { success: true };
-  } catch (e) {
-    throw new Error(errorHandler(e));
-  }
-}

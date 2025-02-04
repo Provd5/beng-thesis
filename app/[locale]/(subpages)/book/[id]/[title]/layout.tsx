@@ -4,7 +4,7 @@ import { type Metadata } from "next";
 import { Book } from "~/components/Book/Book";
 import { BackFrom } from "~/components/Links/BackCategoryLink";
 import { BookLoader } from "~/components/ui/Loaders/Skeletons/BookLoader";
-import { getBookPreview } from "~/lib/services/book";
+import { getBookPreview } from "~/lib/services/book/queries";
 
 export async function generateMetadata({
   params,

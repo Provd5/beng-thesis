@@ -59,11 +59,13 @@ export default async function BookshelfPage({
 }) {
   const { fullname } = await params;
   const awaitedSearchParams = await searchParams;
+
   const bookshelfAsEnum = awaitedSearchParams.bookshelf
     ? (convertPathnameToTypeEnum(
         awaitedSearchParams.bookshelf,
       ) as BookshelvesTypes)
     : "ALREADY_READ";
+
   const validBookshelf: BookshelvesTypes = BookshelvesArray.includes(
     bookshelfAsEnum,
   )
@@ -71,31 +73,29 @@ export default async function BookshelfPage({
     : "ALREADY_READ";
 
   return (
-    <>
-      <BookshelfContainer bookshelf={validBookshelf}>
-        {validBookshelf === "REVIEWS" ? (
-          <Suspense
-            key={`${fullname}-${validBookshelf}`}
-            fallback={<LargeComponentLoader />}
-          >
-            <ReviewBookshelfFeed
-              profileName={fullname}
-              searchParams={awaitedSearchParams}
-            />
-          </Suspense>
-        ) : (
-          <Suspense
-            key={`${fullname}-${validBookshelf}`}
-            fallback={<LargeComponentLoader />}
-          >
-            <BookshelfFeed
-              profileName={fullname}
-              bookshelf={validBookshelf}
-              searchParams={awaitedSearchParams}
-            />
-          </Suspense>
-        )}
-      </BookshelfContainer>
-    </>
+    <BookshelfContainer bookshelf={validBookshelf}>
+      {validBookshelf === "REVIEWS" ? (
+        <Suspense
+          key={`BookshelfPage-${fullname}-${validBookshelf}`}
+          fallback={<LargeComponentLoader />}
+        >
+          <ReviewBookshelfFeed
+            profileName={fullname}
+            searchParams={awaitedSearchParams}
+          />
+        </Suspense>
+      ) : (
+        <Suspense
+          key={`BookshelfPage-${fullname}-${validBookshelf}`}
+          fallback={<LargeComponentLoader />}
+        >
+          <BookshelfFeed
+            profileName={fullname}
+            bookshelf={validBookshelf}
+            searchParams={awaitedSearchParams}
+          />
+        </Suspense>
+      )}
+    </BookshelfContainer>
   );
 }

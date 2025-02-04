@@ -2,8 +2,8 @@ import { type FC } from "react";
 
 import { SortReviewBookshelfArray } from "~/types/orderArrays";
 
-import { getReviewBooks } from "~/lib/services/bookshelf";
-import { getSessionUser } from "~/lib/services/session";
+import { getReviewBooks } from "~/lib/services/bookshelf/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { FeedSort } from "../Modals/FeedSort";
 import { BookReviewCard } from "../Review/BookReviewCard/BookReviewCard";

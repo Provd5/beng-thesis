@@ -6,17 +6,19 @@ import { type Provider } from "@supabase/supabase-js";
 
 import ROUTES from "~/utils/routes";
 
-import { errorHandler } from "../errorHandler";
-import { createClient } from "../supabase/server";
-import { ErrorsToTranslate } from "../validations/errorsEnums";
+import { errorHandler } from "../../errorHandler";
+import { createClient } from "../../supabase/server";
+import { ErrorsToTranslate } from "../../validations/errorsEnums";
 
 export async function providerAuth(provider: Provider) {
+  let dataUrl: string;
   try {
+    const origin = process.env.SITE_URL!;
     const supabase = await createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: `${origin}/auth/callback`,
       },
     });
 
@@ -24,9 +26,14 @@ export async function providerAuth(provider: Provider) {
       throw new Error(error?.message);
     }
 
+    dataUrl = data.url;
     revalidateTag("session-user");
   } catch (e) {
     throw new Error(errorHandler(e));
+  }
+
+  if (dataUrl) {
+    redirect(dataUrl);
   }
 }
 
@@ -54,7 +61,6 @@ export async function login(
     }
 
     revalidateTag("session-user");
-    redirect("/profile");
   } catch (e) {
     throw new Error(errorHandler(e));
   }
@@ -73,7 +79,6 @@ export async function demoLogin() {
     }
 
     revalidateTag("session-user");
-    redirect("/profile");
   } catch (e) {
     throw new Error(errorHandler(e));
   }
@@ -108,10 +113,11 @@ export async function signUp(
     }
 
     revalidateTag("session-user");
-    redirect(`${ROUTES.auth.signup}?checkMail=${formData.email}`);
   } catch (e) {
     throw new Error(errorHandler(e));
   }
+
+  redirect(`${ROUTES.auth.signup}?checkMail=${formData.email}`);
 }
 
 export async function signOut() {
@@ -124,7 +130,6 @@ export async function signOut() {
     }
 
     revalidateTag("session-user");
-    redirect("/profile");
   } catch (e) {
     throw new Error(errorHandler(e));
   }

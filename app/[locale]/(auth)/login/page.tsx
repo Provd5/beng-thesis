@@ -2,6 +2,7 @@ import { type Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
 import { AuthPage } from "~/components/Auth/AuthPage";
+import { DemoLogin } from "~/components/Auth/DemoLogin";
 import { LoginForm } from "~/components/Auth/LoginForm";
 import { type localeTypes } from "~/i18n/routing";
 
@@ -19,8 +20,11 @@ export async function generateMetadata({
 
 export default function LoginPage({}) {
   return (
-    <AuthPage view="logIn">
-      <LoginForm />
-    </AuthPage>
+    <>
+      <AuthPage view="logIn">
+        <LoginForm />
+      </AuthPage>
+      <DemoLogin />
+    </>
   );
 }

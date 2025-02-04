@@ -1,12 +1,12 @@
 "use client";
 
 import type { FC } from "react";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { FaUserCircle } from "react-icons/fa";
 import { FaPenToSquare } from "react-icons/fa6";
 
+import { Link } from "~/i18n/routing";
 import ROUTES from "~/utils/routes";
 
 import { LogoutButton } from "../Auth/LogoutButton";

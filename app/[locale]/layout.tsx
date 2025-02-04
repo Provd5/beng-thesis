@@ -1,11 +1,11 @@
 import { type Metadata } from "next";
 import { Quicksand } from "next/font/google";
-import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getMessages } from "next-intl/server";
 
 import { Navbar } from "~/components/Links/Navbar/Navbar";
+import { DarkModeInitializer } from "~/components/ui/DarkModeInitializer";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
 import { type localeTypes, routing } from "~/i18n/routing";
 
@@ -69,17 +69,17 @@ export default async function RootLayout({
   params: { locale: localeTypes };
 }) {
   const { locale } = await params;
-  if (!routing.locales.includes(locale)) {
-    notFound();
-  }
+  const validLocale = routing.locales.includes(locale)
+    ? locale
+    : routing.defaultLocale;
 
-  setRequestLocale(locale);
+  setRequestLocale(validLocale);
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={quicksandFont.className}>
+    <html lang={validLocale} className={`${quicksandFont.className} dark`}>
       <body className="bg-gradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-colors-text antialiased selection:bg-colors-accent selection:text-white md:flex-col">
-        {/* <DarkModeInitializer /> */}
+        <DarkModeInitializer />
 
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Navbar />

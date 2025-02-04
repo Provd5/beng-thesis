@@ -16,7 +16,7 @@ import {
   RiThumbUpLine,
 } from "react-icons/ri";
 
-import { postReaction } from "~/lib/services/review";
+import { postReaction } from "~/lib/services/review/actions";
 import { ReviewReactionValidator } from "~/lib/validations/review";
 import { cn } from "~/utils/cn";
 import { translatableError } from "~/utils/translatableError";
@@ -37,7 +37,7 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [reactionState, setReactionState] = useState({
@@ -65,30 +65,30 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
               sessionReaction: validReaction,
             }
           : // unset reaction
-          reactionState.sessionReaction === validReaction
-          ? {
-              upQuantity:
-                validReaction === "OK"
-                  ? reactionState.upQuantity - 1
-                  : reactionState.upQuantity,
-              downQuantity:
-                validReaction === "MEH"
-                  ? reactionState.downQuantity - 1
-                  : reactionState.downQuantity,
-              sessionReaction: null,
-            }
-          : // change reaction
-          validReaction === "OK"
-          ? {
-              upQuantity: reactionState.upQuantity + 1,
-              downQuantity: reactionState.downQuantity - 1,
-              sessionReaction: validReaction,
-            }
-          : {
-              upQuantity: reactionState.upQuantity - 1,
-              downQuantity: reactionState.downQuantity + 1,
-              sessionReaction: validReaction,
-            }
+            reactionState.sessionReaction === validReaction
+            ? {
+                upQuantity:
+                  validReaction === "OK"
+                    ? reactionState.upQuantity - 1
+                    : reactionState.upQuantity,
+                downQuantity:
+                  validReaction === "MEH"
+                    ? reactionState.downQuantity - 1
+                    : reactionState.downQuantity,
+                sessionReaction: null,
+              }
+            : // change reaction
+              validReaction === "OK"
+              ? {
+                  upQuantity: reactionState.upQuantity + 1,
+                  downQuantity: reactionState.downQuantity - 1,
+                  sessionReaction: validReaction,
+                }
+              : {
+                  upQuantity: reactionState.upQuantity - 1,
+                  downQuantity: reactionState.downQuantity + 1,
+                  sessionReaction: validReaction,
+                },
       );
 
       await postReaction(reviewId, validReaction);
@@ -108,7 +108,7 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
           "text-md flex items-center gap-1.5 rounded-l-md border border-transparent px-2 py-1.5 transition-colors hover:bg-colors-green/10",
           isActive("OK")
             ? "border-y-colors-green border-l-colors-green"
-            : "border-y-colors-gray border-l-colors-gray"
+            : "border-y-colors-gray border-l-colors-gray",
         )}
         onClick={() => handleReaction("OK")}
       >
@@ -120,7 +120,7 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
         <p
           className={cn(
             "min-w-[12px] text-base",
-            isActive("OK") && "text-colors-green"
+            isActive("OK") && "text-colors-green",
           )}
         >
           {reactionState.upQuantity}
@@ -133,7 +133,7 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
           "text-md flex items-center gap-1.5 rounded-r-md border border-transparent px-2 py-1.5 transition-colors hover:bg-colors-red/10",
           isActive("MEH")
             ? "border-y-colors-red border-r-colors-red"
-            : "border-y-colors-gray border-r-colors-gray"
+            : "border-y-colors-gray border-r-colors-gray",
         )}
         onClick={() => handleReaction("MEH")}
       >
@@ -145,7 +145,7 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
         <p
           className={cn(
             "min-w-[12px] text-base",
-            isActive("MEH") && "text-colors-red"
+            isActive("MEH") && "text-colors-red",
           )}
         >
           {reactionState.downQuantity}

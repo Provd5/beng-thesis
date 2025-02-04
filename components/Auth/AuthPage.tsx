@@ -1,10 +1,10 @@
 "use client";
 
 import { type FC, useState } from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import { Link } from "~/i18n/routing";
 import ROUTES from "~/utils/routes";
 
 import { Providers } from "./Providers";

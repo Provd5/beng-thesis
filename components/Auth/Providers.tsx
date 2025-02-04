@@ -1,6 +1,6 @@
 "use client";
 
-import type { FC } from "react";
+import { type FC, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import {
   type Formats,
@@ -9,45 +9,59 @@ import {
 } from "next-intl";
 import { type Provider } from "@supabase/supabase-js";
 
-import { providerAuth } from "~/lib/services/auth";
-import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
+import { providerAuth } from "~/lib/services/auth/actions";
 import { translatableError } from "~/utils/translatableError";
 
 import { ButtonWhite } from "../ui/Buttons";
+import { Loader } from "../ui/Loaders/Loader";
+
+const ENABLED_PROVIDERS: Provider[] = ["discord", "google", "github"];
 
 export const Providers: FC = () => {
   const t = useTranslations("Profile.Auth");
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
-  const Providers: Provider[] = ["discord", "google", "github"];
+  const [isPending, startTransition] = useTransition();
+  const [selectedProvider, setSelectedProvider] = useState<Provider | null>(
+    null,
+  );
 
-  const onSubmit = async (provider: Provider) => {
+  const handleSubmit = (provider: Provider) => {
     try {
-      const res = await providerAuth(provider);
-      if (!res.success) {
-        throw new Error(ErrorsToTranslate.SOMETHING_WENT_WRONG);
-      }
-
-      toast.success(
-        t("we will redirect you to the provider's website in a moment")
-      );
+      setSelectedProvider(provider);
+      startTransition(async () => {
+        await providerAuth(provider);
+        toast.success(
+          t("we will redirect you to the provider's website in a moment"),
+        );
+      });
     } catch (error) {
       toast.error(te(translatableError(error)));
     }
   };
 
-  return Providers.map((provider) => (
+  return ENABLED_PROVIDERS.map((provider) => (
     <ButtonWhite
-      key={provider}
+      key={`Providers-${provider}`}
       type="submit"
       className="w-[220px]"
-      onClick={() => onSubmit(provider)}
+      disabled={isPending && selectedProvider === provider}
+      onClick={() => handleSubmit(provider)}
     >
-      {t("with")} <span className="first-letter:uppercase">{provider}</span>
+      <div>
+        {isPending && selectedProvider === provider ? (
+          <Loader className="size-6" />
+        ) : (
+          <p>
+            {t("with")}{" "}
+            <span className="first-letter:uppercase">{provider}</span>
+          </p>
+        )}
+      </div>
     </ButtonWhite>
   ));
 };

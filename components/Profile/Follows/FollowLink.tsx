@@ -1,12 +1,12 @@
 "use client";
 
 import { type FC } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { MdNavigateNext } from "react-icons/md";
 
+import { Link } from "~/i18n/routing";
 import { cn } from "~/utils/cn";
 import ROUTES from "~/utils/routes";
 
@@ -42,13 +42,13 @@ export const ProfileSubpageLink: FC<ProfileSubpageLinkProps> = ({
       href={pageRoutes[variant]}
       className={cn(
         "transition-transform hover:translate-x-1",
-        isActive() && "pointer-events-none"
+        isActive() && "pointer-events-none",
       )}
     >
       <div
         className={cn(
           "flex w-fit items-center",
-          isActive() && "text-colors-primary"
+          isActive() && "text-colors-primary",
         )}
       >
         <h1 className="py-0.5 font-semibold">{t(variant)}</h1>
