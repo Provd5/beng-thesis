@@ -1,5 +1,7 @@
 "use server";
 
+import { unstable_cache } from "next/cache";
+
 import { type BookshelvesTypes } from "~/types/consts";
 import { type GetBookInterface } from "~/types/data/book";
 import { type ReviewInterface } from "~/types/data/review";
@@ -15,7 +17,6 @@ import {
 
 import { db } from "~/lib/db";
 import { errorHandler } from "~/lib/errorHandler";
-import { unstable_cache } from "~/lib/unstable-cache";
 import { bookshelvesSelector } from "~/lib/utils/prismaSelectors";
 import { totalPages } from "~/lib/utils/totalPages";
 import { transformBookData } from "~/lib/utils/transformBookData";
@@ -74,7 +75,7 @@ export const getBookshelfQuantity = unstable_cache(
     }
   },
   ["bookshelf-quantity"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["bookshelf-quantity"] }, // two hours
 );
 
 export const getBookshelfBooks = unstable_cache(
@@ -179,7 +180,7 @@ export const getBookshelfBooks = unstable_cache(
     }
   },
   ["bookshelf-books"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["bookshelf-books"] }, // two hours
 );
 
 export const getReviewBooks = unstable_cache(
@@ -241,5 +242,5 @@ export const getReviewBooks = unstable_cache(
     }
   },
   ["review-books"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["review-books"] }, // two hours
 );

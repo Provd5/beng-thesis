@@ -61,6 +61,7 @@ export async function postReaction(
 
     // on success
     revalidateTag("reactions");
+    revalidateTag("all-reviews");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));
@@ -110,7 +111,12 @@ export async function postReview(
     }
 
     // on success
-    revalidateTag("session-user");
+    revalidateTag("review");
+    revalidateTag("all-reviews");
+    revalidateTag("book");
+    revalidateTag("all-books");
+    revalidateTag("review-books");
+    revalidateTag("profile");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));
@@ -134,7 +140,12 @@ export async function deleteReview(
     });
 
     // on success
-    revalidateTag("session-user");
+    revalidateTag("review");
+    revalidateTag("all-reviews");
+    revalidateTag("book");
+    revalidateTag("all-books");
+    revalidateTag("review-books");
+    revalidateTag("profile");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));

@@ -1,5 +1,7 @@
 "use server";
 
+import { unstable_cache } from "next/cache";
+
 import {
   type GetReviewInterface,
   type GetReviewReactionInterface,
@@ -11,7 +13,6 @@ import { type SortReviewsType } from "~/types/sort";
 
 import { db } from "~/lib/db";
 import { errorHandler } from "~/lib/errorHandler";
-import { unstable_cache } from "~/lib/unstable-cache";
 import { totalPages } from "~/lib/utils/totalPages";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
@@ -30,7 +31,7 @@ export const getReviewQuantity = unstable_cache(
     }
   },
   ["review-quantity"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["review-quantity"] }, // two hours
 );
 
 export const getAllReviews = unstable_cache(
@@ -73,7 +74,7 @@ export const getAllReviews = unstable_cache(
                   select: {
                     bookshelf: { where: { bookshelf: "ALREADY_READ" } },
                     liked_book: { where: { book_id: bookId } },
-                    review: { where: { book_id: bookId } },
+                    review: true,
                   },
                 },
               },
@@ -96,7 +97,7 @@ export const getAllReviews = unstable_cache(
     }
   },
   ["all-reviews"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["all-reviews"] }, // two hours
 );
 
 export const getReview = unstable_cache(
@@ -117,7 +118,7 @@ export const getReview = unstable_cache(
     }
   },
   ["review"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["review"] }, // two hours
 );
 
 export const getReactions = unstable_cache(
@@ -160,5 +161,5 @@ export const getReactions = unstable_cache(
     }
   },
   ["reactions"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["reactions"] }, // two hours
 );

@@ -35,22 +35,11 @@ export const ReviewCard: FC<ReviewCardProps> = ({ reviewData }) => {
         }
         className="flex h-fit flex-none gap-x-1.5 gap-y-1 transition-transform hover:-translate-y-1 sm:w-28 sm:flex-col sm:items-center"
       >
-        <ReviewCardProfileDetails
-          avatarUrl={reviewData.profile.avatar_url}
-          profileName={reviewData.profile.full_name}
-          createdAt={reviewData.profile.created_at}
-          bookshelfQuantity={reviewData.profile._count.bookshelf}
-          reviewQuantity={reviewData.profile._count.review}
-        />
+        <ReviewCardProfileDetails profileData={reviewData.profile} />
       </Link>
       <div className="flex w-full flex-col">
         <div>
-          <ReviewCardDetails
-            createdAt={reviewData.created_at}
-            updatedAt={reviewData.updated_at}
-            rate={reviewData.rate}
-            likedBooksQuantity={reviewData.profile._count.liked_book}
-          />
+          <ReviewCardDetails reviewData={reviewData} />
         </div>
         <div className="mt-1.5 flex h-full flex-wrap justify-between">
           {reviewData.text && (

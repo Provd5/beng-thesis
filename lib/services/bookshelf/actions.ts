@@ -55,7 +55,10 @@ export async function changeBookshelf(
     });
 
     // on success
-    revalidateTag("session-user");
+    revalidateTag("profile");
+    revalidateTag("book");
+    revalidateTag("all-books");
+    revalidateTag("bookshelf-books");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));

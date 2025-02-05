@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, useState } from "react";
+import { type FC } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -24,8 +24,6 @@ import { CreateReviewValidator } from "~/lib/validations/review";
 import { cn } from "~/utils/cn";
 import { translatableError } from "~/utils/translatableError";
 
-import { DeleteReviewForm } from "./DeleteReviewForm";
-
 interface CreateReviewFormProps {
   bookId: string;
   reviewData: ReviewInterface | null;
@@ -41,12 +39,6 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
     values?: TranslationValues | undefined,
     formats?: Partial<Formats> | undefined,
   ) => string;
-
-  const [reviewDataState, setReviewDataState] = useState({
-    isReview: !!reviewData,
-    text: reviewData?.text,
-    rate: reviewData ? reviewData.rate : null,
-  });
 
   const {
     register,
@@ -64,17 +56,9 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
   const onSubmit = handleSubmit(async (formData) => {
     try {
       const validData = CreateReviewValidator.parse(formData);
-      setReviewDataState({
-        isReview: true,
-        text: validData.text,
-        rate: validData.rate,
-      });
-
       const res = await postReview(bookId, validData);
-
       if (res.success) toast.success(te(ErrorsToTranslate.SUCCESS));
     } catch (e) {
-      setReviewDataState(reviewDataState);
       toast.error(te(translatableError(e)));
     }
   });
@@ -108,7 +92,7 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
                   key={rate}
                   className={cn(
                     "text-center",
-                    reviewDataState.rate === rate &&
+                    reviewData?.rate === rate &&
                       "font-bold text-colors-primary",
                   )}
                 >
@@ -120,12 +104,6 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
           </div>
         </div>
         <div className="relative flex gap-1">
-          {reviewDataState.isReview && (
-            <DeleteReviewForm
-              reviewId={reviewData?.id}
-              setReviewDataState={setReviewDataState}
-            />
-          )}
           {
             <Button
               type="submit"
@@ -137,7 +115,7 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
                 !isDirty && "bg-colors-gray/20",
               )}
             >
-              {reviewDataState.isReview ? t("edit") : t("add")}
+              {reviewData ? t("edit") : t("add")}
             </Button>
           }
         </div>

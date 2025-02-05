@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { type Provider } from "@supabase/supabase-js";
 
@@ -27,7 +26,6 @@ export async function providerAuth(provider: Provider) {
     }
 
     dataUrl = data.url;
-    revalidateTag("session-user");
   } catch (e) {
     throw new Error(errorHandler(e));
   }
@@ -59,8 +57,6 @@ export async function login(
     if (error) {
       throw new Error(error.message);
     }
-
-    revalidateTag("session-user");
   } catch (e) {
     throw new Error(errorHandler(e));
   }
@@ -77,8 +73,6 @@ export async function demoLogin() {
     if (error) {
       throw new Error(error.message);
     }
-
-    revalidateTag("session-user");
   } catch (e) {
     throw new Error(errorHandler(e));
   }
@@ -111,8 +105,6 @@ export async function signUp(
     if (error) {
       throw new Error(error?.message);
     }
-
-    revalidateTag("session-user");
   } catch (e) {
     throw new Error(errorHandler(e));
   }
@@ -128,8 +120,6 @@ export async function signOut() {
     if (error) {
       throw new Error(error?.message);
     }
-
-    revalidateTag("session-user");
   } catch (e) {
     throw new Error(errorHandler(e));
   }

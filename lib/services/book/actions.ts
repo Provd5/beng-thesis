@@ -40,7 +40,11 @@ export async function postLike(bookId: unknown): Promise<{ success: boolean }> {
     }
 
     // on success
-    revalidateTag("session-user");
+    revalidateTag("profile");
+    revalidateTag("all-reviews");
+    revalidateTag("book");
+    revalidateTag("all-books");
+    revalidateTag("bookshelf-books");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));
@@ -90,7 +94,10 @@ export async function postOwnedAs(
     });
 
     // on success
-    revalidateTag("session-user");
+    revalidateTag("profile");
+    revalidateTag("book");
+    revalidateTag("all-books");
+    revalidateTag("bookshelf-books");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));

@@ -1,5 +1,7 @@
 "use server";
 
+import { unstable_cache } from "next/cache";
+
 import { type GetBookInterface } from "~/types/data/book";
 import { type BookshelfPreviewType } from "~/types/data/bookshelf";
 import { type GetDataList } from "~/types/list";
@@ -8,7 +10,6 @@ import { type SortBooksType } from "~/types/sort";
 
 import { db } from "~/lib/db";
 import { errorHandler } from "~/lib/errorHandler";
-import { unstable_cache } from "~/lib/unstable-cache";
 import { bookshelfPreviewSelector } from "~/lib/utils/prismaSelectors";
 import { totalPages } from "~/lib/utils/totalPages";
 import { transformBookData } from "~/lib/utils/transformBookData";
@@ -45,7 +46,7 @@ export const getBookQuantity = unstable_cache(
     }
   },
   ["book-quantity"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["book-quantity"] }, // two hours
 );
 
 export const getAllBooks = unstable_cache(
@@ -125,7 +126,7 @@ export const getAllBooks = unstable_cache(
     }
   },
   ["all-books"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["all-books"] }, // two hours
 );
 
 export const getBook = unstable_cache(
@@ -177,7 +178,7 @@ export const getBook = unstable_cache(
     }
   },
   ["book"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["book"] }, // two hours
 );
 
 export const getBookPreview = unstable_cache(
@@ -199,5 +200,5 @@ export const getBookPreview = unstable_cache(
     }
   },
   ["book-preview"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["book-preview"] }, // two hours
 );

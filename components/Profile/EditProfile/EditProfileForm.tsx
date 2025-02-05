@@ -14,7 +14,7 @@ import { type GetProfileInterface } from "~/types/data/profile";
 
 import { Button } from "~/components/ui/Buttons";
 import { Input } from "~/components/ui/Input";
-import { editProfile } from "~/lib/services/profile";
+import { editProfile } from "~/lib/services/profile/actions";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import { EditProfileValidator } from "~/lib/validations/profile";
 import { cn } from "~/utils/cn";
@@ -29,7 +29,7 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [isPrivate, setIsPrivate] = useState(profileData.private);
@@ -81,10 +81,11 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
               "peer relative h-6 w-11 rounded-full after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-transform after:content-[''] peer-focus:outline-none dark:after:bg-black",
               isPrivate
                 ? "bg-colors-primary after:translate-x-full"
-                : "bg-black dark:bg-white"
+                : "bg-black dark:bg-white",
             )}
             onClick={() => (
-              setValue("private", !isPrivate), setIsPrivate(!isPrivate)
+              setValue("private", !isPrivate, { shouldDirty: true }),
+              setIsPrivate(!isPrivate)
             )}
           />
           <span className="ml-2">
@@ -125,7 +126,7 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
           "transition-colors",
           isPrivate === profileData.private &&
             !isDirty &&
-            "bg-colors-gray/20 text-white hover:bg-colors-gray/20"
+            "bg-colors-gray/20 text-white hover:bg-colors-gray/20",
         )}
       >
         {t("save")}

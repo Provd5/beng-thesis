@@ -51,7 +51,9 @@ export async function postFollow(
     }
 
     // on success
-    revalidateTag("session-user");
+    revalidateTag("profile");
+    revalidateTag("all-profiles");
+    revalidateTag("follow-profiles");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));
@@ -96,7 +98,7 @@ export async function editProfile(
     });
 
     // on success
-    revalidateTag("session-user");
+    revalidateTag("profile");
     return { success: true };
   } catch (e) {
     throw new Error(errorHandler(e));

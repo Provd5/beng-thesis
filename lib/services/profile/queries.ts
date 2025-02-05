@@ -1,5 +1,7 @@
 "use server";
 
+import { unstable_cache } from "next/cache";
+
 import { type GetProfileInterface } from "~/types/data/profile";
 import { type GetDataList } from "~/types/list";
 import {
@@ -13,7 +15,6 @@ import {
 
 import { db } from "~/lib/db";
 import { errorHandler } from "~/lib/errorHandler";
-import { unstable_cache } from "~/lib/unstable-cache";
 import { profileSelector } from "~/lib/utils/prismaSelectors";
 import { totalPages } from "~/lib/utils/totalPages";
 import { transformProfileData } from "~/lib/utils/transformProfileData";
@@ -40,7 +41,7 @@ export const getProfileQuantity = unstable_cache(
     }
   },
   ["profile-quantity"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["profile-quantity"] }, // two hours
 );
 
 export const getAllProfiles = unstable_cache(
@@ -110,19 +111,23 @@ export const getAllProfiles = unstable_cache(
     }
   },
   ["all-profiles"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["all-profiles"] }, // two hours
 );
 
 export const getProfile = unstable_cache(
   async (
     sessionId: string | undefined,
-    profileName: string,
+    profileName?: string,
   ): Promise<GetProfileInterface | null> => {
-    const decodedProfileName = decodeURIComponent(profileName);
+    const decodedProfileName = profileName
+      ? decodeURIComponent(profileName)
+      : undefined;
 
     try {
       const profile = await db.profile.findUnique({
-        where: { full_name: decodedProfileName },
+        where: decodedProfileName
+          ? { full_name: decodedProfileName }
+          : { id: sessionId },
         include: profileSelector(sessionId),
       });
 
@@ -136,7 +141,7 @@ export const getProfile = unstable_cache(
     }
   },
   ["profile"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["profile"] }, // two hours
 );
 
 export const getFollowQuantity = unstable_cache(
@@ -170,7 +175,7 @@ export const getFollowQuantity = unstable_cache(
     }
   },
   ["follow-quantity"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["follow-quantity"] }, // two hours
 );
 
 export const getFollowProfiles = unstable_cache(
@@ -252,5 +257,5 @@ export const getFollowProfiles = unstable_cache(
     }
   },
   ["follow-profiles"],
-  { revalidate: 60 * 60 * 2 }, // two hours
+  { revalidate: 60 * 60 * 2, tags: ["follow-profiles"] }, // two hours
 );

@@ -1,15 +1,13 @@
 import type { FC } from "react";
 
-import {
-  getSessionUser,
-  getSessionUserDetails,
-} from "~/lib/services/session/queries";
+import { getProfile } from "~/lib/services/profile/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { NavbarLink } from "./NavbarLink";
 
 export const Navbar: FC = async () => {
   const sessionUser = await getSessionUser();
-  const userDetails = await getSessionUserDetails(sessionUser?.id);
+  const sessionProfile = await getProfile(sessionUser?.id);
 
   return (
     <>
@@ -17,8 +15,8 @@ export const Navbar: FC = async () => {
         <div className="flex size-full max-w-sm items-center justify-between gap-3 px-8 md:max-w-7xl md:justify-end md:px-6">
           <NavbarLink pageVariant={"explore"} />
           <NavbarLink
-            profileName={userDetails?.full_name}
-            pageVariant={userDetails ? "profile" : "login"}
+            profileName={sessionProfile?.full_name}
+            pageVariant={sessionProfile ? "profile" : "login"}
           />
           <NavbarLink pageVariant="search" />
         </div>

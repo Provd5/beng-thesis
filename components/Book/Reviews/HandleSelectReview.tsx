@@ -25,7 +25,7 @@ export const HandleSelectReview: FC<HandleSelectReviewProps> = ({
 
   const handleFocusReview = () => {
     const reviewTextarea = document.getElementById(
-      "review-text"
+      "review-text",
     ) as HTMLTextAreaElement | null;
 
     reviewTextarea?.focus();
@@ -40,7 +40,7 @@ export const HandleSelectReview: FC<HandleSelectReviewProps> = ({
       onClick={handleFocusReview}
     >
       <div className="flex h-fit">
-        {!!reviewData ? (
+        {reviewData ? (
           <BookmarkIcon category="REVIEWS" size="lg" />
         ) : (
           <BookmarkIcon Icon={BsBookmarkStar} color="gradient" size="lg" />

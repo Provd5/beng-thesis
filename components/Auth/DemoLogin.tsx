@@ -5,11 +5,13 @@ import toast from "react-hot-toast";
 
 import { demoLogin } from "~/lib/services/auth/actions";
 
+import { ButtonWhite } from "../ui/Buttons";
+
 export const DemoLogin: FC = () => {
   return (
-    <div className="absolute inset-x-0 bottom-0">
-      <button
-        className="px-3 py-2"
+    <div className="absolute bottom-3 left-3">
+      <ButtonWhite
+        size="xs"
         onClick={async () => {
           try {
             await demoLogin();
@@ -20,7 +22,7 @@ export const DemoLogin: FC = () => {
         }}
       >
         Login as TestUser
-      </button>
+      </ButtonWhite>
     </div>
   );
 };

@@ -1,25 +1,15 @@
-import { type FC } from "react";
+import { type FC, Suspense } from "react";
 
-import {
-  getSessionUser,
-  getSessionUserDetails,
-} from "~/lib/services/session/queries";
-
-import { AccountSettings } from "../Modals/AccountSettings";
 import { Settings } from "../Modals/Settings";
-import { ProfileBadge } from "../Profile/ProfileBadge";
+import { Loader } from "../ui/Loaders/Loader";
+import { AccountBadge } from "./AccountBadge";
 
 export const Badges: FC = async ({}) => {
-  const sessionUser = await getSessionUser();
-  const userDetails = await getSessionUserDetails(sessionUser?.id);
-
   return (
     <div className="flex h-fit gap-3">
-      {userDetails && (
-        <AccountSettings>
-          <ProfileBadge profileData={userDetails} />
-        </AccountSettings>
-      )}
+      <Suspense key={"Badges"} fallback={<Loader />}>
+        <AccountBadge />
+      </Suspense>
       <Settings />
     </div>
   );
