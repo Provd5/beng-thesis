@@ -26,7 +26,7 @@ export const OwnedAsModal: FC<OwnedAsModalProps> = ({
   return (
     <button
       onClick={handleAddFunc}
-      className="flex flex-auto justify-between gap-2 py-1 transition-transform hover:scale-95"
+      className="flex flex-auto justify-between gap-2 py-1 transition-transform hover:translate-x-1"
     >
       <div className="flex items-center gap-1.5">
         <OwnedBookIcon ownedAs={ownedAs} />

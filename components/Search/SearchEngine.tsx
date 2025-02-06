@@ -35,7 +35,7 @@ export const SearchEngine: FC<SearchEngineProps> = ({
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const pathname = usePathname();

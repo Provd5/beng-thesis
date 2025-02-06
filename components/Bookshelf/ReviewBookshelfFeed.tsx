@@ -2,7 +2,8 @@ import { type FC } from "react";
 
 import { SortReviewBookshelfArray } from "~/types/orderArrays";
 
-import { getReviewBooks } from "~/lib/services/bookshelf";
+import { getReviewBooks } from "~/lib/services/bookshelf/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { FeedSort } from "../Modals/FeedSort";
 import { BookReviewCard } from "../Review/BookReviewCard/BookReviewCard";
@@ -17,7 +18,12 @@ export const ReviewBookshelfFeed: FC<ReviewBookshelfFeedProps> = async ({
   profileName,
   searchParams,
 }) => {
-  const reviews = await getReviewBooks(profileName, searchParams);
+  const sessionUser = await getSessionUser();
+  const reviews = await getReviewBooks(
+    sessionUser?.id,
+    profileName,
+    searchParams,
+  );
 
   return reviews.allItems === 0 ? (
     <NotFoundItems />
@@ -27,7 +33,7 @@ export const ReviewBookshelfFeed: FC<ReviewBookshelfFeedProps> = async ({
       totalPages={reviews.totalPages}
       orderArray={SortReviewBookshelfArray}
     >
-      <div className="grid grid-cols-1 gap-x-5 gap-y-8 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-y-2">
         {reviews.data.map((review) => (
           <BookReviewCard key={review.review.id} reviewData={review} />
         ))}

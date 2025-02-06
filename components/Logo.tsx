@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import Image, { type StaticImageData } from "next/image";
-import Link from "next/link";
 
+import { Link } from "~/i18n/routing";
 import LogoImage from "~/public/booksphere-logo.svg";
 import ROUTES from "~/utils/routes";
 
@@ -12,7 +12,7 @@ export const Logo: FC = ({}) => {
     <div className="absolute left-3 top-2">
       <Link
         href={ROUTES.root}
-        className="flex h-8 select-none items-center gap-1"
+        className="flex h-8 select-none items-center gap-1 transition-transform hover:translate-x-1"
       >
         <Image
           alt={`${APP_NAME} Logo`}

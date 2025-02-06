@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { type Metadata } from "next";
-import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { BackCategoryLink } from "~/components/Links/BackCategoryLink";
 import { AlreadyReadStatisticsCard } from "~/components/Profile/Statistics/AlreadyReadStatistics/AlreadyReadStatisticsCard";
@@ -8,26 +8,27 @@ import { MainStatisticsCard } from "~/components/Profile/Statistics/MainStatisti
 import { OwnedAsStatisticsCard } from "~/components/Profile/Statistics/OwnedAsStatistics/OwnedAsStatisticsCard";
 import { StatisticsCategoryWrapper } from "~/components/Profile/Statistics/StatisticsCategoryWrapper";
 import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
-import { type localeTypes } from "~/i18n";
+import { type localeTypes } from "~/i18n/routing";
 import ROUTES from "~/utils/routes";
 
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: {
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
     title: t("statistics"),
   };
 }
 
-export default function StatisticsPage({
-  params: { fullname, locale },
+export default async function StatisticsPage({
+  params,
 }: {
-  params: { fullname: string; locale: localeTypes };
+  params: Promise<{ fullname: string }>;
 }) {
-  unstable_setRequestLocale(locale);
+  const { fullname } = await params;
 
   return (
     <>

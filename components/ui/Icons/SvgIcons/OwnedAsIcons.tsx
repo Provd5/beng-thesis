@@ -1,8 +1,10 @@
 import type { FC } from "react";
 
-const className = "size-full fill-colors-primary drop-shadow-icon";
+interface OwnedAsIconsProps {
+  className?: string;
+}
 
-export const AsEbook: FC = () => {
+export const AsEbook: FC<OwnedAsIconsProps> = ({ className }) => {
   return (
     <svg
       className={className}
@@ -20,7 +22,7 @@ export const AsEbook: FC = () => {
   );
 };
 
-export const AsAudiobook: FC = () => {
+export const AsAudiobook: FC<OwnedAsIconsProps> = ({ className }) => {
   return (
     <svg
       className={className}
@@ -38,7 +40,7 @@ export const AsAudiobook: FC = () => {
   );
 };
 
-export const AsBook: FC = () => {
+export const AsBook: FC<OwnedAsIconsProps> = ({ className }) => {
   return (
     <svg
       className={className}

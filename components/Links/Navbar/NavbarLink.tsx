@@ -1,10 +1,10 @@
 "use client";
 
 import type { FC } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
+import { Link, routing } from "~/i18n/routing";
 import { cn } from "~/utils/cn";
 import ROUTES from "~/utils/routes";
 
@@ -36,19 +36,32 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
 
   const pathname = usePathname();
   const pathnameParts = pathname.split("/");
+  const localeShift = routing.locales.includes(pathnameParts[1]) ? 1 : 0;
 
   const isActive = () => {
-    if (!pathnameParts[2] && pageVariant === "explore") return true;
-
-    if (pathnameParts[2] !== "profile" && pathnameParts[2] === pageVariant)
-      return true;
-
-    if (
-      pathnameParts[2] === "profile" &&
-      profileName &&
-      pathnameParts[3] === profileName
-    )
-      return true;
+    switch (pageVariant) {
+      case "explore":
+        if (
+          pathnameParts[1 + localeShift] === "community" ||
+          !pathnameParts[1 + localeShift]
+        )
+          return true;
+        break;
+      case "login":
+      case "search":
+        if (pathnameParts[1 + localeShift] === pageVariant) return true;
+        break;
+      case "profile":
+        if (
+          pathnameParts[1 + localeShift] === pageVariant &&
+          !!profileName &&
+          pathnameParts[2 + localeShift] === profileName
+        )
+          return true;
+        break;
+      default:
+        return false;
+    }
 
     return false;
   };
@@ -62,7 +75,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
           ? "max-md:size-[58px]"
           : "max-md:size-[48px]",
         isActive() && "pointer-events-none cursor-default",
-        !isActive() && "hover:scale-95 hover:bg-colors-text/10"
+        !isActive() && "hover:translate-x-1 hover:bg-colors-text/10",
       )}
     >
       <div className="flex flex-col items-center justify-center gap-0.5 md:flex-row-reverse md:gap-1.5">
@@ -82,7 +95,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
         <p
           className={cn(
             "whitespace-nowrap text-center text-xs md:text-base",
-            isActive() && "text-colors-primary"
+            isActive() && "text-colors-primary",
           )}
         >
           {t(pageVariant)}

@@ -4,7 +4,7 @@ import { type FC } from "react";
 import Image, { type StaticImageData } from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
 
-import { locales } from "~/i18n";
+import { locales } from "~/i18n/routing";
 import FlagOfTheUnitedKingdom from "~/public/flags/flag-icons-gb.png";
 import FlagOfPoland from "~/public/flags/flag-icons-pl.png";
 import { cn } from "~/utils/cn";
@@ -43,12 +43,12 @@ export const LanguageSwitcher: FC = () => {
               pathname.replace(`/${localeFromUrl}`, `/${locale}`) +
               `?${searchParams.toString()}`
             }
-            className="flex flex-col items-center text-sm"
+            className="flex flex-col items-center text-sm transition-transform hover:scale-110"
           >
             <Image
               className={cn(
                 "border-2 border-transparent",
-                localeFromUrl === locale && "border-colors-primary"
+                localeFromUrl === locale && "border-colors-primary",
               )}
               src={flagFromLocale.src}
               alt={flagFromLocale.alt}
@@ -61,7 +61,7 @@ export const LanguageSwitcher: FC = () => {
             <p
               className={cn(
                 localeFromUrl === locale && "text-colors-primary",
-                "font-semibold"
+                "font-semibold",
               )}
             >
               {locale.toUpperCase()}

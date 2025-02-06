@@ -1,18 +1,17 @@
 import { Suspense } from "react";
-import { unstable_setRequestLocale } from "next-intl/server";
 
 import { ReviewsFeed } from "~/components/Review/ReviewsFeed";
 import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
-import { type localeTypes } from "~/i18n";
 
-export default function BookReviewsPage({
-  params: { id, title, locale },
+export default async function BookReviewsPage({
+  params,
   searchParams,
 }: {
-  params: { id: string; title: string; locale: localeTypes };
-  searchParams: unknown;
+  params: Promise<{ id: string; title: string }>;
+  searchParams: Promise<unknown> | undefined;
 }) {
-  unstable_setRequestLocale(locale);
+  const { id, title } = await params;
+  const awaitedSearchParams = await searchParams;
 
   return (
     <div className="flex flex-col">
@@ -23,7 +22,7 @@ export default function BookReviewsPage({
         <ReviewsFeed
           bookId={id}
           bookTitle={title}
-          searchParams={searchParams}
+          searchParams={awaitedSearchParams}
         />
       </Suspense>
     </div>

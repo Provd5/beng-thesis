@@ -2,7 +2,8 @@ import { type FC } from "react";
 
 import { SortBooksArray } from "~/types/orderArrays";
 
-import { getAllBooks } from "~/lib/services/book";
+import { getAllBooks } from "~/lib/services/book/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { FeedSort } from "../Modals/FeedSort";
 import { ItemsFound } from "../Search/ItemsFound";
@@ -15,7 +16,8 @@ interface BooksFeedProps {
 }
 
 export const BooksFeed: FC<BooksFeedProps> = async ({ searchParams, q }) => {
-  const books = await getAllBooks(searchParams, q);
+  const sessionUser = await getSessionUser();
+  const books = await getAllBooks(sessionUser?.id, searchParams, q);
 
   return (
     <>
@@ -28,7 +30,7 @@ export const BooksFeed: FC<BooksFeedProps> = async ({ searchParams, q }) => {
           totalPages={books.totalPages}
           orderArray={SortBooksArray}
         >
-          <div className="grid grid-cols-1 gap-6 2xl:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2 2xl:grid-cols-2">
             {books.data.map((book) => (
               <BookCard key={book.book.id} bookData={book} />
             ))}

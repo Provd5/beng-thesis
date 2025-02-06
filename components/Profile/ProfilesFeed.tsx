@@ -2,7 +2,8 @@ import { type FC } from "react";
 
 import { SortProfilesArray } from "~/types/orderArrays";
 
-import { getAllProfiles } from "~/lib/services/profile";
+import { getAllProfiles } from "~/lib/services/profile/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { FeedSort } from "../Modals/FeedSort";
 import { ItemsFound } from "../Search/ItemsFound";
@@ -18,7 +19,8 @@ export const ProfilesFeed: FC<ProfilesFeedProps> = async ({
   searchParams,
   q,
 }) => {
-  const profiles = await getAllProfiles(searchParams, q);
+  const sessionUser = await getSessionUser();
+  const profiles = await getAllProfiles(sessionUser?.id, searchParams, q);
 
   return (
     <>

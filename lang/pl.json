@@ -41,6 +41,7 @@
     "failed to load items": "Nie udało się załadować elementów",
     "not found": "Nie znaleziono",
     "something went wrong": "Coś poszło nie tak, spróbuj ponownie za chwilę",
+    "try again": "Spróbuj ponownie",
 
     "pending": "W toku...",
     "success": "Sukces"
@@ -121,9 +122,9 @@
     "Auth": {
       "logIn": "Zaloguj się",
       "signUp": "Stwórz konto",
-      "with": "przez",
-      "logIn/signUp with email and password": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} za pomocą adresu email i hasła",
-      "logIn/signUp with provider": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} przez dostawcę",
+      "logIn/signUp with password": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Kontynuuj}} używając hasła",
+      "logIn/signUp with": "{view, select, logIn {Zaloguj się przez} signUp {Zarejestruj się z} other {Kontynuuj za pomocą}}",
+      "logIn/signUp with provider": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Kontynuuj}} używając dostawcy",
       "terms of service": "Logując się, wyrażasz zgodę na <Link>nasze warunki świadczenia usług</Link>.",
       "email:": "Adres email:",
       "password:": "Hasło:",
@@ -141,7 +142,7 @@
       "your profile description:": "Twój opis profilu:",
       "enter username": "Podaj nazwę...",
       "add profile description": "Dodaj opis profilu...",
-      "profile visibility:": "Widoczność profilu:",
+      "profile visibility:": "Prywatność profilu:",
       "public/private": "{view, select, public {Publiczny} private {Prywatny} other {}}",
       "edit": "Edytuj",
       "save": "Zapisz"
@@ -213,9 +214,7 @@
       "description:": "Opis:"
     },
     "ManageLikes": {
-      "likes": "Polubienia",
-      "liked": "polubiono",
-      "like": "polub"
+      "likes": "Lubi to"
     },
     "ManageBookshelf": {
       "on a shelf": "Na półce",
@@ -229,14 +228,13 @@
       "ok": "ok"
     },
     "ManageOwnedAs": {
-      "owned as": "Posiadasz jako",
+      "owned as": "Posiadasz",
       "BOOK": "Książka",
       "EBOOK": "E-book",
       "AUDIOBOOK": "Audiobook"
     },
     "ManageReviews": {
-      "reviews": "Recenzje",
-      "write yours": "napisz swoją"
+      "reviews": "Recenzji"
     }
   },
 
@@ -244,7 +242,7 @@
     "CreateReview": {
       "log in to add your review": "Zaloguj się, aby dodać swoją recenzję",
       "express your opinion": "Wyraź swoją opinię...",
-      "your rate": "Twoja ocena",
+      "your rate": "Oceniono",
       "all reviews": "Wszystkie recenzje",
       "add": "Dodaj",
       "edit": "Edytuj",
@@ -261,7 +259,7 @@
       "likes it": "lubi to"
     },
     "BookReviewCard": {
-      "your rate:": "Twoja ocena:",
+      "your rate:": "Oceniono:",
       "posted:": "Zamieszczono:",
       "edited:": "Edytowano:",
       "users found this review helpful": "{numUsers, plural, =1 {<span># osoba</span> uznała} few {<span># osoby</span> uznały} other {<span># osób</span> uznało}} tę recenzję za pomocną"

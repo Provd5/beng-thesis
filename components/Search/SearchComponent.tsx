@@ -71,7 +71,7 @@ export const SearchComponent: FC<SearchComponentProps> = ({
                       validSearchCategory.category === searchCategory &&
                         "text-colors-primary",
                       validSearchCategory.category !== searchCategory &&
-                        "hover:translate-x-1"
+                        "hover:translate-x-1",
                     )}
                     onClick={() => changeCategory(searchCategory)}
                   >

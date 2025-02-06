@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, useRef, useState } from "react";
+import { type FC, useRef, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import {
   type Formats,
@@ -8,48 +8,51 @@ import {
   useTranslations,
 } from "next-intl";
 
+import { FaTrash } from "react-icons/fa";
+
 import { ModalWrapper } from "~/components/Modals/ModalWrapper";
 import { Button } from "~/components/ui/Buttons";
-import { deleteReview } from "~/lib/services/review";
+import { deleteReview } from "~/lib/services/review/actions";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
 import { translatableError } from "~/utils/translatableError";
 
 interface DeleteReviewFormProps {
   reviewId: string | undefined;
-  setReviewDataState: (data: {
-    isReview: boolean;
-    text: string | null;
-    rate: number | null;
-  }) => void;
 }
 
-export const DeleteReviewForm: FC<DeleteReviewFormProps> = ({
-  reviewId,
-  setReviewDataState,
-}) => {
+export const DeleteReviewForm: FC<DeleteReviewFormProps> = ({ reviewId }) => {
   const t = useTranslations("Reviews.CreateReview");
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
+  const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModalButtonRef = useRef<HTMLButtonElement>(null);
 
   if (!reviewId) return;
 
-  const handleDeleteReview = async () => {
+  const handleDeleteReview = () => {
     try {
-      setReviewDataState({
-        isReview: false,
-        rate: null,
-        text: null,
+      startTransition(async () => {
+        const res = await deleteReview(reviewId);
+        if (!res.success) throw new Error(res.error);
+
+        const reviewTextarea = document.getElementById(
+          "review-text",
+        ) as HTMLTextAreaElement | null;
+        const reviewRateSelect = document.getElementById(
+          "review-rate",
+        ) as HTMLSelectElement | null;
+
+        if (reviewTextarea && reviewRateSelect) {
+          reviewTextarea.value = "";
+          reviewRateSelect.value = "";
+        }
+        toast.success(te(ErrorsToTranslate.SUCCESS));
       });
-
-      const res = await deleteReview(reviewId);
-
-      if (res.success) toast.success(te(ErrorsToTranslate.SUCCESS));
     } catch (e) {
       toast.error(te(translatableError(e)));
     }
@@ -60,13 +63,13 @@ export const DeleteReviewForm: FC<DeleteReviewFormProps> = ({
       <Button
         ref={openModalButtonRef}
         type="button"
-        size="sm"
+        size="icon"
         onClick={() => setIsModalOpen(!isModalOpen)}
         defaultColor={false}
         className="bg-colors-red text-white"
-        disabled={isModalOpen}
+        disabled={isModalOpen || isPending}
       >
-        {t("delete")}
+        <FaTrash />
       </Button>
       {isModalOpen && (
         <ModalWrapper
@@ -82,6 +85,7 @@ export const DeleteReviewForm: FC<DeleteReviewFormProps> = ({
                 onClick={handleDeleteReview}
                 defaultColor={false}
                 className="bg-colors-red text-white"
+                loading={isPending}
               >
                 {t("delete")}
               </Button>
@@ -91,6 +95,7 @@ export const DeleteReviewForm: FC<DeleteReviewFormProps> = ({
                 onClick={() => setIsModalOpen(false)}
                 defaultColor={false}
                 className="bg-colors-gray text-white"
+                disabled={isPending}
               >
                 {t("cancel")}
               </Button>

@@ -1,38 +1,35 @@
 "use client";
 
-import { type FC, useRef, useState } from "react";
+import { type FC } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 import {
   type Formats,
   type TranslationValues,
   useTranslations,
 } from "next-intl";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-import { signup } from "~/lib/services/auth";
-import { SignupValidator } from "~/lib/validations/auth";
-import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
-import ROUTES from "~/utils/routes";
+import { signUp } from "~/lib/services/auth/actions";
 import { translatableError } from "~/utils/translatableError";
 
 import { ButtonWhite } from "../ui/Buttons";
 import { Input } from "../ui/Input";
 
-export const SignupForm: FC = () => {
+interface SignupFormProps {
+  captchaToken: string;
+  resetCaptcha: () => void;
+}
+
+export const SignupForm: FC<SignupFormProps> = ({
+  captchaToken,
+  resetCaptcha,
+}) => {
   const t = useTranslations("Profile.Auth");
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
-
-  const router = useRouter();
-
-  const captcha = useRef<HCaptcha>(null);
-  const [captchaToken, setCaptchaToken] = useState("");
 
   const {
     register,
@@ -40,29 +37,23 @@ export const SignupForm: FC = () => {
     formState: { isSubmitting },
   } = useForm({
     defaultValues: { email: "", password: "", repeat_password: "" },
-    resolver: zodResolver(SignupValidator),
   });
 
-  const onSubmit = handleSubmit(async (formData) => {
+  const onSubmit = async (formData: unknown) => {
     try {
-      const validData = SignupValidator.parse(formData);
-      const res = await signup(captchaToken, validData);
-      if (!res.success) {
-        throw new Error(ErrorsToTranslate.SOMETHING_WENT_WRONG);
-      }
-
-      router.replace(`${ROUTES.auth.signup}?checkMail=${validData.email}`);
+      const res = await signUp(captchaToken, formData);
+      if (!res.success) throw new Error(res.error);
     } catch (error) {
       toast.error(te(translatableError(error)));
     } finally {
-      captcha.current?.resetCaptcha();
+      resetCaptcha();
     }
-  });
+  };
 
   return (
     <form
       className="flex max-w-sm flex-1 flex-col items-center justify-center gap-1"
-      onSubmit={(e) => (e.preventDefault(), onSubmit())}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Input
         {...register("email", { required: true })}
@@ -89,21 +80,10 @@ export const SignupForm: FC = () => {
         label={t("repeat password:")}
         id="repeat-password-input"
       />
-      <div className="mt-1 overflow-hidden rounded-sm">
-        {captchaToken === "" && (
-          <HCaptcha
-            ref={captcha}
-            sitekey={process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY as string}
-            onVerify={(token) => {
-              setCaptchaToken(token);
-            }}
-          />
-        )}
-      </div>
       <ButtonWhite
         loading={isSubmitting}
         type="submit"
-        className="my-5 uppercase"
+        className="my-2 uppercase"
       >
         {t("signUp")}
       </ButtonWhite>

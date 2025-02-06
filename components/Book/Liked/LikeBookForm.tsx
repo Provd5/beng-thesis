@@ -13,7 +13,8 @@ import { BsBookmarkHeart } from "react-icons/bs";
 import { type LikedBookInterface } from "~/types/data/book";
 
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
-import { postLike } from "~/lib/services/book";
+import { postLike } from "~/lib/services/book/actions";
+import { dateFormater } from "~/utils/dateFormater";
 import { translatableError } from "~/utils/translatableError";
 
 interface LikeBookFormProps {
@@ -31,7 +32,7 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [likeState, setLikeState] = useState({
@@ -48,7 +49,8 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
           : likeState.likesQuantity + 1,
       });
 
-      await postLike(bookId);
+      const res = await postLike(bookId);
+      if (!res.success) throw new Error(res.error);
     } catch (e) {
       setLikeState(likeState);
       toast.error(te(translatableError(e)));
@@ -57,31 +59,32 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
 
   return (
     <button
-      className="flex h-fit min-h-[70px] w-36 gap-1 rounded-md bg-white/90 p-1 transition-colors hover:bg-colors-gray/10 dark:bg-black/30 hover:dark:bg-white/10"
+      className="flex h-fit min-h-[60px] w-[132px] rounded-md bg-white/90 p-1 text-left transition-colors hover:bg-colors-gray/10 dark:bg-black/30 hover:dark:bg-white/10"
       disabled={likeData === undefined}
       onClick={handleLike}
     >
-      <div className="flex h-fit">
-        {!!likeState.isLike ? (
-          <BookmarkIcon category="LIKED" size="lg" />
-        ) : (
-          <BookmarkIcon Icon={BsBookmarkHeart} color="gradient" size="lg" />
-        )}
-      </div>
-      <div className="flex flex-col">
-        <h3 className="px-1 py-0.5 text-base font-semibold text-colors-primary hover:animate-pulse">
-          {t("likes")}
-        </h3>
-        <p className="-mt-1">{likeState.likesQuantity}</p>
-        {likeData !== undefined && (
-          <p className="text-xs text-colors-text">
-            {!!likeState.isLike ? (
-              t("liked")
-            ) : (
-              <span className="select-none underline">{t("like")}</span>
-            )}
+      <div className="flex">
+        <div className="flex h-fit">
+          {!!likeState.isLike ? (
+            <BookmarkIcon category="LIKED" size="lg" />
+          ) : (
+            <BookmarkIcon Icon={BsBookmarkHeart} color="gradient" size="lg" />
+          )}
+        </div>
+
+        <div className="flex flex-col">
+          <h3 className="px-1 text-base font-semibold text-colors-primary">
+            {t("likes")}
+          </h3>
+          <p className="-mt-1 ml-1 whitespace-nowrap text-sm font-bold">
+            {likeState.likesQuantity}
           </p>
-        )}
+          {likeData && (
+            <p className="-mt-0.5 ml-1 whitespace-nowrap text-xs text-colors-text">
+              {dateFormater(likeData.updated_at)}
+            </p>
+          )}
+        </div>
       </div>
     </button>
   );

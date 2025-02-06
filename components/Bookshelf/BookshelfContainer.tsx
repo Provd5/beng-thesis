@@ -23,7 +23,8 @@ export const BookshelfContainer: FC<BookshelfContainerProps> = ({
     <>
       <DragContainer
         arrowSize="sm"
-        containerClassName="flex-start py-1 px-0.5 hidden-scrollbar gap-1"
+        containerClassName="justify-center"
+        innerContainerClassName="flex-start py-1 px-0.5 hidden-scrollbar gap-1"
       >
         <CategoryLinksContainer
           currentBookshelf={bookshelf}

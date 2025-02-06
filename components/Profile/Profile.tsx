@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import { notFound } from "next/navigation";
 
-import { getProfile } from "~/lib/services/profile";
-import readUserSession from "~/lib/supabase/readUserSession";
+import { getProfile } from "~/lib/services/profile/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { AvatarImage } from "./AvatarImage";
 import { FollowButton } from "./Follows/FollowButton";
@@ -17,15 +17,13 @@ interface ProfileProps {
 }
 
 export const Profile: FC<ProfileProps> = async ({ profileName, children }) => {
-  const profileData = await getProfile(profileName);
+  const sessionUser = await getSessionUser();
+
+  const profileData = await getProfile(sessionUser?.id, profileName);
 
   if (!profileData) notFound();
 
-  const {
-    data: { session },
-  } = await readUserSession();
-
-  const isMyProfile = session?.user.id === profileData.id;
+  const isMyProfile = profileData.id === sessionUser?.id;
 
   return (
     <>

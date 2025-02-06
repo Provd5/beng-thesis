@@ -2,12 +2,13 @@
 
 import type { FC } from "react";
 import { type Url } from "next/dist/shared/lib/router/router";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { MdNavigateNext } from "react-icons/md";
 
 import { type BookshelvesTypes } from "~/types/consts";
+
+import { Link } from "~/i18n/routing";
 
 import { BookmarkIcon } from "../ui/Icons/BookmarkIcon";
 import { OwnedBookIcon } from "../ui/Icons/OwnedBookIcon";

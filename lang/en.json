@@ -41,6 +41,7 @@
     "failed to load items": "Failed to load items",
     "not found": "Not found",
     "something went wrong": "Something went wrong, try again in a moment",
+    "try again": "Try again",
 
     "pending": "Pending...",
     "success": "Success"
@@ -121,9 +122,9 @@
     "Auth": {
       "logIn": "Log in",
       "signUp": "Sign up",
-      "with": "with",
-      "logIn/signUp with email and password": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with email and password",
-      "logIn/signUp with provider": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with provider",
+      "logIn/signUp with password": "{view, select, logIn {Log in} signUp {Sign up} other {Continue}} using password",
+      "logIn/signUp with": "{view, select, logIn {Sign in with} signUp {Sign up with} other {Continue with}}",
+      "logIn/signUp with provider": "{view, select, logIn {Log in} signUp {Sign up} other {Continue}} using provider",
       "terms of service": "By logging in, you agree to <Link>our terms of service</Link>.",
       "email:": "Email:",
       "password:": "Password:",
@@ -141,7 +142,7 @@
       "your profile description:": "Your profile description:",
       "enter username": "Enter username...",
       "add profile description": "Add profile description...",
-      "profile visibility:": "Profile visibility:",
+      "profile visibility:": "Profile privacy:",
       "public/private": "{view, select, public {Pubilc} private {Private} other {}}",
       "edit": "Edit",
       "save": "Save"
@@ -213,9 +214,7 @@
       "description:": "Description:"
     },
     "ManageLikes": {
-      "likes": "Likes",
-      "liked": "liked",
-      "like": "like"
+      "likes": "Likes"
     },
     "ManageBookshelf": {
       "on a shelf": "On a shelf",
@@ -235,8 +234,7 @@
       "AUDIOBOOK": "Audiobook"
     },
     "ManageReviews": {
-      "reviews": "Reviews",
-      "write yours": "write yours"
+      "reviews": "Reviews"
     }
   },
 
@@ -244,7 +242,7 @@
     "CreateReview": {
       "log in to add your review": "Log in to add your review",
       "express your opinion": "Express your opinion...",
-      "your rate": "Your rate",
+      "your rate": "Rated",
       "all reviews": "All reviews",
       "add": "Add",
       "edit": "Edit",
@@ -261,7 +259,7 @@
       "likes it": "likes it"
     },
     "BookReviewCard": {
-      "your rate:": "Your rate:",
+      "your rate:": "Rated:",
       "posted:": "Posted:",
       "edited:": "Edited:",
       "users found this review helpful": "<span>{numUsers, plural, =1 {# user} other {# users}}</span> found this review helpful"

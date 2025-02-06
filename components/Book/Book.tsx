@@ -1,9 +1,10 @@
-import { type FC, Suspense } from "react";
+import { type FC } from "react";
 import { notFound } from "next/navigation";
 
 import { HIGHEST_REVIEW_RATE } from "~/types/data/review";
 
-import { getBook } from "~/lib/services/book";
+import { getBook } from "~/lib/services/book/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 
 import { BookCover } from "./BookCover";
 import { BookDetails } from "./BookDetails";
@@ -18,13 +19,14 @@ interface BookProps {
 }
 
 export const Book: FC<BookProps> = async ({ bookId, children }) => {
-  const bookData = await getBook(bookId);
+  const sessionUser = await getSessionUser();
+  const bookData = await getBook(sessionUser?.id, bookId);
 
   if (!bookData) notFound();
 
   return (
-    <div className="mt-3 flex flex-col gap-8 text-sm">
-      <div className="flex flex-col gap-x-10 gap-y-8 px-1 md:px-6">
+    <div className="mt-3 flex flex-col gap-6 text-sm">
+      <div className="flex flex-col gap-3 px-1 md:px-6">
         <div className="flex gap-3">
           <BookCover size="lg" coverUrl={bookData.book.thumbnail_url} />
 
@@ -75,18 +77,11 @@ export const Book: FC<BookProps> = async ({ bookId, children }) => {
             />
           </div>
         </div>
-        <div className="flex w-full flex-wrap justify-center gap-2 self-start">
-          <Suspense
-            key={"Book-ManageReviews"}
-            fallback={
-              <div className="h-[70px] w-36 rounded-md bg-white/90 dark:bg-black/30" />
-            }
-          >
-            <ManageReviews
-              bookId={bookData.book.id}
-              reviewsQuantity={bookData._count.review}
-            />
-          </Suspense>
+        <div className="flex w-full flex-wrap justify-end gap-2 md:justify-center">
+          <ManageReviews
+            reviewsQuantity={bookData._count.review}
+            reviewData={bookData.review}
+          />
           <ManageLikes
             bookId={bookData.book.id}
             likesQuantity={bookData._count.liked_by}

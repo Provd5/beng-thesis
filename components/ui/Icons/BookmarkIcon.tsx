@@ -20,7 +20,7 @@ type sizes = "default" | "lg" | "sm";
 interface BookshelfBookmarkIconProps {
   category: BookshelvesTypes;
   Icon?: never;
-  color?: never;
+  color?: "gradient" | `fill-${string}`;
   size?: sizes;
 }
 
@@ -104,15 +104,19 @@ export const BookmarkIcon: FC<
           className={cn(
             "h-auto drop-shadow-icon",
             color === "gradient" ? "fill-colors-primary" : color,
-            sizeClass[size]
+            sizeClass[size],
           )}
         />
       ) : (
         <bookshelfBookmark.Icon
           className={cn(
             "h-auto drop-shadow-icon",
-            bookshelfBookmark.color,
-            sizeClass[size]
+            color
+              ? color === "gradient"
+                ? "fill-colors-primary"
+                : color
+              : bookshelfBookmark.color,
+            sizeClass[size],
           )}
         />
       )}

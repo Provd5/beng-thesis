@@ -1,35 +1,33 @@
 import { Suspense } from "react";
 import { type Metadata } from "next";
-import { unstable_setRequestLocale } from "next-intl/server";
 
 import { Profile } from "~/components/Profile/Profile";
-import { ProfileLoader } from "~/components/ui/Loaders/Skeletons/ProfileLoader";
-import { type localeTypes } from "~/i18n";
+import { LoadingPage } from "~/components/ui/Loaders/LoadingPage";
 
-export function generateMetadata({
+export async function generateMetadata({
   params,
 }: {
-  params: { fullname: string };
-}): Metadata {
+  params: Promise<{ fullname: string }>;
+}): Promise<Metadata> {
+  const { fullname } = await params;
   return {
     title: {
-      default: `@${decodeURIComponent(params.fullname)}`,
-      template: `@${decodeURIComponent(params.fullname)}/%s | Booksphere`,
+      default: `@${decodeURIComponent(fullname)}`,
+      template: `@${decodeURIComponent(fullname)}/%s | Booksphere`,
     },
   };
 }
 
-export default function ProfileFullnameLayout({
+export default async function ProfileFullnameLayout({
   children,
-  params: { fullname, locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { fullname: string; locale: localeTypes };
+  params: Promise<{ fullname: string }>;
 }) {
-  unstable_setRequestLocale(locale);
-
+  const { fullname } = await params;
   return (
-    <Suspense key={`profile-${fullname}`} fallback={<ProfileLoader />}>
+    <Suspense key={`profile-${fullname}`} fallback={<LoadingPage />}>
       <Profile profileName={fullname}>{children}</Profile>
     </Suspense>
   );

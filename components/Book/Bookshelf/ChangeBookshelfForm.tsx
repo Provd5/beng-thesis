@@ -13,7 +13,7 @@ import { type bookshelfType } from "@prisma/client";
 
 import { Button } from "~/components/ui/Buttons";
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
-import { changeBookshelf } from "~/lib/services/bookshelf";
+import { changeBookshelf } from "~/lib/services/bookshelf/actions";
 import {
   ChangeBookshelfValidator,
   type ChangeBookshelfValidatorType,
@@ -27,14 +27,14 @@ import { ReadQuantitySetter } from "./ReadQuantitySetter";
 interface ChangeBookshelfFormProps {
   bookId: string;
   bookshelfData: ChangeBookshelfValidatorType;
-  setBookshlefState: Dispatch<SetStateAction<ChangeBookshelfValidatorType>>;
+  setBookshelfState: Dispatch<SetStateAction<ChangeBookshelfValidatorType>>;
   closeModal: () => void;
 }
 
 export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
   bookId,
   bookshelfData,
-  setBookshlefState,
+  setBookshelfState,
   closeModal,
 }) => {
   const t = useTranslations("Book.ManageBookshelf");
@@ -42,7 +42,7 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [isFormOpen, setIsFormOpen] = useState(!bookshelfData);
@@ -71,18 +71,19 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
 
       // Filter out properties with undefined values
       const filteredData = Object.fromEntries(
-        Object.entries(validData).filter(([_, value]) => value !== undefined)
+        Object.entries(validData).filter(([_, value]) => value !== undefined),
       );
-      setBookshlefState({
+      setBookshelfState({
         ...newBookshelfData,
         ...filteredData,
       });
 
-      await changeBookshelf(bookId, validData);
+      const res = await changeBookshelf(bookId, validData);
+      if (!res.success) throw new Error(res.error);
       setIsFormOpen(false);
       closeModal();
     } catch (e) {
-      setBookshlefState(bookshelfData);
+      setBookshelfState(bookshelfData);
       toast.error(te(translatableError(e)));
     }
   });

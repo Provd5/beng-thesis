@@ -4,7 +4,7 @@ import { URLSearchParams } from "url";
 
 import { SortReviewsArray } from "~/types/orderArrays";
 
-import { getAllReviews } from "~/lib/services/review";
+import { getAllReviews } from "~/lib/services/review/queries";
 import ROUTES from "~/utils/routes";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 

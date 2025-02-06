@@ -37,33 +37,46 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
     });
   };
 
-  return BookshelvesArray.map((bookshelfVariant) => {
+  const SortedBookshelves = BookshelvesArray.toSorted((bookshelf) => {
+    if (bookshelf === currentBookshelf) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+
+  return SortedBookshelves.map((bookshelfVariant) => {
     const bookshelfVariantAsPathname =
       convertTypeEnumToPathname(bookshelfVariant);
 
     const isActive = currentBookshelf === bookshelfVariant;
 
     return (
-      <>
-        <button
-          key={bookshelfVariant}
-          ref={ref}
-          onClick={() => changeBookshelf(bookshelfVariantAsPathname)}
-          className={cn(
-            "flex items-center gap-2 whitespace-nowrap rounded-xl border border-colors-primary px-5 py-2 text-sm transition-colors",
-            isActive
-              ? "cursor-default bg-colors-primary text-white"
-              : "text-colors-primary hover:bg-colors-primary/70 hover:text-white"
-          )}
-        >
-          {bookshelfVariant === "OWNED" ? (
-            <OwnedBookIcon ownedAs="BOOK" size="sm" />
-          ) : (
-            <BookmarkIcon category={bookshelfVariant} />
-          )}
-          {t(bookshelfVariant)}
-        </button>
-      </>
+      <button
+        key={`CategoryLinksContainer-${bookshelfVariant}`}
+        ref={ref}
+        onClick={() => changeBookshelf(bookshelfVariantAsPathname)}
+        className={cn(
+          "flex items-center gap-2 whitespace-nowrap rounded-full border border-colors-primary px-5 py-2 text-sm transition-all hover:-translate-y-1",
+          isActive
+            ? "cursor-default bg-colors-primary text-white"
+            : "text-colors-primary hover:bg-colors-primary/20 hover:text-black dark:hover:text-white",
+        )}
+      >
+        {bookshelfVariant === "OWNED" ? (
+          <OwnedBookIcon
+            color={isActive ? "fill-white" : undefined}
+            ownedAs="BOOK"
+            size="sm"
+          />
+        ) : (
+          <BookmarkIcon
+            color={isActive ? "fill-white" : undefined}
+            category={bookshelfVariant}
+          />
+        )}
+        {t(bookshelfVariant)}
+      </button>
     );
   });
 };

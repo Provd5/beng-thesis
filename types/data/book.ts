@@ -5,7 +5,7 @@ export interface RawGetBookData extends BookInterface {
     liked_by: number;
     review: number;
   };
-  review: { rate: number }[];
+  review: { rate: number; author_id: string; created_at: Date }[];
   book_owned_as: BookOwnedAsInterface[];
   liked_by: LikedBookInterface[];
   bookshelf: BookshelfInterface[];
@@ -18,6 +18,7 @@ export interface GetBookInterface {
     review: number;
   };
   _avg_rate: number;
+  review: { rate: number; created_at: Date } | null | undefined;
   book_owned_as: BookOwnedAsInterface | null | undefined;
   liked_by: LikedBookInterface | null | undefined;
   bookshelf: BookshelfInterface | null | undefined;

@@ -1,6 +1,6 @@
 import type { FC } from "react";
 
-import { getReadStatistics } from "~/lib/services/statistics";
+import { getReadStatistics } from "~/lib/services/statistics/queries";
 
 import { AlreadyReadStatisticsDetails } from "./AlreadyReadStatisticsDetails";
 

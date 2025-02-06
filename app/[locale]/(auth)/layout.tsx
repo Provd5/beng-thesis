@@ -1,17 +1,21 @@
-import { unstable_setRequestLocale } from "next-intl/server";
-
 import { Logo } from "~/components/Logo";
 import { Settings } from "~/components/Modals/Settings";
-import { type localeTypes } from "~/i18n";
+import { type localeTypes, redirect } from "~/i18n/routing";
+import { getSessionUser } from "~/lib/services/session/queries";
+import ROUTES from "~/utils/routes";
 
-export default function AuthLayout({
+export default async function AuthLayout({
+  params,
+
   children,
-  params: { locale },
 }: {
+  params: Promise<{ locale: localeTypes }>;
+
   children: React.ReactNode;
-  params: { locale: localeTypes };
 }) {
-  unstable_setRequestLocale(locale);
+  const { locale } = await params;
+  const sessionUser = await getSessionUser();
+  if (sessionUser) redirect({ href: ROUTES.profile.session_profile, locale });
 
   return (
     <main className="nav-padding grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-hidden text-xl text-white">

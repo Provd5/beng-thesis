@@ -1,27 +1,25 @@
-import { Suspense } from "react";
-import { unstable_setRequestLocale } from "next-intl/server";
-
 import { Badges } from "~/components/Links/Badges";
 import { Logo } from "~/components/Logo";
-import { Loader } from "~/components/ui/Loaders/Loader";
-import { type localeTypes } from "~/i18n";
+import { type localeTypes, redirect } from "~/i18n/routing";
+import { getSessionUser } from "~/lib/services/session/queries";
+import ROUTES from "~/utils/routes";
 
-export default function ProfileLayout({
+export default async function ProfileLayout({
+  params,
   children,
-  params: { locale },
 }: {
+  params: Promise<{ locale: localeTypes }>;
   children: React.ReactNode;
-  params: { locale: localeTypes };
 }) {
-  unstable_setRequestLocale(locale);
+  const { locale } = await params;
+  const sessionUser = await getSessionUser();
+  if (!sessionUser) redirect({ href: ROUTES.auth.login, locale });
 
   return (
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll scroll-smooth">
       <Logo />
       <div className="flex h-[68px] flex-none self-end p-3 text-white">
-        <Suspense key={"Badges"} fallback={<Loader />}>
-          <Badges />
-        </Suspense>
+        <Badges />
       </div>
       <div className="nav-padding relative flex flex-auto flex-col rounded-t-3xl bg-white/90 dark:bg-black/90 md:rounded-none">
         <div className="container pb-12">{children}</div>

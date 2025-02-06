@@ -1,20 +1,16 @@
 import type { FC } from "react";
 
-import { getReview } from "~/lib/services/review";
-
 import { HandleSelectReview } from "./HandleSelectReview";
 
 interface ManageReviewsProps {
-  bookId: string;
   reviewsQuantity: number;
+  reviewData: { rate: number; created_at: Date } | null | undefined;
 }
 
 export const ManageReviews: FC<ManageReviewsProps> = async ({
-  bookId,
   reviewsQuantity,
+  reviewData,
 }) => {
-  const reviewData = await getReview(bookId);
-
   return (
     <HandleSelectReview
       reviewData={reviewData}

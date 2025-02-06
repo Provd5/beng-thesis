@@ -1,21 +1,25 @@
-import { notFound, redirect } from "next/navigation";
-import { unstable_setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
 
-import { type localeTypes } from "~/i18n";
-import { getSessionProfile } from "~/lib/services/profile";
+import { LoadingPage } from "~/components/ui/Loaders/LoadingPage";
+import { type localeTypes, redirect } from "~/i18n/routing";
+import { getProfile } from "~/lib/services/profile/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 import ROUTES from "~/utils/routes";
 
-export default async function CheckUsernamePage({
-  params: { locale },
+export default async function ProfileRedirectPage({
+  params,
 }: {
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }) {
-  unstable_setRequestLocale(locale);
-  const userData = await getSessionProfile();
+  const { locale } = await params;
 
-  if (!userData) notFound();
+  const sessionUser = await getSessionUser();
+  if (!sessionUser) redirect({ href: ROUTES.auth.login, locale });
 
-  userData.full_name
-    ? redirect(`${ROUTES.profile.root(userData.full_name)}`)
-    : redirect(ROUTES.profile.edit_profile);
+  const sessionProfile = await getProfile(sessionUser?.id);
+  if (!sessionProfile?.full_name) notFound();
+
+  redirect({ href: ROUTES.profile.root(sessionProfile.full_name), locale });
+
+  return <LoadingPage />;
 }

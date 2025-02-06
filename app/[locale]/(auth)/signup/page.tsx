@@ -1,31 +1,21 @@
 import { type Metadata } from "next";
-import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import { AuthPage } from "~/components/Auth/AuthPage";
-import { SignupForm } from "~/components/Auth/SignupForm";
-import { type localeTypes } from "~/i18n";
+import { type localeTypes } from "~/i18n/routing";
 
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: {
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
   return {
     title: t("signup"),
   };
 }
 
-export default function SignUpPage({
-  params: { locale },
-}: {
-  params: { locale: localeTypes };
-}) {
-  unstable_setRequestLocale(locale);
-
-  return (
-    <AuthPage view="signUp">
-      <SignupForm />
-    </AuthPage>
-  );
+export default async function SignUpPage() {
+  return <AuthPage view="signUp" />;
 }

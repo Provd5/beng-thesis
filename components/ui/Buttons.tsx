@@ -16,17 +16,19 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const sharedClass =
   "flex items-center justify-center font-semibold whitespace-nowrap h-fit";
 
-type commonSizeTypes = "default" | "sm" | "xs";
+type commonSizeTypes = "default" | "sm" | "xs" | "icon";
 
 const commonSizeClass = {
-  default: "rounded-2xl px-8 py-3.5 text-base",
+  default: "rounded-2xl px-8 py-3 text-base",
   sm: "rounded-xl px-6 py-3 text-sm",
   xs: "rounded-md px-4 py-2 text-sm",
+  icon: "rounded-lg p-3 *:size-5",
 };
 const commonLoadingSizeClass = {
   default: "size-[1.125rem]",
   sm: "size-4",
   xs: "size-4",
+  icon: "size-4",
 };
 
 const Button = forwardRef<
@@ -42,7 +44,7 @@ const Button = forwardRef<
       className,
       ...restProps
     },
-    ref
+    ref,
   ) => {
     return (
       <button
@@ -53,7 +55,7 @@ const Button = forwardRef<
           "gap-1 transition-transform hover:scale-105",
           defaultColor && "bg-colors-primary text-white hover:bg-colors-accent",
           commonSizeClass[size],
-          className
+          className,
         )}
         {...restProps}
       >
@@ -61,7 +63,7 @@ const Button = forwardRef<
         {children}
       </button>
     );
-  }
+  },
 );
 const ButtonWhite = forwardRef<
   HTMLButtonElement,
@@ -75,7 +77,7 @@ const ButtonWhite = forwardRef<
         sharedClass,
         "gap-1 bg-white text-colors-primary transition-all hover:scale-105 hover:bg-white/80",
         commonSizeClass[size],
-        className
+        className,
       )}
       {...restProps}
     >
@@ -103,7 +105,7 @@ const ButtonLink = forwardRef<
       active,
       ...restProps
     },
-    ref
+    ref,
   ) => {
     const sizeClass = {
       lg: "text-md",
@@ -116,11 +118,11 @@ const ButtonLink = forwardRef<
         ref={ref}
         disabled={loading}
         className={cn(
-          "px-1 py-0.5 hover:animate-pulse",
+          "px-1",
           sharedClass,
           defaultColor && "text-colors-primary",
           sizeClass[size],
-          className
+          className,
         )}
         {...restProps}
       >
@@ -129,13 +131,13 @@ const ButtonLink = forwardRef<
           <MdKeyboardArrowDown
             className={cn(
               "flex-none text-xl",
-              defaultColor && "fill-colors-primary"
+              defaultColor && "fill-colors-primary",
             )}
           />
         </span>
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

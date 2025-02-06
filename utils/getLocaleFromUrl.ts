@@ -1,4 +1,4 @@
-import { defaultLocale, locales, type localeTypes } from "~/i18n";
+import { defaultLocale, locales, type localeTypes } from "~/i18n/routing";
 
 export const getLocaleFromUrl = (url: string): localeTypes => {
   const urlParts = url.split("/");

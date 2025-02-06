@@ -11,7 +11,7 @@ import {
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
 import { Button } from "~/components/ui/Buttons";
-import { postFollow } from "~/lib/services/profile";
+import { postFollow } from "~/lib/services/profile/actions";
 import { translatableError } from "~/utils/translatableError";
 
 interface FollowFormProps {
@@ -24,7 +24,7 @@ export const FollowForm: FC<FollowFormProps> = ({ userId, isFollowed }) => {
   const te = useTranslations("Errors") as (
     key: string,
     values?: TranslationValues | undefined,
-    formats?: Partial<Formats> | undefined
+    formats?: Partial<Formats> | undefined,
   ) => string;
 
   const [followState, setFollowState] = useState(isFollowed);
@@ -33,7 +33,8 @@ export const FollowForm: FC<FollowFormProps> = ({ userId, isFollowed }) => {
     setFollowState(!followState);
 
     try {
-      await postFollow(userId);
+      const res = await postFollow(userId);
+      if (!res.success) throw new Error(res.error);
     } catch (e) {
       setFollowState(followState);
       toast.error(te(translatableError(e)));

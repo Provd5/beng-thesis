@@ -1,8 +1,8 @@
 import type { FC } from "react";
-import Link from "next/link";
 
 import { type GetProfileInterface } from "~/types/data/profile";
 
+import { Link } from "~/i18n/routing";
 import ROUTES from "~/utils/routes";
 
 import { AvatarImage } from "./AvatarImage";
@@ -14,7 +14,7 @@ interface ProfileBadgeProps {
 export const ProfileBadge: FC<ProfileBadgeProps> = ({ profileData }) => {
   return (
     <Link
-      className="mx-[-8px] flex items-center gap-1.5 py-1 text-sm transition-transform hover:-translate-y-1"
+      className="mx-[-8px] flex items-center gap-1.5 py-1 text-sm transition-transform hover:translate-x-1"
       href={ROUTES.profile.session_profile}
     >
       <AvatarImage avatarSrc={profileData.avatar_url} size="xs" />

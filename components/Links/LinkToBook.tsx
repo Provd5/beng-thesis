@@ -1,9 +1,9 @@
 "use client";
 
 import type { FC } from "react";
-import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 
+import { Link } from "~/i18n/routing";
 import { getLocaleFromUrl } from "~/utils/getLocaleFromUrl";
 import ROUTES from "~/utils/routes";
 

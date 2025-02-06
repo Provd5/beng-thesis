@@ -3,7 +3,8 @@ import { type FC } from "react";
 import { SortFollowProfilesArray } from "~/types/orderArrays";
 
 import { NotFoundItems } from "~/components/ui/NotFound/NotFoundItems";
-import { getFollowProfiles } from "~/lib/services/profile";
+import { getFollowProfiles } from "~/lib/services/profile/queries";
+import { getSessionUser } from "~/lib/services/session/queries";
 import ROUTES from "~/utils/routes";
 
 import { BackCategoryLink } from "../../Links/BackCategoryLink";
@@ -21,7 +22,13 @@ export const FollowPage: FC<FollowPageProps> = async ({
   variant,
   searchParams,
 }) => {
-  const profiles = await getFollowProfiles(profileName, variant, searchParams);
+  const sessionUser = await getSessionUser();
+  const profiles = await getFollowProfiles(
+    sessionUser?.id,
+    profileName,
+    variant,
+    searchParams,
+  );
 
   return (
     <>

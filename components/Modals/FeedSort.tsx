@@ -63,9 +63,9 @@ export const FeedSort: FC<FeedSortProps> = ({
       <div className="mb-3 flex w-full justify-end">
         <ModalInitiator
           initiatorStyle={
-            <div className="flex items-center gap-1 whitespace-nowrap px-1 py-1 text-sm">
+            <div className="flex items-center gap-1 whitespace-nowrap px-1 py-1 text-sm transition-transform hover:translate-x-1">
               <span>{t("sort by:")}</span>
-              <span className="flex items-center gap-0.5 text-colors-primary hover:animate-pulse">
+              <span className="flex items-center gap-0.5 text-colors-primary">
                 {t(sortParams.orderBy)}{" "}
                 {sortParams.order === "desc" ? (
                   <TbSortDescending2 className="text-lg" />
@@ -87,7 +87,7 @@ export const FeedSort: FC<FeedSortProps> = ({
                   className={cn(
                     "flex items-center justify-between gap-1 py-0.5 text-left transition-transform",
                     isActive && "text-colors-primary",
-                    !isActive && "hover:translate-x-1"
+                    !isActive && "hover:translate-x-1",
                   )}
                 >
                   <p>{t(sort.orderBy)}</p>

@@ -1,13 +1,14 @@
 import { type Metadata } from "next";
 import { Quicksand } from "next/font/google";
-import { notFound } from "next/navigation";
-import { type AbstractIntlMessages, NextIntlClientProvider } from "next-intl";
-import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { getMessages } from "next-intl/server";
 
 import { Navbar } from "~/components/Links/Navbar/Navbar";
 import { DarkModeInitializer } from "~/components/ui/DarkModeInitializer";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
-import { type localeTypes } from "~/i18n";
+import { type localeTypes, routing } from "~/i18n/routing";
+import { cn } from "~/utils/cn";
 
 import "~/styles/globals.css";
 
@@ -18,24 +19,15 @@ const quicksandFont = Quicksand({
 });
 
 export function generateStaticParams() {
-  return [{ locale: "pl" }, { locale: "en" }];
-}
-
-export async function getMessages(locale: localeTypes) {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    return (await import(`../../lang/${locale}.json`))
-      .default as AbstractIntlMessages;
-  } catch (error) {
-    notFound();
-  }
+  return routing.locales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: {
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({
     locale,
     namespace: "Nav.CategoryTitles",
@@ -48,9 +40,6 @@ export async function generateMetadata({
     },
     description: t("page description"),
 
-    twitter: {
-      card: "summary_large_image",
-    },
     alternates: {
       canonical: "/",
       languages: {
@@ -59,29 +48,35 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: {
-        default: "Booksphere",
-        template: "%s | Booksphere",
-      },
+      title: "Booksphere",
       description: t("page description"),
-      siteName: "Booksphere",
-      type: "website",
+      images: ["/og-main.jpg"],
+    },
+    twitter: {
+      title: "Booksphere",
+      description: t("page description"),
+      card: "summary_large_image",
+      images: ["/twitter-large.jpg"],
     },
   };
 }
 
 export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }) {
-  unstable_setRequestLocale(locale);
-  const messages = await getMessages(locale);
+  const { locale } = await params;
+  const validLocale = routing.locales.includes(locale)
+    ? locale
+    : routing.defaultLocale;
+
+  const messages = await getMessages();
 
   return (
-    <html lang={locale} className={quicksandFont.className}>
+    <html lang={validLocale} className={cn(quicksandFont.className, "dark")}>
       <body className="bg-gradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-colors-text antialiased selection:bg-colors-accent selection:text-white md:flex-col">
         <DarkModeInitializer />
 

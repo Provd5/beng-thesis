@@ -1,21 +1,20 @@
 import { Suspense } from "react";
-import { unstable_setRequestLocale } from "next-intl/server";
 
 import { CategoryLink } from "~/components/Links/CategoryLink";
 import { AllReviewsButton } from "~/components/Review/AllReviewsButton";
 import { MyReview } from "~/components/Review/CreateReview/MyReview";
 import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
-import { type localeTypes } from "~/i18n";
 import ROUTES from "~/utils/routes";
 
-export default function BookPage({
-  params: { id, title, locale },
+export default async function BookPage({
+  params,
   searchParams,
 }: {
-  params: { id: string; title: string; locale: localeTypes };
-  searchParams?: string;
+  params: Promise<{ id: string; title: string }>;
+  searchParams: Promise<string> | undefined;
 }) {
-  unstable_setRequestLocale(locale);
+  const { id, title } = await params;
+  const awaitedSearchParams = await searchParams;
 
   return (
     <>
@@ -23,7 +22,7 @@ export default function BookPage({
         <CategoryLink
           href={{
             pathname: ROUTES.book.reviews(id, title),
-            query: searchParams,
+            query: awaitedSearchParams,
           }}
           bookshelfVariant="REVIEWS"
           replace
@@ -33,7 +32,10 @@ export default function BookPage({
         </Suspense>
       </div>
       <AllReviewsButton
-        href={{ pathname: ROUTES.book.reviews(id, title), query: searchParams }}
+        href={{
+          pathname: ROUTES.book.reviews(id, title),
+          query: awaitedSearchParams,
+        }}
       />
     </>
   );
