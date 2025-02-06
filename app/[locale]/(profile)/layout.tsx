@@ -8,7 +8,7 @@ export default async function ProfileLayout({
   params,
   children,
 }: {
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
   children: React.ReactNode;
 }) {
   const { locale } = await params;

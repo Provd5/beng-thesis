@@ -19,8 +19,8 @@ export async function generateMetadata({
   params,
   searchParams,
 }: {
-  params: { fullname: string; locale: localeTypes };
-  searchParams: { bookshelf?: string };
+  params: Promise<{ fullname: string; locale: localeTypes }>;
+  searchParams: Promise<{ bookshelf?: string }> | undefined;
 }): Promise<Metadata> {
   const { fullname, locale } = await params;
   const awaitedSearchParams = await searchParams;
@@ -32,7 +32,7 @@ export async function generateMetadata({
     values?: TranslationValues | undefined,
     formats?: Partial<Formats> | undefined,
   ) => string;
-  const bookshelfAsEnum = awaitedSearchParams.bookshelf
+  const bookshelfAsEnum = awaitedSearchParams?.bookshelf
     ? (convertPathnameToTypeEnum(
         awaitedSearchParams.bookshelf,
       ) as BookshelvesTypes)
@@ -54,13 +54,13 @@ export default async function BookshelfPage({
   params,
   searchParams,
 }: {
-  params: { fullname: string };
-  searchParams: { bookshelf?: string };
+  params: Promise<{ fullname: string }>;
+  searchParams: Promise<{ bookshelf?: string }> | undefined;
 }) {
   const { fullname } = await params;
   const awaitedSearchParams = await searchParams;
 
-  const bookshelfAsEnum = awaitedSearchParams.bookshelf
+  const bookshelfAsEnum = awaitedSearchParams?.bookshelf
     ? (convertPathnameToTypeEnum(
         awaitedSearchParams.bookshelf,
       ) as BookshelvesTypes)

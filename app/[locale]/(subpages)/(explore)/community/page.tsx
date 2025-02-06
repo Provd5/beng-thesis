@@ -9,7 +9,7 @@ import { type localeTypes } from "~/i18n/routing";
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
@@ -21,7 +21,7 @@ export async function generateMetadata({
 export default async function CommunityPage({
   searchParams,
 }: {
-  searchParams: unknown;
+  searchParams: Promise<unknown> | undefined;
 }) {
   const awaitedSearchParams = await searchParams;
 

@@ -7,8 +7,8 @@ export default async function BookReviewsPage({
   params,
   searchParams,
 }: {
-  params: { id: string; title: string };
-  searchParams: unknown;
+  params: Promise<{ id: string; title: string }>;
+  searchParams: Promise<unknown> | undefined;
 }) {
   const { id, title } = await params;
   const awaitedSearchParams = await searchParams;

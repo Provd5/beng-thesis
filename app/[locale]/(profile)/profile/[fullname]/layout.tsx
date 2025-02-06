@@ -7,7 +7,7 @@ import { ProfileLoader } from "~/components/ui/Loaders/Skeletons/ProfileLoader";
 export async function generateMetadata({
   params,
 }: {
-  params: { fullname: string };
+  params: Promise<{ fullname: string }>;
 }): Promise<Metadata> {
   const { fullname } = await params;
   return {
@@ -23,7 +23,7 @@ export default async function ProfileFullnameLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { fullname: string };
+  params: Promise<{ fullname: string }>;
 }) {
   const { fullname } = await params;
   return (

@@ -8,7 +8,7 @@ import ROUTES from "~/utils/routes";
 export default async function ProfileRedirectPage({
   params,
 }: {
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }) {
   const { locale } = await params;
 

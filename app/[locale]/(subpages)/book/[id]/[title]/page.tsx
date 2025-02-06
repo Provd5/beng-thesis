@@ -10,8 +10,8 @@ export default async function BookPage({
   params,
   searchParams,
 }: {
-  params: { id: string; title: string };
-  searchParams?: string;
+  params: Promise<{ id: string; title: string }>;
+  searchParams: Promise<string> | undefined;
 }) {
   const { id, title } = await params;
   const awaitedSearchParams = await searchParams;

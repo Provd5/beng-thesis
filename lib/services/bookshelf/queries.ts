@@ -165,7 +165,7 @@ export const getBookshelfBooks = unstable_cache(
       ]);
 
       const transformedData = books.map(({ book }) =>
-        transformBookData(!!sessionId, book),
+        transformBookData(sessionId, book),
       );
 
       return {

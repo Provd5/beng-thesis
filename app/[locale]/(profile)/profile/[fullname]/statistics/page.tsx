@@ -14,7 +14,7 @@ import ROUTES from "~/utils/routes";
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Nav.CategoryTitles" });
@@ -26,7 +26,7 @@ export async function generateMetadata({
 export default async function StatisticsPage({
   params,
 }: {
-  params: { fullname: string };
+  params: Promise<{ fullname: string }>;
 }) {
   const { fullname } = await params;
 

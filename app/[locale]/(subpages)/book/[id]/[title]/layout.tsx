@@ -9,7 +9,7 @@ import { getBookPreview } from "~/lib/services/book/queries";
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string; title: string };
+  params: Promise<{ id: string; title: string }>;
 }): Promise<Metadata> {
   const { id, title } = await params;
   const bookData = await getBookPreview(id);
@@ -32,7 +32,7 @@ export default async function BookLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
 

@@ -25,7 +25,7 @@ export function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({
@@ -67,7 +67,7 @@ export default async function RootLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: localeTypes };
+  params: Promise<{ locale: localeTypes }>;
 }) {
   const { locale } = await params;
   const validLocale = routing.locales.includes(locale)
