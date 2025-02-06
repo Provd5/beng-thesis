@@ -14,7 +14,7 @@ export const Input = forwardRef<
   InputProps
 >(function InputComponent(
   { id, loading, isTextarea, label, className, ...props },
-  ref
+  ref,
 ) {
   const commonProps = {
     disabled: loading,
@@ -33,8 +33,8 @@ export const Input = forwardRef<
         <textarea
           {...commonProps}
           className={cn(
-            "rounded-l-md rounded-tr-md border border-colors-gray/30 p-3 text-base caret-colors-accent placeholder:text-base",
-            className
+            "rounded-l-md rounded-tr-md border border-colors-gray/30 p-3 text-base text-colors-text caret-colors-accent placeholder:text-base",
+            className,
           )}
           ref={ref as Ref<HTMLTextAreaElement>}
         />
@@ -42,8 +42,8 @@ export const Input = forwardRef<
         <input
           {...commonProps}
           className={cn(
-            "text-md rounded-lg border border-colors-gray/30 px-3 py-2 caret-colors-accent placeholder:text-base",
-            className
+            "text-md rounded-lg border border-colors-gray/30 px-3 py-2 text-colors-text caret-colors-accent placeholder:text-base",
+            className,
           )}
           ref={ref as Ref<HTMLInputElement>}
         />

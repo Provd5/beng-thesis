@@ -70,7 +70,7 @@ export async function postReaction(
 
 export async function postReview(
   bookId: unknown,
-  formData: object,
+  formData: unknown,
 ): Promise<{ success: boolean }> {
   try {
     const sessionUser = await getSessionUser();

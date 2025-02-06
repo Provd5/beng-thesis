@@ -124,6 +124,8 @@ export const getProfile = unstable_cache(
       : undefined;
 
     try {
+      if (!sessionId && !decodedProfileName) return null;
+
       const profile = await db.profile.findUnique({
         where: decodedProfileName
           ? { full_name: decodedProfileName }

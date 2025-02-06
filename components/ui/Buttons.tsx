@@ -19,7 +19,7 @@ const sharedClass =
 type commonSizeTypes = "default" | "sm" | "xs" | "icon";
 
 const commonSizeClass = {
-  default: "rounded-2xl px-8 py-3.5 text-base",
+  default: "rounded-2xl px-8 py-3 text-base",
   sm: "rounded-xl px-6 py-3 text-sm",
   xs: "rounded-md px-4 py-2 text-sm",
   icon: "rounded-lg p-3 *:size-5",

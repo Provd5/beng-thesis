@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, useRef, useState } from "react";
+import { type FC } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -8,17 +8,22 @@ import {
   type TranslationValues,
   useTranslations,
 } from "next-intl";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { login } from "~/lib/services/auth/actions";
-import { LoginValidator } from "~/lib/validations/auth";
 import { translatableError } from "~/utils/translatableError";
 
 import { ButtonWhite } from "../ui/Buttons";
 import { Input } from "../ui/Input";
 
-export const LoginForm: FC = () => {
+interface LoginFormProps {
+  captchaToken: string;
+  resetCaptcha: () => void;
+}
+
+export const LoginForm: FC<LoginFormProps> = ({
+  captchaToken,
+  resetCaptcha,
+}) => {
   const t = useTranslations("Profile.Auth");
   const te = useTranslations("Errors") as (
     key: string,
@@ -26,35 +31,30 @@ export const LoginForm: FC = () => {
     formats?: Partial<Formats> | undefined,
   ) => string;
 
-  const captchaSiteKey = process.env.NEXT_PUBLIC_HCAPTCHA_SITEKEY!;
-  const captcha = useRef<HCaptcha>(null);
-  const [captchaToken, setCaptchaToken] = useState("");
-
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm({
     defaultValues: { email: "", password: "" },
-    resolver: zodResolver(LoginValidator),
   });
 
-  const onSubmit = handleSubmit(async (formData) => {
+  const onSubmit = async (formData: unknown) => {
     try {
       await login(captchaToken, formData);
       toast.success(t("we will redirect you to your profile in a moment"));
     } catch (error) {
       toast.error(te(translatableError(error)));
     } finally {
-      captcha.current?.resetCaptcha();
+      resetCaptcha();
     }
-  });
+  };
 
   return (
     <>
       <form
         className="flex max-w-sm flex-1 flex-col items-center justify-center gap-1"
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
       >
         <Input
           {...register("email", {
@@ -77,21 +77,10 @@ export const LoginForm: FC = () => {
           label={t("password:")}
           id="password-input"
         />
-        <div className="mt-1 overflow-hidden rounded-sm">
-          {captchaToken === "" && (
-            <HCaptcha
-              ref={captcha}
-              sitekey={captchaSiteKey}
-              onVerify={(token) => {
-                setCaptchaToken(token);
-              }}
-            />
-          )}
-        </div>
         <ButtonWhite
           loading={isSubmitting}
           type="submit"
-          className="my-5 uppercase"
+          className="my-2 uppercase"
         >
           {t("logIn")}
         </ButtonWhite>

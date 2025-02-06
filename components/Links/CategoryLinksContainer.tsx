@@ -37,7 +37,15 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
     });
   };
 
-  return BookshelvesArray.map((bookshelfVariant) => {
+  const SortedBookshelves = BookshelvesArray.toSorted((bookshelf) => {
+    if (bookshelf === currentBookshelf) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+
+  return SortedBookshelves.map((bookshelfVariant) => {
     const bookshelfVariantAsPathname =
       convertTypeEnumToPathname(bookshelfVariant);
 
@@ -49,16 +57,23 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
         ref={ref}
         onClick={() => changeBookshelf(bookshelfVariantAsPathname)}
         className={cn(
-          "flex items-center gap-2 whitespace-nowrap rounded-xl border border-colors-primary px-5 py-2 text-sm transition-colors",
+          "flex items-center gap-2 whitespace-nowrap rounded-full border border-colors-primary px-5 py-2 text-sm transition-colors",
           isActive
             ? "cursor-default bg-colors-primary text-white"
             : "text-colors-primary hover:bg-colors-primary/70 hover:text-white",
         )}
       >
         {bookshelfVariant === "OWNED" ? (
-          <OwnedBookIcon ownedAs="BOOK" size="sm" />
+          <OwnedBookIcon
+            color={isActive ? "fill-white" : undefined}
+            ownedAs="BOOK"
+            size="sm"
+          />
         ) : (
-          <BookmarkIcon category={bookshelfVariant} />
+          <BookmarkIcon
+            color={isActive ? "fill-white" : undefined}
+            category={bookshelfVariant}
+          />
         )}
         {t(bookshelfVariant)}
       </button>

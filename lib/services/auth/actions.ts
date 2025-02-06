@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { type Provider } from "@supabase/supabase-js";
 
+import { LoginValidator, SignupValidator } from "~/lib/validations/auth";
 import ROUTES from "~/utils/routes";
 
 import { errorHandler } from "../../errorHandler";
@@ -35,22 +36,17 @@ export async function providerAuth(provider: Provider) {
   }
 }
 
-export async function login(
-  captchaToken: string,
-  formData: {
-    email: string;
-    password: string;
-  },
-) {
+export async function login(captchaToken: string, formData: unknown) {
   try {
+    const validData = LoginValidator.parse(formData);
+
+    const supabase = await createClient();
     if (captchaToken === "") {
       throw new Error(ErrorsToTranslate.AUTH.CAPTCHA_WAS_NOT_SOLVED);
     }
-
-    const supabase = await createClient();
     const { error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
+      email: validData.email,
+      password: validData.password,
       options: { captchaToken: captchaToken },
     });
 
@@ -78,27 +74,24 @@ export async function demoLogin() {
   }
 }
 
-export async function signUp(
-  captchaToken: string,
-  formData: {
-    email: string;
-    password: string;
-    repeat_password: string;
-  },
-) {
-  try {
-    if (captchaToken === "") {
-      throw new Error(ErrorsToTranslate.AUTH.CAPTCHA_WAS_NOT_SOLVED);
-    }
+export async function signUp(captchaToken: string, formData: unknown) {
+  let email = "";
 
-    if (formData.password !== formData.repeat_password) {
+  try {
+    const validData = SignupValidator.parse(formData);
+    email = validData.email;
+
+    if (validData.password !== validData.repeat_password) {
       throw new Error(ErrorsToTranslate.AUTH.PASSWORDS_ARE_NOT_THE_SAME);
     }
 
     const supabase = await createClient();
+    if (captchaToken === "") {
+      throw new Error(ErrorsToTranslate.AUTH.CAPTCHA_WAS_NOT_SOLVED);
+    }
     const { error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
+      email: validData.email,
+      password: validData.password,
       options: { captchaToken: captchaToken },
     });
 
@@ -109,7 +102,7 @@ export async function signUp(
     throw new Error(errorHandler(e));
   }
 
-  redirect(`${ROUTES.auth.signup}?checkMail=${formData.email}`);
+  if (email !== "") redirect(`${ROUTES.auth.signup}?checkMail=${email}`);
 }
 
 export async function signOut() {

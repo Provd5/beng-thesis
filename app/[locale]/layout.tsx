@@ -8,6 +8,7 @@ import { Navbar } from "~/components/Links/Navbar/Navbar";
 import { DarkModeInitializer } from "~/components/ui/DarkModeInitializer";
 import { ToasterComponent } from "~/components/ui/ToasterComponent";
 import { type localeTypes, routing } from "~/i18n/routing";
+import { cn } from "~/utils/cn";
 
 import "~/styles/globals.css";
 
@@ -77,7 +78,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={validLocale} className={`${quicksandFont.className} dark`}>
+    <html lang={validLocale} className={cn(quicksandFont.className, "dark")}>
       <body className="bg-gradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-colors-text antialiased selection:bg-colors-accent selection:text-white md:flex-col">
         <DarkModeInitializer />
 

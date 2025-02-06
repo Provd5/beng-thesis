@@ -9,7 +9,7 @@ import { ButtonWhite } from "../ui/Buttons";
 
 export const DemoLogin: FC = () => {
   return (
-    <div className="absolute bottom-3 left-3">
+    <div className="nav-padding absolute bottom-3 left-3">
       <ButtonWhite
         size="xs"
         onClick={async () => {

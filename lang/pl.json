@@ -122,9 +122,9 @@
     "Auth": {
       "logIn": "Zaloguj się",
       "signUp": "Stwórz konto",
-      "with": "przez",
-      "logIn/signUp with email and password": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} za pomocą adresu email i hasła",
-      "logIn/signUp with provider": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Zaloguj się/Stwórz konto}} przez dostawcę",
+      "logIn/signUp with password": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Kontynuuj}} używając hasła",
+      "logIn/signUp with": "{view, select, logIn {Zaloguj się przez} signUp {Zarejestruj się z} other {Kontynuuj za pomocą}}",
+      "logIn/signUp with provider": "{view, select, logIn {Zaloguj się} signUp {Stwórz konto} other {Kontynuuj}} używając dostawcy",
       "terms of service": "Logując się, wyrażasz zgodę na <Link>nasze warunki świadczenia usług</Link>.",
       "email:": "Adres email:",
       "password:": "Hasło:",

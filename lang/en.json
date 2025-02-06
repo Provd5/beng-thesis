@@ -122,9 +122,9 @@
     "Auth": {
       "logIn": "Log in",
       "signUp": "Sign up",
-      "with": "with",
-      "logIn/signUp with email and password": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with email and password",
-      "logIn/signUp with provider": "{view, select, logIn {Log in} signUp {Sign up} other {Log in/Sign up}} with provider",
+      "logIn/signUp with password": "{view, select, logIn {Log in} signUp {Sign up} other {Continue}} using password",
+      "logIn/signUp with": "{view, select, logIn {Sign in with} signUp {Sign up with} other {Continue with}}",
+      "logIn/signUp with provider": "{view, select, logIn {Log in} signUp {Sign up} other {Continue}} using provider",
       "terms of service": "By logging in, you agree to <Link>our terms of service</Link>.",
       "email:": "Email:",
       "password:": "Password:",

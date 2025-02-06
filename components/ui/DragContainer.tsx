@@ -10,6 +10,7 @@ interface DragContainerProps {
   children: React.ReactNode;
   arrowSize?: "sm" | "default";
   containerClassName?: string;
+  innerContainerClassName?: string;
   arrowsClassName?: string;
 }
 
@@ -17,6 +18,7 @@ export const DragContainer: FC<DragContainerProps> = ({
   children,
   arrowSize = "default",
   containerClassName,
+  innerContainerClassName,
   arrowsClassName,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -57,12 +59,12 @@ export const DragContainer: FC<DragContainerProps> = ({
     "hidden md:block rounded-full drop-shadow-icon text-white transition-all bg-colors-primary hover:scale-105 hover:bg-colors-accent";
 
   return (
-    <div className="relative flex">
+    <div className={cn("relative flex", containerClassName)}>
       <div
         ref={containerRef}
         className={cn(
           "flex w-fit max-w-full overflow-x-auto overflow-y-hidden",
-          containerClassName
+          innerContainerClassName,
         )}
       >
         {children}
@@ -78,7 +80,7 @@ export const DragContainer: FC<DragContainerProps> = ({
                 renderLeftButton
                   ? "pointer-events-auto opacity-100"
                   : "pointer-events-none opacity-0",
-                arrowsClassName
+                arrowsClassName,
               )}
               onClick={() => handleClickToScroll(-256)}
             >
@@ -94,7 +96,7 @@ export const DragContainer: FC<DragContainerProps> = ({
                 renderRightButton
                   ? "pointer-events-auto opacity-100"
                   : "pointer-events-none opacity-0",
-                arrowsClassName
+                arrowsClassName,
               )}
               onClick={() => handleClickToScroll(256)}
             >
