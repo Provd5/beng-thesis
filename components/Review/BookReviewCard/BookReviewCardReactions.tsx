@@ -1,25 +1,22 @@
 import type { FC } from "react";
 
-import { getReactions } from "~/lib/services/review/queries";
-import { getSessionUser } from "~/lib/services/session/queries";
+import { type BookshelfReviewsInterface } from "~/types/data/bookshelf";
 
 import { BookReviewCardReactionsLabel } from "./BookReviewCardReactionsLabel";
 
 interface BookReviewCardReactionsProps {
-  reviewId: string;
+  reviewReactions: BookshelfReviewsInterface["review_reaction"];
 }
 
 export const BookReviewCardReactions: FC<
   BookReviewCardReactionsProps
-> = async ({ reviewId }) => {
-  const sessionUser = await getSessionUser();
-  const reactions = await getReactions(sessionUser?.id, reviewId);
-
-  if (!(reactions.upQuantity > 0)) return;
+> = async ({ reviewReactions }) => {
+  const upQuantity = reviewReactions?.filter((r) => r.reaction === "OK").length;
+  if (!(upQuantity > 0)) return;
 
   return (
     <div className="text-xs text-colors-text">
-      <BookReviewCardReactionsLabel upReactions={reactions.upQuantity} />
+      <BookReviewCardReactionsLabel upReactions={upQuantity} />
     </div>
   );
 };

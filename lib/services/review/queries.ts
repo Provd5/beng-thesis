@@ -4,7 +4,6 @@ import { unstable_cache } from "next/cache";
 
 import {
   type GetReviewInterface,
-  type GetReviewReactionInterface,
   type ReviewInterface,
 } from "~/types/data/review";
 import { type GetDataList } from "~/types/list";
@@ -12,7 +11,6 @@ import { SortReviewsArray } from "~/types/orderArrays";
 import { type SortReviewsType } from "~/types/sort";
 
 import { db } from "~/lib/db";
-import { errorHandler } from "~/lib/errorHandler";
 import { totalPages } from "~/lib/utils/totalPages";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
@@ -27,7 +25,7 @@ export const getReviewQuantity = unstable_cache(
 
       return quantity;
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return 0;
     }
   },
   ["review-quantity"],
@@ -93,7 +91,13 @@ export const getAllReviews = unstable_cache(
         data: reviews,
       };
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return {
+        page: 0,
+        totalPages: 0,
+        allItems: 0,
+        itemsPerPage: 0,
+        data: [],
+      };
     }
   },
   ["all-reviews"],
@@ -114,52 +118,9 @@ export const getReview = unstable_cache(
 
       return review;
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return null;
     }
   },
   ["review"],
   { revalidate: 60 * 60 * 2, tags: ["review"] }, // two hours
-);
-
-export const getReactions = unstable_cache(
-  async (
-    sessionId: string | undefined,
-    reviewId: string,
-  ): Promise<GetReviewReactionInterface> => {
-    try {
-      const [upQuantity, downQuantity, sessionReaction] = await Promise.all([
-        db.review_reaction.count({
-          where: {
-            review_id: reviewId,
-            reaction: "OK",
-          },
-        }),
-        db.review_reaction.count({
-          where: {
-            review_id: reviewId,
-            reaction: "MEH",
-          },
-        }),
-        sessionId
-          ? db.review_reaction.findFirst({
-              where: {
-                review_id: reviewId,
-                user_id: sessionId,
-              },
-            })
-          : undefined,
-      ]);
-
-      return {
-        upQuantity,
-        downQuantity,
-        sessionReaction:
-          sessionReaction === null ? null : sessionReaction?.reaction,
-      };
-    } catch (e) {
-      throw new Error(errorHandler(e));
-    }
-  },
-  ["reactions"],
-  { revalidate: 60 * 60 * 2, tags: ["reactions"] }, // two hours
 );

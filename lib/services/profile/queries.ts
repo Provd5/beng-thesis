@@ -14,7 +14,6 @@ import {
 } from "~/types/sort";
 
 import { db } from "~/lib/db";
-import { errorHandler } from "~/lib/errorHandler";
 import { profileSelector } from "~/lib/utils/prismaSelectors";
 import { totalPages } from "~/lib/utils/totalPages";
 import { transformProfileData } from "~/lib/utils/transformProfileData";
@@ -37,7 +36,7 @@ export const getProfileQuantity = unstable_cache(
 
       return quantity;
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return 0;
     }
   },
   ["profile-quantity"],
@@ -107,7 +106,13 @@ export const getAllProfiles = unstable_cache(
         data: transformedData,
       };
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return {
+        page: 0,
+        totalPages: 0,
+        allItems: 0,
+        itemsPerPage: 0,
+        data: [],
+      };
     }
   },
   ["all-profiles"],
@@ -139,7 +144,7 @@ export const getProfile = unstable_cache(
 
       return transformedData;
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return null;
     }
   },
   ["profile"],
@@ -173,7 +178,7 @@ export const getFollowQuantity = unstable_cache(
 
       return quantity;
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return 0;
     }
   },
   ["follow-quantity"],
@@ -255,7 +260,13 @@ export const getFollowProfiles = unstable_cache(
         data: transformedData,
       };
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return {
+        page: 0,
+        totalPages: 0,
+        allItems: 0,
+        itemsPerPage: 0,
+        data: [],
+      };
     }
   },
   ["follow-profiles"],

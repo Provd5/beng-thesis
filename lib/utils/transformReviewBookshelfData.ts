@@ -1,22 +1,26 @@
+import { type reactionType } from "@prisma/client";
+
 import { type RawGetBookData } from "~/types/data/book";
 import { type ReviewInterface } from "~/types/data/review";
 
 export const transformReviewBookshelfData = (
   isSession: boolean,
-  data: ReviewInterface & { book: RawGetBookData }
+  data: ReviewInterface & { book: RawGetBookData } & {
+    review_reaction: { reaction: reactionType }[];
+  },
 ) => {
   const _avg_rate = parseFloat(
     (data.book.review.length > 0
       ? data.book.review.reduce(
           (accumulator, currentValue) => accumulator + currentValue.rate,
-          0
+          0,
         ) / data.book.review.length
       : 0
-    ).toFixed(1)
+    ).toFixed(1),
   );
 
   const reviewKeys = Object.keys(data).filter(
-    (key) => !["book"].includes(key)
+    (key) => !["book"].includes(key),
   ) as (keyof ReviewInterface)[];
 
   const review = reviewKeys.map((key) => {
@@ -26,8 +30,8 @@ export const transformReviewBookshelfData = (
   const bookKeys = Object.keys(data.book).filter(
     (key) =>
       !["_count", "review", "book_owned_as", "bookshelf", "liked_by"].includes(
-        key
-      )
+        key,
+      ),
   ) as (keyof Omit<
     RawGetBookData,
     "_count" | "review" | "book_owned_as" | "bookshelf" | "liked_by"
@@ -44,6 +48,7 @@ export const transformReviewBookshelfData = (
   >;
 
   const transformedData = {
+    review_reaction: data.review_reaction,
     review: reviewData,
     book: bookData,
     _count: data.book._count,

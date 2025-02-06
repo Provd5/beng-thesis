@@ -1,9 +1,6 @@
-import { type FC, Suspense } from "react";
+import { type FC } from "react";
 
-import { type GetBookInterface } from "~/types/data/book";
-import { type ReviewInterface } from "~/types/data/review";
-
-import { Loader } from "~/components/ui/Loaders/Loader";
+import { type BookshelfReviewsInterface } from "~/types/data/bookshelf";
 
 import { BookCover } from "../../Book/BookCover";
 import { LinkToBook } from "../../Links/LinkToBook";
@@ -11,7 +8,7 @@ import { BookReviewCardDetails } from "./BookReviewCardDetails";
 import { BookReviewCardReactions } from "./BookReviewCardReactions";
 
 interface BookReviewCardProps {
-  reviewData: GetBookInterface & { review: ReviewInterface };
+  reviewData: BookshelfReviewsInterface;
 }
 
 export const BookReviewCard: FC<BookReviewCardProps> = ({ reviewData }) => {
@@ -35,9 +32,9 @@ export const BookReviewCard: FC<BookReviewCardProps> = ({ reviewData }) => {
           updated_at={reviewData.review.updated_at}
         />
         {reviewData.review.text && (
-          <Suspense key={"BookReviewCardReactions"} fallback={<Loader />}>
-            <BookReviewCardReactions reviewId={reviewData.review.id} />
-          </Suspense>
+          <BookReviewCardReactions
+            reviewReactions={reviewData.review_reaction}
+          />
         )}
         {reviewData.review.text && (
           <p className="mt-1 py-1 pl-1">{reviewData.review.text}</p>

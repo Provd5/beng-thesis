@@ -4,7 +4,7 @@ import { unstable_cache } from "next/cache";
 
 import { type BookshelvesTypes } from "~/types/consts";
 import { type GetBookInterface } from "~/types/data/book";
-import { type ReviewInterface } from "~/types/data/review";
+import { type BookshelfReviewsInterface } from "~/types/data/bookshelf";
 import { type GetDataList } from "~/types/list";
 import {
   SortBookshelvesArray,
@@ -16,7 +16,6 @@ import {
 } from "~/types/sort";
 
 import { db } from "~/lib/db";
-import { errorHandler } from "~/lib/errorHandler";
 import { bookshelvesSelector } from "~/lib/utils/prismaSelectors";
 import { totalPages } from "~/lib/utils/totalPages";
 import { transformBookData } from "~/lib/utils/transformBookData";
@@ -71,7 +70,7 @@ export const getBookshelfQuantity = unstable_cache(
 
       return quantity;
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return 0;
     }
   },
   ["bookshelf-quantity"],
@@ -176,7 +175,13 @@ export const getBookshelfBooks = unstable_cache(
         data: transformedData,
       };
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return {
+        page: 0,
+        totalPages: 0,
+        allItems: 0,
+        itemsPerPage: 0,
+        data: [],
+      };
     }
   },
   ["bookshelf-books"],
@@ -188,7 +193,7 @@ export const getReviewBooks = unstable_cache(
     sessionId: string | undefined,
     profileName: string,
     searchParams: unknown,
-  ): Promise<GetDataList<GetBookInterface & { review: ReviewInterface }>> => {
+  ): Promise<GetDataList<BookshelfReviewsInterface>> => {
     const decodedProfileName = decodeURIComponent(profileName);
 
     const validSearchParams = sortParamsValidator(
@@ -222,7 +227,10 @@ export const getReviewBooks = unstable_cache(
                     ? { rate: order }
                     : { book: { [orderBy]: order } },
           where: { profile: { full_name: decodedProfileName } },
-          include: bookshelvesSelector(sessionId),
+          include: {
+            ...bookshelvesSelector(sessionId),
+            review_reaction: { select: { reaction: true } },
+          },
         }),
       ]);
 
@@ -238,7 +246,13 @@ export const getReviewBooks = unstable_cache(
         data: transformedData,
       };
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return {
+        page: 0,
+        totalPages: 0,
+        allItems: 0,
+        itemsPerPage: 0,
+        data: [],
+      };
     }
   },
   ["review-books"],

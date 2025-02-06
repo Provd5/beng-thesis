@@ -9,7 +9,6 @@ import { SortBooksArray } from "~/types/orderArrays";
 import { type SortBooksType } from "~/types/sort";
 
 import { db } from "~/lib/db";
-import { errorHandler } from "~/lib/errorHandler";
 import { bookshelfPreviewSelector } from "~/lib/utils/prismaSelectors";
 import { totalPages } from "~/lib/utils/totalPages";
 import { transformBookData } from "~/lib/utils/transformBookData";
@@ -42,7 +41,7 @@ export const getBookQuantity = unstable_cache(
 
       return quantity;
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return 0;
     }
   },
   ["book-quantity"],
@@ -124,7 +123,13 @@ export const getAllBooks = unstable_cache(
         data: transformedData,
       };
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return {
+        page: 0,
+        totalPages: 0,
+        allItems: 0,
+        itemsPerPage: 0,
+        data: [],
+      };
     }
   },
   ["all-books"],
@@ -178,7 +183,7 @@ export const getBook = unstable_cache(
 
       return transformedData;
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return null;
     }
   },
   ["book"],
@@ -199,7 +204,7 @@ export const getBookPreview = unstable_cache(
 
       return bookData;
     } catch (e) {
-      throw new Error(errorHandler(e));
+      return null;
     }
   },
   ["book-preview"],

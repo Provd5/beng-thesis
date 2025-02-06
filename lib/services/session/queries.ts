@@ -2,7 +2,6 @@
 
 import { type User } from "@supabase/supabase-js";
 
-import { errorHandler } from "~/lib/errorHandler";
 import { createClient } from "~/lib/supabase/server";
 
 export const getSessionUser = async (): Promise<User | null> => {
@@ -14,6 +13,6 @@ export const getSessionUser = async (): Promise<User | null> => {
 
     return user;
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return null;
   }
 };

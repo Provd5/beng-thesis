@@ -7,7 +7,6 @@ import {
 } from "~/types/data/statistics";
 
 import { db } from "~/lib/db";
-import { errorHandler } from "~/lib/errorHandler";
 import { bookshelfPreviewSelector } from "~/lib/utils/prismaSelectors";
 
 import { getBookshelfQuantity } from "../bookshelf/queries";
@@ -62,7 +61,16 @@ export async function getAllBookshelvesQuantity(
       other: others?._count.bookshelf || 0,
     };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return {
+      book_owned_as: 0,
+      liked_book: 0,
+      review: 0,
+      abandoned: 0,
+      already_read: 0,
+      reading: 0,
+      to_read: 0,
+      other: 0,
+    };
   }
 }
 
@@ -111,7 +119,11 @@ export async function getOwnedStatistics(
       totalOwnedBooks,
     };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return {
+      lastAdded: null,
+      updatedAt: null,
+      totalOwnedBooks: 0,
+    };
   }
 }
 
@@ -173,6 +185,12 @@ export async function getReadStatistics(
       updatedAt: lastRead?.updated_at || null,
     };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return {
+      lastRead: null,
+      mostRead: null,
+      totalRead: 0,
+      totalReadPages: 0,
+      updatedAt: null,
+    };
   }
 }

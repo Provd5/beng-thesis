@@ -37,15 +37,7 @@ export const CategoryLinksContainer: FC<CategoryLinksContainerProps> = ({
     });
   };
 
-  const SortedBookshelves = BookshelvesArray.toSorted((bookshelf) => {
-    if (bookshelf === currentBookshelf) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
-
-  return SortedBookshelves.map((bookshelfVariant) => {
+  return BookshelvesArray.map((bookshelfVariant) => {
     const bookshelfVariantAsPathname =
       convertTypeEnumToPathname(bookshelfVariant);
 

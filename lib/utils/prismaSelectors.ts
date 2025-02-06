@@ -37,7 +37,9 @@ export const bookshelvesSelector = (sessionId?: string) => {
     book: {
       include: {
         _count: { select: { review: true, liked_by: true } },
-        review: { select: { rate: true, author_id: true, created_at: true } },
+        review: {
+          select: { rate: true, author_id: true, created_at: true },
+        },
         ...(sessionId
           ? {
               book_owned_as: {
