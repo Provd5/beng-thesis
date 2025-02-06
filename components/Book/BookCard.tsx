@@ -36,7 +36,7 @@ export const BookCard: FC<BookCardProps> = ({ bookData }) => {
           )}
         </div>
       </LinkToBook>
-      <div className="mt-1 flex flex-wrap justify-center gap-2">
+      <div className="mt-1 flex flex-wrap justify-end gap-2 md:justify-center">
         <LinkToBook
           bookId={bookData.book.id}
           bookTitle={bookData.book.title}

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { type Metadata } from "next";
 
 import { Profile } from "~/components/Profile/Profile";
-import { ProfileLoader } from "~/components/ui/Loaders/Skeletons/ProfileLoader";
+import { LoadingPage } from "~/components/ui/Loaders/LoadingPage";
 
 export async function generateMetadata({
   params,
@@ -27,7 +27,7 @@ export default async function ProfileFullnameLayout({
 }) {
   const { fullname } = await params;
   return (
-    <Suspense key={`profile-${fullname}`} fallback={<ProfileLoader />}>
+    <Suspense key={`profile-${fullname}`} fallback={<LoadingPage />}>
       <Profile profileName={fullname}>{children}</Profile>
     </Suspense>
   );

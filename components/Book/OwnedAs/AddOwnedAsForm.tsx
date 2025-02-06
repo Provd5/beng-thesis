@@ -86,52 +86,54 @@ export const AddOwnedAsForm: FC<AddOwnedAsFormProps> = ({
 
   return (
     <div
-      className="relative flex h-fit min-h-[70px] w-36 cursor-pointer flex-col rounded-md bg-white/90 p-1 transition-colors hover:bg-colors-gray/10 dark:bg-black/30 hover:dark:bg-white/10"
+      className="relative flex h-fit min-h-[60px] w-[132px] cursor-pointer rounded-md bg-white/90 p-1 transition-colors hover:bg-colors-gray/10 dark:bg-black/30 hover:dark:bg-white/10"
       onClick={(e) =>
         !openModalButtonRef.current?.contains(e?.target as Node) &&
         setIsModalOpen(true)
       }
     >
-      <ButtonLink
-        ref={openModalButtonRef}
-        aria-label="open-modal-button"
-        active={isModalOpen}
-        className="self-start"
-        onClick={() => setIsModalOpen(!isModalOpen)}
-        size="default"
-      >
-        {t("owned as")}
-      </ButtonLink>
-      {isModalOpen && (
-        <ModalWrapper
-          closeModalHandler={() => setIsModalOpen(false)}
-          openModalButtonRef={openModalButtonRef}
+      <div className="flex flex-col">
+        <ButtonLink
+          ref={openModalButtonRef}
+          aria-label="open-modal-button"
+          active={isModalOpen}
+          className="self-start"
+          onClick={() => setIsModalOpen(!isModalOpen)}
+          size="default"
         >
-          <div className="flex flex-col gap-2">
-            <OwnedAsModal
-              handleAddFunc={() => handleAddOwnedAs("BOOK")}
-              ownedAs="BOOK"
-              state={ownedBookState.book}
-            />
-            <OwnedAsModal
-              handleAddFunc={() => handleAddOwnedAs("EBOOK")}
-              ownedAs="EBOOK"
-              state={ownedBookState.ebook}
-            />
-            <OwnedAsModal
-              handleAddFunc={() => handleAddOwnedAs("AUDIOBOOK")}
-              ownedAs="AUDIOBOOK"
-              state={ownedBookState.audiobook}
-            />
-          </div>
-        </ModalWrapper>
-      )}
-      <div className="mr-2 flex gap-1 self-center">
-        {ownedBookState.book && <OwnedBookIcon ownedAs="BOOK" size="sm" />}
-        {ownedBookState.ebook && <OwnedBookIcon ownedAs="EBOOK" size="sm" />}
-        {ownedBookState.audiobook && (
-          <OwnedBookIcon ownedAs="AUDIOBOOK" size="sm" />
+          {t("owned as")}
+        </ButtonLink>
+        {isModalOpen && (
+          <ModalWrapper
+            closeModalHandler={() => setIsModalOpen(false)}
+            openModalButtonRef={openModalButtonRef}
+          >
+            <div className="flex flex-col gap-2">
+              <OwnedAsModal
+                handleAddFunc={() => handleAddOwnedAs("BOOK")}
+                ownedAs="BOOK"
+                state={ownedBookState.book}
+              />
+              <OwnedAsModal
+                handleAddFunc={() => handleAddOwnedAs("EBOOK")}
+                ownedAs="EBOOK"
+                state={ownedBookState.ebook}
+              />
+              <OwnedAsModal
+                handleAddFunc={() => handleAddOwnedAs("AUDIOBOOK")}
+                ownedAs="AUDIOBOOK"
+                state={ownedBookState.audiobook}
+              />
+            </div>
+          </ModalWrapper>
         )}
+        <div className="flex gap-1 self-center">
+          {ownedBookState.book && <OwnedBookIcon ownedAs="BOOK" size="sm" />}
+          {ownedBookState.ebook && <OwnedBookIcon ownedAs="EBOOK" size="sm" />}
+          {ownedBookState.audiobook && (
+            <OwnedBookIcon ownedAs="AUDIOBOOK" size="sm" />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -17,7 +17,7 @@ export async function generateMetadata({
   };
 }
 
-export default function LoginPage({}) {
+export default async function LoginPage() {
   return (
     <>
       <AuthPage view="logIn" />

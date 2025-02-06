@@ -16,6 +16,6 @@ export async function generateMetadata({
   };
 }
 
-export default function SignUpPage({}) {
+export default async function SignUpPage() {
   return <AuthPage view="signUp" />;
 }

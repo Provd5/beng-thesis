@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { LoadingPage } from "~/components/ui/Loaders/LoadingPage";
 import { type localeTypes, redirect } from "~/i18n/routing";
 import { getProfile } from "~/lib/services/profile/queries";
 import { getSessionUser } from "~/lib/services/session/queries";
@@ -19,4 +20,6 @@ export default async function ProfileRedirectPage({
   if (!sessionProfile?.full_name) notFound();
 
   redirect({ href: ROUTES.profile.root(sessionProfile.full_name), locale });
+
+  return <LoadingPage />;
 }

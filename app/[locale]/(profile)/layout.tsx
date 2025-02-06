@@ -13,10 +13,7 @@ export default async function ProfileLayout({
 }) {
   const { locale } = await params;
   const sessionUser = await getSessionUser();
-
-  if (!sessionUser) {
-    redirect({ href: ROUTES.auth.login, locale });
-  }
+  if (!sessionUser) redirect({ href: ROUTES.auth.login, locale });
 
   return (
     <main className="grow-1 relative flex h-full flex-col overflow-x-hidden overflow-y-scroll scroll-smooth">

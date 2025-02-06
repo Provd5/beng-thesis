@@ -25,8 +25,8 @@ export const Book: FC<BookProps> = async ({ bookId, children }) => {
   if (!bookData) notFound();
 
   return (
-    <div className="mt-3 flex flex-col gap-8 text-sm">
-      <div className="flex flex-col gap-x-10 gap-y-8 px-1 md:px-6">
+    <div className="mt-3 flex flex-col gap-6 text-sm">
+      <div className="flex flex-col gap-3 px-1 md:px-6">
         <div className="flex gap-3">
           <BookCover size="lg" coverUrl={bookData.book.thumbnail_url} />
 
@@ -77,7 +77,7 @@ export const Book: FC<BookProps> = async ({ bookId, children }) => {
             />
           </div>
         </div>
-        <div className="flex w-full flex-wrap justify-center gap-2 self-start">
+        <div className="flex w-full flex-wrap justify-end gap-2 md:justify-center">
           <ManageReviews
             reviewsQuantity={bookData._count.review}
             reviewData={bookData.review}

@@ -50,13 +50,13 @@ export async function generateMetadata({
     openGraph: {
       title: "Booksphere",
       description: t("page description"),
-      images: ["og-main.jpg"],
+      images: ["/og-main.jpg"],
     },
     twitter: {
       title: "Booksphere",
       description: t("page description"),
       card: "summary_large_image",
-      images: ["twitter-large.jpg"],
+      images: ["/twitter-large.jpg"],
     },
   };
 }

@@ -214,9 +214,7 @@
       "description:": "Opis:"
     },
     "ManageLikes": {
-      "likes": "Polubienia",
-      "liked": "polubiono",
-      "like": "polub"
+      "likes": "Lubi to"
     },
     "ManageBookshelf": {
       "on a shelf": "Na półce",
@@ -230,14 +228,13 @@
       "ok": "ok"
     },
     "ManageOwnedAs": {
-      "owned as": "Posiadasz jako",
+      "owned as": "Posiadasz",
       "BOOK": "Książka",
       "EBOOK": "E-book",
       "AUDIOBOOK": "Audiobook"
     },
     "ManageReviews": {
-      "reviews": "Recenzje",
-      "write yours": "napisz swoją"
+      "reviews": "Recenzji"
     }
   },
 
@@ -245,7 +242,7 @@
     "CreateReview": {
       "log in to add your review": "Zaloguj się, aby dodać swoją recenzję",
       "express your opinion": "Wyraź swoją opinię...",
-      "your rate": "Twoja ocena",
+      "your rate": "Oceniono",
       "all reviews": "Wszystkie recenzje",
       "add": "Dodaj",
       "edit": "Edytuj",
@@ -262,7 +259,7 @@
       "likes it": "lubi to"
     },
     "BookReviewCard": {
-      "your rate:": "Twoja ocena:",
+      "your rate:": "Oceniono:",
       "posted:": "Zamieszczono:",
       "edited:": "Edytowano:",
       "users found this review helpful": "{numUsers, plural, =1 {<span># osoba</span> uznała} few {<span># osoby</span> uznały} other {<span># osób</span> uznało}} tę recenzję za pomocną"

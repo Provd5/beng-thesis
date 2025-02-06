@@ -118,7 +118,7 @@ const ButtonLink = forwardRef<
         ref={ref}
         disabled={loading}
         className={cn(
-          "px-1 py-0.5",
+          "px-1",
           sharedClass,
           defaultColor && "text-colors-primary",
           sizeClass[size],

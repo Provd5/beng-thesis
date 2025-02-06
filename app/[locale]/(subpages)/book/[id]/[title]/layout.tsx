@@ -3,7 +3,7 @@ import { type Metadata } from "next";
 
 import { Book } from "~/components/Book/Book";
 import { BackFrom } from "~/components/Links/BackCategoryLink";
-import { BookLoader } from "~/components/ui/Loaders/Skeletons/BookLoader";
+import { LoadingPage } from "~/components/ui/Loaders/LoadingPage";
 import { getBookPreview } from "~/lib/services/book/queries";
 
 export async function generateMetadata({
@@ -39,7 +39,7 @@ export default async function BookLayout({
   return (
     <div className="container pb-12 pt-8">
       <BackFrom />
-      <Suspense key={"Book"} fallback={<BookLoader />}>
+      <Suspense key={"Book"} fallback={<LoadingPage />}>
         <Book bookId={id}>{children}</Book>
       </Suspense>
     </div>

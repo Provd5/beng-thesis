@@ -214,9 +214,7 @@
       "description:": "Description:"
     },
     "ManageLikes": {
-      "likes": "Likes",
-      "liked": "liked",
-      "like": "like"
+      "likes": "Likes"
     },
     "ManageBookshelf": {
       "on a shelf": "On a shelf",
@@ -236,8 +234,7 @@
       "AUDIOBOOK": "Audiobook"
     },
     "ManageReviews": {
-      "reviews": "Reviews",
-      "write yours": "write yours"
+      "reviews": "Reviews"
     }
   },
 
@@ -245,7 +242,7 @@
     "CreateReview": {
       "log in to add your review": "Log in to add your review",
       "express your opinion": "Express your opinion...",
-      "your rate": "Your rate",
+      "your rate": "Rated",
       "all reviews": "All reviews",
       "add": "Add",
       "edit": "Edit",
@@ -262,7 +259,7 @@
       "likes it": "likes it"
     },
     "BookReviewCard": {
-      "your rate:": "Your rate:",
+      "your rate:": "Rated:",
       "posted:": "Posted:",
       "edited:": "Edited:",
       "users found this review helpful": "<span>{numUsers, plural, =1 {# user} other {# users}}</span> found this review helpful"
