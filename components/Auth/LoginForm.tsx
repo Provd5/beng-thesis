@@ -41,7 +41,8 @@ export const LoginForm: FC<LoginFormProps> = ({
 
   const onSubmit = async (formData: unknown) => {
     try {
-      await login(captchaToken, formData);
+      const res = await login(captchaToken, formData);
+      if (!res.success) throw new Error(res.error);
       toast.success(t("we will redirect you to your profile in a moment"));
     } catch (error) {
       toast.error(te(translatableError(error)));

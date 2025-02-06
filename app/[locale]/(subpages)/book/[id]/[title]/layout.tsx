@@ -21,9 +21,9 @@ export async function generateMetadata({
 
   return {
     title: bookData.title,
-    openGraph: bookData.thumbnail_url
-      ? { images: { url: bookData.thumbnail_url } }
-      : {},
+    openGraph: {
+      images: bookData.thumbnail_url ? [bookData.thumbnail_url] : undefined,
+    },
   };
 }
 

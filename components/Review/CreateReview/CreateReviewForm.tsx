@@ -57,7 +57,8 @@ export const CreateReviewForm: FC<CreateReviewFormProps> = ({
     try {
       const validData = CreateReviewValidator.parse(formData);
       const res = await postReview(bookId, validData);
-      if (res.success) toast.success(te(ErrorsToTranslate.SUCCESS));
+      if (!res.success) throw new Error(res.error);
+      toast.success(te(ErrorsToTranslate.SUCCESS));
     } catch (e) {
       toast.error(te(translatableError(e)));
     }

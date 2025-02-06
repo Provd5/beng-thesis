@@ -91,7 +91,8 @@ export const HandleSubmitReaction: FC<HandleSubmitReactionProps> = ({
                 },
       );
 
-      await postReaction(reviewId, validReaction);
+      const res = await postReaction(reviewId, validReaction);
+      if (!res.success) throw new Error(res.error);
     } catch (e) {
       toast.error(te(translatableError(e)));
     }

@@ -29,8 +29,10 @@ export const LogoutButton: FC = () => {
   const handleSignOut = () => {
     try {
       startTransition(async () => {
-        await signOut();
+        const res = await signOut();
+        if (!res.success) throw new Error(res.error);
       });
+      toast.success(t("logged out"));
     } catch (error) {
       toast.error(te(translatableError(error)));
     }

@@ -1,7 +1,7 @@
 import { type Metadata } from "next";
 import { Quicksand } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { getMessages } from "next-intl/server";
 
 import { Navbar } from "~/components/Links/Navbar/Navbar";
@@ -40,9 +40,6 @@ export async function generateMetadata({
     },
     description: t("page description"),
 
-    twitter: {
-      card: "summary_large_image",
-    },
     alternates: {
       canonical: "/",
       languages: {
@@ -51,13 +48,15 @@ export async function generateMetadata({
       },
     },
     openGraph: {
-      title: {
-        default: "Booksphere",
-        template: "%s | Booksphere",
-      },
+      title: "Booksphere",
       description: t("page description"),
-      siteName: "Booksphere",
-      type: "website",
+      images: ["og-main.jpg"],
+    },
+    twitter: {
+      title: "Booksphere",
+      description: t("page description"),
+      card: "summary_large_image",
+      images: ["twitter-large.jpg"],
     },
   };
 }
@@ -74,7 +73,6 @@ export default async function RootLayout({
     ? locale
     : routing.defaultLocale;
 
-  setRequestLocale(validLocale);
   const messages = await getMessages();
 
   return (

@@ -59,7 +59,8 @@ export const Providers: FC<ProvidersProps> = ({ view }) => {
     try {
       setSelectedProvider(provider);
       startTransition(async () => {
-        await providerAuth(provider);
+        const res = await providerAuth(provider);
+        if (!res.success) throw new Error(res.error);
         toast.success(
           t("we will redirect you to the provider's website in a moment"),
         );

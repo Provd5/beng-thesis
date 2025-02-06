@@ -33,7 +33,8 @@ export const FollowForm: FC<FollowFormProps> = ({ userId, isFollowed }) => {
     setFollowState(!followState);
 
     try {
-      await postFollow(userId);
+      const res = await postFollow(userId);
+      if (!res.success) throw new Error(res.error);
     } catch (e) {
       setFollowState(followState);
       toast.error(te(translatableError(e)));

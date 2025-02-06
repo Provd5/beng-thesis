@@ -27,14 +27,14 @@ import { ReadQuantitySetter } from "./ReadQuantitySetter";
 interface ChangeBookshelfFormProps {
   bookId: string;
   bookshelfData: ChangeBookshelfValidatorType;
-  setBookshlefState: Dispatch<SetStateAction<ChangeBookshelfValidatorType>>;
+  setBookshelfState: Dispatch<SetStateAction<ChangeBookshelfValidatorType>>;
   closeModal: () => void;
 }
 
 export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
   bookId,
   bookshelfData,
-  setBookshlefState,
+  setBookshelfState,
   closeModal,
 }) => {
   const t = useTranslations("Book.ManageBookshelf");
@@ -73,16 +73,17 @@ export const ChangeBookshelfForm: FC<ChangeBookshelfFormProps> = ({
       const filteredData = Object.fromEntries(
         Object.entries(validData).filter(([_, value]) => value !== undefined),
       );
-      setBookshlefState({
+      setBookshelfState({
         ...newBookshelfData,
         ...filteredData,
       });
 
-      await changeBookshelf(bookId, validData);
+      const res = await changeBookshelf(bookId, validData);
+      if (!res.success) throw new Error(res.error);
       setIsFormOpen(false);
       closeModal();
     } catch (e) {
-      setBookshlefState(bookshelfData);
+      setBookshelfState(bookshelfData);
       toast.error(te(translatableError(e)));
     }
   });

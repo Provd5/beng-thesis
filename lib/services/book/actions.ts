@@ -2,6 +2,8 @@
 
 import { revalidateTag } from "next/cache";
 
+import { type ActionResponseType } from "~/types/actions";
+
 import { db } from "~/lib/db";
 import { errorHandler } from "~/lib/errorHandler";
 import { OwnedAsValidator } from "~/lib/validations/book";
@@ -10,7 +12,7 @@ import { UuidValidator } from "~/lib/validations/others";
 
 import { getSessionUser } from "../session/queries";
 
-export async function postLike(bookId: unknown): Promise<{ success: boolean }> {
+export async function postLike(bookId: unknown): ActionResponseType {
   try {
     const sessionUser = await getSessionUser();
 
@@ -47,14 +49,14 @@ export async function postLike(bookId: unknown): Promise<{ success: boolean }> {
     revalidateTag("bookshelf-books");
     return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }
 
 export async function postOwnedAs(
   bookId: unknown,
   ownedAs: unknown,
-): Promise<{ success: boolean }> {
+): ActionResponseType {
   try {
     const sessionUser = await getSessionUser();
 
@@ -100,6 +102,6 @@ export async function postOwnedAs(
     revalidateTag("bookshelf-books");
     return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }

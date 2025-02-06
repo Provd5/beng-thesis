@@ -2,6 +2,8 @@
 
 import { revalidateTag } from "next/cache";
 
+import { type ActionResponseType } from "~/types/actions";
+
 import { db } from "~/lib/db";
 import { errorHandler } from "~/lib/errorHandler";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
@@ -16,7 +18,7 @@ import { getSessionUser } from "../session/queries";
 export async function postReaction(
   reviewId: unknown,
   reaction: unknown,
-): Promise<{ success: boolean }> {
+): ActionResponseType {
   try {
     const sessionUser = await getSessionUser();
 
@@ -64,14 +66,14 @@ export async function postReaction(
     revalidateTag("all-reviews");
     return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }
 
 export async function postReview(
   bookId: unknown,
   formData: unknown,
-): Promise<{ success: boolean }> {
+): ActionResponseType {
   try {
     const sessionUser = await getSessionUser();
 
@@ -119,13 +121,11 @@ export async function postReview(
     revalidateTag("profile");
     return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }
 
-export async function deleteReview(
-  reviewId: unknown,
-): Promise<{ success: boolean }> {
+export async function deleteReview(reviewId: unknown): ActionResponseType {
   try {
     const sessionUser = await getSessionUser();
 
@@ -148,6 +148,6 @@ export async function deleteReview(
     revalidateTag("profile");
     return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }

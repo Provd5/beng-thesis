@@ -41,7 +41,8 @@ export const SignupForm: FC<SignupFormProps> = ({
 
   const onSubmit = async (formData: unknown) => {
     try {
-      await signUp(captchaToken, formData);
+      const res = await signUp(captchaToken, formData);
+      if (!res.success) throw new Error(res.error);
     } catch (error) {
       toast.error(te(translatableError(error)));
     } finally {

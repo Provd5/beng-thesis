@@ -3,6 +3,8 @@
 import { redirect } from "next/navigation";
 import { type Provider } from "@supabase/supabase-js";
 
+import { type ActionResponseType } from "~/types/actions";
+
 import { LoginValidator, SignupValidator } from "~/lib/validations/auth";
 import ROUTES from "~/utils/routes";
 
@@ -10,7 +12,7 @@ import { errorHandler } from "../../errorHandler";
 import { createClient } from "../../supabase/server";
 import { ErrorsToTranslate } from "../../validations/errorsEnums";
 
-export async function providerAuth(provider: Provider) {
+export async function providerAuth(provider: Provider): ActionResponseType {
   let dataUrl: string;
   try {
     const origin = process.env.SITE_URL!;
@@ -28,15 +30,19 @@ export async function providerAuth(provider: Provider) {
 
     dataUrl = data.url;
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 
   if (dataUrl) {
     redirect(dataUrl);
   }
+  return { success: true };
 }
 
-export async function login(captchaToken: string, formData: unknown) {
+export async function login(
+  captchaToken: string,
+  formData: unknown,
+): ActionResponseType {
   try {
     const validData = LoginValidator.parse(formData);
 
@@ -53,12 +59,14 @@ export async function login(captchaToken: string, formData: unknown) {
     if (error) {
       throw new Error(error.message);
     }
+
+    return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }
 
-export async function demoLogin() {
+export async function demoLogin(): ActionResponseType {
   try {
     const supabase = await createClient();
     const { error } = await supabase.auth.signInWithPassword({
@@ -69,12 +77,17 @@ export async function demoLogin() {
     if (error) {
       throw new Error(error.message);
     }
+
+    return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }
 
-export async function signUp(captchaToken: string, formData: unknown) {
+export async function signUp(
+  captchaToken: string,
+  formData: unknown,
+): ActionResponseType {
   let email = "";
 
   try {
@@ -99,13 +112,14 @@ export async function signUp(captchaToken: string, formData: unknown) {
       throw new Error(error?.message);
     }
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 
   if (email !== "") redirect(`${ROUTES.auth.signup}?checkMail=${email}`);
+  return { success: true };
 }
 
-export async function signOut() {
+export async function signOut(): ActionResponseType {
   try {
     const supabase = await createClient();
     const { error } = await supabase.auth.signOut({ scope: "local" });
@@ -113,7 +127,9 @@ export async function signOut() {
     if (error) {
       throw new Error(error?.message);
     }
+
+    return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }

@@ -48,7 +48,8 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
           : likeState.likesQuantity + 1,
       });
 
-      await postLike(bookId);
+      const res = await postLike(bookId);
+      if (!res.success) throw new Error(res.error);
     } catch (e) {
       setLikeState(likeState);
       toast.error(te(translatableError(e)));

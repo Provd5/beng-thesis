@@ -38,20 +38,20 @@ export const DeleteReviewForm: FC<DeleteReviewFormProps> = ({ reviewId }) => {
     try {
       startTransition(async () => {
         const res = await deleteReview(reviewId);
-        if (res.success) {
-          const reviewTextarea = document.getElementById(
-            "review-text",
-          ) as HTMLTextAreaElement | null;
-          const reviewRateSelect = document.getElementById(
-            "review-rate",
-          ) as HTMLSelectElement | null;
+        if (!res.success) throw new Error(res.error);
 
-          if (reviewTextarea && reviewRateSelect) {
-            reviewTextarea.value = "";
-            reviewRateSelect.value = "";
-          }
-          toast.success(te(ErrorsToTranslate.SUCCESS));
+        const reviewTextarea = document.getElementById(
+          "review-text",
+        ) as HTMLTextAreaElement | null;
+        const reviewRateSelect = document.getElementById(
+          "review-rate",
+        ) as HTMLSelectElement | null;
+
+        if (reviewTextarea && reviewRateSelect) {
+          reviewTextarea.value = "";
+          reviewRateSelect.value = "";
         }
+        toast.success(te(ErrorsToTranslate.SUCCESS));
       });
     } catch (e) {
       toast.error(te(translatableError(e)));

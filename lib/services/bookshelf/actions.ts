@@ -2,6 +2,8 @@
 
 import { revalidateTag } from "next/cache";
 
+import { type ActionResponseType } from "~/types/actions";
+
 import { db } from "~/lib/db";
 import { errorHandler } from "~/lib/errorHandler";
 import { ChangeBookshelfValidator } from "~/lib/validations/bookshelf";
@@ -13,7 +15,7 @@ import { getSessionUser } from "../session/queries";
 export async function changeBookshelf(
   bookId: unknown,
   formData: unknown,
-): Promise<{ success: boolean }> {
+): ActionResponseType {
   try {
     const sessionUser = await getSessionUser();
 
@@ -61,6 +63,6 @@ export async function changeBookshelf(
     revalidateTag("bookshelf-books");
     return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }

@@ -179,7 +179,6 @@ export const getBook = unstable_cache(
       return transformedData;
     } catch (e) {
       throw new Error(errorHandler(e));
-    } finally {
     }
   },
   ["book"],
@@ -201,7 +200,6 @@ export const getBookPreview = unstable_cache(
       return bookData;
     } catch (e) {
       throw new Error(errorHandler(e));
-    } finally {
     }
   },
   ["book-preview"],

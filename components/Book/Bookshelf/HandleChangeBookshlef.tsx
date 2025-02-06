@@ -37,7 +37,7 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
     read_quantity: bookshelfData?.read_quantity,
   };
 
-  const [bookshlefState, setBookshlefState] =
+  const [bookshelfState, setBookshelfState] =
     useState<ChangeBookshelfValidatorType>(formattedData);
 
   return (
@@ -49,16 +49,16 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
       }
     >
       <div className="relative flex h-fit">
-        {bookshlefState?.bookshelf ? (
-          <BookmarkIcon category={bookshlefState.bookshelf} size="lg" />
+        {bookshelfState?.bookshelf ? (
+          <BookmarkIcon category={bookshelfState.bookshelf} size="lg" />
         ) : (
           <BookmarkIcon Icon={BsBookmarkPlus} color="gradient" size="lg" />
         )}
-        {bookshlefState?.bookshelf === "ALREADY_READ" &&
-          !!bookshlefState.read_quantity &&
-          bookshlefState.read_quantity > 1 && (
+        {bookshelfState?.bookshelf === "ALREADY_READ" &&
+          !!bookshelfState.read_quantity &&
+          bookshelfState.read_quantity > 1 && (
             <div className="absolute -bottom-0.5 -right-0.5 flex size-5 items-center justify-center rounded-full bg-colors-red text-xs">
-              <p className="text-white">×{bookshlefState.read_quantity}</p>
+              <p className="text-white">×{bookshelfState.read_quantity}</p>
             </div>
           )}
       </div>
@@ -75,12 +75,12 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
         </ButtonLink>
         <div className="mr-1 flex flex-col items-end">
           <p className="-mt-1 whitespace-nowrap text-sm">
-            {bookshlefState?.bookshelf && tb(bookshlefState.bookshelf)}
+            {bookshelfState?.bookshelf && tb(bookshelfState.bookshelf)}
           </p>
 
-          {bookshlefState?.bookshelf && bookshlefState.updated_at && (
+          {bookshelfState?.bookshelf && bookshelfState.updated_at && (
             <p className="whitespace-nowrap text-xs text-colors-text">
-              {dateFormater(bookshlefState.updated_at)}
+              {dateFormater(bookshelfState.updated_at)}
             </p>
           )}
         </div>
@@ -93,8 +93,8 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
           <ChangeBookshelfForm
             key={`ChangeBookshelfForm-${bookId}`}
             bookId={bookId}
-            bookshelfData={bookshlefState}
-            setBookshlefState={setBookshlefState}
+            bookshelfData={bookshelfState}
+            setBookshelfState={setBookshelfState}
             closeModal={() => setIsModalOpen(false)}
           />
         </ModalWrapper>

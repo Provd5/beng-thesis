@@ -14,8 +14,11 @@ export const DemoLogin: FC = () => {
         size="xs"
         onClick={async () => {
           try {
-            await demoLogin();
-            toast.success("we will redirect you to your profile in a moment");
+            const res = await demoLogin();
+            if (!res.success) {
+              throw new Error(res.error);
+            }
+            toast.success("Redirecting to demo profile");
           } catch (error) {
             console.error(error);
           }

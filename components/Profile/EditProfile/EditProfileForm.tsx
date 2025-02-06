@@ -51,10 +51,9 @@ export const EditProfileForm: FC<EditProfileFormProps> = ({ profileData }) => {
   const onSubmit = handleSubmit(async (formData) => {
     try {
       const validData = EditProfileValidator.parse(formData);
-
       const res = await editProfile(validData);
-
-      if (res.success) toast.success(te(ErrorsToTranslate.SUCCESS));
+      if (!res.success) throw new Error(res.error);
+      toast.success(te(ErrorsToTranslate.SUCCESS));
     } catch (e) {
       toast.error(te(translatableError(e)));
     }

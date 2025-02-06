@@ -2,6 +2,8 @@
 
 import { revalidateTag } from "next/cache";
 
+import { type ActionResponseType } from "~/types/actions";
+
 import { db } from "~/lib/db";
 import { errorHandler } from "~/lib/errorHandler";
 import { ErrorsToTranslate } from "~/lib/validations/errorsEnums";
@@ -10,9 +12,7 @@ import { EditProfileValidator } from "~/lib/validations/profile";
 
 import { getSessionUser } from "../session/queries";
 
-export async function postFollow(
-  profileId: unknown,
-): Promise<{ success: boolean }> {
+export async function postFollow(profileId: unknown): ActionResponseType {
   try {
     const sessionUser = await getSessionUser();
 
@@ -56,13 +56,11 @@ export async function postFollow(
     revalidateTag("follow-profiles");
     return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }
 
-export async function editProfile(
-  formData: unknown,
-): Promise<{ success: boolean }> {
+export async function editProfile(formData: unknown): ActionResponseType {
   try {
     const sessionUser = await getSessionUser();
 
@@ -101,6 +99,6 @@ export async function editProfile(
     revalidateTag("profile");
     return { success: true };
   } catch (e) {
-    throw new Error(errorHandler(e));
+    return { success: false, error: errorHandler(e) };
   }
 }

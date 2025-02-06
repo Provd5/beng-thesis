@@ -76,7 +76,8 @@ export const AddOwnedAsForm: FC<AddOwnedAsFormProps> = ({
             : ownedBookState.audiobook,
       });
 
-      await postOwnedAs(bookId, ownedAs);
+      const res = await postOwnedAs(bookId, ownedAs);
+      if (!res.success) throw new Error(res.error);
     } catch (e) {
       setOwnedBookState(ownedBookState);
       toast.error(te(translatableError(e)));
