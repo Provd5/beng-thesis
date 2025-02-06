@@ -1,4 +1,4 @@
-import { type FC, Suspense } from "react";
+import { type FC } from "react";
 import { notFound } from "next/navigation";
 
 import { HIGHEST_REVIEW_RATE } from "~/types/data/review";
@@ -78,17 +78,10 @@ export const Book: FC<BookProps> = async ({ bookId, children }) => {
           </div>
         </div>
         <div className="flex w-full flex-wrap justify-center gap-2 self-start">
-          <Suspense
-            key={"Book-ManageReviews"}
-            fallback={
-              <div className="h-[70px] w-36 rounded-md bg-white/90 dark:bg-black/30" />
-            }
-          >
-            <ManageReviews
-              bookId={bookData.book.id}
-              reviewsQuantity={bookData._count.review}
-            />
-          </Suspense>
+          <ManageReviews
+            reviewsQuantity={bookData._count.review}
+            reviewData={bookData.review}
+          />
           <ManageLikes
             bookId={bookData.book.id}
             likesQuantity={bookData._count.liked_by}

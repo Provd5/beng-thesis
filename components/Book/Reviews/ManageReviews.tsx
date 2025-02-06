@@ -1,22 +1,16 @@
 import type { FC } from "react";
 
-import { getReview } from "~/lib/services/review/queries";
-import { getSessionUser } from "~/lib/services/session/queries";
-
 import { HandleSelectReview } from "./HandleSelectReview";
 
 interface ManageReviewsProps {
-  bookId: string;
   reviewsQuantity: number;
+  reviewData: { rate: number; created_at: Date } | null | undefined;
 }
 
 export const ManageReviews: FC<ManageReviewsProps> = async ({
-  bookId,
   reviewsQuantity,
+  reviewData,
 }) => {
-  const sessionUser = await getSessionUser();
-  const reviewData = await getReview(sessionUser?.id, bookId);
-
   return (
     <HandleSelectReview
       reviewData={reviewData}

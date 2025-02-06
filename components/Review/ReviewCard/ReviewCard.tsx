@@ -33,7 +33,7 @@ export const ReviewCard: FC<ReviewCardProps> = ({ reviewData }) => {
             ? `${ROUTES.profile.root(reviewData.profile.full_name)}`
             : "#"
         }
-        className="flex h-fit flex-none gap-x-1.5 gap-y-1 transition-transform hover:-translate-y-1 sm:w-28 sm:flex-col sm:items-center"
+        className="flex h-fit flex-none gap-x-1.5 gap-y-1 transition-transform hover:translate-x-1 sm:w-28 sm:flex-col sm:items-center"
       >
         <ReviewCardProfileDetails profileData={reviewData.profile} />
       </Link>

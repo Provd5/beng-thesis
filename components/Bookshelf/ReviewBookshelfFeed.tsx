@@ -33,7 +33,7 @@ export const ReviewBookshelfFeed: FC<ReviewBookshelfFeedProps> = async ({
       totalPages={reviews.totalPages}
       orderArray={SortReviewBookshelfArray}
     >
-      <div className="grid grid-cols-1 gap-x-5 gap-y-8 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-y-2">
         {reviews.data.map((review) => (
           <BookReviewCard key={review.review.id} reviewData={review} />
         ))}

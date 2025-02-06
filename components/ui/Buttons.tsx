@@ -118,7 +118,7 @@ const ButtonLink = forwardRef<
         ref={ref}
         disabled={loading}
         className={cn(
-          "px-1 py-0.5 hover:animate-pulse",
+          "px-1 py-0.5",
           sharedClass,
           defaultColor && "text-colors-primary",
           sizeClass[size],

@@ -93,13 +93,13 @@ const ThemeButton: FC<ThemeButtonProps> = ({
 
   return (
     <button
-      className="text-md flex items-center gap-1.5 py-0.5"
+      className="text-md flex items-center gap-1.5 py-0.5 transition-transform hover:translate-x-1"
       onClick={() => handleToggleTheme(theme)}
     >
       <Icon
         className={cn(
           "text-lg",
-          active ? "fill-colors-primary" : "fill-colors-text"
+          active ? "fill-colors-primary" : "fill-colors-text",
         )}
       />
 

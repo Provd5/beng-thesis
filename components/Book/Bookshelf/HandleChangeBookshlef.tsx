@@ -30,7 +30,7 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModalButtonRef = useRef<HTMLButtonElement>(null);
 
-  const formatedData = {
+  const formattedData = {
     bookshelf: bookshelfData?.bookshelf || null,
     began_reading_at: bookshelfData?.began_reading_at,
     updated_at: bookshelfData?.updated_at || new Date(),
@@ -38,7 +38,7 @@ export const HandleChangeBookshlef: FC<HandleChangeBookshlefProps> = ({
   };
 
   const [bookshlefState, setBookshlefState] =
-    useState<ChangeBookshelfValidatorType>(formatedData);
+    useState<ChangeBookshelfValidatorType>(formattedData);
 
   return (
     <div

@@ -69,7 +69,7 @@ export const LikeBookForm: FC<LikeBookFormProps> = ({
         )}
       </div>
       <div className="flex flex-col">
-        <h3 className="px-1 py-0.5 text-base font-semibold text-colors-primary hover:animate-pulse">
+        <h3 className="px-1 py-0.5 text-base font-semibold text-colors-primary">
           {t("likes")}
         </h3>
         <p className="-mt-1">{likeState.likesQuantity}</p>

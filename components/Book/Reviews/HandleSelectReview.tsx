@@ -5,13 +5,11 @@ import { useTranslations } from "next-intl";
 
 import { BsBookmarkStar } from "react-icons/bs";
 
-import { type ReviewInterface } from "~/types/data/review";
-
 import { BookmarkIcon } from "~/components/ui/Icons/BookmarkIcon";
 import { dateFormater } from "~/utils/dateFormater";
 
 interface HandleSelectReviewProps {
-  reviewData: ReviewInterface | null | undefined;
+  reviewData: { rate: number; created_at: Date } | null | undefined;
   reviewsQuantity: number;
 }
 
@@ -47,7 +45,7 @@ export const HandleSelectReview: FC<HandleSelectReviewProps> = ({
         )}
       </div>
       <div className="flex flex-col">
-        <h3 className="px-1 py-0.5 text-base font-semibold text-colors-primary hover:animate-pulse">
+        <h3 className="px-1 py-0.5 text-base font-semibold text-colors-primary">
           {t("reviews")}
         </h3>
         <p className="-mt-1">{reviewsQuantity}</p>

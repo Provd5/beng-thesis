@@ -44,7 +44,7 @@ export const BookshelfFeed: FC<BookshelfFeedProps> = async ({
           totalPages={books.totalPages}
           orderArray={SortBookshelvesArray}
         >
-          <div className="grid grid-cols-1 gap-6 2xl:grid-cols-2">
+          <div className="grid grid-cols-1 gap-2 2xl:grid-cols-2">
             {books.data.map((book) => (
               <BookCard key={book.book.id} bookData={book} />
             ))}

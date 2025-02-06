@@ -75,7 +75,7 @@ export const NavbarLink: FC<NavbarLinkProps> = ({
           ? "max-md:size-[58px]"
           : "max-md:size-[48px]",
         isActive() && "pointer-events-none cursor-default",
-        !isActive() && "hover:scale-95 hover:bg-colors-text/10",
+        !isActive() && "hover:translate-x-1 hover:bg-colors-text/10",
       )}
     >
       <div className="flex flex-col items-center justify-center gap-0.5 md:flex-row-reverse md:gap-1.5">

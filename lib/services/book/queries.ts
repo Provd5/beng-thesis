@@ -92,7 +92,9 @@ export const getAllBooks = unstable_cache(
               : { [orderBy]: order },
           include: {
             _count: { select: { review: true, liked_by: true } },
-            review: { select: { rate: true } },
+            review: {
+              select: { rate: true, author_id: true, created_at: true },
+            },
             ...(sessionId
               ? {
                   book_owned_as: {
@@ -111,7 +113,7 @@ export const getAllBooks = unstable_cache(
       ]);
 
       const transformedData = books.map((book) =>
-        transformBookData(!!sessionId, book),
+        transformBookData(sessionId, book),
       );
 
       return {
@@ -141,7 +143,10 @@ export const getBook = unstable_cache(
         where: { id: validBookId },
         include: {
           _count: { select: { review: true, liked_by: true } },
-          review: { where: { book_id: validBookId }, select: { rate: true } },
+          review: {
+            where: { book_id: validBookId },
+            select: { rate: true, author_id: true, created_at: true },
+          },
           ...(sessionId
             ? {
                 book_owned_as: {
@@ -169,7 +174,7 @@ export const getBook = unstable_cache(
 
       if (!bookData) return null;
 
-      const transformedData = transformBookData(!!sessionId, bookData);
+      const transformedData = transformBookData(sessionId, bookData);
 
       return transformedData;
     } catch (e) {

@@ -43,7 +43,7 @@ export const LanguageSwitcher: FC = () => {
               pathname.replace(`/${localeFromUrl}`, `/${locale}`) +
               `?${searchParams.toString()}`
             }
-            className="flex flex-col items-center text-sm"
+            className="flex flex-col items-center text-sm transition-transform hover:scale-110"
           >
             <Image
               className={cn(

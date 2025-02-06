@@ -42,7 +42,7 @@ export const SubpageNavbarButton: FC<SubpageNavbarButtonProps> = ({
       className={cn(
         "flex h-full w-32 items-center justify-center gap-2 transition-transform",
         isActive() && "border-b border-colors-primary",
-        !isActive() && "hover:-translate-y-1",
+        !isActive() && "hover:translate-x-1",
       )}
     >
       {pageVariant === "community" ? (
