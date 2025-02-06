@@ -70,12 +70,12 @@ export const Providers: FC<ProvidersProps> = ({ view }) => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className="flex flex-col items-center gap-1.5">
       {AVAILABLE_PROVIDERS.map((provider) => (
         <button
           key={`Providers-${provider.name}`}
           type="submit"
-          className="rounded-full bg-[#F2F2F2] px-[12px] py-[10px] text-[14px]/[20px] text-[#1F1F1F]"
+          className="rounded-full bg-[#F2F2F2] px-[12px] py-[10px] text-[14px]/[20px] text-[#1F1F1F] transition-transform hover:scale-105"
           disabled={isPending && selectedProvider === provider.name}
           onClick={() => handleSubmit(provider.name)}
         >
