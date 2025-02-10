@@ -32,7 +32,7 @@ export default async function StatisticsPage({
 
   return (
     <>
-      <BackCategoryLink variant="RETURN" href={ROUTES.profile.back(fullname)} />
+      <BackCategoryLink href={ROUTES.profile.back(fullname)} />
       <div className="flex flex-col justify-center gap-3">
         {/* all categories statistics */}
         <StatisticsCategoryWrapper variant="profile statistics">

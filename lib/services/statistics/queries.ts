@@ -1,5 +1,6 @@
 "use server";
 
+import { type QueryResponseType } from "~/types/actions";
 import {
   type BookshelfQuantitiesInterface,
   type OwnedBooksInterface,
@@ -7,13 +8,14 @@ import {
 } from "~/types/data/statistics";
 
 import { db } from "~/lib/db";
+import { errorHandler } from "~/lib/errorHandler";
 import { bookshelfPreviewSelector } from "~/lib/utils/prismaSelectors";
 
 import { getBookshelfQuantity } from "../bookshelf/queries";
 
 export async function getAllBookshelvesQuantity(
   profileName: string,
-): Promise<BookshelfQuantitiesInterface> {
+): QueryResponseType<BookshelfQuantitiesInterface> {
   const decodedProfileName = decodeURIComponent(profileName);
 
   try {
@@ -51,32 +53,25 @@ export async function getAllBookshelvesQuantity(
       ]);
 
     return {
-      book_owned_as: others?._count.book_owned_as || 0,
-      liked_book: others?._count.liked_book || 0,
-      review: others?._count.review || 0,
-      abandoned,
-      already_read,
-      reading,
-      to_read,
-      other: others?._count.bookshelf || 0,
+      data: {
+        book_owned_as: others?._count.book_owned_as || 0,
+        liked_book: others?._count.liked_book || 0,
+        review: others?._count.review || 0,
+        abandoned,
+        already_read,
+        reading,
+        to_read,
+        other: others?._count.bookshelf || 0,
+      },
     };
   } catch (e) {
-    return {
-      book_owned_as: 0,
-      liked_book: 0,
-      review: 0,
-      abandoned: 0,
-      already_read: 0,
-      reading: 0,
-      to_read: 0,
-      other: 0,
-    };
+    return { error: errorHandler(e) };
   }
 }
 
 export async function getOwnedStatistics(
   profileName: string,
-): Promise<OwnedBooksInterface> {
+): QueryResponseType<OwnedBooksInterface> {
   const decodedProfileName = decodeURIComponent(profileName);
 
   try {
@@ -114,22 +109,20 @@ export async function getOwnedStatistics(
     ]);
 
     return {
-      lastAdded: lastAdded?.book || null,
-      updatedAt: lastAdded?.updated_at || null,
-      totalOwnedBooks,
+      data: {
+        lastAdded: lastAdded?.book || null,
+        updatedAt: lastAdded?.updated_at || null,
+        totalOwnedBooks,
+      },
     };
   } catch (e) {
-    return {
-      lastAdded: null,
-      updatedAt: null,
-      totalOwnedBooks: 0,
-    };
+    return { error: errorHandler(e) };
   }
 }
 
 export async function getReadStatistics(
   profileName: string,
-): Promise<ReadBooksInterface> {
+): QueryResponseType<ReadBooksInterface> {
   const decodedProfileName = decodeURIComponent(profileName);
 
   try {
@@ -178,19 +171,15 @@ export async function getReadStatistics(
     ]);
 
     return {
-      lastRead: lastRead?.book || null,
-      mostRead,
-      totalRead,
-      totalReadPages: totalReadPages._sum.page_count || 0,
-      updatedAt: lastRead?.updated_at || null,
+      data: {
+        lastRead: lastRead?.book || null,
+        mostRead,
+        totalRead,
+        totalReadPages: totalReadPages._sum.page_count || 0,
+        updatedAt: lastRead?.updated_at || null,
+      },
     };
   } catch (e) {
-    return {
-      lastRead: null,
-      mostRead: null,
-      totalRead: 0,
-      totalReadPages: 0,
-      updatedAt: null,
-    };
+    return { error: errorHandler(e) };
   }
 }

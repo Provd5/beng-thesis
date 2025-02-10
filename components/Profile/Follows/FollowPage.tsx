@@ -1,11 +1,16 @@
 import { type FC } from "react";
+import { type ReadonlyURLSearchParams } from "next/navigation";
 
-import { SortFollowProfilesArray } from "~/types/orderArrays";
+import {
+  SortBookshelvesArray,
+  SortFollowProfilesArray,
+} from "~/types/orderArrays";
 
 import { NotFoundItems } from "~/components/ui/NotFound/NotFoundItems";
 import { getFollowProfiles } from "~/lib/services/profile/queries";
 import { getSessionUser } from "~/lib/services/session/queries";
 import ROUTES from "~/utils/routes";
+import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
 import { BackCategoryLink } from "../../Links/BackCategoryLink";
 import { FeedSort } from "../../Modals/FeedSort";
@@ -22,19 +27,31 @@ export const FollowPage: FC<FollowPageProps> = async ({
   variant,
   searchParams,
 }) => {
+  const params = new URLSearchParams(searchParams as ReadonlyURLSearchParams);
+  const from = params.get("from");
+
   const sessionUser = await getSessionUser();
-  const profiles = await getFollowProfiles(
+  const { data: profiles, error } = await getFollowProfiles(
     sessionUser?.id,
     profileName,
     variant,
     searchParams,
   );
 
+  if (error || !profiles) throw new Error(error);
+
+  const validSearchParams = sortParamsValidator(
+    searchParams,
+    SortBookshelvesArray,
+  );
+
   return (
     <>
       <BackCategoryLink
-        href={`${ROUTES.profile.root(profileName)}`}
-        variant="RETURN"
+        href={{
+          pathname: `${ROUTES.profile.root(profileName)}`,
+          query: { from, ...validSearchParams },
+        }}
       />
 
       {profiles.allItems === 0 ? (

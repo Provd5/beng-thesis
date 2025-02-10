@@ -2,8 +2,10 @@ import { type FC } from "react";
 
 import { type BookshelfReviewsInterface } from "~/types/data/bookshelf";
 
+import ROUTES from "~/utils/routes";
+
 import { BookCover } from "../../Book/BookCover";
-import { LinkToBook } from "../../Links/LinkToBook";
+import { LinkWithFrom } from "../../Links/LinkToBook";
 import { BookReviewCardDetails } from "./BookReviewCardDetails";
 import { BookReviewCardReactions } from "./BookReviewCardReactions";
 
@@ -13,9 +15,8 @@ interface BookReviewCardProps {
 
 export const BookReviewCard: FC<BookReviewCardProps> = ({ reviewData }) => {
   return (
-    <LinkToBook
-      bookId={reviewData.book.id}
-      bookTitle={reviewData.book.title}
+    <LinkWithFrom
+      href={ROUTES.book.root(reviewData.book.id, reviewData.book.title)}
       className="rounded-lg bg-white p-2 dark:bg-black"
     >
       <div className="float-left mr-3 size-fit">
@@ -40,6 +41,6 @@ export const BookReviewCard: FC<BookReviewCardProps> = ({ reviewData }) => {
           <p className="mt-1 py-1 pl-1">{reviewData.review.text}</p>
         )}
       </div>
-    </LinkToBook>
+    </LinkWithFrom>
   );
 };

@@ -2,6 +2,7 @@
 
 import { unstable_cache } from "next/cache";
 
+import { type QueryResponseType } from "~/types/actions";
 import {
   type GetReviewInterface,
   type ReviewInterface,
@@ -11,6 +12,7 @@ import { SortReviewsArray } from "~/types/orderArrays";
 import { type SortReviewsType } from "~/types/sort";
 
 import { db } from "~/lib/db";
+import { errorHandler } from "~/lib/errorHandler";
 import { totalPages } from "~/lib/utils/totalPages";
 import { sortParamsValidator } from "~/utils/sortParamsValidator";
 
@@ -36,7 +38,7 @@ export const getAllReviews = unstable_cache(
   async (
     bookId: string,
     searchParams: unknown,
-  ): Promise<GetDataList<GetReviewInterface>> => {
+  ): QueryResponseType<GetDataList<GetReviewInterface>> => {
     const validSearchParams = sortParamsValidator(
       searchParams,
       SortReviewsArray,
@@ -83,21 +85,17 @@ export const getAllReviews = unstable_cache(
       ]);
 
       return {
-        page,
-        totalPages: totalPages(allItems, itemsPerPage),
-        allItems,
-        itemsPerPage:
-          reviews.length < itemsPerPage ? reviews.length : itemsPerPage,
-        data: reviews,
+        data: {
+          page,
+          totalPages: totalPages(allItems, itemsPerPage),
+          allItems,
+          itemsPerPage:
+            reviews.length < itemsPerPage ? reviews.length : itemsPerPage,
+          data: reviews,
+        },
       };
     } catch (e) {
-      return {
-        page: 0,
-        totalPages: 0,
-        allItems: 0,
-        itemsPerPage: 0,
-        data: [],
-      };
+      return { error: errorHandler(e) };
     }
   },
   ["all-reviews"],

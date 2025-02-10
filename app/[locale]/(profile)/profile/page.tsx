@@ -15,7 +15,7 @@ export default async function ProfileRedirectPage({
   const sessionUser = await getSessionUser();
   if (!sessionUser) redirect({ href: ROUTES.auth.login, locale });
 
-  const sessionProfile = await getProfile(sessionUser?.id);
+  const { data: sessionProfile } = await getProfile(sessionUser?.id);
   if (!sessionProfile?.full_name) notFound();
 
   redirect({ href: ROUTES.profile.root(sessionProfile.full_name), locale });

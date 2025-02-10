@@ -23,12 +23,14 @@ export const BookshelfFeed: FC<BookshelfFeedProps> = async ({
   searchParams,
 }) => {
   const sessionUser = await getSessionUser();
-  const books = await getBookshelfBooks(
+  const { data: books, error } = await getBookshelfBooks(
     sessionUser?.id,
     bookshelf,
     profileName,
     searchParams,
   );
+
+  if (error || !books) throw new Error(error);
 
   return (
     <>

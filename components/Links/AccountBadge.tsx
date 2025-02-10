@@ -8,7 +8,7 @@ import { ProfileBadge } from "../Profile/ProfileBadge";
 
 export const AccountBadge: FC = async () => {
   const sessionUser = await getSessionUser();
-  const sessionProfile = await getProfile(sessionUser?.id);
+  const { data: sessionProfile } = await getProfile(sessionUser?.id);
 
   if (!sessionProfile) return;
 

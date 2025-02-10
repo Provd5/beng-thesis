@@ -2,6 +2,7 @@
 
 import { unstable_cache } from "next/cache";
 
+import { type QueryResponseType } from "~/types/actions";
 import { type GetProfileInterface } from "~/types/data/profile";
 import { type GetDataList } from "~/types/list";
 import {
@@ -14,6 +15,7 @@ import {
 } from "~/types/sort";
 
 import { db } from "~/lib/db";
+import { errorHandler } from "~/lib/errorHandler";
 import { profileSelector } from "~/lib/utils/prismaSelectors";
 import { totalPages } from "~/lib/utils/totalPages";
 import { transformProfileData } from "~/lib/utils/transformProfileData";
@@ -48,7 +50,7 @@ export const getAllProfiles = unstable_cache(
     sessionId: string | undefined,
     searchParams: unknown,
     q?: string,
-  ): Promise<GetDataList<GetProfileInterface>> => {
+  ): QueryResponseType<GetDataList<GetProfileInterface>> => {
     const validSearchParams = sortParamsValidator(
       searchParams,
       SortProfilesArray,
@@ -98,21 +100,17 @@ export const getAllProfiles = unstable_cache(
       );
 
       return {
-        page,
-        totalPages: totalPages(allItems, itemsPerPage),
-        allItems,
-        itemsPerPage:
-          profiles.length < itemsPerPage ? profiles.length : itemsPerPage,
-        data: transformedData,
+        data: {
+          page,
+          totalPages: totalPages(allItems, itemsPerPage),
+          allItems,
+          itemsPerPage:
+            profiles.length < itemsPerPage ? profiles.length : itemsPerPage,
+          data: transformedData,
+        },
       };
     } catch (e) {
-      return {
-        page: 0,
-        totalPages: 0,
-        allItems: 0,
-        itemsPerPage: 0,
-        data: [],
-      };
+      return { error: errorHandler(e) };
     }
   },
   ["all-profiles"],
@@ -123,13 +121,13 @@ export const getProfile = unstable_cache(
   async (
     sessionId: string | undefined,
     profileName?: string,
-  ): Promise<GetProfileInterface | null> => {
+  ): QueryResponseType<GetProfileInterface | null> => {
     const decodedProfileName = profileName
       ? decodeURIComponent(profileName)
       : undefined;
 
     try {
-      if (!sessionId && !decodedProfileName) return null;
+      if (!sessionId && !decodedProfileName) return { data: null };
 
       const profile = await db.profile.findUnique({
         where: decodedProfileName
@@ -138,13 +136,13 @@ export const getProfile = unstable_cache(
         include: profileSelector(sessionId),
       });
 
-      if (!profile) return null;
+      if (!profile) return { data: null };
 
       const transformedData = transformProfileData(!!sessionId, profile);
 
-      return transformedData;
+      return { data: transformedData };
     } catch (e) {
-      return null;
+      return { error: errorHandler(e) };
     }
   },
   ["profile"],
@@ -191,7 +189,7 @@ export const getFollowProfiles = unstable_cache(
     profileName: string,
     variant: "follower" | "following",
     searchParams: unknown,
-  ): Promise<GetDataList<GetProfileInterface>> => {
+  ): QueryResponseType<GetDataList<GetProfileInterface>> => {
     const decodedProfileName = decodeURIComponent(profileName);
 
     const validSearchParams = sortParamsValidator(
@@ -252,21 +250,17 @@ export const getFollowProfiles = unstable_cache(
       );
 
       return {
-        page,
-        totalPages: totalPages(allItems, itemsPerPage),
-        allItems,
-        itemsPerPage:
-          profiles.length < itemsPerPage ? profiles.length : itemsPerPage,
-        data: transformedData,
+        data: {
+          page,
+          totalPages: totalPages(allItems, itemsPerPage),
+          allItems,
+          itemsPerPage:
+            profiles.length < itemsPerPage ? profiles.length : itemsPerPage,
+          data: transformedData,
+        },
       };
     } catch (e) {
-      return {
-        page: 0,
-        totalPages: 0,
-        allItems: 0,
-        itemsPerPage: 0,
-        data: [],
-      };
+      return { error: errorHandler(e) };
     }
   },
   ["follow-profiles"],

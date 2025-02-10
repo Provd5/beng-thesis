@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 
 import { MdNavigateNext } from "react-icons/md";
 
-import { Link } from "~/i18n/routing";
+import { LinkWithFrom } from "~/components/Links/LinkToBook";
 import { cn } from "~/utils/cn";
 import ROUTES from "~/utils/routes";
 
@@ -38,7 +38,7 @@ export const ProfileSubpageLink: FC<ProfileSubpageLinkProps> = ({
   };
 
   return (
-    <Link
+    <LinkWithFrom
       href={pageRoutes[variant]}
       className={cn(
         "transition-transform hover:translate-x-1",
@@ -55,6 +55,6 @@ export const ProfileSubpageLink: FC<ProfileSubpageLinkProps> = ({
         {quantity > 0 && <p>: {quantity}</p>}
         {!isActive() && <MdNavigateNext className="text-lg" />}
       </div>
-    </Link>
+    </LinkWithFrom>
   );
 };

@@ -17,7 +17,13 @@ interface BooksFeedProps {
 
 export const BooksFeed: FC<BooksFeedProps> = async ({ searchParams, q }) => {
   const sessionUser = await getSessionUser();
-  const books = await getAllBooks(sessionUser?.id, searchParams, q);
+  const { data: books, error } = await getAllBooks(
+    sessionUser?.id,
+    searchParams,
+    q,
+  );
+
+  if (error || !books) throw new Error(error);
 
   return (
     <>

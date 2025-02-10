@@ -11,7 +11,10 @@ interface MainStatisticsCardProps {
 export const MainStatisticsCard: FC<MainStatisticsCardProps> = async ({
   profileName,
 }) => {
-  const quantities = await getAllBookshelvesQuantity(profileName);
+  const { data: quantities, error } =
+    await getAllBookshelvesQuantity(profileName);
+
+  if (error || !quantities) throw new Error(error);
 
   return (
     <div className="flex flex-wrap justify-center gap-2">

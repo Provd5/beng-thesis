@@ -19,8 +19,12 @@ interface ProfileProps {
 export const Profile: FC<ProfileProps> = async ({ profileName, children }) => {
   const sessionUser = await getSessionUser();
 
-  const profileData = await getProfile(sessionUser?.id, profileName);
+  const { data: profileData, error } = await getProfile(
+    sessionUser?.id,
+    profileName,
+  );
 
+  if (error) throw new Error(error);
   if (!profileData) notFound();
 
   const isMyProfile = profileData.id === sessionUser?.id;

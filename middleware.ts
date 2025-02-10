@@ -12,8 +12,10 @@ export async function middleware(request: NextRequest) {
   if (!routing.locales.includes(locale)) {
     const usesNewProfile = request.cookies.get("NEXT_LOCALE")?.value;
     const pathname = request.nextUrl.pathname;
-    const slash = pathname.startsWith("/") ? "" : "/";
-    const newUrl = (locale: string) => `/${locale}` + slash + pathname;
+    const normalizedPathname = pathname.startsWith("/")
+      ? pathname
+      : `/${pathname}`;
+    const newUrl = (locale: string) => `/${locale}` + normalizedPathname;
 
     if (usesNewProfile) {
       request.nextUrl.pathname = newUrl(usesNewProfile);

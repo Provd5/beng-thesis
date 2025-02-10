@@ -26,7 +26,9 @@ export const ReviewsFeed: FC<ReviewsFeedProps> = async ({
 }) => {
   const params = new URLSearchParams(searchParams as ReadonlyURLSearchParams);
   const from = params.get("from");
-  const reviews = await getAllReviews(bookId, searchParams);
+  const { data: reviews, error } = await getAllReviews(bookId, searchParams);
+
+  if (error || !reviews) throw new Error(error);
 
   const validSearchParams = sortParamsValidator(searchParams, SortReviewsArray);
 

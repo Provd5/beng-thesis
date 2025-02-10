@@ -20,7 +20,13 @@ export const ProfilesFeed: FC<ProfilesFeedProps> = async ({
   q,
 }) => {
   const sessionUser = await getSessionUser();
-  const profiles = await getAllProfiles(sessionUser?.id, searchParams, q);
+  const { data: profiles, error } = await getAllProfiles(
+    sessionUser?.id,
+    searchParams,
+    q,
+  );
+
+  if (error || !profiles) throw new Error(error);
 
   return (
     <>

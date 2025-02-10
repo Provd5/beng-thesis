@@ -2,6 +2,7 @@
 
 import { unstable_cache } from "next/cache";
 
+import { type QueryResponseType } from "~/types/actions";
 import { type GetBookInterface } from "~/types/data/book";
 import { type BookshelfPreviewType } from "~/types/data/bookshelf";
 import { type GetDataList } from "~/types/list";
@@ -9,6 +10,7 @@ import { SortBooksArray } from "~/types/orderArrays";
 import { type SortBooksType } from "~/types/sort";
 
 import { db } from "~/lib/db";
+import { errorHandler } from "~/lib/errorHandler";
 import { bookshelfPreviewSelector } from "~/lib/utils/prismaSelectors";
 import { totalPages } from "~/lib/utils/totalPages";
 import { transformBookData } from "~/lib/utils/transformBookData";
@@ -53,7 +55,7 @@ export const getAllBooks = unstable_cache(
     sessionId: string | undefined,
     searchParams: unknown,
     q?: string,
-  ): Promise<GetDataList<GetBookInterface>> => {
+  ): QueryResponseType<GetDataList<GetBookInterface>> => {
     const validSearchParams = sortParamsValidator(searchParams, SortBooksArray);
     const { order, orderBy: defaultOrderBy, page } = validSearchParams;
     const orderBy = defaultOrderBy as SortBooksType;
@@ -116,20 +118,17 @@ export const getAllBooks = unstable_cache(
       );
 
       return {
-        page,
-        totalPages: totalPages(allItems, itemsPerPage),
-        allItems,
-        itemsPerPage: books.length < itemsPerPage ? books.length : itemsPerPage,
-        data: transformedData,
+        data: {
+          page,
+          totalPages: totalPages(allItems, itemsPerPage),
+          allItems,
+          itemsPerPage:
+            books.length < itemsPerPage ? books.length : itemsPerPage,
+          data: transformedData,
+        },
       };
     } catch (e) {
-      return {
-        page: 0,
-        totalPages: 0,
-        allItems: 0,
-        itemsPerPage: 0,
-        data: [],
-      };
+      return { error: errorHandler(e) };
     }
   },
   ["all-books"],
@@ -140,7 +139,7 @@ export const getBook = unstable_cache(
   async (
     sessionId: string | undefined,
     bookId: string,
-  ): Promise<GetBookInterface | null> => {
+  ): QueryResponseType<GetBookInterface | null> => {
     try {
       const validBookId = UuidValidator.parse(bookId);
 
@@ -177,13 +176,13 @@ export const getBook = unstable_cache(
         },
       });
 
-      if (!bookData) return null;
+      if (!bookData) return { data: null };
 
       const transformedData = transformBookData(sessionId, bookData);
 
-      return transformedData;
+      return { data: transformedData };
     } catch (e) {
-      return null;
+      return { error: errorHandler(e) };
     }
   },
   ["book"],
@@ -191,7 +190,7 @@ export const getBook = unstable_cache(
 );
 
 export const getBookPreview = unstable_cache(
-  async (bookId: string): Promise<BookshelfPreviewType | null> => {
+  async (bookId: string): QueryResponseType<BookshelfPreviewType | null> => {
     try {
       const validBookId = UuidValidator.parse(bookId);
 
@@ -200,11 +199,11 @@ export const getBookPreview = unstable_cache(
         select: bookshelfPreviewSelector.book.select,
       });
 
-      if (!bookData) return null;
+      if (!bookData) return { data: null };
 
-      return bookData;
+      return { data: bookData };
     } catch (e) {
-      return null;
+      return { error: errorHandler(e) };
     }
   },
   ["book-preview"],

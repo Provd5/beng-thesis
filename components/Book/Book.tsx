@@ -20,8 +20,9 @@ interface BookProps {
 
 export const Book: FC<BookProps> = async ({ bookId, children }) => {
   const sessionUser = await getSessionUser();
-  const bookData = await getBook(sessionUser?.id, bookId);
+  const { data: bookData, error } = await getBook(sessionUser?.id, bookId);
 
+  if (error) throw new Error(error);
   if (!bookData) notFound();
 
   return (

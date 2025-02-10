@@ -19,7 +19,7 @@ export const CreateReview: FC<CreateReviewProps> = async ({
   reviewData,
 }) => {
   const sessionUser = await getSessionUser();
-  const sessionProfile = await getProfile(sessionUser?.id);
+  const { data: sessionProfile } = await getProfile(sessionUser?.id);
 
   return (
     <div className="flex min-h-[350px] w-full flex-col gap-x-1 gap-y-2 py-3 sm:min-h-[260px] sm:flex-row">

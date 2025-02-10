@@ -8,3 +8,14 @@ type ActionError = {
 };
 
 export type ActionResponseType = Promise<ActionSuccess | ActionError>;
+
+type QuerySuccess<T> = {
+  data: T;
+  error?: never;
+};
+type QueryError = {
+  data?: never;
+  error: string;
+};
+
+export type QueryResponseType<T> = Promise<QuerySuccess<T> | QueryError>;

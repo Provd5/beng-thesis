@@ -10,7 +10,7 @@ export const ManageProfile: FC = async () => {
   const sessionUser = await getSessionUser();
   if (!sessionUser) return;
 
-  const sessionProfile = await getProfile(sessionUser?.id);
+  const { data: sessionProfile } = await getProfile(sessionUser?.id);
   if (!sessionProfile) return;
 
   return (

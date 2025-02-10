@@ -2,6 +2,7 @@
 
 import { unstable_cache } from "next/cache";
 
+import { type QueryResponseType } from "~/types/actions";
 import { type BookshelvesTypes } from "~/types/consts";
 import { type GetBookInterface } from "~/types/data/book";
 import { type BookshelfReviewsInterface } from "~/types/data/bookshelf";
@@ -16,6 +17,7 @@ import {
 } from "~/types/sort";
 
 import { db } from "~/lib/db";
+import { errorHandler } from "~/lib/errorHandler";
 import { bookshelvesSelector } from "~/lib/utils/prismaSelectors";
 import { totalPages } from "~/lib/utils/totalPages";
 import { transformBookData } from "~/lib/utils/transformBookData";
@@ -83,7 +85,7 @@ export const getBookshelfBooks = unstable_cache(
     bookshelf: Exclude<BookshelvesTypes, "REVIEWS">,
     profileName: string,
     searchParams: unknown,
-  ): Promise<GetDataList<GetBookInterface>> => {
+  ): QueryResponseType<GetDataList<GetBookInterface>> => {
     const decodedProfileName = decodeURIComponent(profileName);
 
     const validSearchParams = sortParamsValidator(
@@ -168,20 +170,17 @@ export const getBookshelfBooks = unstable_cache(
       );
 
       return {
-        page,
-        totalPages: totalPages(allItems, itemsPerPage),
-        allItems,
-        itemsPerPage: books.length < itemsPerPage ? books.length : itemsPerPage,
-        data: transformedData,
+        data: {
+          page,
+          totalPages: totalPages(allItems, itemsPerPage),
+          allItems,
+          itemsPerPage:
+            books.length < itemsPerPage ? books.length : itemsPerPage,
+          data: transformedData,
+        },
       };
     } catch (e) {
-      return {
-        page: 0,
-        totalPages: 0,
-        allItems: 0,
-        itemsPerPage: 0,
-        data: [],
-      };
+      return { error: errorHandler(e) };
     }
   },
   ["bookshelf-books"],
@@ -193,7 +192,7 @@ export const getReviewBooks = unstable_cache(
     sessionId: string | undefined,
     profileName: string,
     searchParams: unknown,
-  ): Promise<GetDataList<BookshelfReviewsInterface>> => {
+  ): QueryResponseType<GetDataList<BookshelfReviewsInterface>> => {
     const decodedProfileName = decodeURIComponent(profileName);
 
     const validSearchParams = sortParamsValidator(
@@ -239,20 +238,17 @@ export const getReviewBooks = unstable_cache(
       );
 
       return {
-        page,
-        totalPages: totalPages(allItems, itemsPerPage),
-        allItems,
-        itemsPerPage: books.length < itemsPerPage ? books.length : itemsPerPage,
-        data: transformedData,
+        data: {
+          page,
+          totalPages: totalPages(allItems, itemsPerPage),
+          allItems,
+          itemsPerPage:
+            books.length < itemsPerPage ? books.length : itemsPerPage,
+          data: transformedData,
+        },
       };
     } catch (e) {
-      return {
-        page: 0,
-        totalPages: 0,
-        allItems: 0,
-        itemsPerPage: 0,
-        data: [],
-      };
+      return { error: errorHandler(e) };
     }
   },
   ["review-books"],

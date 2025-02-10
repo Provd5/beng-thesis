@@ -11,7 +11,9 @@ interface OwnedAsStatisticsCardProps {
 export const OwnedAsStatisticsCard: FC<OwnedAsStatisticsCardProps> = async ({
   profileName,
 }) => {
-  const ownedBooks = await getOwnedStatistics(profileName);
+  const { data: ownedBooks, error } = await getOwnedStatistics(profileName);
+
+  if (error || !ownedBooks) throw new Error(error);
 
   return <OwnedAsStatisticsDetails ownedBooks={ownedBooks} />;
 };

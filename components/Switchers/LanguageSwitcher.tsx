@@ -13,7 +13,14 @@ import { getLocaleFromUrl } from "~/utils/getLocaleFromUrl";
 export const LanguageSwitcher: FC = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const normalizedPathname = pathname.startsWith("/")
+    ? pathname
+    : `/${pathname}`;
   const localeFromUrl = getLocaleFromUrl(pathname);
+  const newLink = (locale: string) =>
+    localeFromUrl
+      ? normalizedPathname.replace(`/${localeFromUrl}`, `/${locale}`)
+      : `/${locale}` + normalizedPathname;
 
   return (
     <div className="flex flex-none gap-3">
@@ -39,10 +46,7 @@ export const LanguageSwitcher: FC = () => {
         return (
           <a
             key={locale}
-            href={
-              pathname.replace(`/${localeFromUrl}`, `/${locale}`) +
-              `?${searchParams.toString()}`
-            }
+            href={newLink(locale) + `?${searchParams}`}
             className="flex flex-col items-center text-sm transition-transform hover:scale-110"
           >
             <Image

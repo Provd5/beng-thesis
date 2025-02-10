@@ -1,12 +1,12 @@
-import { defaultLocale, locales, type localeTypes } from "~/i18n/routing";
+import { locales, type localeTypes } from "~/i18n/routing";
 
-export const getLocaleFromUrl = (url: string): localeTypes => {
+export const getLocaleFromUrl = (url: string): localeTypes | undefined => {
   const urlParts = url.split("/");
   const localeFromUrl = urlParts[1];
 
-  const validLocale = locales.includes(localeFromUrl as localeTypes)
+  const validLocale = locales.includes(localeFromUrl)
     ? (localeFromUrl as localeTypes)
-    : defaultLocale;
+    : undefined;
 
   return validLocale;
 };

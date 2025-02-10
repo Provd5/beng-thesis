@@ -2,7 +2,9 @@ import type { FC } from "react";
 
 import { type BookshelfPreviewType } from "~/types/data/bookshelf";
 
-import { LinkToBook } from "../Links/LinkToBook";
+import ROUTES from "~/utils/routes";
+
+import { LinkWithFrom } from "../Links/LinkToBook";
 import { BookCover } from "./BookCover";
 
 interface SmallBookCardProps {
@@ -11,9 +13,8 @@ interface SmallBookCardProps {
 
 export const SmallBookCard: FC<SmallBookCardProps> = ({ bookData }) => {
   return (
-    <LinkToBook
-      bookId={bookData.id}
-      bookTitle={bookData.title}
+    <LinkWithFrom
+      href={ROUTES.book.root(bookData.id, bookData.title)}
       className="flex w-32 flex-none snap-center flex-col items-center gap-1 py-0.5 transition-transform hover:-translate-y-1 md:snap-start"
     >
       <BookCover coverUrl={bookData.thumbnail_url} />
@@ -23,6 +24,6 @@ export const SmallBookCard: FC<SmallBookCardProps> = ({ bookData }) => {
           {bookData.authors.join(", ")}
         </p>
       </div>
-    </LinkToBook>
+    </LinkWithFrom>
   );
 };

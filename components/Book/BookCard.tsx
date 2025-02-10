@@ -2,7 +2,9 @@ import { type FC } from "react";
 
 import { type GetBookInterface } from "~/types/data/book";
 
-import { LinkToBook } from "../Links/LinkToBook";
+import ROUTES from "~/utils/routes";
+
+import { LinkWithFrom } from "../Links/LinkToBook";
 import { BookCover } from "./BookCover";
 import { ManageBookshelf } from "./Bookshelf/ManageBookshelf";
 import { ManageLikes } from "./Liked/ManageLikes";
@@ -17,9 +19,8 @@ interface BookCardProps {
 export const BookCard: FC<BookCardProps> = ({ bookData }) => {
   return (
     <div className="rounded-lg bg-white p-2 dark:bg-black">
-      <LinkToBook
-        bookId={bookData.book.id}
-        bookTitle={bookData.book.title}
+      <LinkWithFrom
+        href={ROUTES.book.root(bookData.book.id, bookData.book.title)}
         className="flex gap-3 transition-transform hover:translate-x-1"
       >
         <BookCover coverUrl={bookData.book.thumbnail_url} />
@@ -35,11 +36,10 @@ export const BookCard: FC<BookCardProps> = ({ bookData }) => {
             </p>
           )}
         </div>
-      </LinkToBook>
+      </LinkWithFrom>
       <div className="mt-1 flex flex-wrap justify-end gap-2 md:justify-center">
-        <LinkToBook
-          bookId={bookData.book.id}
-          bookTitle={bookData.book.title}
+        <LinkWithFrom
+          href={ROUTES.book.root(bookData.book.id, bookData.book.title)}
           className="contents"
         >
           <ManageReviews
@@ -47,7 +47,7 @@ export const BookCard: FC<BookCardProps> = ({ bookData }) => {
             reviewsQuantity={bookData._count.review}
             reviewData={bookData.review}
           />
-        </LinkToBook>
+        </LinkWithFrom>
         <ManageLikes
           key={`ManageLikes-${bookData.book.id}`}
           bookId={bookData.book.id}

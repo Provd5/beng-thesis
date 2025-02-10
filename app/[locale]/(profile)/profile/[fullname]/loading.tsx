@@ -1,5 +1,5 @@
-import { LoadingPage } from "~/components/ui/Loaders/LoadingPage";
+import { LargeComponentLoader } from "~/components/ui/Loaders/Loader";
 
 export default function Loading() {
-  return <LoadingPage />;
+  return <LargeComponentLoader />;
 }

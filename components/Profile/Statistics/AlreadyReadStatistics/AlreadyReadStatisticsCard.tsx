@@ -11,7 +11,9 @@ interface AlreadyReadStatisticsCardProps {
 export const AlreadyReadStatisticsCard: FC<
   AlreadyReadStatisticsCardProps
 > = async ({ profileName }) => {
-  const readBooks = await getReadStatistics(profileName);
+  const { data: readBooks, error } = await getReadStatistics(profileName);
+
+  if (error || !readBooks) throw new Error(error);
 
   return <AlreadyReadStatisticsDetails readBooks={readBooks} />;
 };

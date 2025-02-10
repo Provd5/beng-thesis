@@ -19,11 +19,13 @@ export const ReviewBookshelfFeed: FC<ReviewBookshelfFeedProps> = async ({
   searchParams,
 }) => {
   const sessionUser = await getSessionUser();
-  const reviews = await getReviewBooks(
+  const { data: reviews, error } = await getReviewBooks(
     sessionUser?.id,
     profileName,
     searchParams,
   );
+
+  if (error || !reviews) throw new Error(error);
 
   return reviews.allItems === 0 ? (
     <NotFoundItems />
