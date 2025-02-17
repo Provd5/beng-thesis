@@ -80,7 +80,7 @@ export default async function RootLayout({
       <body className="bg-gradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-colors-text antialiased selection:bg-colors-accent selection:text-white md:flex-col">
         <DarkModeInitializer />
 
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={validLocale} messages={messages}>
           <Navbar />
           {children}
           <ToasterComponent />
