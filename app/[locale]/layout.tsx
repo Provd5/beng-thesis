@@ -1,22 +1,8 @@
 import { type Metadata } from "next";
-import { Quicksand } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
-import { getTranslations } from "next-intl/server";
-import { getMessages } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import { Navbar } from "~/components/Links/Navbar/Navbar";
-import { DarkModeInitializer } from "~/components/ui/DarkModeInitializer";
-import { ToasterComponent } from "~/components/ui/ToasterComponent";
+import BaseLayout from "~/components/BaseLayout";
 import { type localeTypes, routing } from "~/i18n/routing";
-import { cn } from "~/utils/cn";
-
-import "~/styles/globals.css";
-
-const quicksandFont = Quicksand({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
-});
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -61,7 +47,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function RootLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: {
@@ -73,19 +59,7 @@ export default async function RootLayout({
     ? locale
     : routing.defaultLocale;
 
-  const messages = await getMessages();
+  setRequestLocale(locale);
 
-  return (
-    <html lang={validLocale} className={cn(quicksandFont.className, "dark")}>
-      <body className="bg-gradient relative flex h-full flex-col-reverse bg-fixed text-base font-medium text-colors-text antialiased selection:bg-colors-accent selection:text-white md:flex-col">
-        <DarkModeInitializer />
-
-        <NextIntlClientProvider locale={validLocale} messages={messages}>
-          <Navbar />
-          {children}
-          <ToasterComponent />
-        </NextIntlClientProvider>
-      </body>
-    </html>
-  );
+  return <BaseLayout locale={validLocale}>{children}</BaseLayout>;
 }
